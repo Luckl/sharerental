@@ -1,36 +1,30 @@
 <template>
-	<div class="container">
-		<div class="flex flex-column align-items-center mt-1">
-			<img alt="Vue logo" src="./assets/primevue-logo.png" />
-			<Toast />
+  <div class="flex justify-content-between flex-wrap bg-yellow-100">
+    <div class="flex align-items-center ml-2">
+      <img alt="Vue logo" class="header-logo" src="./assets/primevue-logo.png"/>
+    </div>
+    <div class="flex align-items-center text-center font-bold">ShareRental</div>
+    <div class="flex align-items-center">
+      <i class="pi pi-user"></i>
+    </div>
+  </div>
 
-			<div class="mt-4">
-				<form @submit.prevent="greet">
-					<InputText type="text" v-model="text" />
-					<Button type="submit" label="Submit" />
-				</form>
-			</div>
-		</div>
-	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useToast } from "primevue/usetoast";
+import {ref} from "vue";
+import {useToast} from "primevue/usetoast";
 
 const text = ref();
 const toast = useToast();
 const greet = () => {
-	toast.add({ severity: "info", summary: "Hello " + text.value });
+  toast.add({severity: "info", summary: "Hello " + text.value});
 };
 </script>
 
 <style>
-.container {
-	margin: 0 auto;
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.header-logo {
+  height: 50px;
 }
+
 </style>
