@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     'primeflex/primeflex.css'
   ],
   build: {
-    transpile: ["primevue"]
-  },
-  devtools: { enabled: true },
+    transpile: ['primevue']
+  }
 })
