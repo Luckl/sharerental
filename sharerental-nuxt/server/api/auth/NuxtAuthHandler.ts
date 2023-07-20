@@ -6,7 +6,7 @@ const runtimeConfig = useRuntimeConfig()
 export default NuxtAuthHandler({
 
     providers: [
-        OktaProvider({
+        OktaProvider.default({
             clientId: runtimeConfig.okta_client_id,
             clientSecret: runtimeConfig.okta_client_secret,
             issuer: runtimeConfig.okta_domain
