@@ -17,6 +17,8 @@
 <script setup lang="ts">
 import MyBackgroundImage from "@/assets/drill-background.jpg";
 
+definePageMeta({ auth: false })
+
 let searchText = ref("");
 
 function search() {

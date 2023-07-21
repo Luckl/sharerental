@@ -1,5 +1,8 @@
 <template>
-  <slot />
+  <div>
+    <SiteNavigation></SiteNavigation>
+    <slot/>
+  </div>
 </template>
 
 <script setup lang="ts">
