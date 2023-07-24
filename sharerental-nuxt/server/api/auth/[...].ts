@@ -19,6 +19,12 @@ export default NuxtAuthHandler({
             async authorize(credentials, req) {
                 console.log(`Logging in user ${ credentials.username }`);
 
+                //TODO: implement authorization logic
+                return {
+                    id: 1,
+                    name: credentials.username,
+                    email: "info@sharerental.app",
+                };
             }
         })
     ]

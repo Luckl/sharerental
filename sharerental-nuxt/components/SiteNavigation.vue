@@ -6,12 +6,17 @@
     <div class="flex-1 align-items-center text-center font-bold text-3xl">ShareRental</div>
     <div class="flex-1">
       <div class="flex">
-        <div class="absolute bg-yellow-600 p-3 mr-3 border-circle right-0" v-if="auth.status.value === 'authenticated'">
-          <i class="pi pi-user"></i>
+        <div v-if="auth.status.value === 'authenticated'" class="absolute mr-3 right-0">
+          <div class="bg-yellow-600 border-circle p-3">
+            <i class="pi pi-user"></i>
+          </div>
+          <span class="absolute right-1"> {{ auth.data?.value?.user?.name }} </span>
         </div>
-        <div v-else class="absolute p-3 mr-3 right-0 ">
-          <Button class="flex items-center justify-center space-x-2 bg-green-500 text-white rounded-lg py-2 px-3 text-lg" @click="auth.signIn()">
-            <i class="fa fa-right-to-bracket pt-0.5" />
+        <div v-else class="absolute mr-3 right-0 ">
+          <Button
+              class="flex items-center justify-center space-x-2 bg-green-500 text-white rounded-lg py-2 px-3 text-lg"
+              @click="auth.signIn()">
+            <i class="fa fa-right-to-bracket pt-0.5"/>
             <span>Login</span>
           </Button>
         </div>
