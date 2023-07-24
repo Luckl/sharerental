@@ -1,8 +1,5 @@
 import {NuxtAuthHandler} from '#auth'
 import CredentialsProvider from "next-auth/providers/credentials";
-import {useFirebaseAuth} from "#imports";
-
-const auth = useFirebaseAuth()
 
 export default NuxtAuthHandler({
 
@@ -20,8 +17,8 @@ export default NuxtAuthHandler({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                await auth.loginUser(credentials.username.value, credentials.password.value)
-                return auth.user
+                console.log(`Logging in user ${ credentials.username }`);
+
             }
         })
     ]
