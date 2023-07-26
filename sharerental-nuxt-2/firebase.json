@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "public": ".output/public",
+    "site": "vuefire-nuxt",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "serverSecondGen"
+      }
+    ]
+  }
+}

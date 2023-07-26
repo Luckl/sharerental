@@ -6,16 +6,15 @@
     <div class="flex-1 align-items-center text-center font-bold text-3xl">ShareRental</div>
     <div class="flex-1">
       <div class="flex">
-        <div v-if="auth.status.value === 'authenticated'" class="absolute mr-3 right-0">
+        <div v-if="true" class="absolute mr-3 right-0">
           <div class="bg-yellow-600 border-circle p-3">
             <i class="pi pi-user"></i>
           </div>
-          <span class="absolute right-1"> {{ auth.data?.value?.user?.name }} </span>
+          <span class="absolute right-1"> user </span>
         </div>
         <div v-else class="absolute mr-3 right-0 ">
           <Button
-              class="flex items-center justify-center space-x-2 bg-green-500 text-white rounded-lg py-2 px-3 text-lg"
-              @click="auth.signIn()">
+              class="flex items-center justify-center space-x-2 bg-green-500 text-white rounded-lg py-2 px-3 text-lg">
             <i class="fa fa-right-to-bracket pt-0.5"/>
             <span>Login</span>
           </Button>
@@ -27,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import {useAuth} from "#imports";
+import {useCurrentUser} from "vuefire";
 
-const auth = useAuth()
+const user = useCurrentUser()
 </script>

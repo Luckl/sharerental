@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-20rem p-3 bg-center bg-no-repeat flex flex-column justify-content-center align-items-center"
-       :style="`background-image: url(${MyBackgroundImage})`">
+       :style="`background-image: url(${MyBackgroundImage})`" >
     <div>
         <span class="p-input-icon-left ">
           <i class="pi pi-search"/>
@@ -16,8 +16,6 @@
 
 <script setup lang="ts">
 import MyBackgroundImage from "@/assets/drill-background.jpg";
-
-definePageMeta({ auth: false })
 
 let searchText = ref("");
 
