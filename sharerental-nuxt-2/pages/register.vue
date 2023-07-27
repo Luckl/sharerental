@@ -6,8 +6,7 @@ export const googleAuthProvider = new GoogleAuthProvider()
 
 <script lang="ts" setup>
 import {
-  signInWithEmailAndPassword,
-  signOut,
+  createUserWithEmailAndPassword
 } from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 
@@ -22,9 +21,9 @@ const user = useCurrentUser()
 const email = ref("")
 const password = ref("")
 
-function signIn() {
-  signInWithEmailAndPassword(auth, email.value, password.value).catch((reason) => {
-    console.error('Failed signIn', reason)
+function register() {
+  createUserWithEmailAndPassword(auth, email.value, password.value).catch((reason) => {
+    console.error('Failed registration', reason)
     error.value=reason
   })
 }
@@ -43,23 +42,7 @@ const route = useRoute()
     </template>
     <template v-else>
       <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
-      <template v-if="user">
-        <p>
-          You are currently logged in as:
-          <br/>
-          <img
-              class="avatar"
-              v-if="user.photoURL"
-              :src="user.photoURL"
-              referrerpolicy="no-referrer"
-          />
-          <br/>
-          <strong>{{ user.displayName }}.</strong>
-        </p>
-
-        <button @click="signOut(auth)">Logout</button>
-      </template>
-      <template v-else>
+      <template v-if="!user">
         <div>
           <label for="username">Email</label>
           <div>
@@ -73,7 +56,7 @@ const route = useRoute()
           </div>
         </div>
         <div>
-          <Button label="Login" @click="signIn()"></Button>
+          <Button label="Register" @click="register()"></Button>
         </div>
       </template>
     </template>
