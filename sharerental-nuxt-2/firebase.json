@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": ".output/public",
-    "site": "vuefire-nuxt",
+    "site": "sharerental-b66f7",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "rewrites": [
