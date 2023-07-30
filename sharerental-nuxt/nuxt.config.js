@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       measurementId: process.env.FB_MEASUREMENT_ID
     }
   },
+  nitro: {
+    preset: 'vercel-edge',
+  },
   css: [
     'primevue/resources/themes/saga-blue/theme.css',
     'primevue/resources/primevue.css',
