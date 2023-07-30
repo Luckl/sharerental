@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'vercel-edge',
+    logLevel: 5
   },
   css: [
     'primevue/resources/themes/saga-blue/theme.css',
