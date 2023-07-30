@@ -1,8 +1,3 @@
-<script lang="ts">
-import {GoogleAuthProvider} from 'firebase/auth'
-
-export const googleAuthProvider = new GoogleAuthProvider()
-</script>
 
 <script lang="ts" setup>
 import {
@@ -32,7 +27,6 @@ function register() {
 const error = ref<Error | null>(null)
 
 const sticky = ref(false)
-const route = useRoute()
 </script>
 
 <template>
