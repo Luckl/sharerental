@@ -16,7 +16,6 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    preset: 'vercel-edge',
     logLevel: 5
   },
   css: [
