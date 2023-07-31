@@ -1,25 +1,27 @@
 <template>
-  <div>
-    <div class="flex justify-content-between bg-yellow-100 p-2">
-      <div class="flex-1 align-items-center ml-2">
-        <img alt="Logo" class="h-3rem" src="../assets/boels-rental-logo.jpg"/>
-      </div>
-      <div class="flex-1 align-items-center text-center font-bold text-3xl">ShareRental</div>
-      <div class="flex-1">
-        <div class="flex">
-          <div v-if="user" class="absolute mr-3 right-0">
-            <div class="bg-yellow-600 border-circle p-3">
-              <i class="pi pi-user"></i>
-            </div>
-            <span class="absolute right-1"> user </span>
+  <div class="site-navigation-header-container">
+    <div class="logo">
+      <img alt="Logo" class="logo" src="../assets/boels-rental-logo.jpg"/>
+    </div>
+    <div> <h1>ShareRental</h1></div>
+    <div>
+      <div>
+        <div v-if="user">
+          <div>
+            <i class="pi pi-user"></i>
           </div>
-          <div v-else class="absolute mr-3 right-0 ">
+          <span>{{ user.email }}</span>
+        </div>
+        <div v-else class="desktop-menu">
+          <Button>
             <NuxtLink to="/login">Login</NuxtLink>
-          </div>
+          </Button>
+          <Button>
+            <NuxtLink to="/register">Register</NuxtLink>
+          </Button>
         </div>
       </div>
     </div>
-    <div class="bg-yellow-200 h-2rem"></div>
   </div>
 </template>
 
@@ -32,3 +34,25 @@ function redirectToLogin() {
 
 }
 </script>
+
+<style>
+.logo {
+  width: 8.3rem
+}
+
+.site-navigation-header-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 678px){
+  .desktop-menu{
+    display: none;
+  }
+}
+@media screen and (min-width: 678px){
+  .mobile-menu{
+    display: none;
+  }
+}
+</style>

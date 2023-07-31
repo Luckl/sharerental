@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const baseUrl = '/';
 export default defineNuxtConfig({
   modules: ['nuxt-vuefire'],
   ssr: true,
@@ -16,14 +17,19 @@ export default defineNuxtConfig({
       measurementId: process.env.FB_MEASUREMENT_ID
     }
   },
+  googleFonts: {
+
+    families: {
+      Roboto: true
+    }
+  },
   nitro: {
     logLevel: 5
   },
   css: [
-    'primevue/resources/themes/saga-blue/theme.css',
+    'primevue/resources/themes/saga-orange/theme.css',
     'primevue/resources/primevue.css',
-    'primeicons/primeicons.css',
-    'primeflex/primeflex.css'
+    'primeicons/primeicons.css'
   ],
   build: {
     transpile: ['primevue']
