@@ -1,24 +1,35 @@
 <template>
   <div class="site-navigation-header-container">
-    <div class="logo">
-      <img alt="Logo" class="logo" src="../assets/boels-rental-logo.jpg"/>
+    <div>
+      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/boels-rental-logo.jpg"/></NuxtLink>
     </div>
-    <div> <h1>ShareRental</h1></div>
+    <div><h1>ShareRental</h1></div>
     <div>
       <div>
         <div v-if="user">
-          <div>
-            <i class="pi pi-user"></i>
+          <div class="">
+            <div>
+              <i class="pi pi-user"></i>
+            </div>
+            <span>{{ user.email }}</span>
           </div>
-          <span>{{ user.email }}</span>
         </div>
-        <div v-else class="desktop-menu">
-          <Button>
-            <NuxtLink to="/login">Login</NuxtLink>
-          </Button>
-          <Button>
-            <NuxtLink to="/register">Register</NuxtLink>
-          </Button>
+        <div v-else>
+          <div class="desktop-menu">
+            <NuxtLink to="/login">
+              <Button class="desktop-button">
+                Login
+              </Button>
+            </NuxtLink>
+            <NuxtLink to="/register">
+              <Button class="desktop-button">
+                Register
+              </Button>
+            </NuxtLink>
+          </div>
+        </div>
+        <div class="mobile-menu">
+          <i class="pi pi-align-justify"></i>
         </div>
       </div>
     </div>
@@ -30,9 +41,6 @@ import {useCurrentUser} from "vuefire";
 
 const user = useCurrentUser()
 
-function redirectToLogin() {
-
-}
 </script>
 
 <style>
@@ -40,18 +48,24 @@ function redirectToLogin() {
   width: 8.3rem
 }
 
+.desktop-button {
+  margin: 0.2rem
+}
+
 .site-navigation-header-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-@media screen and (max-width: 678px){
-  .desktop-menu{
+@media screen and (max-width: 678px) {
+  .desktop-menu {
     display: none;
   }
 }
-@media screen and (min-width: 678px){
-  .mobile-menu{
+
+@media screen and (min-width: 678px) {
+  .mobile-menu {
     display: none;
   }
 }
