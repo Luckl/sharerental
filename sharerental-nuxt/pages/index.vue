@@ -15,11 +15,13 @@
 
 <script setup lang="ts">
 import MyBackgroundImage from "@/assets/drill-background.jpg";
+import {useRouter} from "#app";
+import {ref} from "vue";
 
-let searchText = ref("");
-
+const router = useRouter();
+let searchText = ref("")
 function search() {
-  console.log(searchText.value);
+  router.push("/search/" + searchText.value)
 }
 </script>
 

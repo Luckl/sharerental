@@ -5,6 +5,7 @@ import Toast from 'primevue/toast'
 import ToastService from 'primevue/toastservice'
 import Password from "primevue/password";
 import Message from "primevue/message";
+import Card from "primevue/card";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
@@ -14,6 +15,7 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Toast', Toast)
     nuxtApp.vueApp.component('Password', Password)
     nuxtApp.vueApp.component('Message', Message)
+    nuxtApp.vueApp.component('Card', Card)
 
     //other components that you need
 })

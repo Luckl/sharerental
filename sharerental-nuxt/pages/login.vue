@@ -4,6 +4,7 @@ import {
   signOut,
 } from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
+import {useRouter} from "#app";
 
 definePageMeta({
   linkTitle: 'Login',
@@ -12,12 +13,14 @@ definePageMeta({
 
 const auth = useFirebaseAuth()! // only exists on client side
 const user = useCurrentUser()
-
+const router = useRouter()
 const email = ref("")
 const password = ref("")
 
 function signIn() {
-  signInWithEmailAndPassword(auth, email.value, password.value).catch((reason) => {
+  signInWithEmailAndPassword(auth, email.value, password.value).then(() => {
+    router.push("/")
+  }, (reason) => {
     console.error('Failed signIn', reason)
     error.value=reason
   })
