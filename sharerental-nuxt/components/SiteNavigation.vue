@@ -1,7 +1,7 @@
 <template>
   <div class="site-navigation-header-container">
     <div>
-      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/boels-rental-logo.jpg"/></NuxtLink>
+      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/sharerental_logo.png"/></NuxtLink>
     </div>
     <div><h1>ShareRental</h1></div>
     <div>
@@ -45,7 +45,9 @@ const user = useCurrentUser()
 
 <style>
 .logo {
-  width: 8.3rem
+  width: 4rem;
+  margin: 1rem;
+  border-radius: 5px;
 }
 
 .desktop-button {
@@ -53,6 +55,7 @@ const user = useCurrentUser()
 }
 
 .site-navigation-header-container {
+  background-color: #e8eef2;
   display: flex;
   justify-content: space-between;
   align-items: center;
