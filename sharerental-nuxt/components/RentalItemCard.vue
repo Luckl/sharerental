@@ -1,7 +1,7 @@
 <template>
   <Card style="width: 25em">
     <template #header>
-      <img alt="user header" src="/images/usercard.png" />
+      <img alt="user header" src="assets/sharerental_logo.png" />
     </template>
     <template #title> Advanced Card </template>
     <template #subtitle> Card subtitle </template>

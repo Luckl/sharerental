@@ -31,7 +31,7 @@ function search() {
 <style scoped>
 .home-search-container {
   background-size: cover;
-  height: 20rem;
+  height: 25rem;
 }
 .search-input-button-container{
   background-color: rgba(255, 255, 255, 0.63);

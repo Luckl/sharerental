@@ -50,10 +50,11 @@ const sticky = ref(false)
               referrerpolicy="no-referrer"
           />
           <br/>
-          <strong>{{ user.displayName }}.</strong>
+          <strong>{{ user.displayName }}</strong>
+          <strong>{{ user.email }}</strong>
         </p>
 
-        <button @click="signOut(auth)">Logout</button>
+        <Button @click="signOut(auth)">Logout</Button>
       </template>
       <template v-else>
         <div>

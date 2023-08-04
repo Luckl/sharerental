@@ -7,11 +7,10 @@
     <div>
       <div>
         <div v-if="user">
-          <div class="">
-            <div>
+          <div @click="navigateToProfile()">
+            <div class="user-icon">
               <i class="pi pi-user"></i>
             </div>
-            <span>{{ user.email }}</span>
           </div>
         </div>
         <div v-else>
@@ -38,16 +37,28 @@
 
 <script setup lang="ts">
 import {useCurrentUser} from "vuefire";
+import {useRouter} from "#app";
 
 const user = useCurrentUser()
-
+const router = useRouter()
+function navigateToProfile() {
+  router.push("/login")
+}
 </script>
 
 <style>
+.user-icon {
+  background-color: #bfaa0d;
+  padding: 1rem;
+  border-radius: 2rem;
+  margin: 2rem;
+  box-shadow: 0.2rem 0.2rem 0.3rem lightblue;
+}
 .logo {
   width: 4rem;
   margin: 1rem;
   border-radius: 5px;
+  box-shadow: 0.2rem 0.2rem 0.3rem lightblue;
 }
 
 .desktop-button {
