@@ -57,6 +57,7 @@ const sticky = ref(false)
         <Button @click="signOut(auth)">Logout</Button>
       </template>
       <template v-else>
+        <h2>Login</h2>
         <div>
           <label for="username">Email</label>
           <div>

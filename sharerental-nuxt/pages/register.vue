@@ -37,6 +37,7 @@ const sticky = ref(false)
     <template v-else>
       <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
       <template v-if="!user">
+        <h2>Register</h2>
         <div>
           <label for="username">Email</label>
           <div>

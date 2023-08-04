@@ -7,14 +7,14 @@
     <div>
       <div>
         <div v-if="user">
-          <div @click="navigateToProfile()">
-            <div class="user-icon">
+          <NuxtLink to="/login" class="remove-link-style">
+            <div class="button-icon">
               <i class="pi pi-user"></i>
             </div>
-          </div>
+          </NuxtLink>
         </div>
         <div v-else>
-          <div class="desktop-menu">
+          <div class="desktop-menu right-menu">
             <NuxtLink to="/login">
               <Button class="desktop-button">
                 Login
@@ -27,7 +27,7 @@
             </NuxtLink>
           </div>
         </div>
-        <div class="mobile-menu">
+        <div class="mobile-menu right-menu button-icon">
           <i class="pi pi-align-justify"></i>
         </div>
       </div>
@@ -37,18 +37,17 @@
 
 <script setup lang="ts">
 import {useCurrentUser} from "vuefire";
-import {useRouter} from "#app";
 
 const user = useCurrentUser()
-const router = useRouter()
-function navigateToProfile() {
-  router.push("/login")
-}
 </script>
 
 <style>
-.user-icon {
-  background-color: #bfaa0d;
+.remove-link-style {
+  text-decoration: none;
+  color: inherit;
+}
+.button-icon {
+  background-color: #FFC107;
   padding: 1rem;
   border-radius: 2rem;
   margin: 2rem;
@@ -62,7 +61,11 @@ function navigateToProfile() {
 }
 
 .desktop-button {
-  margin: 0.2rem
+  margin: 0.2rem;
+}
+
+.right-menu {
+  padding-right: 1rem;
 }
 
 .site-navigation-header-container {
