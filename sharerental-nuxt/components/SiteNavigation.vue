@@ -30,8 +30,16 @@
         <div class="mobile-menu right-menu button-icon">
           <i class="pi pi-align-justify" @click="menuOpened = !menuOpened"></i>
           <Sidebar v-model:visible="menuOpened" position="right">
-            <h2>Right Sidebar</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <NuxtLink to="/login">
+              <Button @click="menuOpened = false" class="menu-button">
+                Login
+              </Button>
+            </NuxtLink>
+            <NuxtLink to="/register">
+              <Button @click="menuOpened = false" class="menu-button">
+                Register
+              </Button>
+            </NuxtLink>
           </Sidebar>
         </div>
       </div>
@@ -64,6 +72,11 @@ const user = useCurrentUser()
   margin: 1rem;
   border-radius: 5px;
   box-shadow: 0.2rem 0.2rem 0.3rem lightblue;
+}
+
+.menu-button {
+  width: 100%;
+  margin: 0.1rem;
 }
 
 .desktop-button {
