@@ -1,7 +1,7 @@
 <template>
   <Card style="width: 25em">
     <template #header>
-      <img alt="user header" src="assets/sharerental_logo.png" />
+      <img class="card-image" alt="Product image" src="assets/sharerental_logo.png" />
     </template>
     <template #title> Advanced Card </template>
     <template #subtitle> Card subtitle </template>
@@ -23,5 +23,7 @@
 </script>
 
 <style scoped>
-
+.card-image {
+  width: 100%;
+}
 </style>
