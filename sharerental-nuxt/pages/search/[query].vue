@@ -3,22 +3,27 @@
     <h1>you searched for {{ $route.params.query }}</h1>
   </div>
   <div class="results">
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
-    <RentalItemCard />
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard :item="rentalItem"/>
   </div>
 </template>
 
 <script setup lang="ts">
+import RentalItemCard, {RentalItem} from "~/components/RentalItemCard.vue";
+import {ref} from "vue";
+import {useRoute} from "#app";
 
-import RentalItemCard from "~/components/RentalItemCard.vue";
-
+let route = useRoute();
+const {query} = route.params;
+const rentalItem = new RentalItem("1",  Array.isArray(query) ? query[0] : query, "ondertitel", "dit is echt vet man", "/assets/primevue-logo.png");
+const value = ref();
 </script>
 
 <style scoped>

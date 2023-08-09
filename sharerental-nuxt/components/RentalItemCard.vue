@@ -1,25 +1,41 @@
 <template>
   <Card style="width: 25em">
     <template #header>
-      <img class="card-image" alt="Product image" src="assets/sharerental_logo.png" />
+      <img class="card-image" alt="Product image" :src="item.image" />
     </template>
-    <template #title> Advanced Card </template>
-    <template #subtitle> Card subtitle </template>
+    <template #title> {{ item.title }}</template>
+    <template #subtitle> {{ item.shortDescription }} </template>
     <template #content>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
-        quas!
+        {{ item.longDescription }}
       </p>
-    </template>
-    <template #footer>
-      <Button icon="pi pi-check" label="Save" />
-      <Button icon="pi pi-times" label="Cancel" severity="secondary" style="margin-left: 0.5em" />
     </template>
   </Card>
 </template>
 
-<script setup>
+<script lang="ts">
+export class RentalItem {
+  id: String;
+  title: String;
+  shortDescription: String | null;
+  longDescription: String;
+  image: String;
 
+  constructor(id: String, name: String, shortDescription: String | null, longDescription: String, imagePath: String) {
+    this.id = id;
+    this.title = name;
+    this.shortDescription = shortDescription;
+    this.longDescription = longDescription;
+    this.image = imagePath;
+  }
+}
+</script>
+
+<script setup lang="ts">
+
+defineProps({
+  item: RentalItem
+})
 </script>
 
 <style scoped>
