@@ -28,6 +28,7 @@ const value = ref();
 
 <style scoped>
 .results {
+  justify-content: center;
   padding: 1rem;
   display: flex;
   flex-wrap: wrap;

@@ -29,7 +29,9 @@ export default defineNuxtConfig({
   css: [
     'primevue/resources/themes/saga-orange/theme.css',
     'primevue/resources/primevue.css',
-    'primeicons/primeicons.css'
+    'primeicons/primeicons.css',
+    'reset-css/reset.css',
+
   ],
   build: {
     transpile: ['primevue']
