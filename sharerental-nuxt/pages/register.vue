@@ -1,4 +1,3 @@
-
 <script lang="ts" setup>
 import {
   createUserWithEmailAndPassword
@@ -19,7 +18,7 @@ const password = ref("")
 function register() {
   createUserWithEmailAndPassword(auth, email.value, password.value).catch((reason) => {
     console.error('Failed registration', reason)
-    error.value=reason
+    error.value = reason
   })
 }
 
@@ -30,34 +29,38 @@ const sticky = ref(false)
 </script>
 
 <template>
-  <main>
-    <template v-if="user === undefined">
-      <p>Loading...</p>
-    </template>
-    <template v-else>
-      <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
-      <template v-if="!user">
-        <h2>Register</h2>
-        <div>
-          <label for="username">Email</label>
-          <div>
-            <InputText type="text" v-model="email"/>
-          </div>
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <div>
-            <Password v-model="password" :feedback="false"/>
-          </div>
-        </div>
-        <div>
-          <Button label="Register" @click="register()"></Button>
-        </div>
+  <form-page>
+    <main>
+      <template v-if="user === undefined">
+        <p>Loading...</p>
       </template>
-    </template>
-  </main>
+      <template v-else>
+        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
+        <template v-if="!user">
+          <h2>Register</h2>
+          <div class="form-input">
+            <label for="username">Email</label>
+            <div>
+              <InputText type="text" v-model="email"/>
+            </div>
+          </div>
+          <div class="form-input">
+            <label for="password">Password</label>
+            <div>
+              <Password v-model="password" :feedback="false"/>
+            </div>
+          </div>
+          <div class="form-input">
+            <Button label="Register" @click="register()"></Button>
+          </div>
+        </template>
+      </template>
+    </main>
+  </form-page>
 </template>
 
 <style scoped>
-
+.form-input {
+  margin: 1em;
+}
 </style>
