@@ -17,6 +17,11 @@ export default defineNuxtConfig({
             measurementId: process.env.FB_MEASUREMENT_ID
         }
     },
+    runtimeConfig: {
+        public: {
+            backendUrl: process.env.SR_BACKEND_URL
+        }
+    },
     googleFonts: {
         families: {
             Roboto: true

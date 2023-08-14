@@ -50,9 +50,14 @@
 <script setup lang="ts">
 import {useCurrentUser} from "vuefire";
 import {ref} from "vue";
+import {useAsyncData} from "#app";
 
 const menuOpened = ref(false);
 const user = useCurrentUser()
+
+const {data: response, error, refresh, pending } = await useAsyncData('userDetails', async () => {
+  const response = await userApi
+})
 </script>
 
 <style>

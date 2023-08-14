@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: ShareRental - OpenAPI 3.0
+  version: 0.0.1
+paths:
+  /search:
+    get:
+      tags:
+        - search
+      summary: Search based on query string
+      parameters:
+        - in: path
+          name: query
+          schema:
+            type: string
+          required: true
+          description: Execute search based on query string
+        - in: query
+          name: Pageable
+          schema:
+            $ref: './utils/PaginationParameters.yaml/#/Pageable'
+      responses:
+        200:
+          description: Successful search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+components:
+  schemas:
+    SearchResult:
+      type: object
+      required:
+        - _embedded
+        - page
+      properties:
+        _embedded:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResultItem'
+        page:
+          $ref: './utils/PaginationResponse.yaml'
+    SearchResultItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of a rental item
+          example: 1
+        title:
+          type: string
+          format: text
+          description: The title
+          example: 'Bouwdroger'
+        subtitle:
+          type: string
+          format: text
+          description: The title
+          example: '50 liter | 1600W'
+        shortDescription:
+          type: string
+          format: text
+          description: A short description of the item
+          example: 'Handig voor het ontvochten van gesloten ruimtes'
+        imageUrl:
+          type: string
+          format: uri
+          description: the url to the item image
+          example: 'https://storage.cloud.google.com/sharerental/0000f357-efb5-471c-abd7-e8bf6c42a455'

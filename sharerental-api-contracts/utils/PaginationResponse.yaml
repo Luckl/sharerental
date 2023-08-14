@@ -1,0 +1,23 @@
+type: object
+required:
+  - size
+  - totalElements
+  - totalPages
+  - number
+properties:
+  pageSize:
+    description: Number of items of the page
+    type: integer
+    format: int32
+  totalElements:
+    description: Total number of results
+    type: integer
+    format: int64
+  totalPages:
+    description: Total number of pages
+    type: integer
+    format: int32
+  number:
+    description: Number of the current page
+    type: integer
+    format: int32

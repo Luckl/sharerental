@@ -1,7 +1,4 @@
 <template>
-  <div>
-    <h1>you searched for {{ $route.params.query }}</h1>
-  </div>
   <div class="results">
     <RentalItemCard :item="rentalItem"/>
     <RentalItemCard :item="rentalItem"/>
@@ -22,7 +19,11 @@ import {useRoute} from "#app";
 
 let route = useRoute();
 const {query} = route.params;
+
 const rentalItem = new RentalItem("1",  Array.isArray(query) ? query[0] : query, "ondertitel", "dit is echt vet man", "/assets/primevue-logo.png");
+
+// Search here
+
 const value = ref();
 </script>
 

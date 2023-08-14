@@ -1,0 +1,25 @@
+Pageable:
+  type: object
+  properties:
+    page:
+      type: integer
+      format: int32
+      required: false
+      description: Pagenumber, default value is 0 (first page).
+      default: 0
+      example: '5'
+    pageSize:
+      type: integer
+      format: int32
+      required: false
+      description: The page size, number of items to return. Default value is 8.
+      default: 8
+      example: '25'
+    sort:
+      type: array
+      items:
+        type: string
+        maxLength: 50
+      required: false
+      description: Page sort, each item represents a sort column
+      example: 'price;desc,name;asc'
