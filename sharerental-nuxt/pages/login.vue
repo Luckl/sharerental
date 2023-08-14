@@ -73,7 +73,7 @@ const sticky = ref(false)
               </div>
             </div>
             <div class="form-input">
-              <Button type="submit" label="Login" on-submit="signIn()"></Button>
+              <Button label="Login" @click="signIn()"></Button>
             </div>
           </form>
         </template>
