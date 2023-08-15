@@ -1,23 +1,38 @@
-import {searchApiConfig} from './config'
-
 import {
+    Configuration as SearchConfiguration,
+    Pageable,
     SearchApi,
     SearchResult,
     SearchResultItem,
-    Pageable, SearchGetRequest
-} from '~~/schemas/openapi/search'
+} from '~~/schemas/openapi/search';
+import {User} from "@firebase/auth";
 
 export type {
     SearchResult,
     SearchResultItem
 }
 
-export default {
+class SearchClient {
+    private user: User | null |undefined;
+    private searchApi: SearchApi;
+
+    constructor(user: User | null | undefined, searchConfiguration: SearchConfiguration) {
+        this.user = user
+        this.searchApi = new SearchApi(searchConfiguration);
+    }
+
     search(pageable?: Pageable, query?: string) {
-        const searchApi = new SearchApi(searchApiConfig);
-        return searchApi.searchGet({
-            query: query ?? "",
-            pageable: pageable
-        })
+        return new Promise(() => {
+            return this.user?.getIdToken()
+        }).then((token) => {
+            console.log(token)
+
+            return this.searchApi.searchGet({
+                query: query ?? "",
+                pageable: pageable
+            });
+        });
     }
 }
+
+export default SearchClient

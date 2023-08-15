@@ -1,37 +1,39 @@
 <template>
   <div class="results">
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
-    <RentalItemCard :item="rentalItem"/>
+    <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem"/>
   </div>
-  token: {{ token }}
 </template>
 
 <script setup lang="ts">
 import RentalItemCard, {RentalItem} from "~/components/RentalItemCard.vue";
-import {ref} from "vue";
-import {useRoute} from "#app";
-import {useCurrentUser} from "vuefire";
+import {reactive, ref} from "vue";
+import {useAsyncData, useNuxtApp, useRoute} from "#app";
+import {SearchResultItem} from '~/services/api/Search';
 
-let route = useRoute();
-const {query} = route.params;
-const user = useCurrentUser();
-const rentalItem = new RentalItem("1", Array.isArray(query) ? query[0] : query, "ondertitel", "dit is echt vet man", "/assets/primevue-logo.png");
+const state = reactive({
+  shifts: undefined as SearchResultItem[] | undefined,
+  pageable: {
+    page: 0,
+    pageSize: 30,
+    sort: ['pricePerDay;asc'],
+  },
+});
 
-user.value?.getIdToken()
-    .then((result) => {
-      token.value = result
-    });
+const { $searchClient } = useNuxtApp();
+const route = useRoute();
+const rentalItems = ref<RentalItem[]>();
+const query = Array.isArray(route.params.query) ? route.params.query[0] : route.params.query;
+
 // Search here
+const result = await useAsyncData('searchWithText', async () => {
+  return await $searchClient.search(state.pageable, query);
+})
 
-const token = ref();
-const value = ref();
+rentalItems.value = result.data.value?.embedded
+    .map((result: SearchResultItem) => {
+      return new RentalItem(result.id, result.title, result.subtitle, result.shortDescription, result.imageUrl, result.pricePerDay)
+    });
+
 </script>
 
 <style scoped>

@@ -15,23 +15,32 @@
 
 <script lang="ts">
 export class RentalItem {
-  id: String;
+  id: number;
   title: String;
-  shortDescription: String | null;
-  longDescription: String;
-  image: String;
+  shortDescription: String | undefined;
+  subTitle: String | undefined;
+  image: String | undefined;
+  pricePerDay: number;
 
-  constructor(id: String, name: String, shortDescription: String | null, longDescription: String, imagePath: String) {
+  constructor(id: number,
+              name: String,
+              subTitle: String | undefined,
+              shortDescription: String | undefined,
+              imagePath: String | undefined,
+              pricePerDay: number) {
     this.id = id;
     this.title = name;
     this.shortDescription = shortDescription;
-    this.longDescription = longDescription;
+    this.subTitle = subTitle;
     this.image = imagePath;
+    this.pricePerDay = pricePerDay;
   }
 }
 </script>
 
 <script setup lang="ts">
+
+import {RentalItem} from "~/components/RentalItemCard.vue";
 
 defineProps({
   item: RentalItem

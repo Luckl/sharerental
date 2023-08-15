@@ -42,6 +42,9 @@ components:
           $ref: './utils/PaginationResponse.yaml'
     SearchResultItem:
       type: object
+      required:
+        - id
+        - title
       properties:
         id:
           type: integer
@@ -68,3 +71,7 @@ components:
           format: uri
           description: the url to the item image
           example: 'https://storage.cloud.google.com/sharerental/0000f357-efb5-471c-abd7-e8bf6c42a455'
+        pricePerDay:
+          type: number
+          description: Price for renting a day
+          example: 15.5

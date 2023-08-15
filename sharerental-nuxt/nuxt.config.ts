@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const baseUrl = '/';
 export default defineNuxtConfig({
     modules: ['nuxt-vuefire'],
     ssr: true,

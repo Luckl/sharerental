@@ -8,6 +8,7 @@ import Message from "primevue/message";
 import Card from "primevue/card";
 import Sidebar from "primevue/sidebar";
 import Editor from "primevue/editor";
+import {defineNuxtPlugin} from "#app";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
