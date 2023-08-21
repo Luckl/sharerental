@@ -15,7 +15,7 @@ const state = reactive({
   pageable: {
     page: 0,
     pageSize: 30,
-    sort: ['pricePerDay;asc'],
+    sort: [],
   },
 });
 
