@@ -2,7 +2,8 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "npm run codegen && npm run build-nuxt",
+    "build-nuxt": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "clean": "rimraf schemas/openapi",
