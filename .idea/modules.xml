@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nl.sharerental.be.sharerental-be.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nl.sharerental.be.sharerental-be.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/../sharerental.iml" filepath="$PROJECT_DIR$/../sharerental.iml" />
     </modules>
   </component>

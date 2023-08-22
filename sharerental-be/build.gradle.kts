@@ -12,7 +12,7 @@ plugins {
 }
 
 openApiGenerate {
-	generatorName.set("kotlin-spring")
+	generatorName.set("spring")
 	inputSpec.set("$rootDir/../sharerental-api-contracts/search.yaml")
 	outputDir.set("$buildDir/generated")
 	apiPackage.set("nl.sharerental.contract.http")
@@ -23,6 +23,8 @@ openApiGenerate {
 		"documentationProvider" to "none",
 		"interfaceOnly" to "true",
 		"useSwaggerUI" to "false",
+		"useJakartaEe" to "true",
+		"useBeanValidation" to "false",
 	))
 }
 
@@ -31,7 +33,7 @@ version = "0.0.1-SNAPSHOT"
 sourceSets {
 	main {
 		java {
-			srcDir("$buildDir/generated/src/main/kotlin")
+			srcDir("$buildDir/generated/src/main/java")
 		}
 	}
 }
@@ -44,6 +46,9 @@ repositories {
 }
 
 dependencies {
+	implementation("org.hibernate.validator:hibernate-validator")
+	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
+	implementation("org.flywaydb:flyway-core")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
