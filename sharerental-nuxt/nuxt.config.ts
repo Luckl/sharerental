@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
     modules: ['nuxt-vuefire'],
     ssr: true,
     devtools: {enabled: true},
@@ -24,6 +25,11 @@ export default defineNuxtConfig({
     googleFonts: {
         families: {
             Roboto: true
+        }
+    },
+    routeRules: {
+        '/backend/**': {
+            proxy: { to: "http://localhost:8080/backend/**", },
         }
     },
     nitro: {

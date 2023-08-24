@@ -26,6 +26,8 @@ const query = Array.isArray(route.params.query) ? route.params.query[0] : route.
 
 // Search here
 const result = await useAsyncData('searchWithText', async () => {
+  console.log("querying " + query)
+  debugger;
   return await $searchClient.search(state.pageable, query);
 })
 

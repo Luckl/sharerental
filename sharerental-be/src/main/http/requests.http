@@ -1,0 +1,3 @@
+### GET search result
+GET http://localhost:8080/search?query=lol
+Accept: application/json
