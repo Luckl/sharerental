@@ -8,8 +8,9 @@ paths:
       tags:
         - search
       summary: Search based on query string
+      operationId: search
       parameters:
-        - in: path
+        - in: query
           name: query
           schema:
             type: string

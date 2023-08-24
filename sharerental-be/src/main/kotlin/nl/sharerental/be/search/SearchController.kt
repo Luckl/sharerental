@@ -8,12 +8,18 @@ import nl.sharerental.contract.http.model.SearchResultItem
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
+
 @RestController
 class SearchController(rentalItemRepository: RentalItemRepository): SearchApi {
-    override fun searchGet(query: String?, pageable: Pageable?): ResponseEntity<SearchResult> {
+
+    override fun search(query: String?, pageable: Pageable?): ResponseEntity<SearchResult> {
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+
         val result = SearchResultItem(1235895, "Bouwdroger 1600W")
         logger.info("querying for string $query")
         result.subtitle = query

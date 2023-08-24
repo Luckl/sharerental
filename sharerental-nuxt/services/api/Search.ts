@@ -19,7 +19,7 @@ class SearchClient {
     }
 
     search(pageable?: Pageable, query?: string) {
-        return this.searchApi.searchGet({
+        return this.searchApi.search({
                 query: query ?? "",
                 pageable: pageable
             });
