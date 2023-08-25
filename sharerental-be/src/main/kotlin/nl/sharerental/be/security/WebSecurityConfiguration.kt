@@ -17,12 +17,13 @@ import java.util.stream.Collectors
 class WebSecurityConfiguration {
     @Bean
     fun filterChain(http: HttpSecurity) =
-        http.authorizeHttpRequests {
+        http
+            .authorizeHttpRequests {
             it
                 .requestMatchers("/me/**")
                 .authenticated()
                 .anyRequest()
-                .anonymous()
+                .permitAll()
         }
             .cors { it.configurationSource(corsConfigurationSource()) }
             .oauth2ResourceServer { oauth2 -> oauth2.jwt { } }
