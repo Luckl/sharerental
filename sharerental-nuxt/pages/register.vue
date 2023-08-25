@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import {
-  createUserWithEmailAndPassword
-} from 'firebase/auth'
+import {createUserWithEmailAndPassword, GoogleAuthProvider, updateProfile} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 
 definePageMeta({
@@ -11,19 +9,27 @@ definePageMeta({
 
 const auth = useFirebaseAuth()! // only exists on client side
 const user = useCurrentUser()
-
+const router = useRouter()
 const email = ref("")
 const password = ref("")
+const username = ref("")
+const errorParser = new RegExp('.*\\((.*)\\).*')
+
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 function register() {
-  createUserWithEmailAndPassword(auth, email.value, password.value).catch((reason) => {
-    console.error('Failed registration', reason)
-    error.value = reason
-  })
+  createUserWithEmailAndPassword(auth, email.value, password.value)
+      .then((result) => updateProfile(result.user, {displayName: username.value, photoURL: "null"}))
+      .then(() => router.push("/profile"))
+      .catch((reason) => {
+        error.value = errorParser.exec(reason.message)?.pop()
+      })
 }
 
 // display errors if any
-const error = ref<Error | null>(null)
+const error = ref<String | undefined>(undefined)
 
 const sticky = ref(false)
 </script>
@@ -32,12 +38,18 @@ const sticky = ref(false)
   <form-page>
     <main>
       <template v-if="user === undefined">
-        <p>Loading...</p>
+        <p>Laden...</p>
       </template>
       <template v-else>
-        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
+        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
         <template v-if="!user">
-          <h2>Register</h2>
+          <h2>Registreren</h2>
+          <div class="form-input">
+            <label for="username">Gebruikersnaam</label>
+            <div>
+              <InputText type="text" v-model="username"/>
+            </div>
+          </div>
           <div class="form-input">
             <label for="username">Email</label>
             <div>
@@ -45,13 +57,13 @@ const sticky = ref(false)
             </div>
           </div>
           <div class="form-input">
-            <label for="password">Password</label>
+            <label for="password">Wachtwoord</label>
             <div>
               <Password v-model="password" :feedback="false"/>
             </div>
           </div>
           <div class="form-input">
-            <Button label="Register" @click="register()"></Button>
+            <Button label="Registreer" @click="register()"></Button>
           </div>
         </template>
       </template>

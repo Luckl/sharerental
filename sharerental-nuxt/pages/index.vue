@@ -4,7 +4,7 @@
       <div class="search-input-button-container">
         <Search></Search>
         <div class="button">
-          <Button class="link-button" label="Ik wil mijn gereedschap verhuren" link/>
+          <Button class="link-button link-button-custom" label="Ik wil mijn gereedschap verhuren" link/>
         </div>
       </div>
     </div>
@@ -18,6 +18,10 @@ import Search from "~/components/Search.vue";
 </script>
 
 <style scoped>
+.link-button-custom{
+  background-color: rgba(255, 255, 255, 0.63);
+  font-weight: bold;
+}
 .home-search-container {
   background-size: cover;
   height: 25rem;

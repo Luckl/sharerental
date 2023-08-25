@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import {
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth'
+import {signInWithEmailAndPassword, signOut,} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 
@@ -16,18 +13,19 @@ const user = useCurrentUser()
 const router = useRouter()
 const email = ref("")
 const password = ref("")
+const errorParser = new RegExp('.*\\((.*)\\).*')
 
 function signIn() {
-  signInWithEmailAndPassword(auth, email.value, password.value).then(() => {
-    router.push("/")
-  }, (reason) => {
-    console.error('Failed signIn', reason)
-    error.value = reason
-  })
+  signInWithEmailAndPassword(auth, email.value, password.value)
+      .then(() => {
+        router.push("/profile")
+      }, (reason) => {
+        error.value = errorParser.exec(reason.message)?.pop()
+      })
 }
 
 // display errors if any
-const error = ref<Error | null>(null)
+const error = ref<String | undefined>(undefined)
 
 const sticky = ref(false)
 </script>
@@ -36,13 +34,13 @@ const sticky = ref(false)
   <form-page>
     <main>
       <template v-if="user === undefined">
-        <p>Loading...</p>
+        <p>Laden...</p>
       </template>
       <template v-else>
-        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error.value?.message }}</Message>
+        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
         <template v-if="user">
           <p>
-            You are currently logged in as:
+            Je bent ingelogd als:
             <br/>
             <img
                 class="avatar"
@@ -55,10 +53,10 @@ const sticky = ref(false)
             <strong>{{ user.email }}</strong>
           </p>
 
-          <Button @click="signOut(auth)">Logout</Button>
+          <Button @click="signOut(auth)">Uitloggen</Button>
         </template>
         <template v-else>
-          <h2>Login</h2>
+          <h2>Inloggen</h2>
           <form>
             <div class="form-input">
               <label for="username">Email</label>
@@ -67,7 +65,7 @@ const sticky = ref(false)
               </div>
             </div>
             <div class="form-input">
-              <label for="password">Password</label>
+              <label for="password">Wachtwoord</label>
               <div>
                 <Password v-model="password" :feedback="false"/>
               </div>
