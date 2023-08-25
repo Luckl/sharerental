@@ -1,37 +1,54 @@
 package nl.sharerental.be.search
 
 import nl.sharerental.be.rentalitem.repository.RentalItemRepository
+import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.net.URI
 
 
 @RestController
-class SearchController(rentalItemRepository: RentalItemRepository): SearchApi {
+class SearchController(val rentalItemRepository: RentalItemRepository) : SearchApi {
 
     override fun search(query: String?, pageable: Pageable?): ResponseEntity<SearchResult> {
         val authentication: Authentication = SecurityContextHolder.getContext().authentication
-
-        val result = SearchResultItem(1235895, "Bouwdroger 1600W")
         logger.info("querying for string $query")
-        result.subtitle = query
-        return ResponseEntity.of(
-            Optional.of(SearchResult(
-            listOf(result),
-            PaginationResponse(1, 1, 0))
-        ))
+
+        return ResponseEntity.ok(
+            rentalItemRepository.findAll(pageable ?: Pageable.ofSize(DEFAULT_PAGE_SIZE))
+                .toResponseObject()
+        );
     }
 
     companion object {
-        private val logger
-                = LoggerFactory.getLogger(SearchController::class.java)
+        private val logger = LoggerFactory.getLogger(SearchController::class.java)
+        private const val DEFAULT_PAGE_SIZE = 20
     }
 }
+
+private fun Page<RentalItem>.toResponseObject(): SearchResult {
+    val toList = this.get()
+        .map { it.toSearchResultItem() }
+        .toList()
+
+    return SearchResult(toList, PaginationResponse(this.totalElements, this.totalPages, this.number))
+}
+
+private fun RentalItem.toSearchResultItem(): SearchResultItem {
+    val searchResultItem = SearchResultItem(id, name)
+    searchResultItem.subtitle = shortDescription
+    searchResultItem.imageUrl = images.map { it.imageUrl }.map { URI(it) }.firstOrNull()
+    searchResultItem.pricePerDay = price_24h
+    return searchResultItem
+
+}
+
