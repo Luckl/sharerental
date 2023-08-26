@@ -15,10 +15,6 @@ const password = ref("")
 const username = ref("")
 const errorParser = new RegExp('.*\\((.*)\\).*')
 
-const googleProvider = new GoogleAuthProvider();
-
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-
 function register() {
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((result) => updateProfile(result.user, {displayName: username.value, photoURL: "null"}))

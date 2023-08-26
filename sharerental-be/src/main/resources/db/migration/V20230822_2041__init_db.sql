@@ -1,45 +1,110 @@
 CREATE TYPE FUEL_TYPE_ENUM AS ENUM ('GASOLINE', 'PETROL', 'ELECTRIC');
-CREATE TABLE rental_item (
-                             id BIGINT PRIMARY KEY,
-                             name TEXT NOT NULL,
-                             number TEXT,
-                             short_description TEXT,
-                             long_description TEXT,
-                             price_24h NUMERIC,
-                             price_48h NUMERIC,
-                             price_168h NUMERIC,
-                             delivery_possible BOOLEAN,
-                             delivery_price NUMERIC,
-                             category TEXT,
-                             reach_meters NUMERIC,
-                             carrying_weight_kilograms NUMERIC,
-                             maximum_work_height_meters NUMERIC,
-                             intrinsic_weight_kilograms NUMERIC,
-                             material_type TEXT,
-                             brand TEXT,
-                             maximum_pressure_bars NUMERIC,
-                             maximum_horse_power NUMERIC,
-                             required_power_voltage_volt NUMERIC,
-                             work_width_meters NUMERIC,
-                             vacuum_attachment_possible BOOLEAN,
-                             capacity_liters NUMERIC,
-                             item_height NUMERIC,
-                             item_width NUMERIC,
-                             item_length NUMERIC,
-                             power_watt NUMERIC,
-                             maximum_surface_square_meters NUMERIC,
-                             fuel_type FUEL_TYPE_ENUM
+CREATE TABLE rental_item
+(
+    id                            BIGINT PRIMARY KEY,
+    name                          TEXT NOT NULL,
+    number                        TEXT,
+    short_description             TEXT,
+    long_description              TEXT,
+    price_24h                     NUMERIC,
+    price_48h                     NUMERIC,
+    price_168h                    NUMERIC,
+    delivery_possible             BOOLEAN,
+    delivery_price                NUMERIC,
+    category                      TEXT,
+    reach_meters                  NUMERIC,
+    carrying_weight_kilograms     NUMERIC,
+    maximum_work_height_meters    NUMERIC,
+    intrinsic_weight_kilograms    NUMERIC,
+    material_type                 TEXT,
+    brand                         TEXT,
+    maximum_pressure_bars         NUMERIC,
+    maximum_horse_power           NUMERIC,
+    required_power_voltage_volt   NUMERIC,
+    work_width_meters             NUMERIC,
+    vacuum_attachment_possible    BOOLEAN,
+    capacity_liters               NUMERIC,
+    item_height                   NUMERIC,
+    item_width                    NUMERIC,
+    item_length                   NUMERIC,
+    power_watt                    NUMERIC,
+    maximum_surface_square_meters NUMERIC,
+    fuel_type                     FUEL_TYPE_ENUM
 );
 
-create table image (
-                       id BIGINT PRIMARY KEY,
-                       image_url TEXT NOT NULL
+create table image
+(
+    id        BIGINT PRIMARY KEY,
+    image_url TEXT NOT NULL
 );
 
-create table rental_item_image (
-    image_id BIGINT,
+create table rental_item_image
+(
+    image_id       BIGINT,
     rental_item_id BIGINT,
     PRIMARY KEY (rental_item_id, image_id),
-    FOREIGN KEY (rental_item_id) REFERENCES rental_item(id),
-    FOREIGN KEY (image_id) REFERENCES image(id)
+    FOREIGN KEY (rental_item_id) REFERENCES rental_item (id),
+    FOREIGN KEY (image_id) REFERENCES image (id)
+);
+
+-- usr table
+CREATE TABLE usr
+(
+    id           TEXT PRIMARY KEY,
+    name         TEXT,
+    surname      TEXT,
+    email        TEXT,
+    phone_number TEXT
+);
+
+-- Locations table
+CREATE TABLE location
+(
+    id                    BIGINT PRIMARY KEY,
+    address_line_1        TEXT,
+    address_line_2        TEXT,
+    address_line_3        TEXT,
+    street                TEXT,
+    house_number          TEXT,
+    house_number_addition TEXT,
+    postal_code           TEXT,
+    city                  TEXT,
+    country               TEXT,
+    geo_location          TEXT
+);
+
+-- Renter table
+CREATE TABLE renter
+(
+    id               BIGINT PRIMARY KEY,
+    name             TEXT,
+    description      TEXT,
+    primary_location BIGINT REFERENCES location (id)
+);
+
+-- RenterFinancialInformation table
+CREATE TABLE renter_financial_information
+(
+    renter_id           BIGINT PRIMARY KEY REFERENCES renter (id),
+    chamber_of_commerce TEXT,
+    vat_id              TEXT,
+    invoice_email       TEXT,
+    iban                TEXT
+);
+
+-- usrRenters table
+CREATE TABLE user_renter
+(
+    user_id   TEXT REFERENCES usr (id),
+    renter_id BIGINT REFERENCES renter (id),
+    role      TEXT,
+    PRIMARY KEY (user_id, renter_id)
+);
+
+-- RenterLocations table
+CREATE TABLE renter_location
+(
+    renter_id   BIGINT REFERENCES renter (id),
+    location_id BIGINT REFERENCES location (id),
+    PRIMARY KEY (renter_id, location_id)
 );

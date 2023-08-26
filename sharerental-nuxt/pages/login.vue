@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {signInWithEmailAndPassword, signOut,} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithEmailAndPassword, signOut,} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 
@@ -14,6 +14,10 @@ const router = useRouter()
 const email = ref("")
 const password = ref("")
 const errorParser = new RegExp('.*\\((.*)\\).*')
+
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 function signIn() {
   signInWithEmailAndPassword(auth, email.value, password.value)
