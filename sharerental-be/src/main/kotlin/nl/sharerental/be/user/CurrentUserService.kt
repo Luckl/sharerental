@@ -34,7 +34,7 @@ class CurrentUserService(val userRepository: UserRepository, val authentication:
                         email = email,
                         name = null,
                         phoneNumber = null,
-                        lessors = emptySet(),
+                        lessorEntities = emptySet(),
                         surname = null
                     )
                 )

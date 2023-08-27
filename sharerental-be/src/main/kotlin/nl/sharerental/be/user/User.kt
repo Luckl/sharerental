@@ -1,7 +1,7 @@
 package nl.sharerental.be.user
 
 import jakarta.persistence.*
-import nl.sharerental.be.lessor.Lessor
+import nl.sharerental.be.lessor.LessorEntity
 
 @Entity
 @Table(name = "usr")
@@ -21,5 +21,5 @@ data class User(
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lessor_id")]
     )
-    val lessors: Set<Lessor> = emptySet()
+    val lessorEntities: Set<LessorEntity> = emptySet()
 )

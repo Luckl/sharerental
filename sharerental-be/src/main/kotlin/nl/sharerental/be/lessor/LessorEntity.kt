@@ -3,7 +3,7 @@ package nl.sharerental.be.lessor
 import jakarta.persistence.*
 
 @Entity
-data class Lessor(
+data class LessorEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
