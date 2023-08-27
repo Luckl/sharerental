@@ -5,8 +5,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class UserConfiguration(val userCreationInterceptor: UserCreationInterceptor): WebMvcConfigurer {
+class UserConfiguration(val userInitializationInterceptor: UserContextInitializationInterceptor): WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(userCreationInterceptor)
+        registry.addInterceptor(userInitializationInterceptor)
     }
 }

@@ -12,7 +12,8 @@ import org.springframework.web.context.WebApplicationContext
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserService(val userRepository: UserRepository, val authentication: AuthenticationFacade) {
 
-    fun initialize(): User? {
+    // Could be improved by storing User object as field since service is request scoped.
+    fun get(): User? {
         val user = when (val principal = authentication.getPrincipal()) {
             is Jwt -> processJwt(principal)
             else -> null

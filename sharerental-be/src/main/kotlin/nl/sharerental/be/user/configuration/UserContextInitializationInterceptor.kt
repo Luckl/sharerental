@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service
 import org.springframework.web.servlet.HandlerInterceptor
 
 @Service
-class UserCreationInterceptor(val currentUserService: CurrentUserService): HandlerInterceptor {
+class UserContextInitializationInterceptor(val currentUserService: CurrentUserService): HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        currentUserService.initialize()
+        currentUserService.get()
         return super.preHandle(request, response, handler)
     }
 }
