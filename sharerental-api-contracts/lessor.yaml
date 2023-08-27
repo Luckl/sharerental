@@ -3,12 +3,12 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
-  /me/renter:
+  /me/lessor:
     get:
       tags:
-        - renter
-      operationId: getRenter
-      summary: Find all renters for user
+        - lessor
+      operationId: getLessor
+      summary: Find all lessors for user
       security:
         - BearerAuth: [ ]
       parameters:
@@ -22,10 +22,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetRenterResult'
+                $ref: '#/components/schemas/GetLessorResult'
     post:
-      summary: Create a new renter
-      operationId: createRenter
+      summary: Create a new lessor
+      operationId: createLessor
+      tags:
+        - lessor
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -33,18 +35,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RenterInput'
+              $ref: '#/components/schemas/LessorInput'
       responses:
         201:
           description: Item created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Renter'
-  /me/renter/{id}:
+                $ref: '#/components/schemas/Lessor'
+  /me/lessor/{id}:
     put:
-      summary: Update a renter
-      operationId: updateRenter
+      summary: Update a lessor
+      operationId: updateLessor
+      tags:
+        - lessor
       security:
         - BearerAuth: [ ]
       parameters:
@@ -59,14 +63,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RenterInput'
+              $ref: '#/components/schemas/LessorInput'
       responses:
         201:
           description: Item created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Renter'
+                $ref: '#/components/schemas/Lessor'
 components:
   securitySchemes:
     BearerAuth:
@@ -74,7 +78,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    GetRenterResult:
+    GetLessorResult:
       type: object
       required:
         - _embedded
@@ -83,10 +87,10 @@ components:
         _embedded:
           type: array
           items:
-            $ref: '#/components/schemas/Renter'
+            $ref: '#/components/schemas/Lessor'
         page:
           $ref: './utils/PaginationResponse.yaml'
-    Renter:
+    Lessor:
       type: object
       properties:
         id:
@@ -130,7 +134,7 @@ components:
           type: string
         country:
           type: string
-    RenterInput:
+    LessorInput:
       type: object
       required:
         - name

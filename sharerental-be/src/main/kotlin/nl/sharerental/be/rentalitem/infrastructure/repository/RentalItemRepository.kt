@@ -1,4 +1,4 @@
-package nl.sharerental.be.rentalitem.repository
+package nl.sharerental.be.rentalitem.infrastructure.repository
 
 import nl.sharerental.be.rentalitem.RentalItem
 import org.springframework.data.repository.CrudRepository

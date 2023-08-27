@@ -1,6 +1,6 @@
 package nl.sharerental.be.search
 
-import nl.sharerental.be.rentalitem.repository.RentalItemRepository
+import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse

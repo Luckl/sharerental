@@ -1,4 +1,4 @@
-package nl.sharerental.be.renter
+package nl.sharerental.be.lessor
 
 import jakarta.persistence.*
 

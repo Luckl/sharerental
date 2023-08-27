@@ -26,6 +26,8 @@ paths:
     post:
       summary: Create a new rental item
       operationId: createRentalItem
+      tags:
+        - rentalItem
       security:
         - BearerAuth: [ ]
       requestBody:

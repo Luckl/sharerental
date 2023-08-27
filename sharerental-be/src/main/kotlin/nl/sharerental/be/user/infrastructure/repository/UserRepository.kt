@@ -1,4 +1,4 @@
-package nl.sharerental.be.user.repository
+package nl.sharerental.be.user.infrastructure.repository
 
 import nl.sharerental.be.user.User
 import org.springframework.data.repository.CrudRepository

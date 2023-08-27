@@ -73,8 +73,8 @@ CREATE TABLE location
     geo_location          TEXT
 );
 
--- Renter table
-CREATE TABLE renter
+-- Lessor table
+CREATE TABLE lessor
 (
     id               BIGINT PRIMARY KEY,
     name             TEXT,
@@ -82,29 +82,29 @@ CREATE TABLE renter
     primary_location BIGINT REFERENCES location (id)
 );
 
--- RenterFinancialInformation table
-CREATE TABLE renter_financial_information
+-- LessorFinancialInformation table
+CREATE TABLE lessor_financial_information
 (
-    renter_id           BIGINT PRIMARY KEY REFERENCES renter (id),
+    lessor_id           BIGINT PRIMARY KEY REFERENCES lessor (id),
     chamber_of_commerce TEXT,
     vat_id              TEXT,
     invoice_email       TEXT,
     iban                TEXT
 );
 
--- usrRenters table
-CREATE TABLE user_renter
+-- usrLessors table
+CREATE TABLE user_lessor
 (
     user_id   TEXT REFERENCES usr (id),
-    renter_id BIGINT REFERENCES renter (id),
+    lessor_id BIGINT REFERENCES lessor (id),
     role      TEXT,
-    PRIMARY KEY (user_id, renter_id)
+    PRIMARY KEY (user_id, lessor_id)
 );
 
--- RenterLocations table
-CREATE TABLE renter_location
+-- LessorLocations table
+CREATE TABLE lessor_location
 (
-    renter_id   BIGINT REFERENCES renter (id),
+    lessor_id   BIGINT REFERENCES lessor (id),
     location_id BIGINT REFERENCES location (id),
-    PRIMARY KEY (renter_id, location_id)
+    PRIMARY KEY (lessor_id, location_id)
 );

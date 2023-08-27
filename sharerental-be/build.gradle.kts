@@ -1,19 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
-
 plugins {
 	id("org.springframework.boot") version "3.1.2"
 	id("io.spring.dependency-management") version "1.1.2"
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
 	kotlin("plugin.jpa") version "1.8.22"
-	id("org.openapi.generator") version "6.6.0"
+	id("org.openapi.generator") version "7.0.0"
 }
 
-openApiGenerate {
+tasks.openApiGenerate {
 	generatorName.set("spring")
-	inputSpec.set("$rootDir/../sharerental-api-contracts/search.yaml")
+	inputSpecRootDirectory.set("$rootDir/../sharerental-api-contracts/")
 	outputDir.set("$buildDir/generated")
 	apiPackage.set("nl.sharerental.contract.http")
 	invokerPackage.set("nl.sharerental.contract.http.invoker")
@@ -21,12 +19,49 @@ openApiGenerate {
 	configOptions.set(mapOf(
 		"annotationLibrary" to "none",
 		"documentationProvider" to "none",
+		"useTags" to "true",
 		"interfaceOnly" to "true",
 		"useSwaggerUI" to "false",
 		"useJakartaEe" to "true",
 		"useBeanValidation" to "false",
 	))
 }
+//
+//tasks.openApiGenerate {
+//	generatorName.set("spring")
+//	inputSpec.set("$rootDir/../sharerental-api-contracts/lessor.yaml")
+//	outputDir.set("$buildDir/generated")
+//	apiPackage.set("nl.sharerental.contract.http")
+//	invokerPackage.set("nl.sharerental.contract.http.invoker")
+//	modelPackage.set("nl.sharerental.contract.http.model")
+//	configOptions.set(mapOf(
+//		"annotationLibrary" to "none",
+//		"documentationProvider" to "none",
+//		"interfaceOnly" to "true",
+//		"useTags" to "true",
+//		"useSwaggerUI" to "false",
+//		"useJakartaEe" to "true",
+//		"useBeanValidation" to "false",
+//	))
+//}
+//
+//tasks.openApiGenerate {
+//	generatorName.set("spring")
+//	inputSpec.set("$rootDir/../sharerental-api-contracts/rentalItem.yaml")
+// 	outputDir.set("$buildDir/generated")
+//	apiPackage.set("nl.sharerental.contract.http")
+//	invokerPackage.set("nl.sharerental.contract.http.invoker")
+//	modelPackage.set("nl.sharerental.contract.http.model")
+//	configOptions.set(mapOf(
+//		"annotationLibrary" to "none",
+//		"documentationProvider" to "none",
+//		"interfaceOnly" to "true",
+//		"useTags" to "true",
+//		"useSwaggerUI" to "false",
+//		"useJakartaEe" to "true",
+//		"useBeanValidation" to "false",
+//	))
+//}
 
 group = "nl.sharerental.be"
 version = "0.0.1-SNAPSHOT"

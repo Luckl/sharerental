@@ -1,7 +1,7 @@
 package nl.sharerental.be.user
 
 import nl.sharerental.be.security.AuthenticationFacade
-import nl.sharerental.be.user.repository.UserRepository
+import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.security.oauth2.jwt.Jwt
@@ -34,7 +34,7 @@ class CurrentUserService(val userRepository: UserRepository, val authentication:
                         email = email,
                         name = null,
                         phoneNumber = null,
-                        renters = emptySet(),
+                        lessors = emptySet(),
                         surname = null
                     )
                 )

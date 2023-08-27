@@ -1,9 +1,9 @@
-package nl.sharerental.be.renter
+package nl.sharerental.be.lessor
 
 import jakarta.persistence.*
 
 @Entity
-data class Renter(
+data class Lessor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
@@ -15,9 +15,9 @@ data class Renter(
 
     @ManyToMany
     @JoinTable(
-        name = "renter_location",
-        joinColumns = [JoinColumn(name = "renter_id")],
+        name = "lessor_location",
+        joinColumns = [JoinColumn(name = "lessor_id")],
         inverseJoinColumns = [JoinColumn(name = "location_id")]
     )
-    val renters: Set<Location> = emptySet()
+    val locations: Set<Location> = emptySet()
 )

@@ -1,7 +1,7 @@
 package nl.sharerental.be.user
 
 import jakarta.persistence.*
-import nl.sharerental.be.renter.Renter
+import nl.sharerental.be.lessor.Lessor
 
 @Entity
 @Table(name = "usr")
@@ -17,9 +17,9 @@ data class User(
 
     @ManyToMany
     @JoinTable(
-        name = "user_renter",
+        name = "user_lessor",
         joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "renter_id")]
+        inverseJoinColumns = [JoinColumn(name = "lessor_id")]
     )
-    val renters: Set<Renter> = emptySet()
+    val lessors: Set<Lessor> = emptySet()
 )

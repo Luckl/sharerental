@@ -11,7 +11,7 @@ import {useAsyncData, useNuxtApp, useRoute} from "#app";
 import {SearchResultItem} from '~/services/api/Search';
 
 const state = reactive({
-  shifts: undefined as SearchResultItem[] | undefined,
+  results: undefined as SearchResultItem[] | undefined,
   pageable: {
     page: 0,
     pageSize: 30,
