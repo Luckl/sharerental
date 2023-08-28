@@ -11,7 +11,7 @@
 <script setup lang="ts">
 
 import {useAsyncData, useNuxtApp} from "#app";
-import RenterClient from "~/services/api/Renter";
+import LessorClient from "~/services/api/Lessor";
 
 let user = useCurrentUser();
 const username = user.value?.displayName
@@ -23,7 +23,7 @@ const pageable = {
   sort: []
 }
 
-const result = await useAsyncData('findRenters', async () => {
+const result = await useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(pageable);
 })
 

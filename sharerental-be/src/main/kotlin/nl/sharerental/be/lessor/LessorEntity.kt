@@ -9,11 +9,11 @@ data class LessorEntity(
     val id: Long = 0,
     val name: String,
     val description: String?,
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "primary_location")
     val primaryLocation: Location,
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.PERSIST])
     @JoinTable(
         name = "lessor_location",
         joinColumns = [JoinColumn(name = "lessor_id")],
