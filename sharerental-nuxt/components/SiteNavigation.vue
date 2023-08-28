@@ -35,22 +35,22 @@
             <div v-if="user">
               <NuxtLink to="/profile">
                 <Button @click="menuOpened = false" class="menu-button">
-                  Profile
+                  Profiel
                 </Button>
               </NuxtLink>
               <Button @click="menuOpened = false; signOut(auth)" class="menu-button">
-                Logout
+                Uitloggen
               </Button>
             </div>
             <div v-else>
               <NuxtLink to="/login">
                 <Button @click="menuOpened = false" class="menu-button">
-                  Login
+                  Inloggen
                 </Button>
               </NuxtLink>
               <NuxtLink to="/register">
                 <Button @click="menuOpened = false" class="menu-button">
-                  Register
+                  Registreren
                 </Button>
               </NuxtLink>
             </div>
