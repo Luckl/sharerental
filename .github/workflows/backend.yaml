@@ -2,7 +2,7 @@ name: CI for API, and deploy to Cloud run
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-api:
