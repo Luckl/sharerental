@@ -21,7 +21,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
         with:
-          arguments: bootBuildImage
+          arguments: bootBuildImage --imageName=europe-west4-docker.pkg.dev/sharerental:${{ github.sha }}
           build-root-directory: sharerental-be
 
       - name: Configure GCP credentials
@@ -42,4 +42,4 @@ jobs:
       - name: Build and push Docker images
         run: |
           # Build a docker container and push it to ECR
-          docker push <imgNameHere>
+          docker push europe-west4-docker.pkg.dev/sharerental:${{ github.sha }}
