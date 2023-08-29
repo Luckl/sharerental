@@ -1,0 +1,17 @@
+---
+servers:
+- url: "http://localhost:8080"
+openapi: "3.0.3"
+paths:
+  /me/rentalItem:
+    $ref: "./rentalItem.yaml#/paths/~1me~1rentalItem"
+  /search:
+    $ref: "./search.yaml#/paths/~1search"
+  /me/lessor/{id}:
+    $ref: "./lessor.yaml#/paths/~1me~1lessor~1{id}"
+  /me/lessor:
+    $ref: "./lessor.yaml#/paths/~1me~1lessor"
+info:
+  title: "merged spec"
+  description: "merged spec"
+  version: "1.0.0"

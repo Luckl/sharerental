@@ -1,17 +1,18 @@
 package nl.sharerental.be.search
 
-import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.rentalitem.RentalItem
+import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
+import nl.sharerental.contract.http.model.Pageable
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Order
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
@@ -19,12 +20,21 @@ import java.net.URI
 @RestController
 class SearchController(val rentalItemRepository: RentalItemRepository) : SearchApi {
 
-    override fun search(query: String?, pageable: Pageable?): ResponseEntity<SearchResult> {
-        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+    override fun search(
+        query: String?,
+        pageable: Pageable?
+    ): ResponseEntity<SearchResult> {
         logger.info("querying for string $query")
 
+        val sortFields = pageable?.sort?.map { s ->
+            Order(Sort.Direction.fromString(s.split(';')[1]),
+                s.split(';')[0]) }
+            .orEmpty()
+
+        val pageRequest = PageRequest.of(pageable?.page ?: 0, pageable?.pageSize ?: DEFAULT_PAGE_SIZE, Sort.by(sortFields))
+
         return ResponseEntity.ok(
-            rentalItemRepository.findAll(pageable ?: Pageable.ofSize(DEFAULT_PAGE_SIZE))
+            rentalItemRepository.findAll(pageRequest)
                 .toResponseObject()
         );
     }

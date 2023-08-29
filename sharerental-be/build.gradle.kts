@@ -11,7 +11,7 @@ plugins {
 
 tasks.openApiGenerate {
 	generatorName.set("spring")
-	inputSpec.set("$rootDir/../sharerental-api-contracts/lessor.yaml")
+	inputSpec.set("$rootDir/../sharerental-api-contracts/merged.yaml")
 	mergedFileName.set("sharerental.yaml")
 	outputDir.set("$buildDir/generated")
 	apiPackage.set("nl.sharerental.contract.http")
