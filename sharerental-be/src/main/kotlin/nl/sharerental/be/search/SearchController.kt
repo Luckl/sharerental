@@ -36,7 +36,7 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         return ResponseEntity.ok(
             rentalItemRepository.findAll(pageRequest)
                 .toResponseObject()
-        );
+        )
     }
 
     companion object {
