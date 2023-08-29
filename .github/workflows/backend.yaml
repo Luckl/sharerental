@@ -1,4 +1,4 @@
-name: CI for API, and deploy to Cloud run
+name: CI for API and deploy to Cloud run
 
 on:
   push:
