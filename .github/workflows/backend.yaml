@@ -1,4 +1,4 @@
-name: CI for FE and API, and deploy to EC2 instance
+name: CI for API, and deploy to Cloud run
 
 on:
   push:
