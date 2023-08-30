@@ -14,4 +14,4 @@ steps:
 #      - 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest'
 #      - '--region'
 #      - 'europe-west4'
-images: ['europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest']
+#images: ['europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest']
