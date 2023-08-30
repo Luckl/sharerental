@@ -9,11 +9,8 @@ plugins {
 	id("org.openapi.generator") version "7.0.0"
 }
 
-bootJar {
-	// Configure the Docker image name
-	docker {
-		name = 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest'
-	}
+tasks.bootBuildImage {
+	imageName.set("europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest")
 }
 
 tasks.openApiGenerate {
