@@ -1,5 +1,6 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gradle'
+  - name: 'gradle:8.3.0-jdk17'
+    entrypoint: 'gradle'
     dir: 'sharerental-be'
     args: ['bootBuildImage']
   - name: 'gcr.io/cloud-builders/docker'
