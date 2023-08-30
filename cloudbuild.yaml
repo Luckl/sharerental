@@ -1,0 +1,17 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gradle'
+    dir: 'sharerental-be'
+    args: ['bootBuildImage']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest' ]
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    entrypoint: gcloud
+#    args:
+#      - 'run'
+#      - 'deploy'
+#      - 'sharerental-backend'
+#      - '--image'
+#      - 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest'
+#      - '--region'
+#      - 'europe-west4'
+images: ['europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest']
