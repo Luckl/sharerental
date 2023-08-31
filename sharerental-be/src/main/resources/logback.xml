@@ -22,5 +22,4 @@
         </root>
     </springProfile>
 
-    <logger name="nl.sharerental.be" level="debug"/>
 </configuration>
