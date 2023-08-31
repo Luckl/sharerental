@@ -50,6 +50,7 @@ repositories {
 }
 
 dependencies {
+	implementation("com.google.cloud:google-cloud-logging-logback:0.130.21-alpha")
 	implementation("org.hibernate.validator:hibernate-validator")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.flywaydb:flyway-core")
