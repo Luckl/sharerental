@@ -3,6 +3,7 @@ package nl.sharerental.be.user.configuration
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import nl.sharerental.be.user.CurrentUserService
+import org.slf4j.MDC
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.HandlerInterceptor
 
@@ -10,7 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor
 class UserContextInitializationInterceptor(val currentUserService: CurrentUserService): HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        currentUserService.get()
+        val user = currentUserService.get()
+        MDC.put("user", user?.id)
         return super.preHandle(request, response, handler)
     }
 }

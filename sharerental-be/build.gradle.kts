@@ -50,7 +50,10 @@ repositories {
 }
 
 dependencies {
-	implementation("com.google.cloud:google-cloud-logging-logback:0.130.21-alpha")
+	implementation("ch.qos.logback:logback-classic:1.3.5")
+	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
 	implementation("org.hibernate.validator:hibernate-validator")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.flywaydb:flyway-core")
