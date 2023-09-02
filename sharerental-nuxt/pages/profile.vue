@@ -24,33 +24,37 @@
         <form @submit="onSubmitNewLessor">
           <div class="flexbox-column">
             <label for="fName" class="mb-1">Weergavenaam</label>
-            <InputText id="fName" class="mb-1" v-model="fName"></InputText>
+            <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
           </div>
           <div class="flexbox-column">
             <label for="fZipCode" class="mb-1">Postcode</label>
-            <InputText id="fZipCode" class="mb-1" v-model="fZipCode"></InputText>
+            <InputText id="fZipCode" class="mb-1" v-model="formInput.zipCode"></InputText>
           </div>
           <div class="flexbox-column">
             <label for="fHouseNumber" class="mb-1">Huisnummer</label>
-            <InputText id="fHouseNumber" class="mb-1" v-model="fHouseNumber"></InputText>
+            <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
           </div>
           <div class="flexbox-column">
             <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
-            <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="fHouseNumberAddition"></InputText>
+            <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="formInput.houseNumberAddition"></InputText>
           </div>
           <div class="flexbox-column">
             <label for="fCity" class="mb-1">Woonplaats</label>
-            <InputText id="fCity" class="mb-1 fit" v-model="fCity"></InputText>
+            <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
           </div>
           <div class="flexbox-row mb-1">
             <div class="flex align-items-center ">
-              <RadioButton v-model="fCountry" inputId="NL" name="fCountry" value="Nederland"/>
+              <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
               <label for="NL" class="ml-2">Nederland</label>
             </div>
             <div class="flex align-items-center">
-              <RadioButton v-model="fCountry" inputId="BE" name="fCountry" value="België"/>
+              <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
               <label for="BE" class="ml-2">België</label>
             </div>
+          </div>
+          <div class="flexbox-column">
+            <label for="fCity" class="mb-1">Telefoonnummer</label>
+            <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
           </div>
           <div >
           <Button type="submit">Aanmaken</Button>
@@ -64,20 +68,26 @@
 
 import {useAsyncData, useNuxtApp} from "#app";
 import {signOut} from "firebase/auth";
+import LessorClient, {Lessor} from "~/services/api/Lessor";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
+const lessors = ref<Lessor[]>()
+
+const formInput = reactive({
+  name: "",
+  zipCode: "",
+  houseNumber: "",
+  houseNumberAddition: "",
+  city: "",
+  country: "",
+  phoneNumber: ""
+})
 
 const showCreateLessor = ref(false)
-const fName = ref<string>()
-const fZipCode = ref<string>()
-const fHouseNumber = ref<string>()
-const fHouseNumberAddition = ref<string>()
-const fCity = ref<string>()
-const fCountry = ref<string>()
 
-const {$lessorClient} = useNuxtApp();
+const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 const pageable = {
   page: 0,
   pageSize: 20,
@@ -88,6 +98,7 @@ const result = await useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(pageable);
 })
 
+lessors.value = result.data.value?.embedded
 function onSubmitNewLessor() {
 
 }

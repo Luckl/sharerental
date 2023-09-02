@@ -10,6 +10,7 @@ data class LessorEntity(
     var id: Long? = null,
     val name: String,
     val description: String?,
+    val phoneNumber: String?,
     @ManyToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "primary_location")
     val primaryLocation: Location,
