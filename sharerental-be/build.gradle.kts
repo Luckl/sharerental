@@ -50,9 +50,7 @@ repositories {
 }
 
 dependencies {
-	implementation("ch.qos.logback:logback-classic:1.3.5")
-	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
-	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+	implementation("com.google.cloud:spring-cloud-gcp-starter-logging:4.7.2")
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
 	implementation("org.hibernate.validator:hibernate-validator")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
