@@ -3,10 +3,11 @@ package nl.sharerental.be.lessor
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "lessor")
 data class LessorEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    var id: Long? = null,
     val name: String,
     val description: String?,
     @ManyToOne(cascade = [CascadeType.PERSIST])

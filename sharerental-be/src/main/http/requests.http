@@ -1,3 +1,23 @@
 ### GET search result
 GET http://localhost:8080/backend/search?query=lol
 Accept: application/json
+
+### CREATE lessor
+POST http://localhost:8080/backend/me/lessor
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2MGI5ZGUwODBmZmFmYmZjMTgzMzllY2Q0NGFjNzdmN2ZhNGU4ZDMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiTHVjIEtsYWFzc2VuIiwicGljdHVyZSI6Im51bGwiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc2hhcmVyZW50YWwtYjY2ZjciLCJhdWQiOiJzaGFyZXJlbnRhbC1iNjZmNyIsImF1dGhfdGltZSI6MTY5MzI1MDI2MCwidXNlcl9pZCI6ImxxaGp6VmZZQlFNY1hNZ3BjMnFzTVRMQkZvSjIiLCJzdWIiOiJscWhqelZmWUJRTWNYTWdwYzJxc01UTEJGb0oyIiwiaWF0IjoxNjkzNjc3ODM2LCJleHAiOjE2OTM2ODE0MzYsImVtYWlsIjoibGtsYWFzc2VuQG1hcXFpZS5ubCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJsa2xhYXNzZW5AbWFxcWllLm5sIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.ZJoQWyzL172W0s2y9dMQ_iJXpomqZ0w5LoUVru0BkMJHFsyUWjgdz1BDHPMA4VFnt2qT_O06eAC4zFpZRQ67pelVj-6Yp9ZHps-5WSWuw0OG-xwP9URVfHcMXlSPcQ5yXVEgteRTxNFWYjl1OJ_8uTn6OsZ1Z2UKCFTIDOGuolN4-psS7zOCg10ThwuaDXVyG2tBDh_q-SBBbFAiXgLHzXlJ34CUw1ewa3eR09i9_pBjLXLTqcolNfx7S3qxB3h1TqaNmmJ35OwsGPRvWb0dNyfQvN1Tc-DUwuC82REJqc8ZizEFb_csGaFnutXo-0FItArVORvZKAa3f67EeKoreA
+
+{
+  "name": "$name",
+  "description": "$description",
+  "addressLine1": "string",
+  "addressLine2": "string",
+  "addressLine3": "string",
+  "street": "string",
+  "houseNumber": "string",
+  "houseNumberAddition": "string",
+  "postalCode": "string",
+  "city": "string",
+  "country": "string"
+}

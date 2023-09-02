@@ -6,7 +6,7 @@ import jakarta.persistence.*
 data class Location(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long? = null,
     @Column(name = "address_line_1")
     val addressLine1: String?,
     @Column(name = "address_line_2")

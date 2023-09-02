@@ -1,5 +1,6 @@
 package nl.sharerental.be.lessor.infrastructure
 
+import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.LessorEntity
 import nl.sharerental.be.lessor.Location
 import nl.sharerental.contract.http.LessorApi
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class LessorController(val lessorRepository: LessorRepository): LessorApi {
 
+    @Transactional
     override fun createLessor(lessorInput: LessorInput?): ResponseEntity<Lessor> {
 
         requireNotNull(lessorInput) { "LessorInputEmpty" }
