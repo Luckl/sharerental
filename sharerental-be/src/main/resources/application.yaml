@@ -2,6 +2,11 @@ server:
   servlet:
     context-path: /backend
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: sharerental-be
+    password: mysecretpassword
+    url: jdbc:postgresql://localhost:5432/sharerental
   security:
     oauth2:
       resourceserver:
