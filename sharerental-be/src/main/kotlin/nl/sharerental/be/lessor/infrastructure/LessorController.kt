@@ -20,21 +20,25 @@ class LessorController(val lessorRepository: LessorRepository): LessorApi {
         requireNotNull(lessorInput) { "LessorInputEmpty" }
         requireNotNull(lessorInput.name) { "LessorNameEmpty" }
 
+        val primaryLocation = Location(
+            addressLine1 = lessorInput.addressLine1,
+            addressLine2 = lessorInput.addressLine2,
+            addressLine3 = lessorInput.addressLine3,
+            city = lessorInput.city,
+            country = lessorInput.country,
+            houseNumber = lessorInput.houseNumber,
+            houseNumberAddition = lessorInput.houseNumberAddition,
+            postalCode = lessorInput.postalCode,
+            street = lessorInput.street,
+            geoLocation = null
+        )
+
         val lessorEntity = LessorEntity(
             name = lessorInput.name,
             description = lessorInput.description,
-            primaryLocation = Location(
-                addressLine1 = lessorInput.addressLine1,
-                addressLine2 = lessorInput.addressLine2,
-                addressLine3 = lessorInput.addressLine3,
-                city = lessorInput.city,
-                country = lessorInput.country,
-                houseNumber = lessorInput.houseNumber,
-                houseNumberAddition = lessorInput.houseNumberAddition,
-                postalCode = lessorInput.postalCode,
-                street = lessorInput.street,
-                geoLocation = null
-            )
+            phoneNumber = lessorInput.phoneNumber,
+            primaryLocation = primaryLocation,
+            locations = setOf(primaryLocation)
         )
 
         val result = lessorRepository.save(lessorEntity)
@@ -47,8 +51,8 @@ class LessorController(val lessorRepository: LessorRepository): LessorApi {
         return ResponseEntity.ok(response)
     }
 
-    override fun getLessor(pageable: Pageable?): ResponseEntity<GetLessorResult> {
-        return super.getLessor(pageable)
+    override fun getLessor(page: Int?, size: Int?, sort: MutableList<String>?): ResponseEntity<GetLessorResult> {
+        return super.getLessor(page, size, sort)
     }
 
     override fun updateLessor(id: Long?, lessorInput: LessorInput?): ResponseEntity<Lessor> {

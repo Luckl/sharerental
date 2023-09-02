@@ -1,12 +1,14 @@
 <template>
   <client-only>
+    <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+    <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
     <Card class="m-1 p-1">
       <template #header class="m-1">
         <h2>Welkom, {{ username }}</h2>
       </template>
       <template #content>
         <div>
-          <div class="mb-1" >
+          <div class="mb-1">
             <Button @click="showCreateLessor = true">Verhuurder worden</Button>
           </div>
           <div class="mb-1">
@@ -27,8 +29,12 @@
             <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
           </div>
           <div class="flexbox-column">
-            <label for="fZipCode" class="mb-1">Postcode</label>
-            <InputText id="fZipCode" class="mb-1" v-model="formInput.zipCode"></InputText>
+            <label for="fDescription" class="mb-1">Omschrijving</label>
+            <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
+          </div>
+          <div class="flexbox-column">
+            <label for="fPostalCode" class="mb-1">Postcode</label>
+            <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
           </div>
           <div class="flexbox-column">
             <label for="fHouseNumber" class="mb-1">Huisnummer</label>
@@ -56,8 +62,8 @@
             <label for="fCity" class="mb-1">Telefoonnummer</label>
             <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
           </div>
-          <div >
-          <Button type="submit">Aanmaken</Button>
+          <div>
+            <Button type="submit">Aanmaken</Button>
           </div>
         </form>
       </template>
@@ -74,10 +80,12 @@ let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
 const lessors = ref<Lessor[]>()
+const message = ref<String | undefined>(undefined)
 
 const formInput = reactive({
   name: "",
-  zipCode: "",
+  description: "",
+  postalCode: "",
   houseNumber: "",
   houseNumberAddition: "",
   city: "",
@@ -88,19 +96,19 @@ const formInput = reactive({
 const showCreateLessor = ref(false)
 
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
-const pageable = {
-  page: 0,
-  pageSize: 20,
-  sort: []
-}
 
 const result = await useAsyncData('findLessors', async () => {
-  return await $lessorClient.findAll(pageable);
+  return await $lessorClient.findAll(0, 20, []);
 })
 
-lessors.value = result.data.value?.embedded
 function onSubmitNewLessor() {
-
+  $lessorClient.create(formInput)
+      .then(success => {
+        message.value="Succesvol aangemaakt"
+      },
+      failureReason => {
+        message.value="Er is iets fout gegaan"
+      })
 }
 
 </script>

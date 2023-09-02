@@ -1,6 +1,5 @@
 import {
     Configuration as LessorConfiguration,
-    Pageable,
     LessorApi,
     GetLessorResult,
     Lessor, LessorInput,
@@ -18,10 +17,12 @@ class LessorClient {
         this.lessorApi = new LessorApi(searchConfiguration);
     }
 
-    findAll(pageable?: Pageable) {
+    findAll(page: number, size: number, sort: string[]) {
         return this.lessorApi.getLessor({
-                pageable: pageable
-            });
+            page: page,
+            size: size,
+            sort: sort
+        });
     }
 
     create(lessorInput: LessorInput) {
