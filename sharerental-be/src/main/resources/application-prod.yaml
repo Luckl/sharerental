@@ -2,4 +2,4 @@ spring:
   datasource:
     username: sharerental-be
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://34.34.58.182:5432/sharerental
+    url: jdbc:postgresql://10.13.144.3:5432/sharerental
