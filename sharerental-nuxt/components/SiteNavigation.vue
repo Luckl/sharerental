@@ -18,12 +18,12 @@
             <div class="right-menu">
               <NuxtLink to="/login">
                 <Button class="desktop-button">
-                  Login
+                  Inloggen
                 </Button>
               </NuxtLink>
               <NuxtLink to="/register">
                 <Button class="desktop-button">
-                  Register
+                  Registreren
                 </Button>
               </NuxtLink>
             </div>
@@ -108,6 +108,7 @@ const auth = useFirebaseAuth()!
 }
 
 .site-navigation-header-container {
+  width: 100%;
   background-color: #e8eef2;
   display: flex;
   justify-content: space-between;
@@ -117,6 +118,10 @@ const auth = useFirebaseAuth()!
 @media screen and (max-width: 678px) {
   .desktop-menu {
     display: none;
+  }
+
+  h1 {
+    font-size: 1.5em;
   }
 }
 

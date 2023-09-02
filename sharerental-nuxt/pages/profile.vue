@@ -6,7 +6,7 @@
       </template>
       <template #content>
         <div>
-          <div class="mb-1">
+          <div class="mb-1" >
             <Button @click="showCreateLessor = true">Verhuurder worden</Button>
           </div>
           <div class="mb-1">
@@ -20,32 +20,40 @@
       <template #header class="m-1">
         <h3>Registreren als verhuurder</h3>
       </template>
-      <template #content class="flexbox">
+      <template #content class="flexbox-column">
         <form @submit="onSubmitNewLessor">
-          <!--private String addressLine1;
-            private String addressLine2;
-            private String addressLine3;
-            private String street;
-            private String houseNumber;
-            private String houseNumberAddition;
-            private String postalCode;
-            private String city;
-            private String country;-->
-          <div class="formInputRow">
-            <label for="fName">Weergavenaam</label>
-            <InputText id="fName" v-model="fName"></InputText>
+          <div class="flexbox-column">
+            <label for="fName" class="mb-1">Weergavenaam</label>
+            <InputText id="fName" class="mb-1" v-model="fName"></InputText>
           </div>
-          <div>
-            <label for="fName">Omschrijving</label>
-            <Editor id="fDescription" editorStyle="height: 120px" v-model="fDescription">
-              <template v-slot:toolbar>
-        <span class="ql-formats">
-            <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
-            <button v-tooltip.bottom="'Italic'" class="ql-italic"></button>
-            <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
-        </span>
-              </template>
-            </Editor>
+          <div class="flexbox-column">
+            <label for="fZipCode" class="mb-1">Postcode</label>
+            <InputText id="fZipCode" class="mb-1" v-model="fZipCode"></InputText>
+          </div>
+          <div class="flexbox-column">
+            <label for="fHouseNumber" class="mb-1">Huisnummer</label>
+            <InputText id="fHouseNumber" class="mb-1" v-model="fHouseNumber"></InputText>
+          </div>
+          <div class="flexbox-column">
+            <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
+            <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="fHouseNumberAddition"></InputText>
+          </div>
+          <div class="flexbox-column">
+            <label for="fCity" class="mb-1">Woonplaats</label>
+            <InputText id="fCity" class="mb-1 fit" v-model="fCity"></InputText>
+          </div>
+          <div class="flexbox-row mb-1">
+            <div class="flex align-items-center ">
+              <RadioButton v-model="fCountry" inputId="NL" name="fCountry" value="Nederland"/>
+              <label for="NL" class="ml-2">Nederland</label>
+            </div>
+            <div class="flex align-items-center">
+              <RadioButton v-model="fCountry" inputId="BE" name="fCountry" value="België"/>
+              <label for="BE" class="ml-2">België</label>
+            </div>
+          </div>
+          <div >
+          <Button type="submit">Aanmaken</Button>
           </div>
         </form>
       </template>
@@ -63,7 +71,11 @@ const username = user.value?.displayName
 
 const showCreateLessor = ref(false)
 const fName = ref<string>()
-const fDescription = ref<string>()
+const fZipCode = ref<string>()
+const fHouseNumber = ref<string>()
+const fHouseNumberAddition = ref<string>()
+const fCity = ref<string>()
+const fCountry = ref<string>()
 
 const {$lessorClient} = useNuxtApp();
 const pageable = {
@@ -82,13 +94,16 @@ function onSubmitNewLessor() {
 
 </script>
 <style>
-.formInputRow {
-  margin: 1rem
-}
 
-.flexbox {
+.flexbox-column {
   display: flex;
   flex-direction: column
+}
+
+.flexbox-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem
 }
 
 .mb-1 {
@@ -102,4 +117,5 @@ function onSubmitNewLessor() {
 .p-1 {
   padding: 1rem
 }
+
 </style>
