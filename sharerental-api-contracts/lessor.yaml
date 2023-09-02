@@ -127,6 +127,9 @@ components:
         description:
           type: string
           example: "Machineverhuur voor iedereen!"
+        phoneNumber:
+          type: string
+          example: "+31 6 43209314"
         primaryLocation:
           $ref: '#/components/schemas/Location'
         locations:
