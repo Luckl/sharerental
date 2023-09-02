@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/backend/:path*",
+      "destination": "https://sharerental-be-v4fplyo4va-ez.a.run.app/backend/:path*"
+    }
+  ]
+}

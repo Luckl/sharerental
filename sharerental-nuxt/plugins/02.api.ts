@@ -8,7 +8,7 @@ import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 export default defineNuxtPlugin((nuxtApp) => {
 
     let configuration = {
-        basePath: useRuntimeConfig().public.backendUrl,
+        basePath: useRuntimeConfig().public.backendUrl + "/backend",
         middleware: [new ApiMiddleware()]
     };
 
