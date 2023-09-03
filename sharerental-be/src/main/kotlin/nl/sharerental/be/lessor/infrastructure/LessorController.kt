@@ -1,12 +1,14 @@
 package nl.sharerental.be.lessor.infrastructure
 
 import jakarta.transaction.Transactional
-import nl.sharerental.be.lessor.LessorEntity
+import nl.sharerental.be.lessor.Lessor
 import nl.sharerental.be.lessor.Location
+import nl.sharerental.be.lessor.UserLessor
+import nl.sharerental.be.lessor.UserLessorId
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.LessorApi
 import nl.sharerental.contract.http.model.GetLessorResult
-import nl.sharerental.contract.http.model.Lessor
+import nl.sharerental.contract.http.model.Lessor as HttpLessor
 import nl.sharerental.contract.http.model.LessorInput
 import nl.sharerental.contract.http.model.PaginationResponse
 import org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZE
@@ -16,10 +18,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LessorController(val lessorRepository: LessorRepository, val currentUserService: CurrentUserService) : LessorApi {
+class LessorController(private val lessorRepository: LessorRepository,
+                       private val userLessorRepository: UserLessorRepository,
+                       private val currentUserService: CurrentUserService) : LessorApi {
 
     @Transactional
-    override fun createLessor(lessorInput: LessorInput?): ResponseEntity<Lessor> {
+    override fun createLessor(lessorInput: LessorInput?): ResponseEntity<HttpLessor> {
 
         requireNotNull(lessorInput) { "LessorInputEmpty" }
         requireNotNull(lessorInput.name) { "LessorNameEmpty" }
@@ -37,19 +41,23 @@ class LessorController(val lessorRepository: LessorRepository, val currentUserSe
             geoLocation = null
         )
 
-        val lessorEntity = LessorEntity(
+        val lessor = Lessor(
             name = lessorInput.name,
             description = lessorInput.description,
             phoneNumber = lessorInput.phoneNumber,
             primaryLocation = primaryLocation,
             lessorFinancialInformation = null,
             locations = setOf(primaryLocation),
-            users = setOf(currentUserService.get())
+            userLessors = setOf()
         )
 
-        val result = lessorRepository.save(lessorEntity)
+        val result = lessorRepository.save(lessor)
 
-        val response = Lessor()
+        val userLessor = UserLessor(UserLessorId(currentUserService.get().id, result.id))
+
+        userLessorRepository.save(userLessor)
+
+        val response = HttpLessor()
             .name(result.name)
             .id(result.id)
             .description(result.description)
@@ -69,11 +77,13 @@ class LessorController(val lessorRepository: LessorRepository, val currentUserSe
 
         val pageRequest = PageRequest.of(page ?: 0, size ?: DEFAULT_PAGE_SIZE, Sort.by(sortFields))
 
-        val lessors = lessorRepository.findAllByUsersContaining(currentUserService.get(), pageRequest)
-//        val lessors = lessorRepository.findAll(pageRequest)
+//        val lessors = lessorRepository.findAllByUserId(currentUserService.get().id, pageRequest)
+        val idsForUserId = lessorRepository.getIdsForUserId(currentUserService.get().id)
+
+        val lessors = lessorRepository.findByIdIn(idsForUserId, pageRequest)
 
         val map = lessors.toList().map {
-            val lessor = Lessor()
+            val lessor = HttpLessor()
             lessor.id = it.id
             lessor.name = it.name
             lessor.description = it.description
@@ -85,7 +95,7 @@ class LessorController(val lessorRepository: LessorRepository, val currentUserSe
         return ResponseEntity.ok(GetLessorResult(map, PaginationResponse(lessors.totalElements, lessors.totalPages, lessors.number)))
     }
 
-    override fun updateLessor(id: Long?, lessorInput: LessorInput?): ResponseEntity<Lessor> {
+    override fun updateLessor(id: Long?, lessorInput: LessorInput?): ResponseEntity<HttpLessor> {
         return super.updateLessor(id, lessorInput)
     }
 }

@@ -12,7 +12,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         middleware: [new ApiMiddleware()]
     };
 
-
     const searchApiConfig = new SearchConfiguration(configuration)
     const lessorApiConfig = new LessorConfiguration(configuration)
 

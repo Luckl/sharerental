@@ -1,73 +1,75 @@
 <template>
   <client-only>
-    <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
-    <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
-    <Card class="m-1 p-1">
-      <template #header class="m-1">
-        <h2>Welkom, {{ username }}</h2>
-      </template>
-      <template #content>
-        <div>
-          <div class="mb-1">
-            <Button @click="showCreateLessor = true">Verhuurder worden</Button>
-          </div>
-          <div class="mb-1">
-            <Button @click="signOut(auth)">Uitloggen</Button>
-          </div>
-        </div>
-      </template>
-    </Card>
-
-    <Card v-if="showCreateLessor" class="m-1 p-1">
-      <template #header class="m-1">
-        <h3>Registreren als verhuurder</h3>
-      </template>
-      <template #content class="flexbox-column">
-        <form @submit="onSubmitNewLessor">
-          <div class="flexbox-column">
-            <label for="fName" class="mb-1">Weergavenaam</label>
-            <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fDescription" class="mb-1">Omschrijving</label>
-            <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fPostalCode" class="mb-1">Postcode</label>
-            <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fHouseNumber" class="mb-1">Huisnummer</label>
-            <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
-            <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="formInput.houseNumberAddition"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fCity" class="mb-1">Woonplaats</label>
-            <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
-          </div>
-          <div class="flexbox-row mb-1">
-            <div class="flex align-items-center ">
-              <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
-              <label for="NL" class="ml-2">Nederland</label>
-            </div>
-            <div class="flex align-items-center">
-              <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
-              <label for="BE" class="ml-2">België</label>
-            </div>
-          </div>
-          <div class="flexbox-column">
-            <label for="fCity" class="mb-1">Telefoonnummer</label>
-            <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
-          </div>
+    <div v-show="loaded">
+      <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+      <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+      <Card class="m-1 p-1">
+        <template #header class="m-1">
+          <h2>Welkom, {{ username }}</h2>
+        </template>
+        <template #content>
           <div>
-            <Button type="submit">Aanmaken</Button>
+            <div class="mb-1">
+              <Button v-show="lessors.length == 0" @click="showCreateLessor = true">Verhuurder worden</Button>
+            </div>
+            <div class="mb-1">
+              <Button @click="signOut(auth)">Uitloggen</Button>
+            </div>
           </div>
-        </form>
-      </template>
-    </Card>
+        </template>
+      </Card>
+
+      <Card v-if="showCreateLessor" class="m-1 p-1">
+        <template #header class="m-1">
+          <h3>Registreren als verhuurder</h3>
+        </template>
+        <template #content class="flexbox-column">
+          <form @submit="onSubmitNewLessor">
+            <div class="flexbox-column">
+              <label for="fName" class="mb-1">Weergavenaam</label>
+              <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
+            </div>
+            <div class="flexbox-column">
+              <label for="fDescription" class="mb-1">Omschrijving</label>
+              <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
+            </div>
+            <div class="flexbox-column">
+              <label for="fPostalCode" class="mb-1">Postcode</label>
+              <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
+            </div>
+            <div class="flexbox-column">
+              <label for="fHouseNumber" class="mb-1">Huisnummer</label>
+              <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
+            </div>
+            <div class="flexbox-column">
+              <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
+              <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="formInput.houseNumberAddition"></InputText>
+            </div>
+            <div class="flexbox-column">
+              <label for="fCity" class="mb-1">Woonplaats</label>
+              <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
+            </div>
+            <div class="flexbox-row mb-1">
+              <div class="flex align-items-center ">
+                <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
+                <label for="NL" class="ml-2">Nederland</label>
+              </div>
+              <div class="flex align-items-center">
+                <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
+                <label for="BE" class="ml-2">België</label>
+              </div>
+            </div>
+            <div class="flexbox-column">
+              <label for="fCity" class="mb-1">Telefoonnummer</label>
+              <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
+            </div>
+            <div>
+              <Button type="submit">Aanmaken</Button>
+            </div>
+          </form>
+        </template>
+      </Card>
+    </div>
   </client-only>
 </template>
 <script setup lang="ts">
@@ -79,8 +81,9 @@ import LessorClient, {Lessor} from "~/services/api/Lessor";
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
-const lessors = ref<Lessor[]>()
+const lessors = ref<Lessor[]>([])
 const message = ref<String | undefined>(undefined)
+const loaded = ref(false)
 
 const formInput = reactive({
   name: "",
@@ -97,18 +100,24 @@ const showCreateLessor = ref(false)
 
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 
-const result = await useAsyncData('findLessors', async () => {
+const result = useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(0, 20, []);
-})
+}).then(succes => {
+      loaded.value = true;
+      lessors.value = succes.data.value?.embedded
+    },
+    failure => {
+      loaded.value = true;
+    })
 
 function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {
-        message.value="Succesvol aangemaakt"
-      },
-      failureReason => {
-        message.value="Er is iets fout gegaan"
-      })
+            message.value = "Succesvol aangemaakt"
+          },
+          failureReason => {
+            message.value = "Er is iets fout gegaan"
+          })
 }
 
 </script>

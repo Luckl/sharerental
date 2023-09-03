@@ -20,5 +20,5 @@ class LessorFinancialInformation(
     @MapsId
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lessor_id")
-    var lessorEntity: LessorEntity
+    var lessor: Lessor
 )

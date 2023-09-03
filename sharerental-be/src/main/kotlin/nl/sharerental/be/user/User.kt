@@ -1,7 +1,7 @@
 package nl.sharerental.be.user
 
 import jakarta.persistence.*
-import nl.sharerental.be.lessor.LessorEntity
+import nl.sharerental.be.lessor.UserLessor
 
 @Entity
 @Table(name = "usr")
@@ -14,12 +14,8 @@ class User(
     val email: String,
     @Column(name = "phone_number")
     val phoneNumber: String?,
+    @OneToMany(mappedBy = "user")
+    var userLessors: Set<UserLessor> = setOf()
+) {
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_lessor",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "lessor_id")]
-    )
-    val lessorEntities: Set<LessorEntity> = emptySet()
-)
+}
