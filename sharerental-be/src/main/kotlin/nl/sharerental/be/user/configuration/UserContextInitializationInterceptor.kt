@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor
 class UserContextInitializationInterceptor(val currentUserService: CurrentUserService): HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        val user = currentUserService.get()
+        val user = currentUserService.init()
         MDC.put("user", user?.id)
         return super.preHandle(request, response, handler)
     }

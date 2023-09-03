@@ -5,7 +5,7 @@ import nl.sharerental.be.lessor.LessorEntity
 
 @Entity
 @Table(name = "usr")
-data class User(
+class User(
 
     @Id
     val id: String,

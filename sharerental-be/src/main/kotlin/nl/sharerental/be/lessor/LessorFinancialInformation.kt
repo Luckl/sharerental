@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "lessor_financial_information")
-data class LessorFinancialInformation(
+class LessorFinancialInformation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lessor_id")
@@ -15,5 +15,10 @@ data class LessorFinancialInformation(
     val vatId: String?,
     @Column(name = "invoice_email")
     val invoiceEmail: String?,
-    val iban: String?
+    val iban: String?,
+
+    @MapsId
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "lessor_id")
+    var lessorEntity: LessorEntity
 )

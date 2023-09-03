@@ -3,6 +3,7 @@ package nl.sharerental.be.lessor.infrastructure
 import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.LessorEntity
 import nl.sharerental.be.lessor.Location
+import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.LessorApi
 import nl.sharerental.contract.http.model.GetLessorResult
 import nl.sharerental.contract.http.model.Lessor
@@ -15,7 +16,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LessorController(val lessorRepository: LessorRepository) : LessorApi {
+class LessorController(val lessorRepository: LessorRepository, val currentUserService: CurrentUserService) : LessorApi {
 
     @Transactional
     override fun createLessor(lessorInput: LessorInput?): ResponseEntity<Lessor> {
@@ -41,7 +42,9 @@ class LessorController(val lessorRepository: LessorRepository) : LessorApi {
             description = lessorInput.description,
             phoneNumber = lessorInput.phoneNumber,
             primaryLocation = primaryLocation,
-            locations = setOf(primaryLocation)
+            lessorFinancialInformation = null,
+            locations = setOf(primaryLocation),
+            users = setOf(currentUserService.get())
         )
 
         val result = lessorRepository.save(lessorEntity)
@@ -66,7 +69,8 @@ class LessorController(val lessorRepository: LessorRepository) : LessorApi {
 
         val pageRequest = PageRequest.of(page ?: 0, size ?: DEFAULT_PAGE_SIZE, Sort.by(sortFields))
 
-        val lessors = lessorRepository.findAll(pageRequest)
+        val lessors = lessorRepository.findAllByUsersContaining(currentUserService.get(), pageRequest)
+//        val lessors = lessorRepository.findAll(pageRequest)
 
         val map = lessors.toList().map {
             val lessor = Lessor()

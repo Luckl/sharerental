@@ -1,6 +1,7 @@
 package nl.sharerental.be.lessor
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase
+import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.infrastructure.LessorRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.test.context.transaction.TestTransaction
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.RequestPostProcessor
@@ -33,6 +35,7 @@ class LessorApiTest {
     private val name = "Franskes machineverhuur"
 
     @Test
+    @Transactional
     fun createLessor() {
 
         val request = """
@@ -57,10 +60,13 @@ class LessorApiTest {
             .content(request))
             .andExpect(status().isOk)
 
+
         val first = lessorRepository.findAll().first()
+
 
         assertThat(first.description).isEqualTo(description)
         assertThat(first.name).isEqualTo(name)
+        assertThat(first.users).hasSize(1)
     }
 
     private fun jwtRequestPostProcessor(): RequestPostProcessor =

@@ -1,25 +1,38 @@
 package nl.sharerental.be.user
 
 import nl.sharerental.be.security.AuthenticationFacade
+import nl.sharerental.be.user.infrastructure.UnauthorizedException
 import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpClientErrorException.Unauthorized
 import org.springframework.web.context.WebApplicationContext
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-class CurrentUserService(val userRepository: UserRepository, val authentication: AuthenticationFacade) {
+class CurrentUserService(private val userRepository: UserRepository,
+                         private val authentication: AuthenticationFacade) {
+
+    private lateinit var currentUser: User
 
     // Could be improved by storing User object as field since service is request scoped.
-    fun get(): User? {
+    fun init(): User? {
         val user = when (val principal = authentication.getPrincipal()) {
             is Jwt -> processJwt(principal)
             else -> null
         }
 
         return user
+    }
+
+    fun get(): User {
+        if (!this::currentUser.isInitialized) {
+            return init().takeIf { it != null } ?: throw UnauthorizedException()
+        }
+        return currentUser
     }
 
     private fun processJwt(principal: Jwt): User {

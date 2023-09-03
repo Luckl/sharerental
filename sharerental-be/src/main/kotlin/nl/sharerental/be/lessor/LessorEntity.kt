@@ -1,10 +1,11 @@
 package nl.sharerental.be.lessor
 
 import jakarta.persistence.*
+import nl.sharerental.be.user.User
 
 @Entity
 @Table(name = "lessor")
-data class LessorEntity(
+class LessorEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -21,5 +22,17 @@ data class LessorEntity(
         joinColumns = [JoinColumn(name = "lessor_id")],
         inverseJoinColumns = [JoinColumn(name = "location_id")]
     )
-    val locations: Set<Location> = emptySet()
+    val locations: Set<Location> = emptySet(),
+
+    @OneToOne(mappedBy = "lessorEntity")
+    var lessorFinancialInformation: LessorFinancialInformation?,
+
+    @ManyToMany(cascade = [CascadeType.PERSIST])
+    @JoinTable(
+        name = "user_lessor",
+        joinColumns = [JoinColumn(name = "lessor_id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    )
+    var users: Set<User> = emptySet()
+
 )
