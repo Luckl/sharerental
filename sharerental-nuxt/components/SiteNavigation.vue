@@ -1,9 +1,8 @@
 <template>
   <div class="site-navigation-header-container">
     <div>
-      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/sharerental_logo.png"/></NuxtLink>
+      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/logo-transparent.png"/></NuxtLink>
     </div>
-    <div><h1>ShareRental</h1></div>
     <div>
       <div>
         <div class="desktop-menu">
@@ -88,10 +87,9 @@ const auth = useFirebaseAuth()!
 }
 
 .logo {
-  width: 4rem;
-  margin: 1rem;
-  border-radius: 5px;
-  box-shadow: 0.2rem 0.2rem 0.3rem lightblue;
+  height: 4rem;
+  margin-left: 1rem
+
 }
 
 .menu-button {
