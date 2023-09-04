@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
     modules: ['nuxt-vuefire'],
     ssr: true,
     devtools: {enabled: true},
@@ -22,18 +21,10 @@ export default defineNuxtConfig({
             backendUrl: process.env.SR_BACKEND_URL
         }
     },
-    googleFonts: {
-        families: {
-            Roboto: true
-        }
-    },
     routeRules: {
         '/backend/**': {
             proxy: { to: "http://localhost:8080/backend/**", },
         }
-    },
-    nitro: {
-        logLevel: 5
     },
     css: [
         '~/assets/css/reset.css',
@@ -42,7 +33,18 @@ export default defineNuxtConfig({
         'primeicons/primeicons.css',
         'quill/dist/quill.core.css'
     ],
+    nitro: {
+        logLevel: 5
+    },
+    $meta: {
+        title: 'ShareRental'
+    },
     build: {
         transpile: ['primevue']
+    },
+    googleFonts: {
+        families: {
+            Roboto: true
+        }
     },
 })

@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>Gegevens - ShareRental</Title>
+  </Head>
   <client-only>
     <div v-show="loaded">
       <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>

@@ -31,6 +31,9 @@ const sticky = ref(false)
 </script>
 
 <template>
+  <Head>
+    <Title>Registreren - ShareRental</Title>
+  </Head>
   <form-page>
     <main>
       <template v-if="user === undefined">

@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>ShareRental</Title>
+  </Head>
   <div class="home-search-container" :style="`background-image: url(${MyBackgroundImage})`">
     <div class="search-input-container">
       <div class="search-input-button-container">

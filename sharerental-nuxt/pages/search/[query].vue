@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>{{ query }} - ShareRental</Title>
+  </Head>
   <div class="results">
     <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem"/>
   </div>
