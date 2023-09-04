@@ -50,7 +50,7 @@
           </NuxtLink>
         </div>
       </client-only>
-      <Button @click="menuOpened = false; signOut(auth)" label="Uitloggen" icon="pi pi-sign-out" class="menu-button">
+      <Button @click="menuOpened = false; signOut(auth); goToStart()" label="Uitloggen" icon="pi pi-sign-out" class="menu-button">
       </Button>
     </div>
     <div v-else>
@@ -82,6 +82,11 @@ const auth = useFirebaseAuth()!
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+const router = useRouter()
+
+const goToStart = function () {
+  router.push("/")
+}
 
 const result = useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(0, 20, []);
@@ -98,13 +103,6 @@ const result = useAsyncData('findLessors', async () => {
 </script>
 
 <style>
-.button-icon {
-  background-color: #FFC107;
-  padding: 1rem;
-  border-radius: 2rem;
-  margin: 2rem;
-  box-shadow: 0.2rem 0.2rem 0.3rem lightblue;
-}
 
 .logo {
   height: 4rem;

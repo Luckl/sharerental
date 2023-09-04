@@ -35,38 +35,39 @@ const sticky = ref(false)
     <Title>Registreren - ShareRental</Title>
   </Head>
   <form-page>
-    <main>
-      <template v-if="user === undefined">
-        <p>Laden...</p>
+      <template #header></template>
+      <template #content>
+        <div v-if="user === undefined">
+          <p>Laden...</p>
+        </div>
+        <div v-else>
+          <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+          <div v-if="!user">
+            <h2>Registreren</h2>
+            <div class="form-input">
+              <label for="username">Gebruikersnaam</label>
+              <div>
+                <InputText type="text" v-model="username"/>
+              </div>
+            </div>
+            <div class="form-input">
+              <label for="username">Email</label>
+              <div>
+                <InputText type="text" v-model="email"/>
+              </div>
+            </div>
+            <div class="form-input">
+              <label for="password">Wachtwoord</label>
+              <div>
+                <Password v-model="password" :feedback="false"/>
+              </div>
+            </div>
+            <div class="form-input">
+              <Button label="Registreer" @click="register()"></Button>
+            </div>
+          </div>
+        </div>
       </template>
-      <template v-else>
-        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-        <template v-if="!user">
-          <h2>Registreren</h2>
-          <div class="form-input">
-            <label for="username">Gebruikersnaam</label>
-            <div>
-              <InputText type="text" v-model="username"/>
-            </div>
-          </div>
-          <div class="form-input">
-            <label for="username">Email</label>
-            <div>
-              <InputText type="text" v-model="email"/>
-            </div>
-          </div>
-          <div class="form-input">
-            <label for="password">Wachtwoord</label>
-            <div>
-              <Password v-model="password" :feedback="false"/>
-            </div>
-          </div>
-          <div class="form-input">
-            <Button label="Registreer" @click="register()"></Button>
-          </div>
-        </template>
-      </template>
-    </main>
   </form-page>
 </template>
 

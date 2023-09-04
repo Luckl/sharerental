@@ -3,7 +3,7 @@
     <Title>Gegevens - ShareRental</Title>
   </Head>
   <client-only>
-    <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+    <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
     <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
     <div v-show="loaded && lessors?.length == 0">
       <form-page>
@@ -33,7 +33,6 @@
                 <label for="BE" class="ml-2">België</label>
               </div>
             </div>
-
             <div class="flexbox-column">
               <label for="fPostalCode" class="data-label mb-1">Postcode</label>
               <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
@@ -48,18 +47,12 @@
                          v-model="formInput.houseNumberAddition"></InputText>
             </div>
             <div class="flexbox-column">
+              <label for="fStreet" class="data-label mb-1">Straat</label>
+              <InputText id="fStreet" class="mb-1 fit" v-model="formInput.street"></InputText>
+            </div>
+            <div class="flexbox-column">
               <label for="fCity" class="data-label mb-1">Woonplaats</label>
               <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
-            </div>
-            <div class="flexbox-row mb-1">
-              <div class="flex align-items-center ">
-                <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
-                <label for="NL" class="ml-2">Nederland</label>
-              </div>
-              <div class="flex align-items-center">
-                <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
-                <label for="BE" class="ml-2">België</label>
-              </div>
             </div>
             <Divider align="left" type="solid" class="mb-1">
               <span>Contactgegevens</span>
@@ -125,10 +118,11 @@ const username = user.value?.displayName
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
 const message = ref<String | undefined>(undefined)
-const loggedInButNotLessor = ref(false)
+const error = ref<String | undefined>(undefined)
 const formInput = reactive({
   name: "",
   description: "",
+  street: "",
   postalCode: "",
   houseNumber: "",
   houseNumberAddition: "",
@@ -139,11 +133,9 @@ const formInput = reactive({
 
 const selectedLessor = ref<Lessor | undefined>(undefined)
 
-const showCreateLessor = ref(false)
-
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 
-const result = useAsyncData('findLessors', async () => {
+const fetchLessors = () => useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(0, 20, []);
 }).then(succes => {
       loaded.value = true;
@@ -156,13 +148,16 @@ const result = useAsyncData('findLessors', async () => {
       loaded.value = true;
     })
 
+const result = fetchLessors()
+
 function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {
             message.value = "Succesvol aangemaakt"
+            fetchLessors()
           },
           failureReason => {
-            message.value = "Er is iets fout gegaan"
+            error.value = "Er is iets fout gegaan"
           })
 }
 
