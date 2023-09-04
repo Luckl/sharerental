@@ -9,6 +9,7 @@ import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.LessorApi
 import nl.sharerental.contract.http.model.GetLessorResult
 import nl.sharerental.contract.http.model.Lessor as HttpLessor
+import nl.sharerental.contract.http.model.Location as HttpLocation
 import nl.sharerental.contract.http.model.LessorInput
 import nl.sharerental.contract.http.model.PaginationResponse
 import org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZE
@@ -88,6 +89,14 @@ class LessorController(private val lessorRepository: LessorRepository,
             lessor.name = it.name
             lessor.description = it.description
             lessor.phoneNumber = it.phoneNumber
+            lessor.primaryLocation = HttpLocation()
+                .id(it.primaryLocation.id)
+                .country(it.primaryLocation.country)
+                .city(it.primaryLocation.city)
+                .street(it.primaryLocation.street)
+                .postalCode(it.primaryLocation.postalCode)
+                .houseNumber(it.primaryLocation.houseNumber)
+                .houseNumberAddition(it.primaryLocation.houseNumberAddition)
             lessor
 
         }
