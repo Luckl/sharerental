@@ -13,28 +13,42 @@
         <template #content class="flexbox-column">
           <form @submit.prevent>
             <div class="flexbox-column">
-              <label for="fName" class="mb-1">Weergavenaam</label>
+              <label for="fName" class="data-label mb-1">Weergavenaam</label>
               <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
             </div>
             <div class="flexbox-column">
-              <label for="fDescription" class="mb-1">Omschrijving</label>
+              <label for="fDescription" class="data-label mb-1">Omschrijving</label>
               <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
             </div>
+            <Divider align="left" type="solid" class="mb-1">
+              <span>Locatiegegevens</span>
+            </Divider>
+            <div class="flexbox-row mb-1">
+              <div class="flex align-items-center ">
+                <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
+                <label for="NL" class="ml-2">Nederland</label>
+              </div>
+              <div class="flex align-items-center">
+                <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
+                <label for="BE" class="ml-2">België</label>
+              </div>
+            </div>
+
             <div class="flexbox-column">
-              <label for="fPostalCode" class="mb-1">Postcode</label>
+              <label for="fPostalCode" class="data-label mb-1">Postcode</label>
               <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
             </div>
             <div class="flexbox-column">
-              <label for="fHouseNumber" class="mb-1">Huisnummer</label>
+              <label for="fHouseNumber" class="data-label mb-1">Huisnummer</label>
               <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
             </div>
             <div class="flexbox-column">
-              <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
+              <label for="fHouseNumberAddition" class="data-label mb-1">Toevoeging</label>
               <InputText id="fHouseNumberAddition" class="mb-1 fit"
                          v-model="formInput.houseNumberAddition"></InputText>
             </div>
             <div class="flexbox-column">
-              <label for="fCity" class="mb-1">Woonplaats</label>
+              <label for="fCity" class="data-label mb-1">Woonplaats</label>
               <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
             </div>
             <div class="flexbox-row mb-1">
@@ -47,8 +61,11 @@
                 <label for="BE" class="ml-2">België</label>
               </div>
             </div>
+            <Divider align="left" type="solid" class="mb-1">
+              <span>Contactgegevens</span>
+            </Divider>
             <div class="flexbox-column">
-              <label for="fCity" class="mb-1">Telefoonnummer</label>
+              <label for="fCity" class="data-label mb-1">Telefoonnummer</label>
               <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
             </div>
             <div>
@@ -65,43 +82,30 @@
         </template>
         <template #content>
           <div class="flexbox-column">
-            <label for="fName" class="mb-1">Weergavenaam</label>
-            <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
+            <span  class="data-label mb-1">Weergavenaam</span>
+            <span class="mb-1">{{ selectedLessor?.name }}</span>
           </div>
           <div class="flexbox-column">
-            <label for="fDescription" class="mb-1">Omschrijving</label>
-            <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
+            <span class="data-label mb-1">Omschrijving</span>
+            <span class="mb-1">{{ selectedLessor?.description }}</span>
+          </div>
+          <Divider align="left" type="solid" class="mb-1">
+            <span>Locatiegegevens</span>
+          </Divider>
+          <div class="flexbox-column">
+            <span class="data-label mb-1">Adres</span>
+            <span>{{ selectedLessor?.primaryLocation?.street }} {{ selectedLessor?.primaryLocation?.houseNumber}}{{selectedLessor?.primaryLocation?.houseNumberAddition}}</span>
           </div>
           <div class="flexbox-column">
-            <label for="fPostalCode" class="mb-1">Postcode</label>
-            <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
+            <span class="data-label mb-1">Woonplaats</span>
+            <span>{{ selectedLessor?.primaryLocation?.postalCode }}, {{ selectedLessor?.primaryLocation?.city}}</span>
           </div>
+          <Divider align="left" type="solid" class="mb-1">
+            <span>Contactgegevens</span>
+          </Divider>
           <div class="flexbox-column">
-            <label for="fHouseNumber" class="mb-1">Huisnummer</label>
-            <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
-            <InputText id="fHouseNumberAddition" class="mb-1 fit"
-                       v-model="formInput.houseNumberAddition"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fCity" class="mb-1">Woonplaats</label>
-            <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
-          </div>
-          <div class="flexbox-row mb-1">
-            <div class="flex align-items-center ">
-              <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
-              <label for="NL" class="ml-2">Nederland</label>
-            </div>
-            <div class="flex align-items-center">
-              <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
-              <label for="BE" class="ml-2">België</label>
-            </div>
-          </div>
-          <div class="flexbox-column">
-            <label for="fCity" class="mb-1">Telefoonnummer</label>
-            <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
+            <span class="data-label mb-1">Telefoonnummer</span>
+            <span>{{selectedLessor?.phoneNumber}}</span>
           </div>
         </template>
       </form-page>
@@ -133,6 +137,8 @@ const formInput = reactive({
   phoneNumber: ""
 })
 
+const selectedLessor = ref<Lessor | undefined>(undefined)
+
 const showCreateLessor = ref(false)
 
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
@@ -143,6 +149,7 @@ const result = useAsyncData('findLessors', async () => {
       loaded.value = true;
       console.log("retrieved lessors from profile: " + succes.data.value?.embedded.length)
       lessors.value = succes.data.value?.embedded
+      selectedLessor.value = succes.data.value?.embedded[0]
     },
     failure => {
       console.log("failed to retrieve lessors from profile: " + failure.message)
@@ -177,12 +184,8 @@ function onSubmitNewLessor() {
   margin-bottom: 1rem
 }
 
-.m-1 {
-  margin: 1rem
-}
-
-.p-1 {
-  padding: 1rem
+.data-label {
+  font-weight: bold;
 }
 
 </style>
