@@ -1,10 +1,10 @@
 <template>
   <div class="form-container">
   <Card style="width: 100%">
-    <template #header>
+    <template class="header" #header>
       <slot name="header"/>
     </template>
-    <template #content>
+    <template class="content" #content>
       <slot name="content"/>
     </template>
   </card>
@@ -21,5 +21,13 @@
   padding-right: 10%;
   padding-top: 5em;
   height: 100%;
+}
+
+.header {
+  padding: 1rem
+}
+
+.content {
+  padding: 1rem
 }
 </style>

@@ -28,33 +28,29 @@
       </div>
     </div>
     <div class="mobile-menu right-menu">
-      <Button icon="pi pi-align-justify" @click="menuOpened = !menuOpened"></Button>
+      <Button icon="pi pi-align-justify" aria-label="Menu" @click="menuOpened = !menuOpened"></Button>
     </div>
   </div>
   <Sidebar v-model:visible="menuOpened" position="right">
     <div v-if="user">
       <NuxtLink to="/profile">
-        <Button @click="menuOpened = false" class="menu-button">
-          Gegevens
+        <Button @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
         </Button>
       </NuxtLink>
 
       <client-only>
-        <div v-if="loaded && lessors.length > 0">
+        <div v-if="loaded && lessors?.length > 0">
           <NuxtLink to="/items">
-            <Button @click="menuOpened = false" class="menu-button">
-              Artikelen
+            <Button @click="menuOpened = false" label="Artikelen" icon="pi pi-file-o" class="menu-button">
             </Button>
           </NuxtLink>
           <NuxtLink to="/transactions">
-            <Button @click="menuOpened = false" class="menu-button">
-              Transacties
+            <Button @click="menuOpened = false" label="Transacties" icon="pi pi-wallet" class="menu-button">
             </Button>
           </NuxtLink>
         </div>
       </client-only>
-      <Button @click="menuOpened = false; signOut(auth)" class="menu-button">
-        Uitloggen
+      <Button @click="menuOpened = false; signOut(auth)" label="Uitloggen" icon="pi pi-sign-out" class="menu-button">
       </Button>
     </div>
     <div v-else>
@@ -91,9 +87,11 @@ const result = useAsyncData('findLessors', async () => {
   return await $lessorClient.findAll(0, 20, []);
 }).then(succes => {
       loaded.value = true;
+      console.log("retrieved lessors from sitenav: " + succes.data.value?.embedded.length)
       lessors.value = succes.data.value?.embedded
     },
     failure => {
+      console.log("failed to retrieve lessors from sitenav: " + failure)
       loaded.value = true;
     })
 
