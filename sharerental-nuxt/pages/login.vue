@@ -39,52 +39,42 @@ const sticky = ref(false)
     <Title>Inloggen - ShareRental</Title>
   </Head>
   <form-page>
-    <main>
-      <template v-if="user === undefined">
-        <p>Laden...</p>
-      </template>
-      <template v-else>
-        <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-        <template v-if="user">
-          <p>
-            Je bent ingelogd als:
-            <br/>
-            <img
-                class="avatar"
-                v-if="user.photoURL"
-                :src="user.photoURL"
-                referrerpolicy="no-referrer"
-            />
-            <br/>
-            <strong>{{ user.displayName }}</strong>
-            <strong>{{ user.email }}</strong>
-          </p>
-
-          <Button @click="signOut(auth)">Uitloggen</Button>
+    <template #header></template>
+    <template #content>
+      <main>
+        <template v-if="user === undefined">
+          <p>Laden...</p>
         </template>
         <template v-else>
-          <h2>Inloggen</h2>
-          <form>
-            <div class="form-input">
-              <label for="username">Email</label>
-              <div>
-                <InputText type="text" v-model="email"/>
+          <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+          <template v-if="user">
+            <Button @click="signOut(auth)">Uitloggen</Button>
+          </template>
+          <template v-else>
+            <h2>Inloggen</h2>
+            <form @submit.prevent>
+              <div class="form-input">
+                <label for="username">Email</label>
+                <div>
+                  <InputText type="text" v-model="email"/>
+                </div>
               </div>
-            </div>
-            <div class="form-input">
-              <label for="password">Wachtwoord</label>
-              <div>
-                <Password v-model="password" :feedback="false"/>
+              <div class="form-input">
+                <label for="password">Wachtwoord</label>
+                <div>
+                  <Password v-model="password" :feedback="false"/>
+                </div>
               </div>
-            </div>
-            <div class="form-input">
-              <Button label="Login" @click="signIn()"></Button>
-            </div>
-          </form>
+              <div class="form-input">
+                <Button type="submit" @click="signIn()" label="Login"></Button>
+              </div>
+            </form>
+          </template>
         </template>
-      </template>
-    </main>
+      </main>
+    </template>
   </form-page>
+
 </template>
 
 <style scoped>

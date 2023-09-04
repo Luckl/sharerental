@@ -3,81 +3,103 @@
     <div>
       <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/logo-transparent.png"/></NuxtLink>
     </div>
-    <div>
-      <div>
-        <div class="desktop-menu">
-          <div v-if="user">
-            <NuxtLink to="/profile" class="remove-link-style">
-              <div class="button-icon">
-                <i class="pi pi-user"></i>
-              </div>
-            </NuxtLink>
-          </div>
-          <div v-else>
-            <div class="right-menu">
-              <NuxtLink to="/login">
-                <Button class="desktop-button">
-                  Inloggen
-                </Button>
-              </NuxtLink>
-              <NuxtLink to="/register">
-                <Button class="desktop-button">
-                  Registreren
-                </Button>
-              </NuxtLink>
-            </div>
-          </div>
+    <div class="desktop-menu">
+      <div v-if="user">
+        <div class="right-menu">
+          <h2 class="desktop-button">Welkom, {{ user.displayName }}</h2>
+          <Button class="desktop-button" label="Menu" icon="pi pi-align-justify" iconPos="right"
+                  @click="menuOpened = !menuOpened">
+          </Button>
         </div>
-        <div class="mobile-menu right-menu button-icon">
-          <i class="pi pi-align-justify" @click="menuOpened = !menuOpened"></i>
-          <Sidebar v-model:visible="menuOpened" position="right">
-            <div v-if="user">
-              <NuxtLink to="/profile">
-                <Button @click="menuOpened = false" class="menu-button">
-                  Profiel
-                </Button>
-              </NuxtLink>
-              <Button @click="menuOpened = false; signOut(auth)" class="menu-button">
-                Uitloggen
-              </Button>
-            </div>
-            <div v-else>
-              <NuxtLink to="/login">
-                <Button @click="menuOpened = false" class="menu-button">
-                  Inloggen
-                </Button>
-              </NuxtLink>
-              <NuxtLink to="/register">
-                <Button @click="menuOpened = false" class="menu-button">
-                  Registreren
-                </Button>
-              </NuxtLink>
-            </div>
-          </Sidebar>
+      </div>
+      <div v-else>
+        <div class="right-menu">
+          <NuxtLink to="/login">
+            <Button class="desktop-button">
+              Inloggen
+            </Button>
+          </NuxtLink>
+          <NuxtLink to="/register">
+            <Button class="desktop-button">
+              Registreren
+            </Button>
+          </NuxtLink>
         </div>
       </div>
     </div>
+    <div class="mobile-menu right-menu">
+      <Button icon="pi pi-align-justify" @click="menuOpened = !menuOpened"></Button>
+    </div>
   </div>
+  <Sidebar v-model:visible="menuOpened" position="right">
+    <div v-if="user">
+      <NuxtLink to="/profile">
+        <Button @click="menuOpened = false" class="menu-button">
+          Gegevens
+        </Button>
+      </NuxtLink>
+
+      <client-only>
+        <div v-if="loaded && lessors.length > 0">
+          <NuxtLink to="/items">
+            <Button @click="menuOpened = false" class="menu-button">
+              Artikelen
+            </Button>
+          </NuxtLink>
+          <NuxtLink to="/transactions">
+            <Button @click="menuOpened = false" class="menu-button">
+              Transacties
+            </Button>
+          </NuxtLink>
+        </div>
+      </client-only>
+      <Button @click="menuOpened = false; signOut(auth)" class="menu-button">
+        Uitloggen
+      </Button>
+    </div>
+    <div v-else>
+      <NuxtLink to="/login">
+        <Button @click="menuOpened = false" class="menu-button">
+          Inloggen
+        </Button>
+      </NuxtLink>
+      <NuxtLink to="/register">
+        <Button @click="menuOpened = false" class="menu-button">
+          Registreren
+        </Button>
+      </NuxtLink>
+    </div>
+  </Sidebar>
 </template>
 
 <script setup lang="ts">
 import {useCurrentUser, useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
-import {useAsyncData} from "#app";
+import {useAsyncData, useNuxtApp} from "#app";
 import {signOut} from "firebase/auth";
+import LessorClient, {Lessor} from "~/services/api/Lessor";
 
 const menuOpened = ref(false);
 const user = useCurrentUser()
 
 const auth = useFirebaseAuth()!
+const lessors = ref<Lessor[]>([])
+const loaded = ref(false)
+const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+
+const result = useAsyncData('findLessors', async () => {
+  return await $lessorClient.findAll(0, 20, []);
+}).then(succes => {
+      loaded.value = true;
+      lessors.value = succes.data.value?.embedded
+    },
+    failure => {
+      loaded.value = true;
+    })
+
 </script>
 
 <style>
-.remove-link-style {
-  text-decoration: none;
-  color: inherit;
-}
-
 .button-icon {
   background-color: #FFC107;
   padding: 1rem;
@@ -89,7 +111,6 @@ const auth = useFirebaseAuth()!
 .logo {
   height: 4rem;
   margin-left: 1rem
-
 }
 
 .menu-button {
@@ -98,10 +119,12 @@ const auth = useFirebaseAuth()!
 }
 
 .desktop-button {
-  margin: 0.2rem;
+  margin: 0.4rem;
 }
 
 .right-menu {
+  display: flex;
+  align-items: center;
   padding-right: 1rem;
 }
 
@@ -116,10 +139,6 @@ const auth = useFirebaseAuth()!
 @media screen and (max-width: 678px) {
   .desktop-menu {
     display: none;
-  }
-
-  h1 {
-    font-size: 1.5em;
   }
 }
 

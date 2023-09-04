@@ -3,31 +3,15 @@
     <Title>Gegevens - ShareRental</Title>
   </Head>
   <client-only>
-    <div v-show="loaded">
-      <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
-      <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
-      <Card class="m-1 p-1">
-        <template #header class="m-1">
-          <h2>Welkom, {{ username }}</h2>
-        </template>
-        <template #content>
-          <div>
-            <div class="mb-1">
-              <Button v-show="lessors.length == 0" @click="showCreateLessor = true">Verhuurder worden</Button>
-            </div>
-            <div class="mb-1">
-              <Button @click="signOut(auth)">Uitloggen</Button>
-            </div>
-          </div>
-        </template>
-      </Card>
-
-      <Card v-if="showCreateLessor" class="m-1 p-1">
-        <template #header class="m-1">
+    <Message severity="error" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+    <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+    <div v-show="loaded && lessors.length == 0">
+      <form-page>
+        <template #header>
           <h3>Registreren als verhuurder</h3>
         </template>
         <template #content class="flexbox-column">
-          <form @submit="onSubmitNewLessor">
+          <form @submit.prevent>
             <div class="flexbox-column">
               <label for="fName" class="mb-1">Weergavenaam</label>
               <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
@@ -46,7 +30,8 @@
             </div>
             <div class="flexbox-column">
               <label for="fHouseNumberAddition" class="mb-1">Toevoeging</label>
-              <InputText id="fHouseNumberAddition" class="mb-1 fit" v-model="formInput.houseNumberAddition"></InputText>
+              <InputText id="fHouseNumberAddition" class="mb-1 fit"
+                         v-model="formInput.houseNumberAddition"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fCity" class="mb-1">Woonplaats</label>
@@ -67,13 +52,21 @@
               <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
             </div>
             <div>
-              <Button type="submit">Aanmaken</Button>
+              <Button @Click="onSubmitNewLessor">Aanmaken</Button>
             </div>
           </form>
         </template>
-      </Card>
+      </form-page>
+    </div>
+    <div v-show="loaded && lessors.length > 0">
+      <form-page>
+        <template #header>
+          <h3>Gegevens</h3>
+        </template>
+      </form-page>
     </div>
   </client-only>
+
 </template>
 <script setup lang="ts">
 
@@ -85,8 +78,8 @@ let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
 const lessors = ref<Lessor[]>([])
-const message = ref<String | undefined>(undefined)
 const loaded = ref(false)
+const message = ref<String | undefined>(undefined)
 
 const formInput = reactive({
   name: "",

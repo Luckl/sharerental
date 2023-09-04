@@ -1,8 +1,11 @@
 <template>
   <div class="form-container">
   <Card style="width: 100%">
+    <template #header>
+      <slot name="header"/>
+    </template>
     <template #content>
-      <slot/>
+      <slot name="content"/>
     </template>
   </card>
   </div>
