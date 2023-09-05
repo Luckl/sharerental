@@ -89,18 +89,16 @@ const goToStart = function () {
   router.push("/")
 }
 
-  $lessorClient.findAll(0, 20, [])
-      .then(success => {
-            loaded.value = true;
-            console.log("retrieved lessors from sitenav: " + success.embedded.length)
-            lessors.value = success.embedded
-          },
-          failure => {
-            console.log("failed to retrieve lessors from sitenav: " + failure)
-            loaded.value = true;
-          })
-
-
+$lessorClient.findAll(0, 20, [])
+    .then(success => {
+          loaded.value = true;
+          console.log("retrieved success from sitenav: " + JSON.stringify(success, null, 2))
+          lessors.value = success.embedded
+        },
+        failure => {
+          console.log("failed to retrieve lessors from sitenav: " + failure)
+          loaded.value = true;
+        })
 
 
 </script>

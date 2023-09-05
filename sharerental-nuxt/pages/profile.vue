@@ -135,21 +135,19 @@ const selectedLessor = ref<Lessor | undefined>(undefined)
 
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 
-const fetchLessors = () => useAsyncData('findLessors', async () => {
-  return await $lessorClient.findAll(0, 20, []);
-}).then(succes => {
-      loaded.value = true;
-      console.log("retrieved lessors from profile: " + succes.data.value?.embedded.length)
-      lessors.value = succes.data.value?.embedded
-      selectedLessor.value = succes.data.value?.embedded[0]
-    },
-    failure => {
-      console.log("failed to retrieve lessors from profile: " + failure.message)
-      loaded.value = true;
-    })
-
-const result = fetchLessors()
-
+function fetchLessors() {
+  $lessorClient.findAll(0, 20, []).then(success => {
+        loaded.value = true;
+        console.log("retrieved success: " + JSON.stringify(success, null, 2))
+        lessors.value = success.embedded
+        selectedLessor.value = success.embedded[0]
+      },
+      failure => {
+        console.log("failed to retrieve lessors from profile: " + failure.message)
+        loaded.value = true;
+      })
+}
+fetchLessors()
 function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {
