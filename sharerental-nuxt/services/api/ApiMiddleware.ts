@@ -3,7 +3,7 @@ import {
     Middleware,
     ResponseContext,
 } from '~~/schemas/openapi/search';
-import {useCurrentUser} from "vuefire";
+import {getCurrentUser} from "vuefire";
 
 export class ApiMiddleware implements Middleware {
     public async pre(context: ResponseContext): Promise<FetchParams | void> {
@@ -36,7 +36,8 @@ export class ApiMiddleware implements Middleware {
         return Promise.resolve(context.response);
     }
 
-    private acquireToken(): Promise<string> | undefined {
-            return useCurrentUser()?.value?.getIdToken();
+    private async acquireToken(): Promise<string | undefined> {
+        let result = await getCurrentUser();
+        return result?.getIdToken();
     }
 }

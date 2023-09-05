@@ -6,7 +6,7 @@
     <div class="search-input-container">
       <div class="search-input-button-container">
         <Search></Search>
-        <div class="button" v-if="user">
+        <div class="button" v-if="!user">
           <NuxtLink to="/register" >
           <Button class="link-button link-button-custom" label="Ik wil mijn gereedschap verhuren" link/>
           </NuxtLink>
