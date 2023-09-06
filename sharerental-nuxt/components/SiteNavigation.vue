@@ -1,13 +1,13 @@
 <template>
   <div class="site-navigation-header-container">
     <div>
-      <NuxtLink to="/"><img alt="Logo" class="logo" src="../assets/logo-transparent.png"/></NuxtLink>
+      <NuxtLink to="/"><img alt="Logo" class="m-2 logo" src="../assets/logo-transparent.png"/></NuxtLink>
     </div>
     <div class="desktop-menu">
       <div v-if="user">
         <div class="right-menu">
           <h2 class="desktop-button">Welkom, {{ user.displayName }}</h2>
-          <Button class="desktop-button" label="Menu" icon="pi pi-align-justify" iconPos="right"
+          <Button  class="m-3 desktop-button" label="Menu" icon="pi pi-align-justify" iconPos="right"
                   @click="menuOpened = !menuOpened">
           </Button>
         </div>
@@ -28,13 +28,13 @@
       </div>
     </div>
     <div class="mobile-menu right-menu">
-      <Button icon="pi pi-align-justify" aria-label="Menu" @click="menuOpened = !menuOpened"></Button>
+      <Button class="m-3" icon="pi pi-align-justify" aria-label="Menu" @click="menuOpened = !menuOpened"></Button>
     </div>
   </div>
   <Sidebar v-model:visible="menuOpened" position="right">
     <div v-if="user">
       <NuxtLink to="/profile">
-        <Button @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
+        <Button  @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
         </Button>
       </NuxtLink>
 
