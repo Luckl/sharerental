@@ -21,7 +21,10 @@
     "@nuxtjs/google-fonts": "^3.0.2",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/node": "^18.17.0",
-    "rimraf": "^5.0.1"
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
+    "rimraf": "^5.0.1",
+    "tailwindcss": "^3.3.3"
   },
   "dependencies": {
     "@nuxtjs/dotenv": "^1.4.1",

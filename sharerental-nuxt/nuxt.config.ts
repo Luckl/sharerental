@@ -28,8 +28,9 @@ export default defineNuxtConfig({
     },
     css: [
         '~/assets/css/reset.css',
-        'primevue/resources/themes/saga-orange/theme.css',
+        '~/assets/css/main.css',
         'primevue/resources/primevue.css',
+        'primevue/resources/themes/saga-orange/theme.css',
         'primeicons/primeicons.css',
         'quill/dist/quill.core.css'
     ],
@@ -41,6 +42,12 @@ export default defineNuxtConfig({
     },
     build: {
         transpile: ['primevue']
+    },
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {}
+        }
     },
     googleFonts: {
         families: {
