@@ -12,6 +12,8 @@ import {defineNuxtPlugin} from "#app";
 import Tooltip from "primevue/tooltip";
 import RadioButton from "primevue/radiobutton";
 import Divider from "primevue/divider";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
@@ -26,6 +28,8 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Editor', Editor)
     nuxtApp.vueApp.component('RadioButton', RadioButton)
     nuxtApp.vueApp.component('Divider', Divider)
+    nuxtApp.vueApp.component('DataTable', DataTable)
+    nuxtApp.vueApp.component('Column', Column)
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 
     //other components that you need
