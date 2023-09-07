@@ -2,7 +2,9 @@
   <div class="form-container">
   <Card style="width: 100%">
     <template class="header" #header>
-      <slot name="header"/>
+      <h1>
+        <slot name="header"/>
+      </h1>
     </template>
     <template class="content" #content>
       <slot name="content"/>

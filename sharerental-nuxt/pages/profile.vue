@@ -8,7 +8,7 @@
     <div v-show="loaded && lessors?.length == 0">
       <form-page>
         <template #header>
-          <h3>Registreren als verhuurder</h3>
+          <span class="font-bold text-xl m-1">Registreren als verhuurder</span>
         </template>
         <template #content class="flexbox-column">
           <form @submit.prevent>
@@ -71,7 +71,7 @@
     <div v-show="loaded && lessors?.length > 0">
       <form-page>
         <template #header>
-          <h3>Gegevens</h3>
+          <span class="font-bold text-xl m-1">Gegevens</span>
         </template>
         <template #content>
           <div class="flexbox-column">
@@ -108,8 +108,6 @@
 </template>
 <script setup lang="ts">
 
-import {useAsyncData, useNuxtApp} from "#app";
-import {signOut} from "firebase/auth";
 import LessorClient, {Lessor} from "~/services/api/Lessor";
 
 let user = useCurrentUser();
@@ -147,7 +145,9 @@ function fetchLessors() {
         loaded.value = true;
       })
 }
-fetchLessors()
+
+onMounted(() => fetchLessors())
+
 function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {

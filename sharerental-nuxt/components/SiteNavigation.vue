@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import {useCurrentUser, useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
-import {useAsyncData, useNuxtApp} from "#app";
+import {useNuxtApp} from "#app";
 import {signOut} from "firebase/auth";
 import LessorClient, {Lessor} from "~/services/api/Lessor";
 
@@ -89,18 +89,18 @@ const goToStart = function () {
   router.push("/")
 }
 
-$lessorClient.findAll(0, 20, [])
-    .then(success => {
-          loaded.value = true;
-          console.log("retrieved success from sitenav: " + JSON.stringify(success, null, 2))
-          lessors.value = success.embedded
-        },
-        failure => {
-          console.log("failed to retrieve lessors from sitenav: " + failure)
-          loaded.value = true;
-        })
-
-
+function fetchLessors() {
+  $lessorClient.findAll(0, 20, []).then(success => {
+        loaded.value = true;
+        console.log("retrieved success: " + JSON.stringify(success, null, 2))
+        lessors.value = success.embedded
+      },
+      failure => {
+        console.log("failed to retrieve lessors from profile: " + failure.message)
+        loaded.value = true;
+      })
+}
+onMounted( () => fetchLessors())
 </script>
 
 <style>
