@@ -47,19 +47,19 @@ const sticky = ref(false)
             <div class="form-input">
               <label for="username">Gebruikersnaam</label>
               <div>
-                <InputText type="text" v-model="username"/>
+                <InputText inputId="username" type="text" v-model="username"/>
               </div>
             </div>
             <div class="form-input">
-              <label for="username">Email</label>
+              <label for="email">Email</label>
               <div>
-                <InputText type="text" v-model="email"/>
+                <InputText inputId="email" type="text" v-model="email"/>
               </div>
             </div>
             <div class="form-input">
               <label for="password">Wachtwoord</label>
               <div>
-                <Password v-model="password" :feedback="false"/>
+                <Password inputId="password" v-model="password" :feedback="false"/>
               </div>
             </div>
             <div class="form-input">

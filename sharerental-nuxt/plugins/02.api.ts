@@ -1,8 +1,10 @@
 import {defineNuxtPlugin, useRuntimeConfig} from "#app";
 import SearchClient from "~/services/api/Search";
 import LessorClient from "~/services/api/Lessor";
+import RentalItemClient from "~/services/api/RentalItem";
 import {Configuration as SearchConfiguration} from '~/schemas/openapi/search';
 import {Configuration as LessorConfiguration} from '~/schemas/openapi/lessor';
+import {Configuration as RentalItemConfiguration} from '~/schemas/openapi/rentalItem';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -14,10 +16,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const searchApiConfig = new SearchConfiguration(configuration)
     const lessorApiConfig = new LessorConfiguration(configuration)
+    const rentalItemApiConfig = new RentalItemConfiguration(configuration)
 
     const searchClient = new SearchClient(searchApiConfig)
     const lessorClient = new LessorClient(lessorApiConfig)
+    const rentalItemClient = new RentalItemClient(rentalItemApiConfig)
 
     nuxtApp.provide('searchClient', searchClient)
     nuxtApp.provide('lessorClient', lessorClient)
+    nuxtApp.provide('rentalItemClient', rentalItemClient)
 })

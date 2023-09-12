@@ -27,9 +27,9 @@ data class RentalItem(
     val shortDescription: String?,
     val longDescription: String?,
 
-    val price_24h: BigDecimal?,
-    val price_48h: BigDecimal?,
-    val price_168h: BigDecimal?,
+    val price24h: BigDecimal?,
+    val price48h: BigDecimal?,
+    val price168h: BigDecimal?,
 
     val deliveryPossible: Boolean?,
     val deliveryPrice: BigDecimal?,

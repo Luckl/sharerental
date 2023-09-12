@@ -14,11 +14,11 @@
           <form @submit.prevent>
             <div class="flexbox-column">
               <label for="fName" class="data-label mb-1">Weergavenaam</label>
-              <InputText id="fName" class="mb-1" v-model="formInput.name"></InputText>
+              <InputText inputId="fName" class="mb-1" v-model="formInput.name"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fDescription" class="data-label mb-1">Omschrijving</label>
-              <InputText id="fDescription" class="mb-1" v-model="formInput.description"></InputText>
+              <InputText inputId="fDescription" class="mb-1" v-model="formInput.description"></InputText>
             </div>
             <Divider align="left" type="solid" class="mb-1">
               <span>Locatiegegevens</span>
@@ -35,31 +35,31 @@
             </div>
             <div class="flexbox-column">
               <label for="fPostalCode" class="data-label mb-1">Postcode</label>
-              <InputText id="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
+              <InputText inputId="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fHouseNumber" class="data-label mb-1">Huisnummer</label>
-              <InputText id="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
+              <InputText inputId="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fHouseNumberAddition" class="data-label mb-1">Toevoeging</label>
-              <InputText id="fHouseNumberAddition" class="mb-1 fit"
+              <InputText inputId="fHouseNumberAddition" class="mb-1 fit"
                          v-model="formInput.houseNumberAddition"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fStreet" class="data-label mb-1">Straat</label>
-              <InputText id="fStreet" class="mb-1 fit" v-model="formInput.street"></InputText>
+              <InputText inputId="fStreet" class="mb-1 fit" v-model="formInput.street"></InputText>
             </div>
             <div class="flexbox-column">
               <label for="fCity" class="data-label mb-1">Woonplaats</label>
-              <InputText id="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
+              <InputText inputId="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
             </div>
             <Divider align="left" type="solid" class="mb-1">
               <span>Contactgegevens</span>
             </Divider>
             <div class="flexbox-column">
               <label for="fCity" class="data-label mb-1">Telefoonnummer</label>
-              <InputText id="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
+              <InputText inputId="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
             </div>
             <div>
               <Button @Click="onSubmitNewLessor">Aanmaken</Button>
