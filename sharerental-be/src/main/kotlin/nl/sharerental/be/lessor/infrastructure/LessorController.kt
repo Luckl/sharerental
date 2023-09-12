@@ -5,6 +5,8 @@ import nl.sharerental.be.lessor.Lessor
 import nl.sharerental.be.lessor.Location
 import nl.sharerental.be.lessor.UserLessor
 import nl.sharerental.be.lessor.UserLessorId
+import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
+import nl.sharerental.be.lessor.infrastructure.repository.UserLessorRepository
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.LessorApi
 import nl.sharerental.contract.http.model.GetLessorResult

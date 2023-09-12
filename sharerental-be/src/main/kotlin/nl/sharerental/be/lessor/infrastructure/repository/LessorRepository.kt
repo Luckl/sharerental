@@ -1,4 +1,4 @@
-package nl.sharerental.be.lessor.infrastructure
+package nl.sharerental.be.lessor.infrastructure.repository
 
 import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.Lessor

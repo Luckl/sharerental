@@ -1,4 +1,4 @@
-package nl.sharerental.be.lessor.infrastructure
+package nl.sharerental.be.lessor.infrastructure.repository
 
 import nl.sharerental.be.lessor.UserLessor
 import nl.sharerental.be.lessor.UserLessorId

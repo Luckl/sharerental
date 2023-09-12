@@ -57,7 +57,7 @@ private fun RentalItem.toSearchResultItem(): SearchResultItem {
     val searchResultItem = SearchResultItem(id, name)
     searchResultItem.subtitle = shortDescription
     searchResultItem.imageUrl = images.map { it.imageUrl }.map { URI(it) }.firstOrNull()
-    searchResultItem.pricePerDay = price_24h
+    searchResultItem.pricePerDay = price24h
     return searchResultItem
 
 }
