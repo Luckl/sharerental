@@ -1,9 +1,9 @@
 package nl.sharerental.be.lessor
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase
-import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.RequestPostProcessor
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.support.TransactionTemplate
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,13 +31,22 @@ class LessorApiTest {
     private lateinit var jwtDecoder: JwtDecoder
 
     @Autowired
+    private lateinit var transactionManager: PlatformTransactionManager
+
+    private lateinit var transactionTemplate: TransactionTemplate
+
+    @Autowired
     private lateinit var lessorRepository: LessorRepository
 
     private val description = "Machineverhuur voor iedereen!"
     private val name = "Franskes machineverhuur"
 
+    @BeforeEach
+    fun setup() {
+        transactionTemplate = TransactionTemplate(transactionManager)
+    }
+
     @Test
-    @Transactional
     fun createLessor() {
 
         val request = """
@@ -53,19 +65,22 @@ class LessorApiTest {
             }
         """
         request.trimIndent()
-        mockMvc.perform(post("/me/lessor")
-            .with(jwtRequestPostProcessor())
-            .contentType("application/json")
-            .content(request))
+        mockMvc.perform(
+            post("/me/lessor")
+                .with(jwtRequestPostProcessor())
+                .contentType("application/json")
+                .content(request)
+        )
             .andExpect(status().isOk)
 
 
-        val first = lessorRepository.findAll().first()
+        transactionTemplate.execute {
+            val first = lessorRepository.findAll().first()
 
-
-        assertThat(first.description).isEqualTo(description)
-        assertThat(first.name).isEqualTo(name)
-        assertThat(first.userLessors).hasSize(1)
+            assertThat(first.description).isEqualTo(description)
+            assertThat(first.name).isEqualTo(name)
+            assertThat(first.userLessors).hasSize(1)
+        }
     }
 
     private fun jwtRequestPostProcessor(): RequestPostProcessor =
