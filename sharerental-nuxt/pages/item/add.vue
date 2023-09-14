@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import {RentalItemInput} from "~/schemas/openapi/rentalItem";
-import RentalItemClient from "~/services/api/RentalItem";
+import RentalItemClient from "~/services/api/RentalItemClient";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)

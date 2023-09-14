@@ -11,7 +11,7 @@
 import RentalItemCard, {RentalItem} from "~/components/RentalItemCard.vue";
 import {reactive, ref} from "vue";
 import {useAsyncData, useNuxtApp, useRoute} from "#app";
-import {SearchResultItem} from '~/services/api/Search';
+import {SearchResultItem} from '~/services/api/SearchClient';
 
 const state = reactive({
   results: undefined as SearchResultItem[] | undefined,

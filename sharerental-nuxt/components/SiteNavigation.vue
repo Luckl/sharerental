@@ -74,7 +74,7 @@ import {useCurrentUser, useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
 import {useNuxtApp} from "#app";
 import {signOut} from "firebase/auth";
-import LessorClient, {Lessor} from "~/services/api/Lessor";
+import LessorClient, {Lessor} from "~/services/api/LessorClient";
 
 const menuOpened = ref(false);
 const user = useCurrentUser()

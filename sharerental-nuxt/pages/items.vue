@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import {FuelType, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/merged";
-import RentalItemClient from "~/services/api/RentalItem";
+import RentalItemClient from "~/services/api/RentalItemClient";
 
 const error = ref<String | undefined>(undefined)
 const router = useRouter()

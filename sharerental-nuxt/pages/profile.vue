@@ -108,7 +108,7 @@
 </template>
 <script setup lang="ts">
 
-import LessorClient, {Lessor} from "~/services/api/Lessor";
+import LessorClient, {Lessor} from "~/services/api/LessorClient";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
