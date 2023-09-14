@@ -17,9 +17,33 @@ paths:
           required: true
           description: Execute search based on query string
         - in: query
-          name: Pageable
+          name: page
           schema:
-            $ref: './utils/PaginationParameters.yaml/#/Pageable'
+            type: integer
+            format: int32
+            default: 0
+            example: '5'
+          required: false
+          description: Pagenumber, default value is 0 (first page).
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+            default: 8
+            example: '25'
+          description: The page size, number of items to return. Default value is 8.
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 50
+            example: 'price;desc,name;asc'
+          required: false
+          description: Page sort, each item represents a sort column
       responses:
         200:
           description: Successful search result

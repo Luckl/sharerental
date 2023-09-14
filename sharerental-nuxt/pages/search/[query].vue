@@ -29,7 +29,7 @@ const query = Array.isArray(route.params.query) ? route.params.query[0] : route.
 
 // Search here
 const result = await useAsyncData('searchWithText', async () => {
-  let newVar = await $searchClient.search(state.pageable, query);
+  let newVar = await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, query);
   return newVar;
 })
 

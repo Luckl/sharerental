@@ -1,6 +1,5 @@
 import {
     Configuration as SearchConfiguration,
-    Pageable,
     SearchApi,
     SearchResult,
     SearchResultItem,
@@ -18,11 +17,13 @@ class SearchClient {
         this.searchApi = new SearchApi(searchConfiguration);
     }
 
-    search(pageable?: Pageable, query?: string) {
+    search(page: number, size: number, sort: string[], query?: string) {
         return this.searchApi.search({
-                query: query ?? "",
-                pageable: pageable
-            });
+            query: query ?? "",
+            page: page,
+            size: size,
+            sort: sort
+        });
     }
 }
 

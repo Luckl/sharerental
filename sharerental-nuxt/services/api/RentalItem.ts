@@ -9,11 +9,12 @@ class RentalItemClient {
         this.rentalItemApi = new RentalItemApi(searchConfiguration);
     }
 
-    findAll(page: number, size: number, sort: string[]) {
+    findAll(page: number, size: number, sort: string[], filter: string) {
         return this.rentalItemApi.getRentalItems({
             page: page,
             size: size,
-            sort: sort
+            sort: sort,
+            filter: filter
         });
     }
 
