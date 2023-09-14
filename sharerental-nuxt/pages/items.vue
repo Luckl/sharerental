@@ -20,7 +20,7 @@
         <Column field="brand" header="Merk" style="width: 25%"></Column>
         <Column header="Acties" style="width: 25%">
           <template #body="slotProps">
-            <Button icon="pi pi-pencil"></Button>
+            <Button icon="pi pi-pencil" @Click="goToEdit(slotProps.data.id)"></Button>
           </template>
         </Column>
       </DataTable>
@@ -53,6 +53,11 @@ const onPage = (event) => {
   page.value = event.page
   fetchRentalItems()
 };
+
+function goToEdit(id: number) {
+  debugger;
+  router.push('/item/' + id)
+}
 
 function fetchRentalItems() {
   $rentalItemClient.findAll(page.value, pageSize.value, [], filter.value)

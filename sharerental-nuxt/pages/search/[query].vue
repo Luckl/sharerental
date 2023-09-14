@@ -23,8 +23,8 @@ const state = reactive({
 });
 
 const { $searchClient } = useNuxtApp();
-const route = useRoute();
 const rentalItems = ref<RentalItem[]>();
+const route = useRoute();
 const query = Array.isArray(route.params.query) ? route.params.query[0] : route.params.query;
 
 // Search here

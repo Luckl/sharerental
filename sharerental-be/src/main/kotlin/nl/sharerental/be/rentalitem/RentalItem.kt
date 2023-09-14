@@ -15,7 +15,7 @@ data class RentalItem(
     val id: Long = 0,
 
     @Column(nullable = false)
-    val name: String,
+    var name: String,
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinTable(
@@ -23,50 +23,50 @@ data class RentalItem(
         joinColumns = [JoinColumn(name = "rental_item_id")],
         inverseJoinColumns = [JoinColumn(name = "image_id")]
     )
-    val images: List<Image> = mutableListOf(),
+    var images: List<Image> = mutableListOf(),
 
-    val number: String?,
-    val shortDescription: String?,
-    val longDescription: String?,
+    var number: String?,
+    var shortDescription: String?,
+    var longDescription: String?,
 
     @ManyToOne
-    val owner: Lessor,
+    var owner: Lessor,
 
     @Column(name = "price_24h")
-    val price24h: BigDecimal?,
+    var price24h: BigDecimal?,
     @Column(name = "price_48h")
-    val price48h: BigDecimal?,
+    var price48h: BigDecimal?,
     @Column(name = "price_168h")
-    val price168h: BigDecimal?,
+    var price168h: BigDecimal?,
 
-    val deliveryPossible: Boolean?,
-    val deliveryPrice: BigDecimal?,
-    val category: String?,
+    var deliveryPossible: Boolean?,
+    var deliveryPrice: BigDecimal?,
+    var category: String?,
 
-    val reachMeters: Double?,
-    val carryingWeightKilograms: Double?,
-    val maximumWorkHeightMeters: Double?,
-    val intrinsicWeightKilograms: Double?,
+    var reachMeters: Double?,
+    var carryingWeightKilograms: Double?,
+    var maximumWorkHeightMeters: Double?,
+    var intrinsicWeightKilograms: Double?,
 
-    val materialType: String?,
-    val brand: String?,
+    var materialType: String?,
+    var brand: String?,
 
-    val maximumPressureBars: Double?,
-    val maximumHorsePower: Double?,
-    val requiredPowerVoltageVolt: Double?,
-    val workWidthMeters: Double?,
+    var maximumPressureBars: Double?,
+    var maximumHorsePower: Double?,
+    var requiredPowerVoltageVolt: Double?,
+    var workWidthMeters: Double?,
 
-    val vacuumAttachmentPossible: Boolean?,
-    val capacityLiters: Double?,
-    val itemHeight: Double?,
-    val itemWidth: Double?,
-    val itemLength: Double?,
+    var vacuumAttachmentPossible: Boolean?,
+    var capacityLiters: Double?,
+    var itemHeight: Double?,
+    var itemWidth: Double?,
+    var itemLength: Double?,
 
-    val powerWatt: Double?,
-    val maximumSurfaceSquareMeters: Double?,
+    var powerWatt: Double?,
+    var maximumSurfaceSquareMeters: Double?,
 
     @Enumerated(EnumType.STRING)
-    val fuelType: FuelType?
+    var fuelType: FuelType?
 )
 
 enum class FuelType {

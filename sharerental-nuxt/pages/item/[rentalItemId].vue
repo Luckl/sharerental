@@ -6,59 +6,43 @@
       <span class="font-bold text-xl m-1">Artikel toevoegen</span>
     </template>
     <template #content class="flexbox-column">
-      <RentalItemForm :rentalItem="formInput" :submit="onSubmitNewItem" submitButtonText="Aanmaken"></RentalItemForm>
+      <RentalItemForm :rentalItem="formInput" :submit="onSubmitNewItem" submitButtonText="Aanpassen"></RentalItemForm>
     </template>
   </FormPage>
 </template>
 <script setup lang="ts">
 import {RentalItemInput} from "~/schemas/openapi/rentalItem";
 import RentalItemClient from "~/services/api/RentalItemClient";
+import {useRoute} from "#app";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
 const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
+const route = useRoute();
+const itemId = Number.parseInt(Array.isArray(route.params.rentalItemId) ? route.params.rentalItemId[0] : route.params.rentalItemId);
 
 const formInput = reactive<RentalItemInput>({
   name: ""
 })
 
-function fetchItem() {
+onMounted(() => {
+  fetchItem();
+})
 
+function fetchItem() {
+  $rentalItemClient.get(itemId)
+      .then(
+          success => {
+            Object.assign(formInput, success)
+          }
+      )
 }
 
 function onSubmitNewItem() {
 
-  $rentalItemClient.create(formInput)
+  $rentalItemClient.update(formInput, itemId)
       .then(success => {
             router.push('/items')
-
-            formInput.name = "";
-            formInput.number = "";
-            formInput.category = "";
-            formInput.shortDescription = "";
-            formInput.longDescription = "";
-            formInput.deliveryPossible = false;
-            formInput.deliveryPrice = undefined;
-            formInput.price24h = undefined;
-            formInput.price48h = undefined;
-            formInput.price168h = undefined;
-            formInput.reachMeters = undefined;
-            formInput.carryingWeightKilograms = undefined;
-            formInput.maximumWorkHeightMeters = undefined;
-            formInput.intrinsicWeightKilograms = undefined;
-            formInput.maximumPressureBars = undefined;
-            formInput.maximumHorsePower = undefined;
-            formInput.requiredPowerVoltageVolt = undefined;
-            formInput.workWidthMeters = undefined;
-            formInput.capacityLiters = undefined;
-            formInput.itemHeight = undefined;
-            formInput.itemWidth = undefined;
-            formInput.itemLength = undefined;
-            formInput.powerWatt = undefined;
-            formInput.maximumSurfaceSquareMeters = undefined;
-            formInput.materialType = undefined;
-            formInput.brand = undefined;
-            formInput.vacuumAttachmentPossible = false;
           },
           failureReason => {
             error.value = "Er is iets fout gegaan"

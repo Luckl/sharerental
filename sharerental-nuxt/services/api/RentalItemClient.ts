@@ -1,5 +1,5 @@
 import {
-    Configuration as RentalItemConfiguration, RentalItemApi
+    Configuration as RentalItemConfiguration, RentalItemApi, UpdateRentalItemRequest
 } from '~/schemas/openapi/rentalItem';
 import {RentalItemInput} from "~/schemas/openapi/merged";
 
@@ -24,6 +24,14 @@ class RentalItemClient {
         return this.rentalItemApi.createRentalItem({
             rentalItemInput: rentalItemInput
         })
+    }
+
+    update(rentalItemInput: RentalItemInput, id: number) {
+        return this.rentalItemApi.updateRentalItem({rentalItemInput, id})
+    }
+
+    get(id: number) {
+        return this.rentalItemApi.getRentalItem({id})
     }
 }
 

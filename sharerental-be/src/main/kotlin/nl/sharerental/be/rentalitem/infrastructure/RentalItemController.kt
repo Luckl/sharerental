@@ -7,14 +7,19 @@ import nl.sharerental.be.rentalitem.FuelType
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.user.CurrentUserService
+import nl.sharerental.be.user.infrastructure.UnauthorizedException
 import nl.sharerental.contract.http.RentalItemApi
 import nl.sharerental.contract.http.model.GetRentalItemsResult
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.RentalItemInput
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.HttpClientErrorException
 
 @RestController
 class RentalItemController(
@@ -22,6 +27,67 @@ class RentalItemController(
     private val rentalItemRepository: RentalItemRepository,
     private val currentUserService: CurrentUserService
 ) : RentalItemApi {
+
+    override fun getRentalItem(id: Long?): ResponseEntity<HttpRentalItem> {
+
+        id ?: throw NotFoundException()
+
+        val findById = rentalItemRepository.findById(id)
+        return findById.map {
+            ResponseEntity.ok(it.toResponse())
+        }.orElseGet {
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    @Transactional
+    override fun updateRentalItem(
+        id: Long?,
+        rentalItemInput: RentalItemInput?
+    ): ResponseEntity<HttpRentalItem> {
+        id ?: throw NotFoundException()
+        rentalItemInput ?: throw HttpClientErrorException(HttpStatus.BAD_REQUEST)
+
+        val entity = rentalItemRepository.findById(id)
+            .orElseThrow { NotFoundException() }
+
+        if (currentUserService.get().userLessors.map { it.lessor?.id }.contains(entity.owner.id)) {
+            throw UnauthorizedException()
+        }
+
+        entity.apply {
+            name = rentalItemInput.name
+            number = rentalItemInput.number
+            shortDescription = rentalItemInput.shortDescription
+            longDescription = rentalItemInput.longDescription
+            price24h = rentalItemInput.price24h?.toBigDecimal()
+            price48h = rentalItemInput.price48h?.toBigDecimal()
+            price168h = rentalItemInput.price168h?.toBigDecimal()
+            deliveryPossible = rentalItemInput.deliveryPossible
+            deliveryPrice = rentalItemInput.deliveryPrice?.toBigDecimal()
+            category = rentalItemInput.category
+            reachMeters = rentalItemInput.reachMeters
+            carryingWeightKilograms = rentalItemInput.carryingWeightKilograms
+            maximumWorkHeightMeters = rentalItemInput.maximumWorkHeightMeters
+            intrinsicWeightKilograms = rentalItemInput.intrinsicWeightKilograms
+            materialType = rentalItemInput.materialType
+            brand = rentalItemInput.brand
+            maximumPressureBars = rentalItemInput.maximumPressureBars
+            maximumHorsePower = rentalItemInput.maximumHorsePower
+            requiredPowerVoltageVolt = rentalItemInput.requiredPowerVoltageVolt
+            workWidthMeters = rentalItemInput.workWidthMeters
+            vacuumAttachmentPossible = rentalItemInput.vacuumAttachmentPossible
+            capacityLiters = rentalItemInput.capacityLiters
+            itemHeight = rentalItemInput.itemHeight
+            itemWidth = rentalItemInput.itemWidth
+            itemLength = rentalItemInput.itemLength
+            powerWatt = rentalItemInput.powerWatt
+            maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters
+            fuelType = rentalItemInput.fuelType?.toEntityEnum()
+        }
+
+        return ResponseEntity.ok(entity.toResponse())
+    }
 
     @Transactional
     override fun createRentalItem(rentalItemInput: RentalItemInput?): ResponseEntity<HttpRentalItem> {
@@ -99,6 +165,7 @@ private fun RentalItem.toResponse(): HttpRentalItem {
     val item = this;
     return HttpRentalItem()
         .apply {
+            id = item.id
             name = item.name
             number = item.number
             shortDescription = item.shortDescription
