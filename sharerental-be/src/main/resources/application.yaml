@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: sharerental-be
     password: mysecretpassword
-    url: jdbc:postgresql://localhost:5432/sharerental
+    url: jdbc:postgresql://localhost:5432/sharerental?stringtype=unspecified
   security:
     oauth2:
       resourceserver:

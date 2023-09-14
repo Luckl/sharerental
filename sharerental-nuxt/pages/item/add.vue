@@ -215,12 +215,9 @@ const formInput = reactive<RentalItemInput>({
 })
 
 function onSubmitNewItem() {
-  console.log("create")
-  console.log(formInput)
 
   $rentalItemClient.create(formInput)
       .then(success => {
-            console.log("Success")
             router.push('/items')
 
             formInput.name = "";
@@ -252,9 +249,6 @@ function onSubmitNewItem() {
             formInput.vacuumAttachmentPossible = false;
           },
           failureReason => {
-            console.log("failureReason")
-            console.log(failureReason)
-
             error.value = "Er is iets fout gegaan"
           })
 }

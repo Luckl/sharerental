@@ -2,6 +2,7 @@ package nl.sharerental.be.rentalitem.infrastructure
 
 import jakarta.transaction.Transactional
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
+import nl.sharerental.be.rentalitem.FuelType
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.user.CurrentUserService
@@ -11,7 +12,6 @@ import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 import nl.sharerental.contract.http.model.RentalItemInput
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import java.math.BigDecimal
 
 @RestController
 class RentalItemController(
@@ -34,11 +34,11 @@ class RentalItemController(
             number = rentalItemInput.number,
             shortDescription = rentalItemInput.shortDescription,
             longDescription = rentalItemInput.longDescription,
-            price24h = BigDecimal.valueOf(rentalItemInput.price24h),
-            price48h = BigDecimal.valueOf(rentalItemInput.price48h),
-            price168h = BigDecimal.valueOf(rentalItemInput.price168h),
+            price24h = rentalItemInput.price24h?.toBigDecimal(),
+            price48h = rentalItemInput.price48h?.toBigDecimal(),
+            price168h = rentalItemInput.price168h?.toBigDecimal(),
             deliveryPossible = rentalItemInput.deliveryPossible,
-            deliveryPrice = BigDecimal.valueOf(rentalItemInput.deliveryPrice),
+            deliveryPrice = rentalItemInput.deliveryPrice?.toBigDecimal(),
             category = rentalItemInput.category,
             reachMeters = rentalItemInput.reachMeters,
             carryingWeightKilograms = rentalItemInput.carryingWeightKilograms,
@@ -57,7 +57,7 @@ class RentalItemController(
             itemLength = rentalItemInput.itemLength,
             powerWatt = rentalItemInput.powerWatt,
             maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters,
-            fuelType = null
+            fuelType = rentalItemInput.fuelType.toEntityEnum()
         )
 
         val result = rentalItemRepository.save(rentalItem)
@@ -75,3 +75,6 @@ class RentalItemController(
     }
 
 }
+
+private fun nl.sharerental.contract.http.model.FuelType.toEntityEnum(): FuelType = FuelType.valueOf(this.value)
+

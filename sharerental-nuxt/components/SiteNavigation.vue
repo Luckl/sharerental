@@ -92,11 +92,9 @@ const goToStart = function () {
 function fetchLessors() {
   $lessorClient.findAll(0, 20, []).then(success => {
         loaded.value = true;
-        console.log("retrieved success: " + JSON.stringify(success, null, 2))
         lessors.value = success.embedded
       },
       failure => {
-        console.log("failed to retrieve lessors from profile: " + failure.message)
         loaded.value = true;
       })
 }

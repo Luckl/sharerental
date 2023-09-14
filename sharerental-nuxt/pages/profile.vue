@@ -136,12 +136,10 @@ const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 function fetchLessors() {
   $lessorClient.findAll(0, 20, []).then(success => {
         loaded.value = true;
-        console.log("retrieved success: " + JSON.stringify(success, null, 2))
         lessors.value = success.embedded
         selectedLessor.value = success.embedded[0]
       },
       failure => {
-        console.log("failed to retrieve lessors from profile: " + failure.message)
         loaded.value = true;
       })
 }

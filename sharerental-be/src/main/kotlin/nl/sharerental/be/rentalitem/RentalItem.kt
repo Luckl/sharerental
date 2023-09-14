@@ -2,6 +2,7 @@ package nl.sharerental.be.rentalitem
 
 import jakarta.persistence.*
 import nl.sharerental.be.images.Image
+import org.hibernate.annotations.Type
 import java.math.BigDecimal
 import java.net.URI
 
@@ -27,8 +28,11 @@ data class RentalItem(
     val shortDescription: String?,
     val longDescription: String?,
 
+    @Column(name = "price_24h")
     val price24h: BigDecimal?,
+    @Column(name = "price_48h")
     val price48h: BigDecimal?,
+    @Column(name = "price_168h")
     val price168h: BigDecimal?,
 
     val deliveryPossible: Boolean?,
