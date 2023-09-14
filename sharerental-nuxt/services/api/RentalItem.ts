@@ -1,6 +1,8 @@
 import {
-    Configuration as RentalItemConfiguration, RentalItemApi, RentalItemInput,
+    Configuration as RentalItemConfiguration, RentalItemApi
 } from '~/schemas/openapi/rentalItem';
+import {RentalItemInput} from "~/schemas/openapi/merged";
+
 
 class RentalItemClient {
     private rentalItemApi: RentalItemApi;

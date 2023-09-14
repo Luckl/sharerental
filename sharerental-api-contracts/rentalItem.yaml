@@ -3,6 +3,55 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
+  /me/rentalItem/{id}:
+    get:
+      tags:
+        - rentalItem
+      operationId: getRentalItem
+      summary: Find a specific item
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentalItem'
+    post:
+      tags:
+        - rentalItem
+      operationId: updateRentalItem
+      summary: Update a specific item
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentalItemInput'
+      responses:
+        200:
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentalItem'
   /me/rentalItem:
     get:
       tags:
@@ -74,6 +123,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RentalItem'
+
 components:
   securitySchemes:
     BearerAuth:

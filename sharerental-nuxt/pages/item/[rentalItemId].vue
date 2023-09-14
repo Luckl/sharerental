@@ -19,34 +19,12 @@ const error = ref<String | undefined>(undefined)
 const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
 
 const formInput = reactive<RentalItemInput>({
-  name: "",
-  number: undefined,
-  category: undefined,
-  shortDescription: undefined,
-  longDescription: undefined,
-  deliveryPossible: false,
-  deliveryPrice: undefined,
-  price24h: undefined,
-  price48h: undefined,
-  price168h: undefined,
-  reachMeters: undefined,
-  carryingWeightKilograms: undefined,
-  maximumWorkHeightMeters: undefined,
-  intrinsicWeightKilograms: undefined,
-  maximumPressureBars: undefined,
-  maximumHorsePower: undefined,
-  requiredPowerVoltageVolt: undefined,
-  workWidthMeters: undefined,
-  capacityLiters: undefined,
-  itemHeight: undefined,
-  itemWidth: undefined,
-  itemLength: undefined,
-  powerWatt: undefined,
-  maximumSurfaceSquareMeters: undefined,
-  materialType: undefined,
-  brand: undefined,
-  vacuumAttachmentPossible: false
+  name: ""
 })
+
+function fetchItem() {
+
+}
 
 function onSubmitNewItem() {
 

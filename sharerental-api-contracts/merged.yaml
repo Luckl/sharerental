@@ -5,6 +5,8 @@ openapi: "3.0.3"
 paths:
   /me/rentalItem:
     $ref: "./rentalItem.yaml#/paths/~1me~1rentalItem"
+  /me/rentalItem/{id}:
+    $ref: "./rentalItem.yaml#/paths/~1me~1rentalItem~1{id}"
   /search:
     $ref: "./search.yaml#/paths/~1search"
   /me/lessor/{id}:
