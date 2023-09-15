@@ -5,39 +5,33 @@ import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.FuelType
 import nl.sharerental.be.rentalitem.RentalItem
+import nl.sharerental.be.rentalitem.RentalItemAuthorization
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.user.CurrentUserService
-import nl.sharerental.be.user.infrastructure.UnauthorizedException
 import nl.sharerental.contract.http.RentalItemApi
 import nl.sharerental.contract.http.model.GetRentalItemsResult
 import nl.sharerental.contract.http.model.PaginationResponse
-import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
-import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.RentalItemInput
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.HttpClientErrorException
+import nl.sharerental.contract.http.model.FuelType as HttpFuelType
+import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 
 @RestController
 class RentalItemController(
     private val lessorRepository: LessorRepository,
     private val rentalItemRepository: RentalItemRepository,
+    private val rentalItemAuthorization: RentalItemAuthorization,
     private val currentUserService: CurrentUserService
 ) : RentalItemApi {
 
     override fun getRentalItem(id: Long?): ResponseEntity<HttpRentalItem> {
 
-        id ?: throw NotFoundException()
+        val findById = rentalItemAuthorization.authorizeById(id)
 
-        val findById = rentalItemRepository.findById(id)
-        return findById.map {
-            ResponseEntity.ok(it.toResponse())
-        }.orElseGet {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(findById.toResponse())
     }
 
     @Transactional
@@ -45,15 +39,9 @@ class RentalItemController(
         id: Long?,
         rentalItemInput: RentalItemInput?
     ): ResponseEntity<HttpRentalItem> {
-        id ?: throw NotFoundException()
         rentalItemInput ?: throw HttpClientErrorException(HttpStatus.BAD_REQUEST)
 
-        val entity = rentalItemRepository.findById(id)
-            .orElseThrow { NotFoundException() }
-
-        if (currentUserService.get().userLessors.map { it.lessor?.id }.contains(entity.owner.id)) {
-            throw UnauthorizedException()
-        }
+        val entity = rentalItemAuthorization.authorizeById(id)
 
         entity.apply {
             name = rentalItemInput.name
@@ -150,7 +138,6 @@ class RentalItemController(
         }
 
         val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(page, size, sort))
-
 
         val getRentalItemsResult = GetRentalItemsResult(
             findAll.get().map { it.toResponse() }.toList(),

@@ -9,7 +9,7 @@
     </template>
 
     <template #content>
-      <FileUpload name="demo[]" @upload="onUpload($event)" custom-upload @uploader="customUploader" :multiple="true" accept="image/*"
+      <FileUpload name="demo[]" :auto="true" custom-upload @uploader="customUploader" :multiple="true" accept="image/*"
                   :maxFileSize="1000000">
         <template #empty>
           <p>Drag and drop files to here to upload.</p>
