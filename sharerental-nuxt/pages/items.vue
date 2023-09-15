@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>Artikelen - ShareRental</Title>
+  </Head>
   <ClientOnly>
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
 
@@ -11,7 +14,7 @@
         <template #header>
           <div class="flex flex-wrap align-items-center justify-between gap-2">
             <InputText v-model="filter" @change="fetchRentalItems()" placeholder="Zoeken"></InputText>
-              <Button label="Nieuw" icon="pi pi-plus" @click="clickNew()"></Button>
+            <Button label="Nieuw" icon="pi pi-plus" @click="clickNew()"></Button>
           </div>
         </template>
         <Column field="name" header="Naam" style="width: 25%"></Column>
@@ -20,7 +23,10 @@
         <Column field="brand" header="Merk" style="width: 25%"></Column>
         <Column header="Acties" style="width: 25%">
           <template #body="slotProps">
-            <Button icon="pi pi-pencil" @Click="goToEdit(slotProps.data.id)"></Button>
+            <div class="flex gap-3">
+              <Button icon="pi pi-pencil" @Click="goToEdit(slotProps.data.id)"></Button>
+              <Button icon="pi pi-images" @Click="goToAddImages(slotProps.data.id)"></Button>
+            </div>
           </template>
         </Column>
       </DataTable>
@@ -55,8 +61,11 @@ const onPage = (event) => {
 };
 
 function goToEdit(id: number) {
-  debugger;
   router.push('/item/' + id)
+}
+
+function goToAddImages(id: number) {
+  router.push('/item/' + id + '/images')
 }
 
 function fetchRentalItems() {

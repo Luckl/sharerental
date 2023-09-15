@@ -51,7 +51,7 @@
               <InputText inputId="fStreet" class="mb-1 fit" v-model="formInput.street"></InputText>
             </div>
             <div class="flexbox-column">
-              <label for="fCity" class="data-label mb-1">Woonplaats</label>
+              <label for="fCity" class="data-label mb-1">Plaatsnaam</label>
               <InputText inputId="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
             </div>
             <Divider align="left" type="solid" class="mb-1">
@@ -90,7 +90,7 @@
             <span>{{ selectedLessor?.primaryLocation?.street }} {{ selectedLessor?.primaryLocation?.houseNumber}}{{selectedLessor?.primaryLocation?.houseNumberAddition}}</span>
           </div>
           <div class="flexbox-column">
-            <span class="data-label mb-1">Woonplaats</span>
+            <span class="data-label mb-1">Plaatsnaam</span>
             <span>{{ selectedLessor?.primaryLocation?.postalCode }}, {{ selectedLessor?.primaryLocation?.city}}</span>
           </div>
           <Divider align="left" type="solid" class="mb-1">

@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>Artikelen - ShareRental</Title>
+  </Head>
   <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
 
   <FormPage>

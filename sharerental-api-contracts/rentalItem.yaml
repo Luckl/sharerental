@@ -3,7 +3,7 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
-  /me/rentalItem/{id}:
+  /me/rental-items/{id}:
     get:
       tags:
         - rentalItem
@@ -52,7 +52,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RentalItem'
-  /me/rentalItem:
+  /me/rental-items/{id}/images:
+    get:
+      tags:
+        - rentalItemImage
+      operationId: getRentalItemImages
+      summary: Find images of a specific item
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentalItemImagesResult'
+    post:
+      tags:
+        - rentalItemImage
+      operationId: uploadRentalItemImage
+      summary: Upload an image
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: Successful result
+  /me/rental-items:
     get:
       tags:
         - rentalItem
@@ -131,6 +177,13 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    RentalItemImagesResult:
+      type: object
+      properties:
+        _embedded:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
     GetRentalItemsResult:
       type: object
       required:

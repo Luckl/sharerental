@@ -19,6 +19,7 @@ import Dropdown from "primevue/dropdown";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import Checkbox from "primevue/checkbox";
+import FileUpload from "primevue/fileupload";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
@@ -40,6 +41,7 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Textarea', Textarea)
     nuxtApp.vueApp.component('InputNumber', InputNumber)
     nuxtApp.vueApp.component('Checkbox', Checkbox)
+    nuxtApp.vueApp.component('FileUpload', FileUpload)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 
