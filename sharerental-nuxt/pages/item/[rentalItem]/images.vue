@@ -22,7 +22,8 @@
 <script setup lang="ts">
 import {useRoute, useRuntimeConfig} from "#app";
 import RentalItemClient from "~/services/api/RentalItemClient";
-import {RentalItem} from "~/schemas/openapi/merged";
+import RentalItemImageClient from "~/services/api/RentalItemImageClient";
+import {Image, RentalItem} from "~/schemas/openapi/merged";
 
 const route = useRoute();
 let itemIdString = Array.isArray(route.params.rentalItem) ? route.params.rentalItem[0] : route.params.rentalItem;
@@ -32,29 +33,48 @@ const uploadUrl = ref(useRuntimeConfig().public.backendUrl + "/backend/rentalIte
 const itemId = Number.parseInt(itemIdString);
 const error = ref<String | undefined>(undefined)
 const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
+const $rentalItemImageClient: RentalItemImageClient = useNuxtApp().$rentalItemImageClient;
 const rentalItem = ref<RentalItem>({
   id: 0,
   name: ""
 })
+const images = ref<Image[]>([])
 
 onMounted(() => {
   fetchItemInformation()
+  fetchImagesForItem()
 })
 
-function onUpload(event) {
-  debugger;
-}
-const customBase64Uploader = async (event) => {
+const customUploader = async (event) => {
   const file = event.files[0];
-  const reader = new FileReader();
   let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
 
-  reader.readAsDataURL(blob);
-
-  reader.onloadend = function () {
-    const base64data = reader.result;
-  };
+  $rentalItemImageClient.upload(itemId, blob)
+      .then(success => {
+        fetchImagesForItem()
+      },
+      failure => {
+        error.value = "Afbeeldingen upload mislukt"
+        console.log(failure)
+      })
 };
+
+function fetchImagesForItem() {
+  $rentalItemImageClient.get(itemId)
+      .then(
+          success => {
+            if (success.embedded !== undefined) {
+              images.value = success.embedded
+            } else {
+              console.log("no images found")
+            }
+          },
+          failure => {
+            error.value = "Afbeeldingen ophalen mislukt"
+            console.log(failure)
+          }
+      )
+}
 
 function fetchItemInformation() {
   $rentalItemClient.get(itemId)

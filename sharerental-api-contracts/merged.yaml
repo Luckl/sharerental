@@ -3,7 +3,7 @@ servers:
 - url: "http://localhost:8080"
 openapi: "3.0.3"
 paths:
-  /me/rentalItem:
+  /me/rental-items:
     $ref: "./rentalItem.yaml#/paths/~1me~1rental-items"
   /me/rental-items/{id}:
     $ref: "./rentalItem.yaml#/paths/~1me~1rental-items~1{id}"

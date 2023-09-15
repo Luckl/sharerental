@@ -2,10 +2,9 @@ import {defineNuxtPlugin, useRuntimeConfig} from "#app";
 import SearchClient from "~/services/api/SearchClient";
 import LessorClient from "~/services/api/LessorClient";
 import RentalItemClient from "~/services/api/RentalItemClient";
-import {Configuration as SearchConfiguration} from '~/schemas/openapi/search';
-import {Configuration as LessorConfiguration} from '~/schemas/openapi/lessor';
-import {Configuration as RentalItemConfiguration} from '~/schemas/openapi/rentalItem';
+import {Configuration} from '~/schemas/openapi/merged';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
+import RentalItemImageClient from "~/services/api/RentalItemImageClient";
 
 export default defineNuxtPlugin((nuxtApp) => {
 
@@ -14,15 +13,15 @@ export default defineNuxtPlugin((nuxtApp) => {
         middleware: [new ApiMiddleware()]
     };
 
-    const searchApiConfig = new SearchConfiguration(configuration)
-    const lessorApiConfig = new LessorConfiguration(configuration)
-    const rentalItemApiConfig = new RentalItemConfiguration(configuration)
+    const config = new Configuration(configuration)
 
-    const searchClient = new SearchClient(searchApiConfig)
-    const lessorClient = new LessorClient(lessorApiConfig)
-    const rentalItemClient = new RentalItemClient(rentalItemApiConfig)
+    const searchClient = new SearchClient(config)
+    const lessorClient = new LessorClient(config)
+    const rentalItemClient = new RentalItemClient(config)
+    const rentalItemImageClient = new RentalItemImageClient(config)
 
     nuxtApp.provide('searchClient', searchClient)
     nuxtApp.provide('lessorClient', lessorClient)
     nuxtApp.provide('rentalItemClient', rentalItemClient)
+    nuxtApp.provide('rentalItemImageClient', rentalItemImageClient)
 })
