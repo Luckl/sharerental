@@ -32,7 +32,6 @@ class RequestResponseLoggingInterceptor() : HandlerInterceptor {
         request: HttpServletRequest, response: HttpServletResponse, handler: Any,
         ex: Exception?
     ) {
-        ex?.printStackTrace()
         logger.info("[afterCompletion][${response.status}][exception: $ex]")
     }
 

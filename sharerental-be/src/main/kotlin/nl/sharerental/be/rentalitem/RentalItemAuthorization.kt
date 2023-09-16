@@ -1,24 +1,28 @@
 package nl.sharerental.be.rentalitem
 
+import nl.sharerental.be.infrastructure.exceptions.BadRequest
+import nl.sharerental.be.infrastructure.exceptions.NotFound
+import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.user.CurrentUserService
-import org.springframework.http.HttpStatus
+import nl.sharerental.be.infrastructure.exceptions.UnauthorizedException
 import org.springframework.stereotype.Component
-import org.springframework.web.client.HttpClientErrorException
 
 @Component
 class RentalItemAuthorization(
     private val rentalItemRepository: RentalItemRepository,
-    private val currentUserService: CurrentUserService
+    private val currentUserService: CurrentUserService,
+    private val lessorRepository: LessorRepository
 ) {
 
     fun authorizeById(id: Long?): RentalItem {
-        id ?: throw HttpClientErrorException(HttpStatus.BAD_REQUEST)
+        id ?: throw BadRequest()
 
-        val item = rentalItemRepository.findById(id).orElseThrow { HttpClientErrorException(HttpStatus.NOT_FOUND) }
+        val item = rentalItemRepository.findById(id).orElseThrow { NotFound() }
 
-        if (!currentUserService.get().userLessors.map { userLessor -> userLessor.lessor }.contains(item.owner)) {
-            throw HttpClientErrorException(HttpStatus.UNAUTHORIZED)
+        lessorRepository.getIdsForUserId(currentUserService.get().id)
+        if (!lessorRepository.getIdsForUserId(currentUserService.get().id).contains(item.owner.id)) {
+            throw UnauthorizedException()
         }
 
         return item

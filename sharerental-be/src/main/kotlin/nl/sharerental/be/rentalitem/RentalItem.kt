@@ -19,7 +19,7 @@ data class RentalItem(
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinTable(
-        name = "rental_item_images",
+        name = "rental_item_image",
         joinColumns = [JoinColumn(name = "rental_item_id")],
         inverseJoinColumns = [JoinColumn(name = "image_id")]
     )

@@ -28,8 +28,6 @@ import {Image, RentalItem} from "~/schemas/openapi/merged";
 const route = useRoute();
 let itemIdString = Array.isArray(route.params.rentalItem) ? route.params.rentalItem[0] : route.params.rentalItem;
 
-const uploadUrl = ref(useRuntimeConfig().public.backendUrl + "/backend/rentalItem/" + itemIdString + "/images");
-
 const itemId = Number.parseInt(itemIdString);
 const error = ref<String | undefined>(undefined)
 const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
@@ -49,11 +47,12 @@ const customUploader = async (event) => {
   const file = event.files[0];
   let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
 
-  $rentalItemImageClient.upload(itemId, blob)
+  $rentalItemImageClient.upload(itemId, blob.type, blob)
       .then(success => {
         fetchImagesForItem()
       },
       failure => {
+        debugger;
         error.value = "Afbeeldingen upload mislukt"
         console.log(failure)
       })

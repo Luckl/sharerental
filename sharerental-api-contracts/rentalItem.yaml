@@ -88,6 +88,11 @@ paths:
           schema:
             type: integer
             format: int64
+        - in: query
+          name: fileType
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:

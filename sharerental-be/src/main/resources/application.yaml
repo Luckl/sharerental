@@ -13,8 +13,18 @@ spring:
         jwt:
           jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken%40system.gserviceaccount.com
           issuer-uri: https://securetoken.google.com/sharerental-b66f7
+  cloud:
+    gcp:
+      project-id: sharerental-b66f7
+
 logging:
   level:
     nl:
       sharerental:
         be: DEBUG
+
+gcp:
+  bucket:
+    public:
+      name: sharerental-staging
+

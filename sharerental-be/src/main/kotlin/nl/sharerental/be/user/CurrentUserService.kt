@@ -1,14 +1,12 @@
 package nl.sharerental.be.user
 
 import nl.sharerental.be.security.AuthenticationFacade
-import nl.sharerental.be.user.infrastructure.UnauthorizedException
+import nl.sharerental.be.infrastructure.exceptions.UnauthorizedException
 import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.HttpClientErrorException.Unauthorized
 import org.springframework.web.context.WebApplicationContext
 
 @Service

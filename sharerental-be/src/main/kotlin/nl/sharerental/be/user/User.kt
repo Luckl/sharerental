@@ -14,7 +14,7 @@ class User(
     val email: String,
     @Column(name = "phone_number")
     val phoneNumber: String?,
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     var userLessors: Set<UserLessor> = setOf()
 ) {
 
