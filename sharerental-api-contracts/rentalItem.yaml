@@ -212,13 +212,6 @@ components:
       required:
         - id
         - url
-    ImageInput:
-      type: object
-      properties:
-        url:
-          type: string
-      required:
-        - url
     FuelType:
       type: string
       enum: [ GASOLINE, DIESEL, ELECTRIC, OTHER ]
@@ -227,10 +220,6 @@ components:
       properties:
         name:
           type: string
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/ImageInput'
         number:
           type: string
         shortDescription:

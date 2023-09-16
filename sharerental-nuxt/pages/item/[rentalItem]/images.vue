@@ -1,29 +1,37 @@
 <template>
-  <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+    <div>
+      <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
 
-  <FormPage>
-    <template #header>
+      <FormPage>
+        <template #header>
       <span class="font-bold text-xl m-1">Afbeeldingen uploaden voor {{ rentalItem.name }} ({{
           rentalItem.number
         }})</span>
-    </template>
-
-    <template #content>
-      <FileUpload name="demo[]" :auto="true" custom-upload @uploader="customUploader" :multiple="true" accept="image/*"
-                  :maxFileSize="1000000">
-        <template #empty>
-          <p>Drag and drop files to here to upload.</p>
         </template>
-      </FileUpload>
-    </template>
 
-  </FormPage>
+        <template #content>
+          <FileUpload name="demo[]" :auto="true" custom-upload @uploader="customUploader" :multiple="true"
+                      accept="image/*"
+                      :maxFileSize="1000000">
+            <template #empty>
+              <p>Drag and drop files to here to upload.</p>
+            </template>
+          </FileUpload>
+
+          <div v-for="image in images">
+            <Image :src="image.url" preview/>
+          </div>
+        </template>
+
+      </FormPage>
+    </div>
 </template>
+
 <script setup lang="ts">
 import {useRoute, useRuntimeConfig} from "#app";
 import RentalItemClient from "~/services/api/RentalItemClient";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
-import {Image, RentalItem} from "~/schemas/openapi/merged";
+import {Image as HttpImage, RentalItem} from "~/schemas/openapi/merged";
 
 const route = useRoute();
 let itemIdString = Array.isArray(route.params.rentalItem) ? route.params.rentalItem[0] : route.params.rentalItem;
@@ -36,7 +44,7 @@ const rentalItem = ref<RentalItem>({
   id: 0,
   name: ""
 })
-const images = ref<Image[]>([])
+const images = ref<HttpImage[]>([])
 
 onMounted(() => {
   fetchItemInformation()
@@ -49,16 +57,16 @@ const customUploader = async (event) => {
 
   $rentalItemImageClient.upload(itemId, blob.type, blob)
       .then(success => {
-        fetchImagesForItem()
-      },
-      failure => {
-        if (failure.response.status === 429) {
-          error.value = "Te veel afbeeldingen geupload"
-        } else {
-          error.value = "Afbeeldingen upload mislukt"
-        }
-        console.log(failure)
-      })
+            fetchImagesForItem()
+          },
+          failure => {
+            if (failure.response.status === 429) {
+              error.value = "Te veel afbeeldingen geupload"
+            } else {
+              error.value = "Afbeeldingen upload mislukt"
+            }
+            console.log(failure)
+          })
 };
 
 function fetchImagesForItem() {
