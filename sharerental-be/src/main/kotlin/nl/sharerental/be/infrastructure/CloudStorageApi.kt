@@ -19,11 +19,15 @@ class CloudStorageApi(
 ) {
     private val logger = LoggerFactory.getLogger(CloudStorageApi::class.java)
 
-    fun uploadFile(fileId: String, fileType: String, blob: Resource) {
+    fun uploadFile(fileId: String, fileType: String, blob: Resource): String {
 
         val blobId = BlobId.of(bucketName, fileId)
         val build = BlobInfo.newBuilder(blobId).setContentType(fileType).build()
 
-        storage.create(build, blob.contentAsByteArray)
+        val create = storage.create(build, blob.contentAsByteArray)
+
+        val mediaLink = "https://storage.googleapis.com/${create.asBlobInfo().generatedId}"
+        logger.info("created new public file {}", mediaLink)
+        return mediaLink
     }
 }

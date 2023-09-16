@@ -1,25 +1,27 @@
 package nl.sharerental.be.rentalitem.infrastructure
 
 import jakarta.transaction.Transactional
+import nl.sharerental.be.images.Image
+import nl.sharerental.be.images.ImageService
 import nl.sharerental.be.infrastructure.CloudStorageApi
-import nl.sharerental.be.infrastructure.exceptions.BadRequest
-import nl.sharerental.be.infrastructure.exceptions.TooManyRequests
 import nl.sharerental.be.rentalitem.RentalItemAuthorization
 import nl.sharerental.be.search.SearchController
 import nl.sharerental.contract.http.RentalItemImageApi
 import nl.sharerental.contract.http.model.RentalItemImagesResult
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import nl.sharerental.contract.http.model.Image as HttpImage
 
 @Controller
 class RentalItemImagesController(
     private val rentalItemAuthorization: RentalItemAuthorization,
-    private val cloudStorageApi: CloudStorageApi,
-    private val imageUploadRateLimiter: ImageUploadRateLimiter
+    private val imageUploadRateLimiter: ImageUploadRateLimiter,
+    private val imageService: ImageService
 ) : RentalItemImageApi {
     private val logger = LoggerFactory.getLogger(SearchController::class.java)
 
@@ -39,18 +41,16 @@ class RentalItemImagesController(
     override fun uploadRentalItemImage(id: Long?, fileType: String?, body: Resource?): ResponseEntity<Void> {
 
         if (!imageUploadRateLimiter.allowed()) {
-            throw TooManyRequests()
+            throw ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS)
         }
 
         val item = rentalItemAuthorization.authorizeById(id)
-        body ?: throw BadRequest()
-        fileType ?: throw BadRequest()
+        body ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        fileType ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
-        val newFileId = "${item.owner.id}-${id}-RAW-${UUID.randomUUID()}"
-        logger.info("uploading new image with ID {}", newFileId)
+        val image: Image = imageService.createImage(item, fileType, body)
 
-        cloudStorageApi.uploadFile(newFileId, fileType, body)
-
+        item.images.add(image)
 
         return ResponseEntity.ok().build()
     }

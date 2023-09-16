@@ -1,8 +1,0 @@
-package nl.sharerental.be.infrastructure.exceptions
-
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
-
-@ResponseStatus(code = HttpStatus.TOO_MANY_REQUESTS)
-class BadRequest : Throwable() {
-}

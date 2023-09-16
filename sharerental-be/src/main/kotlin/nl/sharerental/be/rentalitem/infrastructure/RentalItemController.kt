@@ -2,7 +2,6 @@ package nl.sharerental.be.rentalitem.infrastructure
 
 import jakarta.transaction.Transactional
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
-import nl.sharerental.be.infrastructure.exceptions.BadRequest
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.FuelType
 import nl.sharerental.be.rentalitem.RentalItem
@@ -16,7 +15,7 @@ import nl.sharerental.contract.http.model.RentalItemInput
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.server.ResponseStatusException
 import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 
@@ -40,7 +39,7 @@ class RentalItemController(
         id: Long?,
         rentalItemInput: RentalItemInput?
     ): ResponseEntity<HttpRentalItem> {
-        rentalItemInput ?: throw BadRequest()
+        rentalItemInput ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         val entity = rentalItemAuthorization.authorizeById(id)
 

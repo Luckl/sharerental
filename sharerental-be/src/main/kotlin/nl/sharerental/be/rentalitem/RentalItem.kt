@@ -23,7 +23,7 @@ data class RentalItem(
         joinColumns = [JoinColumn(name = "rental_item_id")],
         inverseJoinColumns = [JoinColumn(name = "image_id")]
     )
-    var images: List<Image> = mutableListOf(),
+    var images: MutableList<Image> = mutableListOf(),
 
     var number: String?,
     var shortDescription: String?,

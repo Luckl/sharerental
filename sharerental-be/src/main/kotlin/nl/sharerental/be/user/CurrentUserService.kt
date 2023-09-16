@@ -1,13 +1,14 @@
 package nl.sharerental.be.user
 
 import nl.sharerental.be.security.AuthenticationFacade
-import nl.sharerental.be.infrastructure.exceptions.UnauthorizedException
 import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.http.HttpStatus
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -28,7 +29,7 @@ class CurrentUserService(private val userRepository: UserRepository,
 
     fun get(): User {
         if (!this::currentUser.isInitialized) {
-            return init().takeIf { it != null } ?: throw UnauthorizedException()
+            return init().takeIf { it != null } ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
         }
         return currentUser
     }

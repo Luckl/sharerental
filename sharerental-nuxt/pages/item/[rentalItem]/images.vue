@@ -52,8 +52,11 @@ const customUploader = async (event) => {
         fetchImagesForItem()
       },
       failure => {
-        debugger;
-        error.value = "Afbeeldingen upload mislukt"
+        if (failure.response.status === 429) {
+          error.value = "Te veel afbeeldingen geupload"
+        } else {
+          error.value = "Afbeeldingen upload mislukt"
+        }
         console.log(failure)
       })
 };
