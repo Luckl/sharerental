@@ -1,30 +1,32 @@
 <template>
-    <div>
-      <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+  <div>
+    <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
 
-      <FormPage>
-        <template #header>
+    <FormPage>
+      <template #header>
       <span class="font-bold text-xl m-1">Afbeeldingen uploaden voor {{ rentalItem.name }} ({{
           rentalItem.number
         }})</span>
-        </template>
+      </template>
 
-        <template #content>
-          <FileUpload name="demo[]" :auto="true" custom-upload @uploader="customUploader" :multiple="true"
-                      accept="image/*"
-                      :maxFileSize="1000000">
-            <template #empty>
-              <p>Sleep afbeeldingen hier naartoe om te uploaden.</p>
-            </template>
-          </FileUpload>
+      <template #content>
+        <FileUpload name="demo[]" custom-upload @uploader="customUploader" :multiple="true"
+                    accept="image/*"
+                    :maxFileSize="1000000">
+          <template #empty>
+            <p>Sleep afbeeldingen hier naartoe om te uploaden.</p>
+          </template>
+        </FileUpload>
 
+        <div class="mt-20 flex flex-row gap-2">
           <div v-for="image in images">
-            <Image :src="image.url" preview width="250" />
+            <Image :src="image.url" preview width="250"/>
           </div>
-        </template>
+        </div>
+      </template>
 
-      </FormPage>
-    </div>
+    </FormPage>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -52,21 +54,23 @@ onMounted(() => {
 })
 
 const customUploader = async (event) => {
-  const file = event.files[0];
-  let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
+  for (const file of event.files) {
 
-  $rentalItemImageClient.upload(itemId, blob.type, blob)
-      .then(success => {
-            fetchImagesForItem()
-          },
-          failure => {
-            if (failure.response.status === 429) {
-              error.value = "Te veel afbeeldingen geupload"
-            } else {
-              error.value = "Afbeeldingen upload mislukt"
-            }
-            console.log(failure)
-          })
+    let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
+
+    $rentalItemImageClient.upload(itemId, blob.type, blob)
+        .then(success => {
+              fetchImagesForItem()
+            },
+            failure => {
+              if (failure.response.status === 429) {
+                error.value = "Te veel afbeeldingen geupload"
+              } else {
+                error.value = "Afbeeldingen upload mislukt"
+              }
+              console.log(failure)
+            })
+  }
 };
 
 function fetchImagesForItem() {

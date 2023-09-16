@@ -6,6 +6,7 @@ import nl.sharerental.be.images.ImageService
 import nl.sharerental.be.infrastructure.CloudStorageApi
 import nl.sharerental.be.rentalitem.RentalItemAuthorization
 import nl.sharerental.be.search.SearchController
+import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.RentalItemImageApi
 import nl.sharerental.contract.http.model.RentalItemImagesResult
 import org.slf4j.LoggerFactory
@@ -21,7 +22,8 @@ import nl.sharerental.contract.http.model.Image as HttpImage
 class RentalItemImagesController(
     private val rentalItemAuthorization: RentalItemAuthorization,
     private val imageUploadRateLimiter: ImageUploadRateLimiter,
-    private val imageService: ImageService
+    private val imageService: ImageService,
+    private val currentUserService: CurrentUserService
 ) : RentalItemImageApi {
     private val logger = LoggerFactory.getLogger(SearchController::class.java)
 
@@ -29,7 +31,6 @@ class RentalItemImagesController(
     override fun getRentalItemImages(id: Long?): ResponseEntity<RentalItemImagesResult> {
 
         val item = rentalItemAuthorization.authorizeById(id)
-        logger.info("Get images called")
 
         return ResponseEntity.ok(
             RentalItemImagesResult()
@@ -41,6 +42,7 @@ class RentalItemImagesController(
     override fun uploadRentalItemImage(id: Long?, fileType: String?, body: Resource?): ResponseEntity<Void> {
 
         if (!imageUploadRateLimiter.allowed()) {
+            logger.info("Rate limiting hit by {}", currentUserService.get().id)
             throw ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS)
         }
 
