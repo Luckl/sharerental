@@ -14,12 +14,12 @@
                       accept="image/*"
                       :maxFileSize="1000000">
             <template #empty>
-              <p>Drag and drop files to here to upload.</p>
+              <p>Sleep afbeeldingen hier naartoe om te uploaden.</p>
             </template>
           </FileUpload>
 
           <div v-for="image in images">
-            <Image :src="image.url" preview/>
+            <Image :src="image.url" preview width="250" />
           </div>
         </template>
 

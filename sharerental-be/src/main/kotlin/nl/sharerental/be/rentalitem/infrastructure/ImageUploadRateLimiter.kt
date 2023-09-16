@@ -10,7 +10,7 @@ import java.time.Duration
 class ImageUploadRateLimiter() {
 
     private final val imageUploadRateLimit: Bucket
-    private final val uploadsCount: Long = 1
+    private final val uploadsCount: Long = 5
     private final val uploadsInterval: Duration = Duration.ofMinutes(1)
     init {
         val limit: Bandwidth = Bandwidth.classic(uploadsCount, Refill.intervally(uploadsCount, uploadsInterval))

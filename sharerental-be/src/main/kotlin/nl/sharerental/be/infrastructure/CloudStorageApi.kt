@@ -26,7 +26,7 @@ class CloudStorageApi(
 
         val create = storage.create(build, blob.contentAsByteArray)
 
-        val mediaLink = "https://$bucketName/storage.googleapis.com/${create.asBlobInfo().name}"
+        val mediaLink = "https://storage.googleapis.com/$bucketName/${create.asBlobInfo().name}"
         logger.info("created new public file {}", mediaLink)
         return mediaLink
     }
