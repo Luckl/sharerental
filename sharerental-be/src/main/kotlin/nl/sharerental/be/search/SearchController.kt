@@ -51,6 +51,9 @@ private fun RentalItem.toSearchResultItem(): SearchResultItem {
     searchResultItem.subtitle = shortDescription
     searchResultItem.imageUrl = images.map { it.imageUrl }.map { URI(it) }.firstOrNull()
     searchResultItem.pricePerDay = price24h
+    searchResultItem.shortDescription = shortDescription
+    searchResultItem.lessor = owner.name
+    searchResultItem.lessorCity = owner.primaryLocation.city
     return searchResultItem
 
 }

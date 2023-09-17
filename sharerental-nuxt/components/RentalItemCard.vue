@@ -1,54 +1,47 @@
 <template>
-  <Card style="width: 25em">
+  <Card style="width: 15em">
     <template #header>
-      <img class="card-image" alt="Product image" :src="item.image" />
+      <div>
+        <Image :src="determineImageUrl()" width="250" height="250"/>
+      </div>
     </template>
-    <template #title> {{ item.title }}</template>
-    <template #subtitle> {{ item.shortDescription }} </template>
+    <template #title>{{ item.title }}</template>
+    <template #subtitle>{{ item.shortDescription }}</template>
     <template #content>
       <p>
-        {{ item.longDescription }}
+        <span class="font-bold">Prijs per dag</span> {{ formatCurrency(item.pricePerDay) }}
       </p>
     </template>
   </Card>
 </template>
 
-<script lang="ts">
-export class RentalItem {
-  id: number;
-  title: String;
-  shortDescription: String | undefined;
-  subTitle: String | undefined;
-  image: String | undefined;
-  pricePerDay: number;
+<script setup lang="ts">
+import {SearchResultItem} from "~/schemas/openapi/merged";
 
-  constructor(id: number,
-              name: String,
-              subTitle: String | undefined,
-              shortDescription: String | undefined,
-              imagePath: String | undefined,
-              pricePerDay: number) {
-    this.id = id;
-    this.title = name;
-    this.shortDescription = shortDescription;
-    this.subTitle = subTitle;
-    this.image = imagePath;
-    this.pricePerDay = pricePerDay;
+interface Props {
+  item: SearchResultItem;
+}
+
+const props = defineProps<Props>()
+const formatter = new Intl.NumberFormat('nl-NL', {
+  style: 'currency',
+  currency: 'EUR',
+})
+
+function determineImageUrl() {
+  if (props.item.imageUrl === undefined) {
+    return '/assets/logo-transparent-2.png'
+  } else {
+    return props.item.imageUrl
   }
 }
-</script>
 
-<script setup lang="ts">
-
-import {RentalItem} from "~/components/RentalItemCard.vue";
-
-defineProps({
-  item: RentalItem
-})
+function formatCurrency(value: number) {
+  if (value !== undefined && value !== null) {
+    return formatter.format(value)
+  } else return "Niet bekend"
+}
 </script>
 
 <style scoped>
-.card-image {
-  width: 100%;
-}
 </style>

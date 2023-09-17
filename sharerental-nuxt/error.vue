@@ -5,7 +5,7 @@
   <site-navigation></site-navigation>
   <form-page>
     <template #content>
-      <H1>Deze pagina is nog niet af, of bestaat niet 😒 </H1>
+      <h1>Deze pagina is nog niet af, of bestaat niet 😒 </h1>
     </template>
   </form-page>
 </template>

@@ -1,17 +1,23 @@
 <template>
   <Head>
-    <Title>{{ query }} - ShareRental</Title>
+    <Title>Zoeken - ShareRental</Title>
   </Head>
-  <div class="results">
-    <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem"/>
+
+  <div class="flex flex-col justify-center side-padding">
+    <div class="text-lg font-bold">Resultaten</div>
+    <div class=" flex justify-center">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-10">
+        <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem" @submit="submit(rentalItem)"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import RentalItemCard, {RentalItem} from "~/components/RentalItemCard.vue";
+import RentalItemCard from "~/components/RentalItemCard.vue";
 import {reactive, ref} from "vue";
 import {useAsyncData, useNuxtApp, useRoute} from "#app";
-import {SearchResultItem} from '~/services/api/SearchClient';
+import SearchClient, {SearchResultItem} from '~/services/api/SearchClient';
 
 const state = reactive({
   results: undefined as SearchResultItem[] | undefined,
@@ -22,39 +28,50 @@ const state = reactive({
   },
 });
 
-const { $searchClient } = useNuxtApp();
-const rentalItems = ref<RentalItem[]>();
+const $searchClient: SearchClient = useNuxtApp().$searchClient;
+const rentalItems = ref<SearchResultItem[]>();
 const route = useRoute();
 const query = Array.isArray(route.params.query) ? route.params.query[0] : route.params.query;
 
 // Search here
-const result = await useAsyncData('searchWithText', async () => {
-  let newVar = await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, query);
-  return newVar;
+
+onMounted(async () => {
+  await fetchResult()
 })
 
-rentalItems.value = result.data.value?.embedded
-    .map((result: SearchResultItem) => {
-      return new RentalItem(result.id, result.title, result.subtitle, result.shortDescription, result.imageUrl, result.pricePerDay)
-    });
+function submit(data: SearchResultItem) {
+  console.log("clicked " + data)
+}
+
+async function fetchResult() {
+  useAsyncData('searchWithText', async () => {
+    return await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, query);
+  }).then(
+      success => {
+        rentalItems.value = success.data.value?.embedded
+      },
+      failure => {
+
+      }
+  )
+}
 
 </script>
 
 <style scoped>
-.results {
-  justify-content: center;
-  padding: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5rem;
+.side-padding {
+  padding-left: 10%;
+  padding-right: 10%;
 }
-
 @media screen and (max-width: 678px) {
 
 }
 
 
-@media screen and (min-width: 678px) {
-
+@media screen and (min-width: 2270px) {
+  .side-padding {
+    padding-left: 20%;
+    padding-right: 20%;
+  }
 }
 </style>

@@ -41,7 +41,7 @@
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import {DisplayStatus, FuelType, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/merged";
+import {DisplayStatus, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/merged";
 import RentalItemClient from "~/services/api/RentalItemClient";
 
 const error = ref<String | undefined>(undefined)

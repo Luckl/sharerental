@@ -100,3 +100,13 @@ components:
           type: number
           description: Price for renting a day
           example: 15.5
+        lessor:
+          type: string
+          format: text
+          description: The name of the lessor
+          example: 'De bunker'
+        lessorCity:
+          type: string
+          format: text
+          description: The city where the lessor is located
+          example: 'Baarle-Nassau'
