@@ -28,7 +28,7 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         val pageRequest = pageRequest(page, size, sort)
 
         return ResponseEntity.ok(
-            rentalItemRepository.findAll(pageRequest)
+            rentalItemRepository.search(query, pageRequest)
                 .toResponseObject()
         )
     }
