@@ -1,7 +1,7 @@
 <template>
   <Card style="width: 15em">
     <template #header>
-      <div>
+      <div class="p-2">
         <Image :src="determineImageUrl()" width="250" height="250"/>
       </div>
     </template>

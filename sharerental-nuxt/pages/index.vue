@@ -20,8 +20,32 @@
 import MyBackgroundImage from "@/assets/drill-background.jpg";
 import Search from "~/components/Search.vue";
 import {useCurrentUser} from "vuefire";
-const user = useCurrentUser()
 
+const user = useCurrentUser()
+useSeoMeta({
+  description: 'Huur en verhuur jouw machines en gereedschap',
+  ogTitle: 'ShareRental',
+  ogDescription: 'Huur en verhuur jouw machines en gereedschap',
+  ogImage: '/assets/logo-transparent-with-border.png',
+  ogUrl: 'https://sharerental.nl?utm_campaign=social-redirect',
+  twitterTitle: 'ShareRental',
+  twitterDescription: 'Huur en verhuur jouw machines en gereedschap',
+  twitterImage: '/assets/logo-transparent-2.png',
+  twitterCard: 'summary'
+})
+
+useHead({
+  htmlAttrs: {
+    lang: 'nl'
+  },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/ico',
+      href: '/favicon.ico'
+    }
+  ]
+})
 </script>
 
 <style scoped>
