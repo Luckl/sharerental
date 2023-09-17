@@ -3,6 +3,7 @@ package nl.sharerental.be.rentalitem.infrastructure
 import jakarta.transaction.Transactional
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
+import nl.sharerental.be.rentalitem.DisplayStatus
 import nl.sharerental.be.rentalitem.FuelType
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.RentalItemAuthorization
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import nl.sharerental.contract.http.model.FuelType as HttpFuelType
+import nl.sharerental.contract.http.model.DisplayStatus as HttpDisplayStatus
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 
 @RestController
@@ -45,11 +47,14 @@ class RentalItemController(
 
         val entity = rentalItemAuthorization.authorizeById(id)
 
+        logger.debug("Previous entity {}", entity.toString())
+
         entity.apply {
             name = rentalItemInput.name
             number = rentalItemInput.number
             shortDescription = rentalItemInput.shortDescription
             longDescription = rentalItemInput.longDescription
+            displayStatus = rentalItemInput.displayStatus.toEntity()
             price24h = rentalItemInput.price24h?.toBigDecimal()
             price48h = rentalItemInput.price48h?.toBigDecimal()
             price168h = rentalItemInput.price168h?.toBigDecimal()
@@ -75,7 +80,7 @@ class RentalItemController(
             maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters
             fuelType = rentalItemInput.fuelType?.toEntityEnum()
         }
-
+        logger.debug("Updated entity {}", entity.toString())
         logger.debug("Updated rentalItem {}", id)
         return ResponseEntity.ok(entity.toResponse())
     }
@@ -125,7 +130,7 @@ class RentalItemController(
 
         val result = rentalItemRepository.save(rentalItem)
 
-        logger.debug("Updated rentalItem {}", result.id)
+        logger.debug("Created rentalItem {}", result.id)
         return ResponseEntity.ok(HttpRentalItem(result.id, result.name))
     }
 
@@ -141,7 +146,9 @@ class RentalItemController(
             throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
         }
 
-        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(page, size, sort))
+        val actualSort = if (sort?.isEmpty() == true) mutableListOf("id;desc") else sort
+
+        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(page, size, actualSort))
 
         val getRentalItemsResult = GetRentalItemsResult(
             findAll.get().map { it.toResponse() }.toList(),
@@ -159,6 +166,7 @@ private fun RentalItem.toResponse(): HttpRentalItem {
             id = item.id
             name = item.name
             number = item.number
+            displayStatus = item.displayStatus.toHttp()
             shortDescription = item.shortDescription
             longDescription = item.longDescription
             price24h = item.price24h?.toDouble()
@@ -187,6 +195,19 @@ private fun RentalItem.toResponse(): HttpRentalItem {
             fuelType = item.fuelType?.toHttpEnum()
         }
 
+}
+
+private fun DisplayStatus.toHttp(): HttpDisplayStatus {
+    return when (this) {
+        DisplayStatus.ACTIVE -> HttpDisplayStatus.ACTIVE
+        DisplayStatus.INACTIVE -> HttpDisplayStatus.INACTIVE
+    }
+}
+private fun HttpDisplayStatus.toEntity(): DisplayStatus {
+    return when (this) {
+        HttpDisplayStatus.ACTIVE -> DisplayStatus.ACTIVE
+        HttpDisplayStatus.INACTIVE -> DisplayStatus.INACTIVE
+    }
 }
 
 private fun FuelType.toHttpEnum(): HttpFuelType {

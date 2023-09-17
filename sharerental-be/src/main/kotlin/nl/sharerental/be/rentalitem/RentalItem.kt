@@ -66,8 +66,15 @@ data class RentalItem(
     var maximumSurfaceSquareMeters: Double?,
 
     @Enumerated(EnumType.STRING)
-    var fuelType: FuelType?
+    var fuelType: FuelType?,
+
+    @Enumerated(EnumType.STRING)
+    var displayStatus: DisplayStatus = DisplayStatus.INACTIVE
 )
+
+enum class DisplayStatus {
+ACTIVE, INACTIVE
+}
 
 enum class FuelType {
     GASOLINE,

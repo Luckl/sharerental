@@ -1,6 +1,7 @@
 package nl.sharerental.be.lessor
 
 import jakarta.persistence.*
+import nl.sharerental.be.rentalitem.FuelType
 
 @Entity
 @Table(name = "lessor")
@@ -15,6 +16,8 @@ class Lessor (
     @JoinColumn(name = "primary_location")
     val primaryLocation: Location,
 
+    @Enumerated(EnumType.STRING)
+    val status: LessorStatus = LessorStatus.ACTIVE,
     @ManyToMany(cascade = [CascadeType.PERSIST])
     @JoinTable(
         name = "lessor_location",
@@ -29,3 +32,7 @@ class Lessor (
     @OneToMany(mappedBy = "lessor", cascade = [CascadeType.PERSIST])
     var userLessors: Set<UserLessor> = setOf()
 )
+
+enum class LessorStatus {
+ACTIVE, INACTIVE;
+}

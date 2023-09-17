@@ -239,6 +239,9 @@ components:
     FuelType:
       type: string
       enum: [ GASOLINE, DIESEL, ELECTRIC, OTHER ]
+    DisplayStatus:
+      type: string
+      enum: [ ACTIVE, INACTIVE ]
     RentalItemInput:
       type: object
       properties:
@@ -246,6 +249,8 @@ components:
           type: string
         number:
           type: string
+        displayStatus:
+          $ref: '#/components/schemas/DisplayStatus'
         shortDescription:
           type: string
         longDescription:
@@ -332,6 +337,8 @@ components:
             $ref: '#/components/schemas/Image'
         number:
           type: string
+        displayStatus:
+          $ref: '#/components/schemas/DisplayStatus'
         shortDescription:
           type: string
         longDescription:

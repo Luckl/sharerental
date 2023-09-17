@@ -20,7 +20,13 @@
         <Column field="name" header="Naam" style="width: 25%"></Column>
         <Column field="category" header="Categorie" style="width: 25%"></Column>
         <Column field="number" header="Referentie" style="width: 25%"></Column>
-        <Column field="brand" header="Merk" style="width: 25%"></Column>
+        <Column header="Zichtbaar" style="width: 20%">
+          <template #body="slotProps">
+            <div >
+              <InputSwitch :model-value="determineVisible(slotProps.data)" @change="toggleVisibility(slotProps.data)"></InputSwitch>
+            </div>
+          </template>
+        </Column>
         <Column header="Acties" style="width: 25%">
           <template #body="slotProps">
             <div class="flex gap-3">
@@ -29,12 +35,13 @@
             </div>
           </template>
         </Column>
+
       </DataTable>
     </div>
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import {FuelType, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/merged";
+import {DisplayStatus, FuelType, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/merged";
 import RentalItemClient from "~/services/api/RentalItemClient";
 
 const error = ref<String | undefined>(undefined)
@@ -54,7 +61,9 @@ onMounted(() => {
 function clickNew() {
   router.push('/item/add')
 }
-
+function determineVisible(item: RentalItem) {
+  return item.displayStatus == DisplayStatus.Active;
+}
 const onPage = (event) => {
   page.value = event.page
   fetchRentalItems()
@@ -66,6 +75,20 @@ function goToEdit(id: number) {
 
 function goToAddImages(id: number) {
   router.push('/item/' + id + '/images')
+}
+
+function toggleVisibility(data: RentalItem) {
+  console.log(data)
+  if (data.displayStatus === "ACTIVE") {
+    data.displayStatus = "INACTIVE"
+  } else if (data.displayStatus === "INACTIVE") {
+    data.displayStatus = "ACTIVE"
+  }
+
+  $rentalItemClient.update(data, data.id)
+      .then(success => {
+        fetchRentalItems()
+      })
 }
 
 function fetchRentalItems() {
