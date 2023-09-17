@@ -7,6 +7,7 @@ import nl.sharerental.be.lessor.UserLessor
 import nl.sharerental.be.lessor.UserLessorId
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.lessor.infrastructure.repository.UserLessorRepository
+import nl.sharerental.be.rentalitem.infrastructure.RentalItemController
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.LessorApi
 import nl.sharerental.contract.http.model.GetLessorResult
@@ -14,6 +15,7 @@ import nl.sharerental.contract.http.model.Lessor as HttpLessor
 import nl.sharerental.contract.http.model.Location as HttpLocation
 import nl.sharerental.contract.http.model.LessorInput
 import nl.sharerental.contract.http.model.PaginationResponse
+import org.slf4j.LoggerFactory
 import org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZE
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 class LessorController(private val lessorRepository: LessorRepository,
                        private val userLessorRepository: UserLessorRepository,
                        private val currentUserService: CurrentUserService) : LessorApi {
+    private val logger = LoggerFactory.getLogger(LessorController::class.java)
 
     @Transactional
     override fun createLessor(lessorInput: LessorInput?): ResponseEntity<HttpLessor> {
@@ -64,6 +67,8 @@ class LessorController(private val lessorRepository: LessorRepository,
             .name(result.name)
             .id(result.id)
             .description(result.description)
+
+        logger.info("User {} created lessor {}", currentUserService.get().id, result.id)
 
         return ResponseEntity.ok(response)
     }

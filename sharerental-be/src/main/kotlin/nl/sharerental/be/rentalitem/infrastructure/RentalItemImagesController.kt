@@ -22,7 +22,7 @@ class RentalItemImagesController(
     private val imageService: ImageService,
     private val currentUserService: CurrentUserService
 ) : RentalItemImageApi {
-    private val logger = LoggerFactory.getLogger(SearchController::class.java)
+    private val logger = LoggerFactory.getLogger(RentalItemImagesController::class.java)
 
     @Transactional
     override fun getRentalItemImages(id: Long?): ResponseEntity<RentalItemImagesResult> {
@@ -59,11 +59,11 @@ class RentalItemImagesController(
     override fun deleteRentalItemImage(id: Long?, imageId: Long?): ResponseEntity<Void> {
         val item = rentalItemAuthorization.authorizeById(id)
 
-        logger.info("user {} is removing image {} from rentalItem {}", currentUserService.get().id, imageId, id)
         val image = item.images.find { it.id == imageId } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
         item.images.remove(image)
         imageService.removeImage(image.imageId)
+        logger.info("user {} removed image {} from rentalItem {}", currentUserService.get().id, imageId, id)
         return ResponseEntity.ok().build()
     }
 }

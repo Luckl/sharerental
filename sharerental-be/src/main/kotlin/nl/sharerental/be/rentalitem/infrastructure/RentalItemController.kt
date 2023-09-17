@@ -12,6 +12,7 @@ import nl.sharerental.contract.http.RentalItemApi
 import nl.sharerental.contract.http.model.GetRentalItemsResult
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.RentalItemInput
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -26,6 +27,7 @@ class RentalItemController(
     private val rentalItemAuthorization: RentalItemAuthorization,
     private val currentUserService: CurrentUserService
 ) : RentalItemApi {
+    private val logger = LoggerFactory.getLogger(RentalItemController::class.java)
 
     override fun getRentalItem(id: Long?): ResponseEntity<HttpRentalItem> {
 
@@ -74,6 +76,7 @@ class RentalItemController(
             fuelType = rentalItemInput.fuelType?.toEntityEnum()
         }
 
+        logger.info("User {} updated rentalItem {}", currentUserService.get().id, id)
         return ResponseEntity.ok(entity.toResponse())
     }
 
@@ -122,6 +125,7 @@ class RentalItemController(
 
         val result = rentalItemRepository.save(rentalItem)
 
+        logger.info("User {} updated rentalItem {}", currentUserService.get().id, result.id)
         return ResponseEntity.ok(HttpRentalItem(result.id, result.name))
     }
 
