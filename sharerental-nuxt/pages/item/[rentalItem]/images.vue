@@ -11,8 +11,7 @@
 
       <template #content>
         <FileUpload name="demo[]" custom-upload @uploader="customUploader" :multiple="true"
-                    accept="image/*"
-                    :maxFileSize="1000000">
+                    accept="image/*">
           <template #empty>
             <p>Sleep afbeeldingen hier naartoe om te uploaden.</p>
           </template>
@@ -20,7 +19,10 @@
 
         <div class="mt-20 flex flex-row gap-2">
           <div v-for="image in images">
-            <Image :src="image.url" preview width="250"/>
+            <div class="m-2 flex flex-col justify-center">
+              <Image :src="image.url" preview width="250"/>
+              <Button label="Verwijderen" @click="removeImage(image.id)"></Button>
+            </div>
           </div>
         </div>
       </template>
@@ -76,6 +78,18 @@ const customUploader = async (event) => {
             console.log(failure)
           })
 };
+
+function removeImage(id: number) {
+  $rentalItemImageClient.delete(itemId, id)
+      .then(
+          success => {
+            fetchImagesForItem()
+          },
+          failure => {
+            error.value = "Afbeelding verwijderen mislukt"
+          }
+      )
+}
 
 function fetchImagesForItem() {
   $rentalItemImageClient.get(itemId)

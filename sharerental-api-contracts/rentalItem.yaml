@@ -52,6 +52,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RentalItem'
+  /me/rental-items/{id}/images/{imageId}:
+    delete:
+      tags:
+        - rentalItemImage
+      operationId: deleteRentalItemImage
+      summary: Delete an image
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: imageId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successfully deleted
   /me/rental-items/{id}/images:
     get:
       tags:

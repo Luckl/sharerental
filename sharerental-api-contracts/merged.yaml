@@ -9,6 +9,8 @@ paths:
     $ref: "./rentalItem.yaml#/paths/~1me~1rental-items~1{id}"
   /me/rental-items/{id}/images:
     $ref: "./rentalItem.yaml#/paths/~1me~1rental-items~1{id}~1images"
+  /me/rental-items/{id}/images/{imageId}:
+    $ref: "./rentalItem.yaml#/paths/~1me~1rental-items~1{id}~1images~1{imageId}"
   /search:
     $ref: "./search.yaml#/paths/~1search"
   /me/lessor/{id}:

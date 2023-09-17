@@ -9,5 +9,6 @@ data class Image(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    val imageUrl: String // You can add other image-related fields here
+    val imageUrl: String,
+    val imageId: String
 )

@@ -1,6 +1,6 @@
 package nl.sharerental.be.images
 
-import nl.sharerental.be.infrastructure.CloudStorageApi
+import nl.sharerental.be.images.infrastructure.CloudStorageApi
 import nl.sharerental.be.rentalitem.RentalItem
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
@@ -18,6 +18,10 @@ class ImageService(private val cloudStorageApi: CloudStorageApi) {
 
         val link = cloudStorageApi.uploadFile(newFileId, fileType, body)
 
-        return Image(imageUrl = link)
+        return Image(imageUrl = link.mediaLink, imageId = link.mediaId)
+    }
+
+    fun removeImage(imageId: String) {
+        cloudStorageApi.removeFile(imageId)
     }
 }

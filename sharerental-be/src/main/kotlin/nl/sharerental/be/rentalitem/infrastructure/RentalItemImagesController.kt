@@ -1,22 +1,18 @@
 package nl.sharerental.be.rentalitem.infrastructure
 
 import jakarta.transaction.Transactional
-import nl.sharerental.be.images.Image
 import nl.sharerental.be.images.ImageService
-import nl.sharerental.be.infrastructure.CloudStorageApi
 import nl.sharerental.be.rentalitem.RentalItemAuthorization
 import nl.sharerental.be.search.SearchController
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.RentalItemImageApi
 import nl.sharerental.contract.http.model.RentalItemImagesResult
 import org.slf4j.LoggerFactory
-import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
-import java.util.*
 import nl.sharerental.contract.http.model.Image as HttpImage
 
 @Controller
@@ -59,4 +55,15 @@ class RentalItemImagesController(
         return ResponseEntity.ok().build()
     }
 
+    @Transactional
+    override fun deleteRentalItemImage(id: Long?, imageId: Long?): ResponseEntity<Void> {
+        val item = rentalItemAuthorization.authorizeById(id)
+
+        logger.info("user {} is removing image {} from rentalItem {}", currentUserService.get().id, imageId, id)
+        val image = item.images.find { it.id == imageId } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
+        item.images.remove(image)
+        imageService.removeImage(image.imageId)
+        return ResponseEntity.ok().build()
+    }
 }

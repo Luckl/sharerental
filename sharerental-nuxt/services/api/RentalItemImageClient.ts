@@ -18,6 +18,10 @@ class RentalItemImageClient {
     get(id: number) {
         return this.rentalItemImageApi.getRentalItemImages({id})
     }
+
+    delete(id: number, imageId: number) {
+        return this.rentalItemImageApi.deleteRentalItemImage({id, imageId})
+    }
 }
 
 export default RentalItemImageClient

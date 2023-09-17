@@ -1,0 +1,1 @@
+alter table image add column image_id text not null default 'UNDEFINED'
