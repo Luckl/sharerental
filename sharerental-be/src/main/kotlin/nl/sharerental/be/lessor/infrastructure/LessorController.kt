@@ -68,7 +68,7 @@ class LessorController(private val lessorRepository: LessorRepository,
             .id(result.id)
             .description(result.description)
 
-        logger.info("User {} created lessor {}", currentUserService.get().id, result.id)
+        logger.debug("Created lessor {}", result.id)
 
         return ResponseEntity.ok(response)
     }

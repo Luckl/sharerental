@@ -63,7 +63,7 @@ class RentalItemImagesController(
 
         item.images.remove(image)
         imageService.removeImage(image.imageId)
-        logger.info("user {} removed image {} from rentalItem {}", currentUserService.get().id, imageId, id)
+        logger.debug("Removed image {} from rentalItem {}", imageId, id)
         return ResponseEntity.ok().build()
     }
 }

@@ -14,7 +14,7 @@ class ImageService(private val cloudStorageApi: CloudStorageApi) {
 
     fun createImage(item: RentalItem, fileType: String, body: Resource): Image {
         val newFileId = "${item.owner.id}-${item.id}-RAW-${UUID.randomUUID()}"
-        logger.info("uploading new image with ID {}", newFileId)
+        logger.debug("uploading new image with ID {}", newFileId)
 
         val link = cloudStorageApi.uploadFile(newFileId, fileType, body)
 

@@ -76,7 +76,7 @@ class RentalItemController(
             fuelType = rentalItemInput.fuelType?.toEntityEnum()
         }
 
-        logger.info("User {} updated rentalItem {}", currentUserService.get().id, id)
+        logger.debug("Updated rentalItem {}", id)
         return ResponseEntity.ok(entity.toResponse())
     }
 
@@ -125,7 +125,7 @@ class RentalItemController(
 
         val result = rentalItemRepository.save(rentalItem)
 
-        logger.info("User {} updated rentalItem {}", currentUserService.get().id, result.id)
+        logger.debug("Updated rentalItem {}", result.id)
         return ResponseEntity.ok(HttpRentalItem(result.id, result.name))
     }
 

@@ -15,7 +15,7 @@ import java.util.*
 class RequestResponseLoggingInterceptor() : HandlerInterceptor {
     private val logger: Logger = LoggerFactory.getLogger(RequestResponseLoggingInterceptor::class.java)
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        logger.info(
+        logger.debug(
             "[preHandle][${request.method}]${request.requestURI}${getParameters(request)}"
         )
         return true
@@ -25,14 +25,14 @@ class RequestResponseLoggingInterceptor() : HandlerInterceptor {
         request: HttpServletRequest, response: HttpServletResponse, handler: Any,
         modelAndView: ModelAndView?
     ) {
-        logger.info("[postHandle][${request.requestURI}]")
+        logger.debug("[postHandle][${request.requestURI}]")
     }
 
     override fun afterCompletion(
         request: HttpServletRequest, response: HttpServletResponse, handler: Any,
         ex: Exception?
     ) {
-        logger.info("[afterCompletion][${response.status}][exception: $ex]")
+        logger.debug("[afterCompletion][${response.status}][exception: $ex]")
     }
 
     private fun getParameters(request: HttpServletRequest): String {

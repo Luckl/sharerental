@@ -23,7 +23,7 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         size: Int?,
         sort: MutableList<String>?
     ): ResponseEntity<SearchResult> {
-        logger.info("querying for string $query")
+        logger.debug("querying for string $query")
 
         val pageRequest = pageRequest(page, size, sort)
 
