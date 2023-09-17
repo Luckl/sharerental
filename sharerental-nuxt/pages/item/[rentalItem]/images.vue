@@ -54,23 +54,27 @@ onMounted(() => {
 })
 
 const customUploader = async (event) => {
+
+  const blobs: Blob[] = []
+
   for (const file of event.files) {
 
     let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
-
-    $rentalItemImageClient.upload(itemId, blob.type, blob)
-        .then(success => {
-              fetchImagesForItem()
-            },
-            failure => {
-              if (failure.response.status === 429) {
-                error.value = "Te veel afbeeldingen geupload"
-              } else {
-                error.value = "Afbeeldingen upload mislukt"
-              }
-              console.log(failure)
-            })
+    blobs.push(blob)
   }
+
+  $rentalItemImageClient.upload(itemId, blobs)
+      .then(success => {
+            fetchImagesForItem()
+          },
+          failure => {
+            if (failure.response.status === 429) {
+              error.value = "Te veel afbeeldingen geupload"
+            } else {
+              error.value = "Afbeeldingen upload mislukt"
+            }
+            console.log(failure)
+          })
 };
 
 function fetchImagesForItem() {

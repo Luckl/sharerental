@@ -19,6 +19,6 @@ class ImageUploadRateLimiter() {
             .build()
     }
 
-    fun allowed(): Boolean = imageUploadRateLimit.tryConsume(1)
+    fun allowed(numberOfImages: Int): Boolean = imageUploadRateLimit.tryConsume(numberOfImages.toLong())
 
 }

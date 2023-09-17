@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import nl.sharerental.contract.http.model.Image as HttpImage
@@ -39,20 +40,21 @@ class RentalItemImagesController(
     }
 
     @Transactional
-    override fun uploadRentalItemImage(id: Long?, fileType: String?, body: Resource?): ResponseEntity<Void> {
+    override fun uploadRentalItemImage(id: Long?, files: MutableList<MultipartFile>?): ResponseEntity<Void> {
+        files ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
-        if (!imageUploadRateLimiter.allowed()) {
-            logger.info("Rate limiting hit by {}", currentUserService.get().id)
+        if (!imageUploadRateLimiter.allowed(files.size)) {
+            logger.error("Rate limiting hit by {}", currentUserService.get().id)
             throw ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS)
         }
 
         val item = rentalItemAuthorization.authorizeById(id)
-        body ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-        fileType ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
-        val image: Image = imageService.createImage(item, fileType, body)
-
-        item.images.add(image)
+        for (file in files) {
+            file.contentType ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+            val image = imageService.createImage(item, file.contentType!!, file.resource)
+            item.images.add(image)
+        }
 
         return ResponseEntity.ok().build()
     }

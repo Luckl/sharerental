@@ -9,9 +9,9 @@ class RentalItemImageClient {
         this.rentalItemImageApi = new RentalItemImageApi(configuration);
     }
 
-    upload(id: number, fileType: string, file: Blob) {
+    upload(id: number, files: Blob[]) {
         return this.rentalItemImageApi.uploadRentalItemImage({
-            id,  body: file, fileType
+            id, files
         })
     }
 
