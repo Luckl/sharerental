@@ -1,6 +1,6 @@
 import {
-    Configuration as RentalItemConfiguration, RentalItemApi, UpdateRentalItemRequest
-} from '~/schemas/openapi/rentalItem';
+    Configuration as RentalItemConfiguration, RentalItemApi
+} from '~/schemas/openapi/merged';
 import {RentalItemInput} from "~/schemas/openapi/merged";
 
 

@@ -1,5 +1,5 @@
 
-import {Configuration, RentalItemImageApi, RentalItemInput} from "~/schemas/openapi/merged";
+import {Configuration, RentalItemImageApi} from "~/schemas/openapi/merged";
 
 
 class RentalItemImageClient {
