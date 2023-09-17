@@ -1,7 +1,7 @@
 <template>
   <div class="site-navigation-header-container">
     <div>
-      <NuxtLink to="/"><img alt="Logo" class="m-2 logo" src="../assets/logo-transparent-resized.png"/></NuxtLink>
+      <NuxtLink to="/"><img alt="Logo" width="524" height="182" class="m-2 logo" src="../assets/logo-transparent-resized.png"/></NuxtLink>
     </div>
     <div class="desktop-menu">
       <div v-if="user">
