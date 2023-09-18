@@ -1,7 +1,7 @@
 <template>
   <div class="site-navigation-header-container">
-    <div>
-      <NuxtLink to="/"><img alt="Logo" width="524" height="182" class="m-2 logo" src="../assets/logo-transparent-resized.png"/></NuxtLink>
+    <div class="m-2">
+      <NuxtLink to="/"><img alt="Logo" width="262" height="91"  src="../assets/logo-transparent-resized.png"/></NuxtLink>
     </div>
     <div class="desktop-menu">
       <div v-if="user">
@@ -104,7 +104,6 @@ onMounted( () => fetchLessors())
 <style>
 
 .logo {
-  height: 4rem;
   margin-left: 1rem
 }
 
