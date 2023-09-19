@@ -22,7 +22,7 @@ googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 function signIn() {
   signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        router.push("/profile")
+        router.push("/lessor/profile")
       }, (reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })

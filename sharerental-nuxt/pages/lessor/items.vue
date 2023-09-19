@@ -59,7 +59,7 @@ onMounted(() => {
 })
 
 function clickNew() {
-  router.push('/item/add')
+  router.push('/lessor/item/add')
 }
 function determineVisible(item: RentalItem) {
   return item.displayStatus == DisplayStatus.Active;
@@ -70,11 +70,11 @@ const onPage = (event) => {
 };
 
 function goToEdit(id: number) {
-  router.push('/item/' + id)
+  router.push('/lessor/item/' + id)
 }
 
 function goToAddImages(id: number) {
-  router.push('/item/' + id + '/images')
+  router.push('/lessor/item/' + id + '/images')
 }
 
 function toggleVisibility(data: RentalItem) {

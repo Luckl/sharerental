@@ -18,7 +18,7 @@ const errorParser = new RegExp('.*\\((.*)\\).*')
 function register() {
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((result) => updateProfile(result.user, {displayName: username.value, photoURL: "null"}))
-      .then(() => router.push("/profile"))
+      .then(() => router.push("/lessor/profile"))
       .catch((reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })

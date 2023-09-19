@@ -33,14 +33,14 @@
   </div>
   <Sidebar v-model:visible="menuOpened" position="right">
     <div v-if="user">
-      <NuxtLink to="/profile">
+      <NuxtLink to="/lessor/profile">
         <Button  @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
         </Button>
       </NuxtLink>
 
       <client-only>
         <div v-if="loaded && lessors?.length > 0">
-          <NuxtLink to="/items">
+          <NuxtLink to="/lessor/items">
             <Button @click="menuOpened = false" label="Artikelen" icon="pi pi-file-o" class="menu-button">
             </Button>
           </NuxtLink>
@@ -103,9 +103,6 @@ onMounted( () => fetchLessors())
 
 <style>
 
-.logo {
-  margin-left: 1rem
-}
 
 .menu-button {
   width: 100%;

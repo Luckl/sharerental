@@ -12,6 +12,9 @@
         <span class="font-bold">Prijs per dag</span> {{ formatCurrency(item.pricePerDay) }}
       </p>
     </template>
+    <template #footer>
+      <NuxtLink to="/items/{{item.id}}"></NuxtLink>
+    </template>
   </Card>
 </template>
 
