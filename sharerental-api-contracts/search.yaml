@@ -76,6 +76,11 @@ components:
           format: int64
           description: The ID of a rental item
           example: 1
+        rentalItemSlug:
+          type: string
+          format: text
+          description: the slug of the rental item
+          example: 'bouwdroger-50-liter'
         title:
           type: string
           format: text
@@ -110,3 +115,8 @@ components:
           format: text
           description: The city where the lessor is located
           example: 'Baarle-Nassau'
+        lessorSlug:
+          type: string
+          format: text
+          description: The slug of the lessor
+          example: 'de-bunker'
