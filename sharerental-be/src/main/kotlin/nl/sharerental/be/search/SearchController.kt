@@ -5,9 +5,9 @@ import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse
-import nl.sharerental.contract.http.model.RentalItem1
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
+import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
@@ -36,7 +36,7 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         )
     }
 
-    override fun searchDetails(slug: String?): ResponseEntity<RentalItem1> {
+    override fun searchDetails(slug: String?): ResponseEntity<HttpRentalItem>? {
         slug ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         return rentalItemRepository.findBySlugAndDisplayStatus(slug)
@@ -60,6 +60,7 @@ private fun Page<RentalItem>.toResponseObject(): SearchResult {
 
 private fun RentalItem.toSearchResultItem(): SearchResultItem {
     val searchResultItem = SearchResultItem(id, name)
+    searchResultItem.rentalItemSlug = slug
     searchResultItem.subtitle = shortDescription
     searchResultItem.imageUrl = images.map { it.imageUrl }.map { URI(it) }.firstOrNull()
     searchResultItem.pricePerDay = price24h
@@ -71,9 +72,9 @@ private fun RentalItem.toSearchResultItem(): SearchResultItem {
 }
 
 
-private fun RentalItem.toResponse(): RentalItem1 {
+private fun RentalItem.toResponse(): HttpRentalItem {
     val item = this;
-    return RentalItem1()
+    return HttpRentalItem()
         .apply {
             id = item.id
             name = item.name

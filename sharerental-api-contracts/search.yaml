@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './rentalItem.yaml/#/components/schemas/RentalItem'
+                $ref: './utils/RentalItem.yaml#/components/schemas/RentalItem'
   /search:
     get:
       tags:
@@ -100,7 +100,7 @@ components:
           type: string
           format: text
           description: the slug of the rental item
-          example: 'bouwdroger-50-liter'
+          example: 'de-bunker-bouwdroger-50-liter'
         title:
           type: string
           format: text
@@ -135,8 +135,3 @@ components:
           format: text
           description: The city where the lessor is located
           example: 'Baarle-Nassau'
-        lessorSlug:
-          type: string
-          format: text
-          description: The slug of the lessor
-          example: 'de-bunker'

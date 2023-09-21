@@ -13,7 +13,7 @@
       </p>
     </template>
     <template #footer>
-      <NuxtLink to="/items/{{item.id}}"><Button label="Huren"></Button></NuxtLink>
+      <NuxtLink :to="'/items/' + item.rentalItemSlug"><Button label="Huren"></Button></NuxtLink>
     </template>
   </Card>
 </template>

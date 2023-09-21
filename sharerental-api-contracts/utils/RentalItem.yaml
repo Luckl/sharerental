@@ -1,0 +1,189 @@
+components:
+  schemas:
+    Image:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+      required:
+        - id
+        - url
+    FuelType:
+      type: string
+      enum: [ GASOLINE, DIESEL, ELECTRIC, OTHER ]
+    DisplayStatus:
+      type: string
+      enum: [ ACTIVE, INACTIVE ]
+    RentalItemInput:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+        displayStatus:
+          $ref: '#/components/schemas/DisplayStatus'
+        shortDescription:
+          type: string
+        longDescription:
+          type: string
+        price_24h:
+          type: number
+          format: double
+        price_48h:
+          type: number
+          format: double
+        price_168h:
+          type: number
+          format: double
+        deliveryPossible:
+          type: boolean
+        deliveryPrice:
+          type: number
+          format: double
+        category:
+          type: string
+        reachMeters:
+          type: number
+          format: double
+        carryingWeightKilograms:
+          type: number
+          format: double
+        maximumWorkHeightMeters:
+          type: number
+          format: double
+        intrinsicWeightKilograms:
+          type: number
+          format: double
+        materialType:
+          type: string
+        brand:
+          type: string
+        maximumPressureBars:
+          type: number
+          format: double
+        maximumHorsePower:
+          type: number
+          format: double
+        requiredPowerVoltageVolt:
+          type: number
+          format: double
+        workWidthMeters:
+          type: number
+          format: double
+        vacuumAttachmentPossible:
+          type: boolean
+        capacityLiters:
+          type: number
+          format: double
+        itemHeight:
+          type: number
+          format: double
+        itemWidth:
+          type: number
+          format: double
+        itemLength:
+          type: number
+          format: double
+        powerWatt:
+          type: number
+          format: double
+        maximumSurfaceSquareMeters:
+          type: number
+          format: double
+        fuelType:
+          $ref: '#/components/schemas/FuelType'
+      required:
+        - name
+    RentalItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        number:
+          type: string
+        displayStatus:
+          $ref: '#/components/schemas/DisplayStatus'
+        shortDescription:
+          type: string
+        longDescription:
+          type: string
+        price_24h:
+          type: number
+          format: double
+        price_48h:
+          type: number
+          format: double
+        price_168h:
+          type: number
+          format: double
+        deliveryPossible:
+          type: boolean
+        deliveryPrice:
+          type: number
+          format: double
+        category:
+          type: string
+        reachMeters:
+          type: number
+          format: double
+        carryingWeightKilograms:
+          type: number
+          format: double
+        maximumWorkHeightMeters:
+          type: number
+          format: double
+        intrinsicWeightKilograms:
+          type: number
+          format: double
+        materialType:
+          type: string
+        brand:
+          type: string
+        maximumPressureBars:
+          type: number
+          format: double
+        maximumHorsePower:
+          type: number
+          format: double
+        requiredPowerVoltageVolt:
+          type: number
+          format: double
+        workWidthMeters:
+          type: number
+          format: double
+        vacuumAttachmentPossible:
+          type: boolean
+        capacityLiters:
+          type: number
+          format: double
+        itemHeight:
+          type: number
+          format: double
+        itemWidth:
+          type: number
+          format: double
+        itemLength:
+          type: number
+          format: double
+        powerWatt:
+          type: number
+          format: double
+        maximumSurfaceSquareMeters:
+          type: number
+          format: double
+        fuelType:
+          $ref: '#/components/schemas/FuelType'
+      required:
+        - id
+        - name

@@ -7,7 +7,7 @@
       "sharerental": {
         "generatorName": "typescript-fetch",
         "output": "./schemas/openapi/#{name}",
-        "glob": "../sharerental-api-contracts/*.yaml"
+        "glob": "../sharerental-api-contracts/merged.yaml"
       }
     }
   }
