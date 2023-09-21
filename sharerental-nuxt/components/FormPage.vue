@@ -18,11 +18,21 @@
 </script>
 
 <style>
-.form-container {
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 5em;
-  height: 100%;
+
+
+@media screen and (max-width: 678px) {
+  .form-container {
+    padding-top: 2em;
+    height: 100%;
+  }
+}
+@media screen and (min-width: 678px) {
+  .form-container {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 5em;
+    height: 100%;
+  }
 }
 
 .header {

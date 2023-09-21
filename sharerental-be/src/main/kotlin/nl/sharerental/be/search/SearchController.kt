@@ -4,6 +4,7 @@ import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
+import nl.sharerental.contract.http.model.Image
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
@@ -26,7 +27,7 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         size: Int?,
         sort: MutableList<String>?
     ): ResponseEntity<SearchResult> {
-        logger.debug("querying for string $query")
+        logger.debug("Search query registered - [$query]")
 
         val pageRequest = pageRequest(page, size, sort)
 
@@ -77,6 +78,7 @@ private fun RentalItem.toResponse(): HttpRentalItem {
     return HttpRentalItem()
         .apply {
             id = item.id
+            images = item.images.map { Image(it.id, it.imageUrl) }
             name = item.name
             number = item.number
             shortDescription = item.shortDescription

@@ -22,6 +22,8 @@ import Checkbox from "primevue/checkbox";
 import FileUpload from "primevue/fileupload";
 import Image from "primevue/image";
 import InputSwitch from "primevue/inputswitch";
+import Calendar from "primevue/calendar";
+import Galleria from "primevue/galleria";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
@@ -46,6 +48,8 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('FileUpload', FileUpload)
     nuxtApp.vueApp.component('Image', Image)
     nuxtApp.vueApp.component('InputSwitch', InputSwitch)
+    nuxtApp.vueApp.component('Calendar', Calendar)
+    nuxtApp.vueApp.component('Galleria', Galleria)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 
