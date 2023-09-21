@@ -1,5 +1,6 @@
 package nl.sharerental.be.rentalitem.infrastructure.repository
 
+import nl.sharerental.be.rentalitem.DisplayStatus
 import nl.sharerental.be.rentalitem.RentalItem
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.repository.query.Param
+import java.util.*
 
 interface RentalItemRepository: PagingAndSortingRepository<RentalItem, Long>, CrudRepository<RentalItem, Long> {
 
@@ -41,6 +43,8 @@ interface RentalItemRepository: PagingAndSortingRepository<RentalItem, Long>, Cr
 """
     )
     fun search(@Param("filter") filter: String?, pageRequest: PageRequest): Page<RentalItem>
+
+    fun findBySlugAndDisplayStatus(slug: String, displayStatus: DisplayStatus = DisplayStatus.ACTIVE): Optional<RentalItem>
 
 
 }

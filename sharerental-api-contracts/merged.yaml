@@ -13,6 +13,8 @@ paths:
     $ref: "./rentalItem.yaml#/paths/~1me~1rental-items~1{id}~1images~1{imageId}"
   /search:
     $ref: "./search.yaml#/paths/~1search"
+  /details/{slug}:
+    $ref: "./search.yaml#/paths/~1details~1{slug}"
   /me/lessor/{id}:
     $ref: "./lessor.yaml#/paths/~1me~1lessor~1{id}"
   /me/lessor:

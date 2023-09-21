@@ -3,6 +3,26 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
+  /details/{slug}:
+    get:
+      tags:
+        - search
+      summary: Retrieve item details based on slug
+      operationId: searchDetails
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: the slug of the rental item
+      responses:
+        200:
+          description: Successful details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: './rentalItem.yaml/#/components/schemas/RentalItem'
   /search:
     get:
       tags:

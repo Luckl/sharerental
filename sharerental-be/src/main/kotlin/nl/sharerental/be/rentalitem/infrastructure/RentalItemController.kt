@@ -2,6 +2,7 @@ package nl.sharerental.be.rentalitem.infrastructure
 
 import jakarta.transaction.Transactional
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
+import nl.sharerental.be.infrastructure.normalizeString
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.DisplayStatus
 import nl.sharerental.be.rentalitem.FuelType
@@ -18,8 +19,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.DisplayStatus as HttpDisplayStatus
+import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 
 @RestController
@@ -98,6 +99,7 @@ class RentalItemController(
 
         val rentalItem = RentalItem(
             name = rentalItemInput!!.name,
+            slug = "${lessor.name} ${rentalItemInput.name}".normalizeString(),
             number = rentalItemInput.number,
             shortDescription = rentalItemInput.shortDescription,
             longDescription = rentalItemInput.longDescription,

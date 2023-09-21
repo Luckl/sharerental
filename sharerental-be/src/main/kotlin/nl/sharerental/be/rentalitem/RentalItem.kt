@@ -16,6 +16,8 @@ data class RentalItem(
 
     @Column(nullable = false)
     var name: String,
+    @Column(nullable = false)
+    var slug: String,
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinTable(
