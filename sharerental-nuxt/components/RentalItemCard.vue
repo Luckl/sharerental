@@ -1,5 +1,5 @@
 <template>
-  <Card style="width: 15em">
+  <Card>
     <template #header>
       <div class="p-2">
         <Image :src="determineImageUrl()" width="250"/>
