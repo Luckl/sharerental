@@ -2,7 +2,7 @@
   <Head>
     <Title>ShareRental</Title>
   </Head>
-  <div class="home-search-container" :style="`background-image: url(${MyBackgroundImage})`">
+  <div class="home-search-container" :style="backgroundStyles">
     <div class="search-input-container">
       <div class="search-input-button-container">
         <Search></Search>
@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import MyBackgroundImage from "@/assets/drill-background.jpg";
 import Search from "~/components/Search.vue";
 import {useCurrentUser} from "vuefire";
 
@@ -46,6 +45,13 @@ useHead({
     }
   ]
 })
+
+const img = useImage()
+const backgroundStyles = computed(() => {
+  const imgUrl = img('drill-background.jpg')
+  return { backgroundImage: `url('${imgUrl}')` }
+})
+
 </script>
 
 <style scoped>
