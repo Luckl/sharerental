@@ -147,7 +147,7 @@
     <div class="flexbox-column" v-if="props.rentalItem.category === 'Verwarmen, drogen en reinigen'">
       <label for="maximumSurfaceSquareMeters" class="data-label mb-1">Maximale oppervlakte</label>
       <InputNumber v-model="props.rentalItem.maximumSurfaceSquareMeters" inputId="maximumSurfaceSquareMeters"
-                   suffix=" W"></InputNumber>
+                   suffix=" m2"></InputNumber>
     </div>
     <div class="flexbox-column mt-5">
       <Button type="submit" @click="props.submit">{{props.submitButtonText}}</Button>

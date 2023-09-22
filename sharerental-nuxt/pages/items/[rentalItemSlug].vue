@@ -1,28 +1,48 @@
 <template>
-<form-page>
-  <template #header>
-    <span class="font-bold text-xl m-1">{{ item.name }}</span>
-  </template>
-  <template #content>
-    <div class="grid grid-cols-1 lg:grid-cols-2">
-      <div class="p-5 flex flex-col gap-2">
-        <Calendar v-model="dates" selectionMode="range" inline :minDate="new Date()"/>
-        <div class="flex justify-end">
-          <Button label="Huren" ></Button>
+  <form-page>
+    <template #header>
+      <span class="font-bold text-xl m-1">{{ item.name }}</span>
+    </template>
+    <template #content>
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="p-5 flex flex-col gap-2">
+          <Calendar v-model="dates" selectionMode="range" inline :minDate="new Date()"/>
+          <div class="flex justify-end">
+            <Button label="Huren"></Button>
+          </div>
+        </div>
+        <div class="p-5 flex justify-center">
+          <Galleria :value="images" :numVisible="5" containerStyle="max-width: 240px"
+                    :showThumbnails="false" :showIndicators="true">
+            <template #item="slotProps: {item: Image}">
+              <img :src="slotProps.item.url" alt="image" style="width: 100%; display: block"/>
+            </template>
+          </Galleria>
         </div>
       </div>
-      <div class="p-5 flex justify-center">
-        <Galleria :value="images" :numVisible="5" containerStyle="max-width: 240px"
-                  :showThumbnails="false" :showIndicators="true">
-          <template #item="slotProps: {item: Image}">
-            <img :src="slotProps.item.url" alt="image" style="width: 100%; display: block" />
-          </template>
-        </Galleria>
+      <div class="flex flex-col gap-5">
+        <span class="font-bold text-xl m-1">Details</span>
+        <SearchDetailsItem :field="item.brand" label="Merk" />
+        <SearchDetailsItem :field="item.longDescription" label="Omschrijving" />
+        <SearchDetailsItem :field="item.reachMeters" label="Bereik" suffix="m" />
+        <SearchDetailsItem :field="item.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg" />
+        <SearchDetailsItem :field="item.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m" />
+        <SearchDetailsItem :field="item.intrinsicWeightKilograms" label="Gewicht" suffix="kg" />
+        <SearchDetailsItem :field="item.materialType" label="Type materiaal" />
+        <SearchDetailsItem :field="item.maximumPressureBars" label="Maximale drukvermogen" suffix="bar"/>
+        <SearchDetailsItem :field="item.maximumHorsePower" label="Maximale vermogen" suffix="pk" />
+        <SearchDetailsItem :field="item.requiredPowerVoltageVolt" label="Benodigde stroomtoevoer" suffix="V" />
+        <SearchDetailsItem :field="item.workWidthMeters" label="Werkbreedte" suffix="m" />
+        <SearchDetailsItem :field="item.vacuumAttachmentPossible" label="Stofzuiger aansluiting" />
+        <SearchDetailsItem :field="item.capacityLiters" label="Bakinhoud" suffix="l" />
+        <SearchDetailsItem :field="item.itemHeight" label="Artikelhoogte" suffix="m" />
+        <SearchDetailsItem :field="item.itemWidth" label="Artikelbreedte" suffix="m"  />
+        <SearchDetailsItem :field="item.itemLength" label="Artikellengte" suffix="m" />
+        <SearchDetailsItem :field="item.powerWatt" label="Vermogen" suffix="W" />
+        <SearchDetailsItem :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2" />
       </div>
-    </div>
-    <div>details</div>
-  </template>
-</form-page>
+    </template>
+  </form-page>
 </template>
 <script setup lang="ts">
 
@@ -50,7 +70,7 @@ function fetchItem() {
   $searchClient.details(slug)
       .then(
           success => {
-            Object.assign(item, success)
+            item.value = success
             if (success.images != undefined) {
               images.value = success.images
             }

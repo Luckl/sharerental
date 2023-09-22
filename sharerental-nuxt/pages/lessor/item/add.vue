@@ -11,7 +11,7 @@
   </FormPage>
 </template>
 <script setup lang="ts">
-import {RentalItemInput} from "~/schemas/openapi/rentalItem";
+import {RentalItemInput} from "~/schemas/openapi/merged";
 import RentalItemClient from "~/services/api/RentalItemClient";
 
 const router = useRouter()
@@ -52,7 +52,7 @@ function onSubmitNewItem() {
 
   $rentalItemClient.create(formInput)
       .then(success => {
-            router.push('/items')
+            router.push('/lessor/items')
 
             formInput.name = "";
             formInput.number = "";
@@ -93,14 +93,6 @@ function onSubmitNewItem() {
 .flexbox-column {
   display: flex;
   flex-direction: column
-}
-
-.mb-1 {
-  margin-bottom: 1rem
-}
-
-.data-label {
-  font-weight: bold;
 }
 
 </style>

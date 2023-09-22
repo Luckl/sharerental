@@ -45,7 +45,7 @@ function onSubmitNewItem() {
 
   $rentalItemClient.update(formInput, itemId)
       .then(success => {
-            router.push('/items')
+            router.push('/lessor/items')
           },
           failureReason => {
             error.value = "Er is iets fout gegaan"
