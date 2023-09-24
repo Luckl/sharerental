@@ -17,9 +17,15 @@
           </Galleria>
         </div>
         <div class="p-5 flex flex-col gap-2">
-          <Calendar v-model="dates" selectionMode="range" inline :minDate="new Date()"/>
-          <div class="flex justify-end">
-            <Button label="Huren"></Button>
+          <Calendar v-model="dates" selectionMode="range" inline @dateSelect="calculatePrice()"
+                    @change="calculatePrice()" :minDate="new Date()"/>
+          <div class="flex flex-row justify-between">
+            <div class="align-middle text-xl">
+              Prijs: € {{ price }}
+            </div>
+            <div class="flex justify-end">
+              <Button label="Huren" @click="createTransaction()"></Button>
+            </div>
           </div>
         </div>
       </div>
@@ -52,11 +58,14 @@
 import {useRoute} from "#app";
 import {Image, RentalItem} from "~/schemas/openapi/merged";
 import SearchClient from "~/services/api/SearchClient";
+import TransactionClient from "~/services/api/TransactionClient";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
+const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 const route = useRoute();
+const price = ref(0);
 const slug = Array.isArray(route.params.rentalItemSlug) ? route.params.rentalItemSlug[0] : route.params.rentalItemSlug;
 const item = ref<RentalItem>({
   name: "",
@@ -68,6 +77,24 @@ const images = ref<Image[]>([]);
 onMounted(() => {
   fetchItem();
 })
+
+function calculatePrice() {
+  if (dates.value[0] != null && dates.value[1] != null) {
+    $transactionClient.calculatePrice(
+        item.value.id,
+        dates.value[0],
+        dates.value[1]
+    ).then(
+        success => {
+          price.value = success.price
+        },
+        failure => {
+
+        }
+    )
+  }
+
+}
 
 function fetchItem() {
   $searchClient.details(slug)

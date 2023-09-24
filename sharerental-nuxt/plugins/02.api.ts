@@ -5,6 +5,7 @@ import RentalItemClient from "~/services/api/RentalItemClient";
 import {Configuration} from '~/schemas/openapi/merged';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
+import TransactionClient from "~/services/api/TransactionClient";
 
 export default defineNuxtPlugin((nuxtApp) => {
 
@@ -19,9 +20,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     const lessorClient = new LessorClient(config)
     const rentalItemClient = new RentalItemClient(config)
     const rentalItemImageClient = new RentalItemImageClient(config)
+    const transactionClient = new TransactionClient(config)
 
     nuxtApp.provide('searchClient', searchClient)
     nuxtApp.provide('lessorClient', lessorClient)
     nuxtApp.provide('rentalItemClient', rentalItemClient)
     nuxtApp.provide('rentalItemImageClient', rentalItemImageClient)
+    nuxtApp.provide('transactionClient', transactionClient)
 })
