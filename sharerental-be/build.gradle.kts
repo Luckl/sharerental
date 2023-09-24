@@ -15,6 +15,7 @@ tasks.bootBuildImage {
 }
 
 tasks.openApiGenerate {
+	inputs.dir("$rootDir/../sharerental-api-contracts")
 	generatorName.set("spring")
 	inputSpec.set("$rootDir/../sharerental-api-contracts/merged.yaml")
 	mergedFileName.set("sharerental.yaml")

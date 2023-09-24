@@ -83,7 +83,7 @@ private fun RentalItem.toResponse(): HttpRentalItem {
             number = item.number
             shortDescription = item.shortDescription
             longDescription = item.longDescription
-            price24h = item.price24h?.toDouble()
+            price24h = item.price24h.toDouble()
             price48h = item.price48h?.toDouble()
             price168h = item.price168h?.toDouble()
             deliveryPossible = item.deliveryPossible

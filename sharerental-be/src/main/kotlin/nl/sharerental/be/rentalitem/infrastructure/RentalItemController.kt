@@ -45,6 +45,7 @@ class RentalItemController(
         rentalItemInput: RentalItemInput?
     ): ResponseEntity<HttpRentalItem> {
         rentalItemInput ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        rentalItemInput.price24h ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         val entity = rentalItemAuthorization.authorizeById(id)
 
@@ -56,7 +57,7 @@ class RentalItemController(
             shortDescription = rentalItemInput.shortDescription
             longDescription = rentalItemInput.longDescription
             displayStatus = rentalItemInput.displayStatus.toEntity()
-            price24h = rentalItemInput.price24h?.toBigDecimal()
+            price24h = rentalItemInput.price24h?.toBigDecimal()!!
             price48h = rentalItemInput.price48h?.toBigDecimal()
             price168h = rentalItemInput.price168h?.toBigDecimal()
             deliveryPossible = rentalItemInput.deliveryPossible
@@ -103,7 +104,7 @@ class RentalItemController(
             number = rentalItemInput.number,
             shortDescription = rentalItemInput.shortDescription,
             longDescription = rentalItemInput.longDescription,
-            price24h = rentalItemInput.price24h?.toBigDecimal(),
+            price24h = rentalItemInput.price24h?.toBigDecimal()!!,
             price48h = rentalItemInput.price48h?.toBigDecimal(),
             price168h = rentalItemInput.price168h?.toBigDecimal(),
             deliveryPossible = rentalItemInput.deliveryPossible,
@@ -171,7 +172,7 @@ private fun RentalItem.toResponse(): HttpRentalItem {
             displayStatus = item.displayStatus.toHttp()
             shortDescription = item.shortDescription
             longDescription = item.longDescription
-            price24h = item.price24h?.toDouble()
+            price24h = item.price24h.toDouble()
             price48h = item.price48h?.toDouble()
             price168h = item.price168h?.toDouble()
             deliveryPossible = item.deliveryPossible

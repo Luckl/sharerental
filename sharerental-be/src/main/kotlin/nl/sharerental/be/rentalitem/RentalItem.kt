@@ -35,7 +35,7 @@ data class RentalItem(
     var owner: Lessor,
 
     @Column(name = "price_24h")
-    var price24h: BigDecimal?,
+    var price24h: BigDecimal,
     @Column(name = "price_48h")
     var price48h: BigDecimal?,
     @Column(name = "price_168h")

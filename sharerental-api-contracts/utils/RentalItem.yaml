@@ -98,6 +98,7 @@ components:
           $ref: '#/components/schemas/FuelType'
       required:
         - name
+        - price24h
     RentalItem:
       type: object
       properties:
