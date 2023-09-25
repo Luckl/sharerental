@@ -4,6 +4,8 @@ import be.woutschoovaerts.mollie.Client
 import be.woutschoovaerts.mollie.data.common.Amount
 import be.woutschoovaerts.mollie.data.payment.PaymentRequest
 import be.woutschoovaerts.mollie.data.payment.PaymentStatus
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import java.math.BigDecimal
 import java.util.*
@@ -16,9 +18,19 @@ class TransactionProcessor(
     @Value("\${shareRental.webhookUrl}")
     private val webhookUrl: String,
 
-    ) {
+    private val objectMapper: ObjectMapper,
+) {
+    private val logger = LoggerFactory.getLogger(TransactionProcessor::class.java)
 
-    fun initializeTransaction(amount: BigDecimal, description: String, transactionId: Long, userId: String): InitializedTransaction {
+    /**
+     * https://docs.mollie.com/reference/v2/payments-api/create-payment
+     */
+    fun initializeTransaction(
+        amount: BigDecimal,
+        description: String,
+        transactionId: Long,
+        userId: String
+    ): InitializedTransaction {
         val paymentRequest = PaymentRequest()
         paymentRequest.amount = Amount("EUR", amount)
         paymentRequest.description = description
@@ -26,9 +38,11 @@ class TransactionProcessor(
         paymentRequest.webhookUrl = Optional.of(webhookUrl)
         paymentRequest.customerReference = Optional.of(userId)
 
-        val response = mollieClient.payments().createPayment(
-            paymentRequest
-        )
+        logger.info("Creating transaction on mollie. Content: {}", objectMapper.writeValueAsString(paymentRequest))
+
+        val response = mollieClient.payments().createPayment(paymentRequest)
+
+        logger.info("Successfully created transaction. Response: {}", objectMapper.writeValueAsString(response))
 
         return InitializedTransaction(
             paymentReference = response.id,
@@ -38,6 +52,8 @@ class TransactionProcessor(
     }
 }
 
-data class InitializedTransaction(val paymentReference: String,
-                                  val checkoutUrl: String,
-                                  val status: PaymentStatus)
+data class InitializedTransaction(
+    val paymentReference: String,
+    val checkoutUrl: String,
+    val status: PaymentStatus
+)

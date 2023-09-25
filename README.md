@@ -18,7 +18,7 @@ A state diagram describing the status of a transaction.
 ![Transaction state](https://www.plantuml.com/plantuml/png/VP11QmCX48Nl-olcNCWVy50YPW_29jd3zj9IYd6dD5JNHST3_dsrH8bDoUqnxtsFcTa6KfwYDTtRqpjiDiyW3tAIV92l_QwxqS10U5I4Cvmku74Xz8sVq97BtT-Pu0VH3qCgoow3KPr_6-WBIqisSfGBqO_JDTconMB0jSQLi7OO3C7v6cYngXW8jMWqvWvy42dx_HkP8m8veBD55mbE-EaymgekDa7jEiVzEFJvhgeOx9N_JYqgW7PsDNXtKGtNptuSNwQkYEiZoTqYMrpcQCqF)
 [Edit image here](https://www.plantuml.com/plantuml/uml/TP11QmCX48Nl-olcNCWVy50YPW_29jd3zj9IYd6dD5JNHST3_dsrH8a9kJryttlEp3QGyXIjwJvUFc6pUGLva9FaWtplTzsD1WR2eoASuNG1ZmkXR_mK7RdStRy9VX3zCAIox38OrVc_WNwmj6GZero8VfokP9ij5WEkDQw4jSDW2CvNe8rLnK2eHQCn3y6dI9dl2J971790Puik4fpmstc4LLri2hNZ7FVZqEUzgcAmL_utjQW0sjdL83t-Mk1osQ_ZszGLSJqakTjTjhZCqPe_)
 
-### Mollie integration
+## Mollie integration
 
 [Mollie hosted checkout example](https://demo.mollie.com/en/one-off-payments/?name=ShareRental&methods=IDCCPPBTBCGIPRKBBPPS)
 
@@ -26,7 +26,7 @@ A state diagram describing the status of a transaction.
 
 # Development
 
-Running ngrok for webhook callbacks from mollie
+### Running ngrok for webhook callbacks from mollie
 
 ```bash
  docker run -it -e NGROK_AUTHTOKEN=<token> ngrok/ngrok http 8080

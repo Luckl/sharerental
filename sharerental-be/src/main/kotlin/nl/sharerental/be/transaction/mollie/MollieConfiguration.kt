@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
+/**
+ * https://github.com/zwaldeck/mollie
+ */
 @Configuration
 class MollieConfiguration(@Value("\${mollie.apiKey}") private val mollieApiKey: String) {
 
