@@ -52,6 +52,7 @@ repositories {
 }
 
 dependencies {
+	implementation("be.woutschoovaerts:mollie:4.0.0")
 	implementation("ch.qos.logback:logback-classic:1.3.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
@@ -92,4 +93,8 @@ tasks {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.bootJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

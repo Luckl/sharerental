@@ -28,3 +28,9 @@ gcp:
     public:
       name: sharerental-staging
 
+mollie:
+  apiKey: test_5nGU9dSj578p2RtgKSkrGPsDp2g9uV
+
+shareRental:
+  callbackUrl: http://localhost:3000/completed
+  webhookUrl: https://a003-185-132-108-115.ngrok-free.app/
