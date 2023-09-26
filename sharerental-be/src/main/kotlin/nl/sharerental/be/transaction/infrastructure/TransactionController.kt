@@ -1,13 +1,14 @@
 package nl.sharerental.be.transaction.infrastructure
 
+import be.woutschoovaerts.mollie.data.payment.PaymentStatus
 import jakarta.transaction.Transactional
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.transaction.TransactionStatus
+import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
-import nl.sharerental.be.user.configuration.RequestResponseLoggingInterceptor
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.CreateTransactionRequest
 import nl.sharerental.contract.http.model.CreateTransactionResponse
@@ -47,6 +48,30 @@ class TransactionController(
 
     override fun mollieCallback(id: String?): ResponseEntity<Void> {
         logger.info("Received mollie webhook call for mollie payment reference {}", id)
+
+        id ?: ResponseStatusException(HttpStatus.BAD_REQUEST)
+        val molliePaymentStatus = transactionProcessor.getMolliePaymentStatus(id)
+
+        logger.info("Received status {} for mollie payment reference {}", molliePaymentStatus, id)
+
+        val transaction = transactionRepository.findByMolliePaymentReference(id).orElseThrow {
+            logger.error("Could not find shareRental transaction related to mollie payment reference {}", id)
+            ResponseStatusException(HttpStatus.NOT_FOUND)
+        }
+
+        when (molliePaymentStatus) {
+            PaymentStatus.PAID -> transaction.currentStatus =
+                TransactionStatus(status = TransactionStatusEnum.PAID, transaction = transaction)
+            PaymentStatus.CANCELED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+            PaymentStatus.EXPIRED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+            PaymentStatus.FAILED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+            else -> {
+                logger.error("Received invalid status from Mollie after webhook.")
+            }
+        }
+
+        // Do things to communicate to lessor
+
         return ResponseEntity.ok().build()
     }
 
@@ -58,7 +83,13 @@ class TransactionController(
         val price =
             Transaction.calculatePrice(rentalItem, createTransactionRequest.startDate, createTransactionRequest.endDate)
 
-        logger.info("Creating transaction for rentalItem {} at price {} from {} to {}", rentalItem.id, price, createTransactionRequest.startDate, createTransactionRequest.endDate)
+        logger.info(
+            "Creating transaction for rentalItem {} at price {} from {} to {}",
+            rentalItem.id,
+            price,
+            createTransactionRequest.startDate,
+            createTransactionRequest.endDate
+        )
 
         val transaction = Transaction(
             rentalItem = rentalItem,

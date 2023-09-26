@@ -52,6 +52,12 @@ class TransactionProcessor(
             status = response.status
         )
     }
+
+    fun getMolliePaymentStatus(molliePaymentReference: String?): PaymentStatus {
+        val payment = mollieClient.payments().getPayment(molliePaymentReference)
+
+        return payment.status
+    }
 }
 
 data class InitializedTransaction(
