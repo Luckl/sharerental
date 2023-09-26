@@ -23,7 +23,13 @@ data class Transaction (
     // Future performance improvement:  https://stackoverflow.com/questions/34889644/what-are-the-benefits-of-using-postgresql-daterange-type-instead-of-two-date-fie
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val price: BigDecimal
+    val price: BigDecimal,
+    var molliePaymentReference: String = "unknown",
+
+    @OneToOne(cascade = [CascadeType.PERSIST])
+    var currentStatus: TransactionStatus? = null,
+    @OneToMany(mappedBy="transaction")
+    val statusHistory: List<TransactionStatus> = emptyList()
 ) {
     companion object {
         fun calculatePrice(rentalItem: RentalItem, startDate: LocalDate, endDate: LocalDate): BigDecimal {

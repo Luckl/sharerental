@@ -9,6 +9,7 @@ paths:
       description: https://docs.mollie.com/overview/webhooks
       tags:
         - transaction
+      operationId: mollieCallback
       requestBody:
         required: true
         content:
@@ -24,6 +25,25 @@ paths:
       responses:
         200:
           description: Webhook successfully processed.
+  /transaction:
+    post:
+      summary: Create a transaction between a lessor and renter
+      operationId: startTransaction
+      tags:
+        - transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+      responses:
+        200:
+          description: Successfully created transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransactionResponse'
   /transaction/calculate-price:
     post:
       summary: Calculate the price for a transaction
@@ -70,3 +90,27 @@ components:
       properties:
         price:
           type: number
+    CreateTransactionRequest:
+      type: object
+      required:
+        - rentalItemId
+        - startDate
+        - endDate
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: The start date
+        endDate:
+          type: string
+          format: date
+          description: The end date
+        rentalItemId:
+          type: integer
+          format: int64
+    CreateTransactionResponse:
+      type: object
+      properties:
+        redirectUrl:
+          type: string
+          description: Mollie hosted checkout url

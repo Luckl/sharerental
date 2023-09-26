@@ -7,9 +7,11 @@ import be.woutschoovaerts.mollie.data.payment.PaymentStatus
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.util.*
 
+@Service
 class TransactionProcessor(
     private val mollieClient: Client,
     @Value("\${shareRental.callbackUrl}")
@@ -45,7 +47,7 @@ class TransactionProcessor(
         logger.info("Successfully created transaction. Response: {}", objectMapper.writeValueAsString(response))
 
         return InitializedTransaction(
-            paymentReference = response.id,
+            molliePaymentReference = response.id,
             checkoutUrl = response.links.checkout.href,
             status = response.status
         )
@@ -53,7 +55,7 @@ class TransactionProcessor(
 }
 
 data class InitializedTransaction(
-    val paymentReference: String,
+    val molliePaymentReference: String,
     val checkoutUrl: String,
     val status: PaymentStatus
 )

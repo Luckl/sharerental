@@ -21,6 +21,10 @@ paths:
     $ref: "./lessor.yaml#/paths/~1me~1lessor"
   /transaction/calculate-price:
     $ref: "./transaction.yaml#/paths/~1transaction~1calculate-price"
+  /transaction:
+    $ref: "./transaction.yaml#/paths/~1transaction"
+  /transaction/mollie-callback:
+    $ref: "./transaction.yaml#/paths/~1transaction~1mollie-callback"
 info:
   title: "merged spec"
   description: "merged spec"
