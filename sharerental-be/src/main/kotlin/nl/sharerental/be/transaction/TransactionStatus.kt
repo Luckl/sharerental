@@ -12,6 +12,7 @@ class TransactionStatus (
 
     val createdTimestamp: Instant = Instant.now(),
 
+    @Enumerated(EnumType.STRING)
     val status: TransactionStatusEnum = TransactionStatusEnum.INITIALIZED,
 
     val notes: String? = null,

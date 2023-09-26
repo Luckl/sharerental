@@ -24,7 +24,7 @@
               Prijs: € {{ price }}
             </div>
             <div class="flex justify-end">
-              <Button label="Huren" @click="createTransaction()"></Button>
+              <Button label="Huren" @click="startTransaction()"></Button>
             </div>
           </div>
         </div>
@@ -78,6 +78,24 @@ onMounted(() => {
   fetchItem();
 })
 
+function startTransaction() {
+  if (dates.value[0] != null && dates.value[1] != null) {
+    $transactionClient.startTransaction(
+        item.value.id,
+        dates.value[0],
+        dates.value[1]
+    ).then(
+        success => {
+          console.log("redirecting to " + success.redirectUrl)
+          navigateTo(success.redirectUrl)
+        },
+        failure => {
+
+        }
+    )
+  }
+}
+
 function calculatePrice() {
   if (dates.value[0] != null && dates.value[1] != null) {
     $transactionClient.calculatePrice(
@@ -93,7 +111,6 @@ function calculatePrice() {
         }
     )
   }
-
 }
 
 function fetchItem() {

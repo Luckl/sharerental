@@ -99,13 +99,14 @@ class TransactionController(
             price = price
         )
 
+        //First save so TransactionStatus entity won't get a null value for transaction_id
+        val savedTransaction = transactionRepository.save(transaction)
+
         val currentStatus = TransactionStatus(
-            transaction = transaction
+            transaction = savedTransaction
         )
 
-        transaction.currentStatus = currentStatus
-
-        val savedTransaction = transactionRepository.save(transaction)
+        savedTransaction.currentStatus = currentStatus
 
         val mollieTransaction = transactionProcessor.initializeTransaction(
             amount = price,
