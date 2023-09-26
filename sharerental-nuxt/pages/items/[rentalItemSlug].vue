@@ -87,7 +87,7 @@ function startTransaction() {
     ).then(
         success => {
           console.log("redirecting to " + success.redirectUrl)
-          navigateTo(success.redirectUrl)
+          navigateTo(success.redirectUrl, { external: true })
         },
         failure => {
 

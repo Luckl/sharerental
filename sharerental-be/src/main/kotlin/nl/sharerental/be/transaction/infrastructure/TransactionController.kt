@@ -1,6 +1,7 @@
 package nl.sharerental.be.transaction.infrastructure
 
 import be.woutschoovaerts.mollie.data.payment.PaymentStatus
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.transaction.Transactional
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
