@@ -47,6 +47,7 @@ class TransactionController(
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
+    @Transactional
     override fun mollieCallback(id: String?): ResponseEntity<Void> {
         logger.info("Received mollie webhook call for mollie payment reference {}", id)
 
