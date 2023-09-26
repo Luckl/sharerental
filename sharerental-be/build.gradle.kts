@@ -52,6 +52,7 @@ repositories {
 }
 
 dependencies {
+	developmentOnly("io.github.kilmajster:ngrok-spring-boot-starter:0.9.0")
 	implementation("be.woutschoovaerts:mollie:4.0.0")
 	implementation("ch.qos.logback:logback-classic:1.3.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")

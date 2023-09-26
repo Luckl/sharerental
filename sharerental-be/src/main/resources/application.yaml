@@ -22,7 +22,6 @@ logging:
     nl:
       sharerental:
         be: DEBUG
-
 gcp:
   bucket:
     public:
@@ -33,4 +32,8 @@ mollie:
 
 shareRental:
   callbackUrl: http://localhost:3000/transaction/completed
-  webhookUrl: https://3e1b-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
+  webhookUrl: https://7ffe-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
+
+ngrok:
+  enabled: true
+  auth-token: 2VtukgpNnE6MmsmLeAIyoSmX1iv_2dRWq8zfkE9YsVhzsTzqS

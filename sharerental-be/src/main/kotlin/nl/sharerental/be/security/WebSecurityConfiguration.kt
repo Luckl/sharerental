@@ -18,6 +18,9 @@ class WebSecurityConfiguration {
     @Bean
     fun filterChain(http: HttpSecurity) =
         http
+            .csrf {
+                it.ignoringRequestMatchers("/transaction/mollie-callback")
+            }
             .authorizeHttpRequests {
             it
                 .requestMatchers("/me/**")
