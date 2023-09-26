@@ -33,4 +33,4 @@ mollie:
 
 shareRental:
   callbackUrl: http://localhost:3000/transaction/completed
-  webhookUrl:  https://36c1-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
+  webhookUrl: https://3e1b-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback

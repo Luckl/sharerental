@@ -9,3 +9,7 @@ gcp:
   bucket:
     public:
       name: sharerental
+
+shareRental:
+  callbackUrl: https://sharerental.nl/transaction/completed
+  webhookUrl: https://sharerental.nl/backend/transaction/mollie-callback
