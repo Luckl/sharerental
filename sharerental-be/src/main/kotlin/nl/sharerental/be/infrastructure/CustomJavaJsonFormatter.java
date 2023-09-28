@@ -11,6 +11,8 @@ public class CustomJavaJsonFormatter extends JacksonJsonFormatter {
         map.put("severity", map.get("level"));
         map.put("logging.googleapis.com/labels", map.get("mdc"));
         map.put("logging.googleapis.com/sourceLocation", map.get("logger"));
+        map.put("logging.googleapis.com/spanId", ((Map) map.get("mdc")).get("spanId"));
+        map.put("logging.googleapis.com/trace", ((Map) map.get("mdc")).get("trace"));
         map.remove("level");
         map.remove("mdc");
         map.remove("logger");
