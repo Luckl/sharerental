@@ -40,6 +40,7 @@ sourceSets {
 	main {
 		java {
 			srcDir("$buildDir/generated/src/main/java")
+			srcDir("$rootDir/src/main/kotlin")
 		}
 	}
 }
