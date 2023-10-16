@@ -4,6 +4,8 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.user.User
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -26,6 +28,7 @@ data class Transaction (
     val startDate: LocalDate,
     val endDate: LocalDate,
     val price: BigDecimal,
+    val amount: Int = 1,
     var molliePaymentReference: String = "unknown",
 
     @OneToOne(cascade = [CascadeType.PERSIST])
@@ -33,6 +36,11 @@ data class Transaction (
     @OneToMany(mappedBy="transaction")
     val statusHistory: List<TransactionStatus> = emptyList()
 ) {
+    init {
+        if (amount < 1) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        }
+    }
     companion object {
         fun calculatePrice(rentalItem: RentalItem,
                            startDate: LocalDate,

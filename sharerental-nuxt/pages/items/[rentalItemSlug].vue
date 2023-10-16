@@ -25,7 +25,7 @@
               Aantal:
             </div>
             <div>
-              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="1" :max="available"></InputNumber>
+              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="1" :max="amountAvailable"></InputNumber>
             </div>
           </div>
           <div class="flex flex-row justify-between">
@@ -82,11 +82,15 @@ const item = ref<RentalItem>({
   name: "",
   id: 0
 });
-const dates = ref();
+const dates = ref([]);
 const images = ref<Image[]>([]);
 
 onMounted(() => {
-  fetchItem();
+  fetchItem()
+      .then(() => {
+        calculatePrice()
+        getAvailableItemsAmount()
+      })
 })
 
 function startTransaction() {
@@ -132,7 +136,6 @@ function calculatePrice() {
 }
 
 function getAvailableItemsAmount() {
-  if (dates.value[0] != null && dates.value[1] != null) {
     $transactionClient.getAvailableItems(
         dates.value[0],
         dates.value[1],
@@ -145,12 +148,11 @@ function getAvailableItemsAmount() {
 
         }
     )
-  }
 }
 
 
 function fetchItem() {
-  $searchClient.details(slug)
+  return $searchClient.details(slug)
       .then(
           success => {
             item.value = success

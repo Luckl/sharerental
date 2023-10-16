@@ -108,6 +108,7 @@ class TransactionController(
             renter = currentUserService.get(),
             startDate = createTransactionRequest.startDate,
             endDate = createTransactionRequest.endDate,
+            amount = createTransactionRequest.amount,
             price = price
         )
 
