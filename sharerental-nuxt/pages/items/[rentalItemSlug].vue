@@ -17,8 +17,17 @@
           </Galleria>
         </div>
         <div class="p-5 flex flex-col gap-2">
-          <Calendar v-model="dates" selectionMode="range" inline @dateSelect="calculatePrice()"
-                    @change="calculatePrice()" :minDate="new Date()"/>
+          <Calendar v-model="dates" selectionMode="range" inline @dateSelect="onUpdateTransactionInformation()"
+                    @change="onUpdateTransactionInformation()" :minDate="new Date()"/>
+          <div class="flex flex-row justify-between">
+
+            <div class="align-middle text-xl">
+              Aantal:
+            </div>
+            <div>
+              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="1" :max="available"></InputNumber>
+            </div>
+          </div>
           <div class="flex flex-row justify-between">
             <div class="align-middle text-xl">
               Prijs: € {{ price }}
@@ -65,7 +74,9 @@ const error = ref<String | undefined>(undefined)
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
 const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 const route = useRoute();
+const amount = ref(1);
 const price = ref(0);
+const amountAvailable = ref(10);
 const slug = Array.isArray(route.params.rentalItemSlug) ? route.params.rentalItemSlug[0] : route.params.rentalItemSlug;
 const item = ref<RentalItem>({
   name: "",
@@ -83,11 +94,12 @@ function startTransaction() {
     $transactionClient.startTransaction(
         item.value.id,
         dates.value[0],
-        dates.value[1]
+        dates.value[1],
+        amount.value
     ).then(
         success => {
           console.log("redirecting to " + success.redirectUrl)
-          navigateTo(success.redirectUrl, { external: true })
+          navigateTo(success.redirectUrl, {external: true})
         },
         failure => {
 
@@ -96,12 +108,18 @@ function startTransaction() {
   }
 }
 
+function onUpdateTransactionInformation() {
+  calculatePrice()
+  getAvailableItemsAmount()
+}
+
 function calculatePrice() {
   if (dates.value[0] != null && dates.value[1] != null) {
     $transactionClient.calculatePrice(
         item.value.id,
         dates.value[0],
-        dates.value[1]
+        dates.value[1],
+        amount.value
     ).then(
         success => {
           price.value = success.price
@@ -112,6 +130,24 @@ function calculatePrice() {
     )
   }
 }
+
+function getAvailableItemsAmount() {
+  if (dates.value[0] != null && dates.value[1] != null) {
+    $transactionClient.getAvailableItems(
+        dates.value[0],
+        dates.value[1],
+        item.value.id
+    ).then(
+        success => {
+          amountAvailable.value = success.amountAvailable
+        },
+        failure => {
+
+        }
+    )
+  }
+}
+
 
 function fetchItem() {
   $searchClient.details(slug)

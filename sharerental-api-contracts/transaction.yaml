@@ -63,9 +63,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionCalculationResult'
+  /transaction/get-amount-available-for-date:
+    post:
+      summary: Get the available amount of items for a specific date range.
+      operationId: getAmountAvailableForDate
+      tags:
+        - transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAmountAvailableRequest'
+      responses:
+        200:
+          description: The amount of items available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAmountAvailableResponse'
 components:
   schemas:
-    TransactionCalculationInput:
+    GetAmountAvailableResponse:
+      type: object
+      required:
+        - amountAvailable
+      properties:
+        amountAvailable:
+          type: integer
+    GetAmountAvailableRequest:
       type: object
       required:
         - startDate
@@ -83,6 +109,27 @@ components:
         rentalItemId:
           type: integer
           format: int64
+    TransactionCalculationInput:
+      type: object
+      required:
+        - startDate
+        - endDate
+        - rentalItemId
+        - amount
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: The start date
+        endDate:
+          type: string
+          format: date
+          description: The end date
+        rentalItemId:
+          type: integer
+          format: int64
+        amount:
+          type: integer
     TransactionCalculationResult:
       type: object
       required:
@@ -96,6 +143,7 @@ components:
         - rentalItemId
         - startDate
         - endDate
+        - amount
       properties:
         startDate:
           type: string
@@ -108,6 +156,9 @@ components:
         rentalItemId:
           type: integer
           format: int64
+        amount:
+          type: integer
+          minimum: 1
     CreateTransactionResponse:
       type: object
       properties:

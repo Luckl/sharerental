@@ -31,6 +31,8 @@ data class RentalItem(
     var shortDescription: String?,
     var longDescription: String?,
 
+    var amount: Int = 1,
+
     @ManyToOne
     var owner: Lessor,
 

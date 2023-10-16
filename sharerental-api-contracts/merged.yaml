@@ -21,6 +21,8 @@ paths:
     $ref: "./lessor.yaml#/paths/~1me~1lessor"
   /transaction/calculate-price:
     $ref: "./transaction.yaml#/paths/~1transaction~1calculate-price"
+  /transaction/get-amount-available-for-date:
+    $ref: "./transaction.yaml#/paths/~1transaction~1get-amount-available-for-date"
   /transaction:
     $ref: "./transaction.yaml#/paths/~1transaction"
   /transaction/mollie-callback:

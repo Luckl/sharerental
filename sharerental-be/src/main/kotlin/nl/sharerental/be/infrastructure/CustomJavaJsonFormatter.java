@@ -5,6 +5,9 @@ import ch.qos.logback.contrib.jackson.JacksonJsonFormatter;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Java since in kotlin we get compiler errors
+ */
 public class CustomJavaJsonFormatter extends JacksonJsonFormatter {
     @Override
     public String toJsonString(Map map) throws IOException {

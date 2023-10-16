@@ -1,6 +1,7 @@
 package nl.sharerental.be.transaction
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotNull
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.user.User
 import java.math.BigDecimal
@@ -33,8 +34,11 @@ data class Transaction (
     val statusHistory: List<TransactionStatus> = emptyList()
 ) {
     companion object {
-        fun calculatePrice(rentalItem: RentalItem, startDate: LocalDate, endDate: LocalDate): BigDecimal {
-            return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate))).setScale(2, RoundingMode.HALF_UP)
+        fun calculatePrice(rentalItem: RentalItem,
+                           startDate: LocalDate,
+                           endDate: LocalDate,
+                           amount: Int): BigDecimal {
+            return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate))).setScale(2, RoundingMode.HALF_UP).times(BigDecimal(amount))
         }
     }
 }

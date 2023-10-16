@@ -7,9 +7,9 @@
 <script setup lang="ts">
 
 interface Props {
-  field: string;
+  field: string | undefined;
   label: string;
-  suffix: string;
+  suffix?: string;
 }
 
 // Define props and emitters here if needed

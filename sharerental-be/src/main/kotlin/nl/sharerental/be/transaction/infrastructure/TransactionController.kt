@@ -1,7 +1,6 @@
 package nl.sharerental.be.transaction.infrastructure
 
 import be.woutschoovaerts.mollie.data.payment.PaymentStatus
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.transaction.Transactional
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
@@ -11,10 +10,7 @@ import nl.sharerental.be.transaction.infrastructure.repository.TransactionReposi
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.TransactionApi
-import nl.sharerental.contract.http.model.CreateTransactionRequest
-import nl.sharerental.contract.http.model.CreateTransactionResponse
-import nl.sharerental.contract.http.model.TransactionCalculationInput
-import nl.sharerental.contract.http.model.TransactionCalculationResult
+import nl.sharerental.contract.http.model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -40,7 +36,8 @@ class TransactionController(
                 Transaction.calculatePrice(
                     it,
                     transactionCalculationInput.startDate,
-                    transactionCalculationInput.endDate
+                    transactionCalculationInput.endDate,
+                    transactionCalculationInput.amount
                 )
             }
             .map { ResponseEntity.ok(TransactionCalculationResult(it)) }
@@ -77,13 +74,26 @@ class TransactionController(
         return ResponseEntity.ok().build()
     }
 
+    override fun getAmountAvailableForDate(getAmountAvailableRequest: GetAmountAvailableRequest?): ResponseEntity<GetAmountAvailableResponse> {
+        val rentalItem = rentalItemRepository.findById(getAmountAvailableRequest!!.rentalItemId)
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        //TODO: Calculate based on transactions between that date.
+        return ResponseEntity.ok(GetAmountAvailableResponse(rentalItem.amount))
+    }
+
     @Transactional
     override fun startTransaction(createTransactionRequest: CreateTransactionRequest?): ResponseEntity<CreateTransactionResponse> {
         val rentalItem = rentalItemRepository.findById(createTransactionRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
         val price =
-            Transaction.calculatePrice(rentalItem, createTransactionRequest.startDate, createTransactionRequest.endDate)
+            Transaction.calculatePrice(
+                rentalItem,
+                createTransactionRequest.startDate,
+                createTransactionRequest.endDate,
+                createTransactionRequest.amount
+            )
 
         logger.info(
             "Creating transaction for rentalItem {} at price {} from {} to {}",
