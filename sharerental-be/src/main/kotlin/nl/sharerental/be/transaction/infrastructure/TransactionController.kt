@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
+import kotlin.math.max
 
 @RestController
 class TransactionController(
@@ -69,7 +70,7 @@ class TransactionController(
             }
         }
 
-        // Do things to communicate to lessor
+        //TODO: Do things to communicate to lessor
 
         return ResponseEntity.ok().build()
     }
@@ -78,8 +79,15 @@ class TransactionController(
         val rentalItem = rentalItemRepository.findById(getAmountAvailableRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        //TODO: Calculate based on transactions between that date.
-        return ResponseEntity.ok(GetAmountAvailableResponse(rentalItem.amount))
+        val amountRentedOut = transactionRepository.findAllByRentalItemAndStartDateAfterAndEndDateBefore(
+            rentalItem,
+            getAmountAvailableRequest.startDate,
+            getAmountAvailableRequest.endDate
+        )
+            .filter { TransactionStatusEnum.CANCELLED != it.currentStatus?.status }
+            .sumOf { it.amount }
+
+        return ResponseEntity.ok(GetAmountAvailableResponse(max(rentalItem.amount - amountRentedOut, 0)))
     }
 
     @Transactional
