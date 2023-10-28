@@ -106,7 +106,6 @@ function startTransaction() {
         amount.value
     ).then(
         success => {
-          console.log("redirecting to " + success.redirectUrl)
           navigateTo(success.redirectUrl, {external: true})
         },
         failure => {

@@ -16,7 +16,8 @@ interface TransactionRepository: CrudRepository<Transaction, Long> {
         select t from Transaction t where t.rentalItem = :rentalItem and 
         ( :startDate <= t.startDate and :endDate >= t.startDate ) or 
         ( :endDate >= t.endDate and :startDate < t.endDate ) or
-        ( :startDate >= t.startDate and :endDate <= t.endDate )
+        ( :startDate >= t.startDate and :endDate <= t.endDate ) or 
+        :startDate = t.endDate or :endDate = t.startDate
     """)
     fun findAllByRentalItemAndDateRange(rentalItem: RentalItem, startDate: LocalDate, endDate: LocalDate): List<Transaction>
 }
