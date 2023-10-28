@@ -2,6 +2,8 @@ package nl.sharerental.be.transaction.infrastructure
 
 import be.woutschoovaerts.mollie.data.payment.PaymentStatus
 import jakarta.transaction.Transactional
+import jakarta.validation.constraints.NotNull
+import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.transaction.TransactionStatus
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
+import java.time.LocalDate
 import kotlin.math.max
 
 @RestController
@@ -62,9 +65,16 @@ class TransactionController(
         when (molliePaymentStatus) {
             PaymentStatus.PAID -> transaction.currentStatus =
                 TransactionStatus(status = TransactionStatusEnum.PAID, transaction = transaction)
-            PaymentStatus.CANCELED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
-            PaymentStatus.EXPIRED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
-            PaymentStatus.FAILED -> transaction.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+
+            PaymentStatus.CANCELED -> transaction.currentStatus =
+                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+
+            PaymentStatus.EXPIRED -> transaction.currentStatus =
+                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+
+            PaymentStatus.FAILED -> transaction.currentStatus =
+                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
+
             else -> {
                 logger.error("Received invalid status from Mollie after webhook.")
             }
@@ -79,21 +89,41 @@ class TransactionController(
         val rentalItem = rentalItemRepository.findById(getAmountAvailableRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        val amountRentedOut = transactionRepository.findAllByRentalItemAndStartDateAfterAndEndDateBefore(
+        val amountRentedOut = getAmountOfRentedOutItems(
             rentalItem,
             getAmountAvailableRequest.startDate,
             getAmountAvailableRequest.endDate
         )
-            .filter { TransactionStatusEnum.CANCELLED != it.currentStatus?.status }
-            .sumOf { it.amount }
 
         return ResponseEntity.ok(GetAmountAvailableResponse(max(rentalItem.amount - amountRentedOut, 0)))
     }
+
+    private fun getAmountOfRentedOutItems(
+        rentalItem: RentalItem,
+        startDate: @NotNull LocalDate,
+        endDate: @NotNull LocalDate
+    ): Int = transactionRepository.findAllByRentalItemAndStartDateAfterAndEndDateBefore(
+        rentalItem,
+        startDate,
+        endDate
+    )
+        .filter { TransactionStatusEnum.CANCELLED != it.currentStatus?.status }
+        .sumOf { it.amount }
 
     @Transactional
     override fun startTransaction(createTransactionRequest: CreateTransactionRequest?): ResponseEntity<CreateTransactionResponse> {
         val rentalItem = rentalItemRepository.findById(createTransactionRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
+
+        if (getAmountOfRentedOutItems(
+                rentalItem,
+                createTransactionRequest.startDate,
+                createTransactionRequest.endDate
+            ) + createTransactionRequest.amount > rentalItem.amount
+        ) {
+            logger.warn("Tried to rent {} items but that many are not available.", createTransactionRequest.amount)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        }
 
         val price =
             Transaction.calculatePrice(
