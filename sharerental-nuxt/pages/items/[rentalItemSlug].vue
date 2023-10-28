@@ -25,7 +25,7 @@
               Aantal:
             </div>
             <div>
-              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="1" :max="amountAvailable"></InputNumber>
+              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="0" :max="amountAvailable"></InputNumber>
             </div>
           </div>
           <div class="flex flex-row justify-between">
@@ -33,7 +33,7 @@
               Prijs: € {{ price }}
             </div>
             <div class="flex justify-end">
-              <Button label="Huren" @click="startTransaction()"></Button>
+              <Button label="Huren" :disabled="amount < 1" @click="startTransaction()"></Button>
             </div>
           </div>
         </div>
@@ -93,6 +93,10 @@ onMounted(() => {
       })
 })
 
+watch(amount, () => {
+  calculatePrice()
+})
+
 function startTransaction() {
   if (dates.value[0] != null && dates.value[1] != null) {
     $transactionClient.startTransaction(
@@ -113,8 +117,8 @@ function startTransaction() {
 }
 
 function onUpdateTransactionInformation() {
-  calculatePrice()
   getAvailableItemsAmount()
+  calculatePrice()
 }
 
 function calculatePrice() {
@@ -143,6 +147,7 @@ function getAvailableItemsAmount() {
     ).then(
         success => {
           amountAvailable.value = success.amountAvailable
+          amount.value = amountAvailable.value
         },
         failure => {
 

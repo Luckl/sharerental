@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
+import nl.sharerental.be.transaction.TransactionService
 import nl.sharerental.be.transaction.TransactionStatus
 import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
@@ -28,6 +29,7 @@ class TransactionController(
     private val transactionProcessor: TransactionProcessor,
     private val currentUserService: CurrentUserService,
     private val transactionRepository: TransactionRepository,
+    private val transactionService: TransactionService,
 ) : TransactionApi {
 
     private val logger: Logger = LoggerFactory.getLogger(TransactionController::class.java)
@@ -89,7 +91,7 @@ class TransactionController(
         val rentalItem = rentalItemRepository.findById(getAmountAvailableRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        val amountRentedOut = getAmountOfRentedOutItems(
+        val amountRentedOut = transactionService.getAmountOfRentedOutItems(
             rentalItem,
             getAmountAvailableRequest.startDate,
             getAmountAvailableRequest.endDate
@@ -98,24 +100,12 @@ class TransactionController(
         return ResponseEntity.ok(GetAmountAvailableResponse(max(rentalItem.amount - amountRentedOut, 0)))
     }
 
-    private fun getAmountOfRentedOutItems(
-        rentalItem: RentalItem,
-        startDate: @NotNull LocalDate,
-        endDate: @NotNull LocalDate
-    ): Int = transactionRepository.findAllByRentalItemAndStartDateAfterAndEndDateBefore(
-        rentalItem,
-        startDate,
-        endDate
-    )
-        .filter { TransactionStatusEnum.CANCELLED != it.currentStatus?.status }
-        .sumOf { it.amount }
-
     @Transactional
     override fun startTransaction(createTransactionRequest: CreateTransactionRequest?): ResponseEntity<CreateTransactionResponse> {
         val rentalItem = rentalItemRepository.findById(createTransactionRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        if (getAmountOfRentedOutItems(
+        if (transactionService.getAmountOfRentedOutItems(
                 rentalItem,
                 createTransactionRequest.startDate,
                 createTransactionRequest.endDate
