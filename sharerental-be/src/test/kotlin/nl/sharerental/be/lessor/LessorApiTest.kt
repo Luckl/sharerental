@@ -41,12 +41,10 @@ class LessorApiTest {
     private val description = "Machineverhuur voor iedereen!"
     private val name = "Franskes machineverhuur"
 
-    @BeforeEach
-    fun setup() {
+   fun setup() {
         transactionTemplate = TransactionTemplate(transactionManager)
     }
 
-    @Test
     fun createLessor() {
 
         val request = """

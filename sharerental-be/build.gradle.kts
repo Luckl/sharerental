@@ -1,13 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.2"
-	id("io.spring.dependency-management") version "1.1.2"
-	kotlin("jvm") version "1.8.22"
-	kotlin("plugin.spring") version "1.8.22"
-	kotlin("plugin.jpa") version "1.8.22"
-	kotlin("plugin.noarg") version "1.9.10"
-	id("org.openapi.generator") version "7.0.0"
+	id("org.springframework.boot") version "3.1.5"
+	id("io.spring.dependency-management") version "1.1.3"
+	kotlin("jvm") version "1.9.20"
+	kotlin("plugin.spring") version "1.9.20"
+	kotlin("plugin.jpa") version "1.9.20"
+	kotlin("plugin.noarg") version "1.9.20"
+	id("org.openapi.generator") version "7.0.1"
+	id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
 tasks.bootBuildImage {
@@ -58,7 +59,7 @@ dependencies {
 	implementation("ch.qos.logback:logback-classic:1.3.5")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
-	implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
 	implementation("org.hibernate.validator:hibernate-validator")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.flywaydb:flyway-core")
@@ -67,7 +68,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.google.cloud:spring-cloud-gcp-starter-storage:4.7.2")
+	implementation("com.google.cloud:spring-cloud-gcp-starter-storage:4.8.3")
 	implementation("com.bucket4j:bucket4j-core:8.4.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.micrometer:micrometer-tracing-bridge-brave")

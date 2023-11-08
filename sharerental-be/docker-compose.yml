@@ -1,5 +1,11 @@
 version: '3'
 services:
+  sharerental-be:
+    image: europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest
+    container_name: local-be
+    ports:
+      - "8080:8080"
+
   postgres:
     image: postgres:15
     container_name: local-postgres
