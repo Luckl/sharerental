@@ -5,7 +5,11 @@ services:
     container_name: local-be
     ports:
       - "8080:8080"
-
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://local-postgres:5432/sharerental?stringtype=unspecified
+      GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
+    volumes:
+      - "../sharerental-nuxt/service-account.json:/service-account.json"
   postgres:
     image: postgres:15
     container_name: local-postgres
@@ -15,8 +19,3 @@ services:
       POSTGRES_USER: sharerental-be
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: sharerental
-    networks:
-      - postgres-network
-
-networks:
-  postgres-network:
