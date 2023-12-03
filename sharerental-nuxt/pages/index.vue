@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>ShareRental</Title>
+    <Title>Home - ShareRental</Title>
   </Head>
   <div class="home-search-container" :style="backgroundStyles">
     <div class="search-input-container">
