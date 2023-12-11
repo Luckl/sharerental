@@ -11,9 +11,9 @@ import java.time.Instant
 
 @Service
 class OneSignal(
-    @Value("\${oneSignal.appId}") private val appId: String,
-    @Value("\${oneSignal.apiKey}") private val apiKey: String,
-    @Value("\${oneSignal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
+    @Value("\${one-signal.app-id}") private val appId: String,
+    @Value("\${one-signal.api-key}") private val apiKey: String,
+    @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(OneSignal::class.java)
 
