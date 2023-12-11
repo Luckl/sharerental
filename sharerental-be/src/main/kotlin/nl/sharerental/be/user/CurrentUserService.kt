@@ -38,6 +38,6 @@ class CurrentUserService(private val userService: UserService,
         val userId = principal.claims["user_id"] as String
         val email = principal.claims["email"] as String
 
-        return userService.findUserOrCreate(userId, email)
+        return userService.findUserOrCreate(userId, email, true)
     }
 }

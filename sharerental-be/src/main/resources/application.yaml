@@ -30,6 +30,12 @@ gcp:
 mollie:
   apiKey: test_5nGU9dSj578p2RtgKSkrGPsDp2g9uV
 
+oneSignal:
+  appId: 138e9f48-cac7-4963-9f20-47b8399e187a
+  apiKey: bungus
+  templates:
+    welcome-email: 81429d3e-cde7-45b4-8385-790ee1ab9875
+
 shareRental:
   callbackUrl: http://localhost:3000/transaction/completed
   webhookUrl: https://7ffe-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
