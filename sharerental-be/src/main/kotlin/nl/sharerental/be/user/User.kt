@@ -9,11 +9,7 @@ class User(
 
     @Id
     val id: String,
-    val name: String?,
-    val surname: String?,
     val email: String,
-    @Column(name = "phone_number")
-    val phoneNumber: String?,
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     var userLessors: Set<UserLessor> = setOf()
 ) {

@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-class CurrentUserService(private val userRepository: UserRepository,
+class CurrentUserService(private val userService: UserService,
                          private val authentication: AuthenticationFacade) {
 
     private lateinit var currentUser: User
@@ -38,17 +38,6 @@ class CurrentUserService(private val userRepository: UserRepository,
         val userId = principal.claims["user_id"] as String
         val email = principal.claims["email"] as String
 
-        return userRepository.findById(userId)
-            .orElse(
-                userRepository.save(
-                    User(
-                        id = userId,
-                        email = email,
-                        name = null,
-                        phoneNumber = null,
-                        surname = null
-                    )
-                )
-            )
+        return userService.findUserOrCreate(userId, email)
     }
 }
