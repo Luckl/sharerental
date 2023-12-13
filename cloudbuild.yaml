@@ -2,7 +2,7 @@ steps:
   - name: 'gradle:8.3.0-jdk17'
     entrypoint: 'gradle'
     dir: 'sharerental-be'
-    args: ['bootBuildImage']
+    args: ['processAot', 'bootBuildImage']
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest' ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
