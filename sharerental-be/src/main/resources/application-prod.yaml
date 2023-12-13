@@ -1,7 +1,6 @@
 spring:
   datasource:
     username: sharerental-be
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://10.13.144.3:5432/sharerental?stringtype=unspecified
 
 
@@ -10,9 +9,9 @@ gcp:
     public:
       name: sharerental
 
-shareRental:
-  callbackUrl: https://sharerental.nl/transaction/completed
-  webhookUrl: https://sharerental.nl/backend/transaction/mollie-callback
+share-rental:
+  callback-url: https://sharerental.nl/transaction/completed
+  webhook-url: https://sharerental.nl/backend/transaction/mollie-callback
 
 ngrok:
   enabled: false

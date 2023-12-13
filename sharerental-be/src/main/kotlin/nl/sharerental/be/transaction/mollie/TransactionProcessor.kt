@@ -14,10 +14,10 @@ import java.util.*
 @Service
 class TransactionProcessor(
     private val mollieClient: Client,
-    @Value("\${shareRental.callbackUrl}")
+    @Value("\${share-rental.callback-url}")
     private val callbackUrl: String,
 
-    @Value("\${shareRental.webhookUrl}")
+    @Value("\${share-rental.webhook-url}")
     private val webhookUrl: String,
 
     private val objectMapper: ObjectMapper,
