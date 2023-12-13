@@ -17,9 +17,11 @@
             </layout>
         </appender>
 
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="jsonConsoleAppender"/>
         </root>
+
+        <logger name="nl.sharerental" level="DEBUG"/>
     </springProfile>
 
 </configuration>
