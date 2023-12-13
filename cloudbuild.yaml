@@ -17,5 +17,5 @@ steps:
       - 'europe-west4'
 options:
   pool:
-    name: 'projects/sharerental-b66f7/locations/europe-west4/workerPools/cloud-build-pool'
+    name: 'projects/sharerental-b66f7/locations/europe-west1/workerPools/europe-west1-pool'
 images: ['europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest']
