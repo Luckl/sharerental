@@ -1,0 +1,1 @@
+alter table usr add column username varchar(255) not null default split_part(email, '@', 1);

@@ -25,6 +25,65 @@ paths:
       responses:
         200:
           description: Webhook successfully processed.
+  /me/transactions:
+    get:
+      tags:
+        - transaction
+      operationId: getTransactions
+      summary: Find all items for user
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            example: '5'
+          required: false
+          description: Pagenumber, default value is 0 (first page).
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+            default: 8
+            example: '25'
+          description: The page size, number of items to return. Default value is 8.
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 50
+            example: 'date;desc'
+          required: false
+          description: Page sort, each item represents a sort column
+        - in: query
+          name: filter
+          schema:
+            type: string
+            example: "bouwdro"
+          required: false
+          description: Search query, applied to all text fields.
+        - in: query
+          name: status
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TransactionStatus'
+          required: false
+          description: Status filter
+      responses:
+        200:
+          description: Successful result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionsResult'
   /transaction:
     post:
       summary: Create a transaction between a lessor and renter
@@ -165,3 +224,55 @@ components:
         redirectUrl:
           type: string
           description: Mollie hosted checkout url
+    GetTransactionsResult:
+      type: object
+      required:
+        - _embedded
+        - page
+      properties:
+        _embedded:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        page:
+          $ref: './utils/PaginationResponse.yaml'
+    TransactionStatus:
+      type: string
+      format: enum
+      enum:
+        - INITIALIZED
+        - PAID
+        - ACCEPTED
+        - COMPLETED
+        - PAID_OUT
+        - CANCELLED
+    Transaction:
+      type: object
+      required:
+        - id
+        - startDate
+        - endDate
+        - amount
+        - price
+        - status
+        - rentalItem
+      properties:
+        id:
+          type: integer
+          format: int64
+        startDate:
+          type: string
+          format: date
+          description: The start date
+        endDate:
+          type: string
+          format: date
+          description: The end date
+        amount:
+          type: integer
+        price:
+          type: number
+        status:
+            $ref: '#/components/schemas/TransactionStatus'
+        rentalItem:
+          $ref: './utils/RentalItem.yaml#/components/schemas/RentalItem'

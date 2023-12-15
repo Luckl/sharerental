@@ -2,8 +2,8 @@ package nl.sharerental.be.transaction.infrastructure
 
 import be.woutschoovaerts.mollie.data.payment.PaymentStatus
 import jakarta.transaction.Transactional
-import jakarta.validation.constraints.NotNull
-import nl.sharerental.be.rentalitem.RentalItem
+import nl.sharerental.be.infrastructure.PageableHelper
+import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.transaction.TransactionService
@@ -14,13 +14,14 @@ import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
+import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDate
 import kotlin.math.max
 
 @RestController
@@ -30,6 +31,7 @@ class TransactionController(
     private val currentUserService: CurrentUserService,
     private val transactionRepository: TransactionRepository,
     private val transactionService: TransactionService,
+    private val lessorRepository: LessorRepository,
 ) : TransactionApi {
 
     private val logger: Logger = LoggerFactory.getLogger(TransactionController::class.java)
@@ -85,6 +87,41 @@ class TransactionController(
         //TODO: Do things to communicate to lessor
 
         return ResponseEntity.ok().build()
+    }
+
+    override fun getTransactions(
+        @RequestParam(defaultValue = "0", required = false, value = "page") page: Int?,
+        @RequestParam(defaultValue = "8", required = false, value = "size") size: Int?,
+        @RequestParam(required = false, value = "sort") sort: MutableList<String>?,
+        @RequestParam(required = false, value = "filter") filter: String?,
+        @RequestParam(
+            required = false,
+            value = "status"
+        ) status: MutableList<nl.sharerental.contract.http.model.TransactionStatus>?
+    ): ResponseEntity<GetTransactionsResult>? {
+        val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
+
+        if (lessors.size != 1) {
+            throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
+        }
+
+        val actualSort = if (sort?.isEmpty() == true) mutableListOf("start_date;desc") else sort
+
+        status?.map { it.toEntityEnum() } ?: listOf(TransactionStatusEnum.ACCEPTED, TransactionStatusEnum.PAID, TransactionStatusEnum.COMPLETED)
+
+        val findAll = transactionRepository.findByLessorIdAndSearch(
+            lessors[0],
+            filter,
+            status?.map { it.toEntityEnum() }.orEmpty(),
+            PageableHelper.pageRequest(page, size, actualSort)
+        )
+
+        val getTransactionsResult = GetTransactionsResult(
+            emptyList(),
+            PaginationResponse(findAll.totalElements, findAll.totalPages, findAll.number)
+        )
+
+        return ResponseEntity.ok(getTransactionsResult)
     }
 
     override fun getAmountAvailableForDate(getAmountAvailableRequest: GetAmountAvailableRequest?): ResponseEntity<GetAmountAvailableResponse> {
@@ -160,5 +197,16 @@ class TransactionController(
 
         logger.info("Successfully created transaction {}", savedTransaction.id)
         return ResponseEntity.ok(CreateTransactionResponse().redirectUrl(mollieTransaction.checkoutUrl))
+    }
+}
+
+private fun HttpTransactionStatus.toEntityEnum(): TransactionStatusEnum {
+    return when(this) {
+        HttpTransactionStatus.INITIALIZED -> TransactionStatusEnum.INITIALIZED
+        HttpTransactionStatus.PAID -> TransactionStatusEnum.PAID
+        HttpTransactionStatus.ACCEPTED -> TransactionStatusEnum.ACCEPTED
+        HttpTransactionStatus.COMPLETED -> TransactionStatusEnum.COMPLETED
+        HttpTransactionStatus.PAID_OUT -> TransactionStatusEnum.PAID_OUT
+        HttpTransactionStatus.CANCELLED -> TransactionStatusEnum.CANCELLED
     }
 }

@@ -40,7 +40,6 @@ class LessorController(private val lessorRepository: LessorRepository,
             city = lessorInput.city,
             country = lessorInput.country,
             houseNumber = lessorInput.houseNumber,
-            houseNumberAddition = lessorInput.houseNumberAddition,
             postalCode = lessorInput.postalCode,
             street = lessorInput.street,
             geoLocation = null
@@ -84,7 +83,6 @@ class LessorController(private val lessorRepository: LessorRepository,
 
         val pageRequest = PageRequest.of(page ?: 0, size ?: DEFAULT_PAGE_SIZE, Sort.by(sortFields))
 
-//        val lessors = lessorRepository.findAllByUserId(currentUserService.get().id, pageRequest)
         val idsForUserId = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
         val lessors = lessorRepository.findByIdIn(idsForUserId, pageRequest)
@@ -102,7 +100,6 @@ class LessorController(private val lessorRepository: LessorRepository,
                 .street(it.primaryLocation.street)
                 .postalCode(it.primaryLocation.postalCode)
                 .houseNumber(it.primaryLocation.houseNumber)
-                .houseNumberAddition(it.primaryLocation.houseNumberAddition)
             lessor
 
         }

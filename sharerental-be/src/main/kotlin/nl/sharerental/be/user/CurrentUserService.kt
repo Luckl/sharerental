@@ -1,7 +1,6 @@
 package nl.sharerental.be.user
 
 import nl.sharerental.be.security.AuthenticationFacade
-import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.http.HttpStatus
@@ -37,7 +36,8 @@ class CurrentUserService(private val userService: UserService,
     private fun processJwt(principal: Jwt): User {
         val userId = principal.claims["user_id"] as String
         val email = principal.claims["email"] as String
+        val name = principal.claims["name"] as String
 
-        return userService.findUserOrCreate(userId, email, true)
+        return userService.findUserOrCreate(userId, email, name, true)
     }
 }

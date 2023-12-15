@@ -16,8 +16,6 @@ class Location(
     val street: String?,
     @Column(name = "house_number")
     val houseNumber: String?,
-    @Column(name = "house_number_addition")
-    val houseNumberAddition: String?,
     @Column(name = "postal_code")
     val postalCode: String?,
     val city: String?,

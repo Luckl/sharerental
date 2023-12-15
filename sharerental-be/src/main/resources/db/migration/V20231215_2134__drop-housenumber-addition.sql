@@ -1,0 +1,1 @@
+alter table location drop column house_number_addition;

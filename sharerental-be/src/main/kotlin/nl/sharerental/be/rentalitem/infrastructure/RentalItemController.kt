@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import nl.sharerental.contract.http.model.DisplayStatus as HttpDisplayStatus
-import nl.sharerental.contract.http.model.FuelType as HttpFuelType
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 
 @RestController
@@ -151,7 +150,10 @@ class RentalItemController(
 
         val actualSort = if (sort?.isEmpty() == true) mutableListOf("id;desc") else sort
 
-        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(page, size, actualSort))
+        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(
+            page,
+            size,
+            actualSort))
 
         val getRentalItemsResult = GetRentalItemsResult(
             findAll.get().map { it.toResponse() }.toList(),
@@ -162,59 +164,12 @@ class RentalItemController(
 
 }
 
-private fun RentalItem.toResponse(): HttpRentalItem {
-    val item = this;
-    return HttpRentalItem()
-        .apply {
-            id = item.id
-            name = item.name
-            number = item.number
-            displayStatus = item.displayStatus.toHttp()
-            shortDescription = item.shortDescription
-            longDescription = item.longDescription
-            price24h = item.price24h.toDouble()
-            price48h = item.price48h?.toDouble()
-            price168h = item.price168h?.toDouble()
-            deliveryPossible = item.deliveryPossible
-            deliveryPrice = item.deliveryPrice?.toDouble()
-            category = item.category
-            reachMeters = item.reachMeters
-            carryingWeightKilograms = item.carryingWeightKilograms
-            maximumWorkHeightMeters = item.maximumWorkHeightMeters
-            intrinsicWeightKilograms = item.intrinsicWeightKilograms
-            materialType = item.materialType
-            brand = item.brand
-            maximumPressureBars = item.maximumPressureBars
-            maximumHorsePower = item.maximumHorsePower
-            requiredPowerVoltageVolt = item.requiredPowerVoltageVolt
-            workWidthMeters = item.workWidthMeters
-            vacuumAttachmentPossible = item.vacuumAttachmentPossible
-            capacityLiters = item.capacityLiters
-            itemHeight = item.itemHeight
-            itemWidth = item.itemWidth
-            itemLength = item.itemLength
-            powerWatt = item.powerWatt
-            maximumSurfaceSquareMeters = item.maximumSurfaceSquareMeters
-            fuelType = item.fuelType?.toHttpEnum()
-        }
 
-}
-
-private fun DisplayStatus.toHttp(): HttpDisplayStatus {
-    return when (this) {
-        DisplayStatus.ACTIVE -> HttpDisplayStatus.ACTIVE
-        DisplayStatus.INACTIVE -> HttpDisplayStatus.INACTIVE
-    }
-}
 private fun HttpDisplayStatus.toEntity(): DisplayStatus {
     return when (this) {
         HttpDisplayStatus.ACTIVE -> DisplayStatus.ACTIVE
         HttpDisplayStatus.INACTIVE -> DisplayStatus.INACTIVE
     }
-}
-
-private fun FuelType.toHttpEnum(): HttpFuelType {
-    return HttpFuelType.valueOf(this.name)
 }
 private fun nl.sharerental.contract.http.model.FuelType.toEntityEnum(): FuelType = FuelType.valueOf(this.value)
 

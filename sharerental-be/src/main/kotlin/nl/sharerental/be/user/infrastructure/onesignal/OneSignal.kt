@@ -47,7 +47,6 @@ class OneSignal(
                 }
                 """.trimIndent()
 
-        logger.info("Body: $body")
         webClient.post()
             .uri("apps/$appId/users")
             .header("accept", "application/json")
@@ -72,7 +71,11 @@ class OneSignal(
                     "${user.email}"
                   ],
                   "app_id": "$appId",
-                  "template_id": "$welcomeEmailTemplateId"
+                  "template_id": "$welcomeEmailTemplateId",
+                  "include_unsubscribed": true,
+                  "custom_data": {
+                    "username": "${user.username}"
+                  }
                 }
                 """.trimIndent()
             )
@@ -82,10 +85,10 @@ class OneSignal(
     }
 
     private final fun logResponse(): ExchangeFilterFunction = ExchangeFilterFunction.ofResponseProcessor { clientResponse ->
-            logger.info("Response status code: ${clientResponse.statusCode()}")
+            logger.debug("Response status code: {}", clientResponse.statusCode())
             clientResponse.bodyToMono(String::class.java)
                 .map { body ->
-                    logger.info("Response body: $body")
+                    logger.debug("Response body: $body")
                     clientResponse
                 }
     }
