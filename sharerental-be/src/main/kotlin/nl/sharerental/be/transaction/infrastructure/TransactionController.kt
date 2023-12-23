@@ -105,7 +105,7 @@ class TransactionController(
             throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
         }
 
-        val actualSort = if (sort?.isEmpty() == true) mutableListOf("start_date;desc") else sort
+        val actualSort = if (sort?.isEmpty() == true) mutableListOf("startDate;desc") else sort
 
         status?.map { it.toEntityEnum() } ?: listOf(TransactionStatusEnum.ACCEPTED, TransactionStatusEnum.PAID, TransactionStatusEnum.COMPLETED)
 
