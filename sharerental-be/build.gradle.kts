@@ -11,6 +11,10 @@ plugins {
 	id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
+configurations.all {
+	exclude(group="commons-logging", module="commons-logging")
+}
+
 tasks.bootBuildImage {
 	imageName.set("europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest")
 }
