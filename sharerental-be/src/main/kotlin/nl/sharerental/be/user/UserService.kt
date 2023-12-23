@@ -10,14 +10,14 @@ class UserService(
     private val oneSignalClient: OneSignal,
 ) {
 
-    fun findUserOrCreate(id: String, email: String, name: String, subscribedToNews: Boolean): User {
+    fun findUserOrCreate(id: String, email: String, name: String?, subscribedToNews: Boolean): User {
         return userRepository.findById(id)
             .orElseGet {
                 userRepository.save(
                     User(
                         id = id,
                         email = email,
-                        username = name
+                        username = name ?: email.substringBefore('@')
                     )
                 ).also { setupMessaging(it, subscribedToNews) }
             }

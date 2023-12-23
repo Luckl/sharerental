@@ -1,5 +1,6 @@
 package nl.sharerental.be.user
 
+import jakarta.transaction.Transactional
 import nl.sharerental.be.security.AuthenticationFacade
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
@@ -17,6 +18,7 @@ class CurrentUserService(private val userService: UserService,
     private lateinit var currentUser: User
 
     // Could be improved by storing User object as field since service is request scoped.
+    @Transactional
     fun init(): User? {
         val user = when (val principal = authentication.getPrincipal()) {
             is Jwt -> processJwt(principal)
@@ -26,6 +28,7 @@ class CurrentUserService(private val userService: UserService,
         return user
     }
 
+    @Transactional
     fun get(): User {
         if (!this::currentUser.isInitialized) {
             return init().takeIf { it != null } ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
@@ -36,8 +39,12 @@ class CurrentUserService(private val userService: UserService,
     private fun processJwt(principal: Jwt): User {
         val userId = principal.claims["user_id"] as String
         val email = principal.claims["email"] as String
-        val name = principal.claims["name"] as String
+        val name = principal.claims["name"] as String?
 
-        return userService.findUserOrCreate(userId, email, name, true)
+        val user = userService.findUserOrCreate(userId, email, name, true)
+        name.also {
+            user.username = it!!
+        }
+        return user
     }
 }

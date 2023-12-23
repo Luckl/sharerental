@@ -10,7 +10,7 @@ class User(
     @Id
     val id: String,
     val email: String,
-    val username: String = email.substringBefore('@'),
+    var username: String,
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     var userLessors: Set<UserLessor> = setOf()
 )
