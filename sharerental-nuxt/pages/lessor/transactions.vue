@@ -54,7 +54,7 @@
         <Column header="Acties" style="width: 25%">
           <template #body="slotProps">
             <div v-if="slotProps.data.status === TransactionStatus.Paid">
-              <Button label="Accepteren" @click="goToEdit(slotProps.data.id)" size="small" ></Button>
+              <Button label="Accepteren" @click="acceptTransaction(slotProps.data.id)" size="small" ></Button>
             </div>
           </template>
         </Column>
@@ -101,12 +101,8 @@ const onPage = (event) => {
   fetchTransactions()
 };
 
-function goToEdit(id: number) {
-  router.push('/lessor/item/' + id)
-}
-
-function goToAddImages(id: number) {
-  router.push('/lessor/item/' + id + '/images')
+function acceptTransaction(id: number) {
+  console.log("accepting transaction " + id)
 }
 
 function fetchTransactions() {
