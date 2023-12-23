@@ -28,7 +28,7 @@ import java.time.temporal.ChronoUnit
 
 @Entity
 @Table(name = "transaction")
-data class Transaction (
+data class Transaction(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
@@ -48,7 +48,7 @@ data class Transaction (
 
     @OneToOne(cascade = [CascadeType.PERSIST])
     var currentStatus: TransactionStatus? = null,
-    @OneToMany(mappedBy="transaction")
+    @OneToMany(mappedBy = "transaction")
     val statusHistory: List<TransactionStatus> = emptyList()
 ) {
 
@@ -69,12 +69,29 @@ data class Transaction (
             throw ResponseStatusException(HttpStatus.BAD_REQUEST)
         }
     }
+
     companion object {
-        fun calculatePrice(rentalItem: RentalItem,
-                           startDate: LocalDate,
-                           endDate: LocalDate,
-                           amount: Int): BigDecimal {
-            return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate))).setScale(2, RoundingMode.HALF_UP).times(BigDecimal(amount))
+        fun calculatePrice(
+            rentalItem: RentalItem,
+            startDate: LocalDate,
+            endDate: LocalDate,
+            amount: Int
+        ): BigDecimal {
+            return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate)))
+                .setScale(2, RoundingMode.HALF_UP).times(BigDecimal(amount))
         }
     }
+
+
+    fun toResponse() =
+        nl.sharerental.contract.http.model.Transaction(
+            this.id,
+            this.startDate,
+            this.endDate,
+            this.amount,
+            this.price,
+            this.currentStatus?.toResponse(),
+            this.rentalItem.toResponse()
+        )
+
 }

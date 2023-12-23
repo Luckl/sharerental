@@ -45,7 +45,9 @@ const error = ref<String | undefined>(undefined)
 const router = useRouter()
 const filter = ref("")
 const page = ref(0)
-const pageSize = ref(5)
+
+//TODO updating this via the datatable doesn't work
+const pageSize = ref(20)
 const totalElements = ref(0)
 const transactions = ref<Transaction[]>([])
 const transactionsResult = ref<GetTransactionsResult>()
@@ -55,7 +57,9 @@ const defaultStatuses = ref([
   TransactionStatus.Initialized,
   TransactionStatus.Paid,
   TransactionStatus.Accepted,
-  TransactionStatus.Completed
+  TransactionStatus.Completed,
+  TransactionStatus.Cancelled,
+  TransactionStatus.PaidOut,
 ])
 
 onMounted(() => {

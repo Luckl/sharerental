@@ -14,6 +14,7 @@ import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
+import nl.sharerental.contract.http.model.Transaction as HttpTransaction
 import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -102,7 +103,7 @@ class TransactionController(
         val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
         if (lessors.size != 1) {
-            throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
+            throw RuntimeException("Multiple or no lessors for user, cannot find transactions.")
         }
 
         val actualSort = if (sort?.isEmpty() == true) mutableListOf("startDate;desc") else sort
@@ -117,7 +118,7 @@ class TransactionController(
         )
 
         val getTransactionsResult = GetTransactionsResult(
-            emptyList(),
+            findAll.content.map { it.toResponse() },
             PaginationResponse(findAll.totalElements, findAll.totalPages, findAll.number)
         )
 

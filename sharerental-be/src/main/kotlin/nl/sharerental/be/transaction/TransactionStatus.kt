@@ -1,6 +1,7 @@
 package nl.sharerental.be.transaction
 
 import jakarta.persistence.*
+import nl.sharerental.contract.http.model.TransactionStatus
 import java.time.Instant
 
 @Entity
@@ -19,5 +20,15 @@ class TransactionStatus (
 
     @ManyToOne
     val transaction: Transaction
-
-)
+) {
+    fun toResponse(): TransactionStatus {
+        return when(this.status) {
+            TransactionStatusEnum.INITIALIZED -> TransactionStatus.INITIALIZED
+            TransactionStatusEnum.PAID -> TransactionStatus.PAID
+            TransactionStatusEnum.ACCEPTED -> TransactionStatus.ACCEPTED
+            TransactionStatusEnum.COMPLETED -> TransactionStatus.COMPLETED
+            TransactionStatusEnum.PAID_OUT -> TransactionStatus.PAID_OUT
+            TransactionStatusEnum.CANCELLED -> TransactionStatus.CANCELLED
+        }
+    }
+}
