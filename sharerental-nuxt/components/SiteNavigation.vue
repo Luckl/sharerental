@@ -44,7 +44,7 @@
             <Button @click="menuOpened = false" label="Artikelen" icon="pi pi-file-o" class="menu-button">
             </Button>
           </NuxtLink>
-          <NuxtLink to="/transactions">
+          <NuxtLink to="/lessor/transactions">
             <Button @click="menuOpened = false" label="Transacties" icon="pi pi-wallet" class="menu-button">
             </Button>
           </NuxtLink>

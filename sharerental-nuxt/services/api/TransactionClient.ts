@@ -3,7 +3,7 @@ import {
     TransactionApi, TransactionStatus
 } from '~/schemas/openapi/merged';
 
-class LessorClient {
+class TransactionClient {
     private transactionApi: TransactionApi;
 
     constructor(configuration: Configuration) {
@@ -42,12 +42,7 @@ class LessorClient {
         })
     }
 
-    getTransactions(page: number = 0, size: number = 20, sort: string[] = ["startDate;desc"], filter: string = "", status: TransactionStatus[] = [
-        TransactionStatus.Initialized,
-        TransactionStatus.Paid,
-        TransactionStatus.Accepted,
-        TransactionStatus.Completed
-    ]) {
+    getTransactions(page: number, size: number, sort: string[], filter: string, status: TransactionStatus[]) {
         return this.transactionApi.getTransactions({
             page: page,
             size: size,
@@ -58,4 +53,4 @@ class LessorClient {
     }
 }
 
-export default LessorClient
+export default TransactionClient
