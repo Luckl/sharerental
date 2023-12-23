@@ -1,6 +1,6 @@
 import {
     Configuration,
-    TransactionApi
+    TransactionApi, TransactionStatus
 } from '~/schemas/openapi/merged';
 
 class LessorClient {
@@ -20,6 +20,7 @@ class LessorClient {
             }
         })
     }
+
     calculatePrice(id: number, startDate: Date, endDate: Date, amount: number) {
         return this.transactionApi.calculatePrice({
             transactionCalculationInput: {
@@ -38,6 +39,21 @@ class LessorClient {
                 startDate: startDate,
                 rentalItemId: id
             }
+        })
+    }
+
+    getTransactions(page: number = 0, size: number = 20, sort: string[] = ["startDate;desc"], filter: string = "", status: TransactionStatus[] = [
+        TransactionStatus.Initialized,
+        TransactionStatus.Paid,
+        TransactionStatus.Accepted,
+        TransactionStatus.Completed
+    ]) {
+        return this.transactionApi.getTransactions({
+            page: page,
+            size: size,
+            sort: sort,
+            filter: filter,
+            status: status
         })
     }
 }
