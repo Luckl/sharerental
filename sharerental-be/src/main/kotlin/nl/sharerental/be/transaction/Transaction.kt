@@ -53,7 +53,7 @@ data class Transaction(
 ) {
 
     fun Transaction.toResponse(): nl.sharerental.contract.http.model.Transaction {
-        val transaction = this;
+        val transaction = this
         return nl.sharerental.contract.http.model.Transaction().apply {
             id = transaction.id
             rentalItem = transaction.rentalItem.toResponse()

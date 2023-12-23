@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 
 @Component
-class ImageUploadRateLimiter() {
+class ImageUploadRateLimiter {
 
     private final val imageUploadRateLimit: Bucket
     private final val uploadsCount: Long = 5

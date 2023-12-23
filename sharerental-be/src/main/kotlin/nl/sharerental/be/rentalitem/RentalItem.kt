@@ -75,8 +75,8 @@ data class RentalItem(
 ) {
 
      fun toResponse(): nl.sharerental.contract.http.model.RentalItem {
-        val item = this;
-        return nl.sharerental.contract.http.model.RentalItem()
+        val item = this
+         return nl.sharerental.contract.http.model.RentalItem()
             .apply {
                 id = item.id
                 name = item.name

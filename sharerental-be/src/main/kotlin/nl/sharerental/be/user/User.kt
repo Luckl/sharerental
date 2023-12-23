@@ -13,6 +13,4 @@ class User(
     val username: String = email.substringBefore('@'),
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     var userLessors: Set<UserLessor> = setOf()
-) {
-
-}
+)

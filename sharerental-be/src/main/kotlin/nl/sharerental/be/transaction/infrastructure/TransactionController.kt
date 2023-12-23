@@ -14,7 +14,6 @@ import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
-import nl.sharerental.contract.http.model.Transaction as HttpTransaction
 import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

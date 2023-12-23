@@ -74,7 +74,7 @@ private fun RentalItem.toSearchResultItem(): SearchResultItem {
 
 
 private fun RentalItem.toResponse(): HttpRentalItem {
-    val item = this;
+    val item = this
     return HttpRentalItem()
         .apply {
             id = item.id
