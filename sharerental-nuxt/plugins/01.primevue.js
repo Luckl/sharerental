@@ -24,6 +24,7 @@ import Image from "primevue/image";
 import InputSwitch from "primevue/inputswitch";
 import Calendar from "primevue/calendar";
 import Galleria from "primevue/galleria";
+import Tag from "primevue/tag";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true })
@@ -50,6 +51,7 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('InputSwitch', InputSwitch)
     nuxtApp.vueApp.component('Calendar', Calendar)
     nuxtApp.vueApp.component('Galleria', Galleria)
+    nuxtApp.vueApp.component('Tag', Tag)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 

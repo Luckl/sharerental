@@ -16,15 +16,45 @@
             <InputText v-model="filter" @change="fetchTransactions()" placeholder="Zoeken"></InputText>
           </div>
         </template>
-        <Column field="name" header="Naam" style="width: 25%"></Column>
-        <Column field="category" header="Categorie" style="width: 25%"></Column>
-        <Column field="number" header="Referentie" style="width: 25%"></Column>
+        <Column field="rentalItem.name" header="Artikel" style="width: 25%"></Column>
+        <Column field="startDate" header="Vanaf" style="width: 25%">
+          <template #body="slotProps">
+            {{ slotProps.data.startDate.toDateString() }}
+          </template>
+        </Column>
+        <Column field="endDate" header="Tot" style="width: 25%">
 
+          <template #body="slotProps">
+            {{ slotProps.data.endDate.toDateString() }}
+          </template>
+        </Column>
+
+        <Column field="status" header="Status">
+          <template #body="slotProps">
+            <div v-if="slotProps.data.status === TransactionStatus.Initialized">
+              <Tag value="Gereserveerd" severity="warning"></Tag>
+            </div>
+            <div v-if="slotProps.data.status === TransactionStatus.Paid">
+              <Tag value="Betaald" severity="info"></Tag>
+            </div>
+            <div v-if="slotProps.data.status === TransactionStatus.Accepted">
+              <Tag value="Geaccepteerd" severity="success"></Tag>
+            </div>
+            <div v-if="slotProps.data.status === TransactionStatus.Completed">
+              <Tag value="Voltooid" severity="success"></Tag>
+            </div>
+            <div v-if="slotProps.data.status === TransactionStatus.Cancelled">
+              <Tag value="Geannuleerd" severity="danger"></Tag>
+            </div>
+            <div v-if="slotProps.data.status === TransactionStatus.PaidOut">
+              <Tag value="Uitbetaald" severity="success"></Tag>
+            </div>
+          </template>
+        </Column>
         <Column header="Acties" style="width: 25%">
           <template #body="slotProps">
-            <div class="flex gap-3">
-              <Button icon="pi pi-pencil" @Click="goToEdit(slotProps.data.id)"></Button>
-              <Button icon="pi pi-images" @Click="goToAddImages(slotProps.data.id)"></Button>
+            <div v-if="slotProps.data.status === TransactionStatus.Paid">
+              <Button label="Accepteren" @click="goToEdit(slotProps.data.id)" size="small" ></Button>
             </div>
           </template>
         </Column>
