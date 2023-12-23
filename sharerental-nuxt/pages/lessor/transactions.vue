@@ -32,7 +32,7 @@
         <Column field="status" header="Status">
           <template #body="slotProps">
             <div v-if="slotProps.data.status === TransactionStatus.Initialized">
-              <Tag value="Gereserveerd" severity="warning"></Tag>
+              <Tag value="Gereserveerd" severity="warning" v-tooltip.top="'Nog niet afgerekend'"></Tag>
             </div>
             <div v-if="slotProps.data.status === TransactionStatus.Paid">
               <Tag value="Betaald" severity="info"></Tag>
