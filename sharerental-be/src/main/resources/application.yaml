@@ -31,6 +31,7 @@ mollie:
   apiKey: test_5nGU9dSj578p2RtgKSkrGPsDp2g9uV
 
 one-signal:
+  mock: true
   app-id: 138e9f48-cac7-4963-9f20-47b8399e187a
   api-key: bungus
   templates:

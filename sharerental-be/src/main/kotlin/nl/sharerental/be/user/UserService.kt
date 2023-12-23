@@ -1,13 +1,13 @@
 package nl.sharerental.be.user
 
-import nl.sharerental.be.user.infrastructure.onesignal.OneSignal
+import nl.sharerental.be.user.infrastructure.onesignal.OneSignalClient
 import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val oneSignal: OneSignal,
+    private val oneSignalClient: OneSignalClient,
 ) {
 
     fun findUserOrCreate(id: String, email: String, name: String, subscribedToNews: Boolean): User {
@@ -24,7 +24,7 @@ class UserService(
     }
 
     private fun setupMessaging(user: User, subscribedToNews: Boolean) {
-        oneSignal.createNewWebUserInOneSignal(user, subscribedToNews)
-        oneSignal.sendWelcomeEmail(user)
+        oneSignalClient.createNewWebUserInOneSignal(user, subscribedToNews)
+        oneSignalClient.sendWelcomeEmail(user)
     }
 }
