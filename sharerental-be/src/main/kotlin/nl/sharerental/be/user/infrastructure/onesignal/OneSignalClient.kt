@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Instant
 
 @Service
-@ConditionalOnProperty(value = ["one-signal.mock"], havingValue = "false")
+@ConditionalOnProperty(prefix = "one-signal", name = ["mock"], havingValue = "false")
 class OneSignalClient(
     @Value("\${one-signal.app-id}") private val appId: String,
     @Value("\${one-signal.api-key}") private val apiKey: String,
@@ -24,6 +24,10 @@ class OneSignalClient(
         .defaultHeader("Authorization", "Basic $apiKey")
         .filter(logResponse())
         .build()
+
+    init {
+        logger.info("OneSignalClient is active")
+    }
 
     override fun createNewWebUserInOneSignal(user: User, subscribedToNews: Boolean) {
         logger.info("Creating new OneSignal user for user ${user.id}")

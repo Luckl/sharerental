@@ -11,13 +11,17 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Instant
 
 @Service
-@ConditionalOnProperty(value = ["one-signal.mock"], havingValue = "true")
+@ConditionalOnProperty(prefix = "one-signal", name = ["mock"], havingValue = "true")
 class OneSignalMock(
     @Value("\${one-signal.app-id}") private val appId: String,
     @Value("\${one-signal.api-key}") private val apiKey: String,
     @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
 ): OneSignal {
     private val logger: Logger = LoggerFactory.getLogger(OneSignalMock::class.java)
+
+    init {
+        logger.info("OneSignalMock is active")
+    }
 
     override fun createNewWebUserInOneSignal(user: User, subscribedToNews: Boolean) {
         logger.info("Creating new OneSignal user for user ${user.id}")
@@ -43,7 +47,7 @@ class OneSignalMock(
                 }
                 """.trimIndent()
 
-        logger.info("WebClient POST request body: $body")
+        logger.info("MOCK WebClient POST request body: $body")
     }
 
     override fun sendWelcomeEmail(user: User) {
@@ -62,6 +66,6 @@ class OneSignalMock(
                 }
                 """.trimIndent()
 
-        logger.info("WebClient POST request body: $body")
+        logger.info("MOCK WebClient POST request body: $body")
     }
 }
