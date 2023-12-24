@@ -40,8 +40,8 @@ class CurrentUserService(private val userService: UserService,
         val name = principal.claims["name"] as String?
 
         val user = userService.findUserOrCreate(userId, email, name, true)
-        name.also {
-            user.username = it!!
+        name?.also {
+            user.username = it
             userService.save(user)
         }
         return user
