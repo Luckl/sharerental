@@ -11,12 +11,12 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Instant
 
 @Service
-@ConditionalOnProperty(prefix = "one-signal", name = ["mock"], havingValue = "false")
 class OneSignalClient(
     @Value("\${one-signal.app-id}") private val appId: String,
     @Value("\${one-signal.api-key}") private val apiKey: String,
     @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
-): OneSignal {
+    @Value("\${one-signal.mock}") private val mock: Boolean,
+) : OneSignal {
     private val logger: Logger = LoggerFactory.getLogger(OneSignalClient::class.java)
 
     private val webClient: WebClient = WebClient.builder()
@@ -24,10 +24,6 @@ class OneSignalClient(
         .defaultHeader("Authorization", "Basic $apiKey")
         .filter(logResponse())
         .build()
-
-    init {
-        logger.info("OneSignalClient is active")
-    }
 
     override fun createNewWebUserInOneSignal(user: User, subscribedToNews: Boolean) {
         logger.info("Creating new OneSignal user for user ${user.id}")
@@ -53,25 +49,24 @@ class OneSignalClient(
                 }
                 """.trimIndent()
 
-        webClient.post()
-            .uri("apps/$appId/users")
-            .header("accept", "application/json")
-            .header("content-type", "application/json")
-            .bodyValue(body)
-            .retrieve()
-            .bodyToMono(String::class.java)
-            .block()
-
+        if (mock) {
+            logger.info("MOCK WebClient POST request body: $body")
+        } else {
+            logger.debug("WebClient POST request body: $body")
+            webClient.post()
+                .uri("apps/$appId/users")
+                .header("accept", "application/json")
+                .header("content-type", "application/json")
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(String::class.java)
+                .block()
+        }
     }
 
     override fun sendWelcomeEmail(user: User) {
         logger.info("Sending welcome email to user ${user.id}")
-        webClient.post()
-            .uri("notifications")
-            .header("accept", "application/json")
-            .header("content-type", "application/json")
-            .bodyValue(
-                """
+        val body = """
                 {
                   "include_email_tokens": [
                     "${user.email}"
@@ -84,18 +79,29 @@ class OneSignalClient(
                   }
                 }
                 """.trimIndent()
-            )
-            .retrieve()
-            .bodyToMono(String::class.java)
-            .block()
+
+        if (mock) {
+            logger.info("MOCK WebClient POST request body: $body")
+        } else {
+            logger.debug("WebClient POST request body: $body")
+            webClient.post()
+                .uri("notifications")
+                .header("accept", "application/json")
+                .header("content-type", "application/json")
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(String::class.java)
+                .block()
+        }
     }
 
-    private final fun logResponse(): ExchangeFilterFunction = ExchangeFilterFunction.ofResponseProcessor { clientResponse ->
+    private final fun logResponse(): ExchangeFilterFunction =
+        ExchangeFilterFunction.ofResponseProcessor { clientResponse ->
             logger.debug("Response status code: {}", clientResponse.statusCode())
             clientResponse.bodyToMono(String::class.java)
                 .map { body ->
                     logger.debug("Response body: $body")
                     clientResponse
                 }
-    }
+        }
 }
