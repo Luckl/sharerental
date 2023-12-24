@@ -18,7 +18,6 @@ class CurrentUserService(private val userService: UserService,
     private lateinit var currentUser: User
 
     // Could be improved by storing User object as field since service is request scoped.
-    @Transactional
     fun init(): User? {
         val user = when (val principal = authentication.getPrincipal()) {
             is Jwt -> processJwt(principal)
@@ -28,7 +27,6 @@ class CurrentUserService(private val userService: UserService,
         return user
     }
 
-    @Transactional
     fun get(): User {
         if (!this::currentUser.isInitialized) {
             return init().takeIf { it != null } ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
@@ -44,6 +42,7 @@ class CurrentUserService(private val userService: UserService,
         val user = userService.findUserOrCreate(userId, email, name, true)
         name.also {
             user.username = it!!
+            userService.save(user)
         }
         return user
     }

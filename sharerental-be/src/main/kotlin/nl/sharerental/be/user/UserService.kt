@@ -27,4 +27,8 @@ class UserService(
         oneSignalClient.createNewWebUserInOneSignal(user, subscribedToNews)
         oneSignalClient.sendWelcomeEmail(user)
     }
+
+    fun save(user: User) {
+        userRepository.save(user)
+    }
 }
