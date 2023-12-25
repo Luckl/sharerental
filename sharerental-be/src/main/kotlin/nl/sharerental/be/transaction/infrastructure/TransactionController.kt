@@ -12,6 +12,7 @@ import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
+import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
 import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
@@ -32,6 +33,7 @@ class TransactionController(
     private val transactionRepository: TransactionRepository,
     private val transactionService: TransactionService,
     private val lessorRepository: LessorRepository,
+    private val oneSignalEmailSender: OneSignalEmailSender,
 ) : TransactionApi {
 
     private val logger: Logger = LoggerFactory.getLogger(TransactionController::class.java)
@@ -84,7 +86,9 @@ class TransactionController(
             }
         }
 
-        //TODO: Do things to communicate to lessor
+        if (molliePaymentStatus == PaymentStatus.PAID) {
+            oneSignalEmailSender.sendItemRentedEmail(transaction)
+        }
 
         return ResponseEntity.ok().build()
     }
