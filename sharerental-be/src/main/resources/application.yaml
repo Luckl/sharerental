@@ -36,10 +36,11 @@ one-signal:
   api-key: bungus
   templates:
     welcome-email: 81429d3e-cde7-45b4-8385-790ee1ab9875
+    item-rented: 1591f7aa-7148-4f26-89ef-3f5f08b3c22c
 
 share-rental:
   callback-url: http://localhost:3000/transaction/completed
-  webhook-url: https://7ffe-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
+  webhook-url: https://2722-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
 
 ngrok:
   enabled: true
