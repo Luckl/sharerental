@@ -18,7 +18,7 @@ class TransactionService(
         endDate: @NotNull LocalDate
     ): Int {
         val transactions = transactionRepository.findAllByRentalItemAndDateRange(
-            rentalItem,
+            rentalItem.id,
             startDate,
             endDate
         ).filter { TransactionStatusEnum.CANCELLED != it.currentStatus?.status }

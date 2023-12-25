@@ -16,13 +16,13 @@ interface TransactionRepository: CrudRepository<Transaction, Long> {
     fun findByMolliePaymentReference(molliePaymentReference: String?): Optional<Transaction>
 
     @Query("""
-        select t from Transaction t where t.rentalItem = :rentalItem and 
+        select t from Transaction t where t.rentalItem.id = :rentalItem and 
         ( :startDate <= t.startDate and :endDate >= t.startDate ) or 
         ( :endDate >= t.endDate and :startDate < t.endDate ) or
         ( :startDate >= t.startDate and :endDate <= t.endDate ) or 
         :startDate = t.endDate or :endDate = t.startDate
     """)
-    fun findAllByRentalItemAndDateRange(rentalItem: RentalItem, startDate: LocalDate, endDate: LocalDate): List<Transaction>
+    fun findAllByRentalItemAndDateRange(rentalItemId: Long, startDate: LocalDate, endDate: LocalDate): List<Transaction>
 
     @Query(
         """
