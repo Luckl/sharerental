@@ -5,9 +5,11 @@ import nl.sharerental.be.user.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 
@@ -38,8 +40,8 @@ class OneSignalEmailSender(
             logger.debug("WebClient POST request body: {}", body)
             oneSignalWebClient.post()
                 .uri("notifications")
-                .header("accept", APPLICATION_JSON_VALUE)
-                .header("content-type", APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String::class.java)
@@ -48,7 +50,6 @@ class OneSignalEmailSender(
     }
 
     fun sendItemRentedEmail(transaction: Transaction) {
-        //todo: send to all users under a lessor (https://trello.com/c/aIA5zkmV/6-create-architecture-for-extensible-transaction-email-sending-for-onesignal)
         logger.info("Sending item rented email to user ${transaction.rentalItem.owner.id}")
         val userEmails = transaction.rentalItem.owner.userLessors.mapNotNull { it.user?.email }
         val body = OneSignalEmailRequest(
@@ -72,8 +73,8 @@ class OneSignalEmailSender(
             logger.debug("WebClient POST request body: $body")
             oneSignalWebClient.post()
                 .uri("notifications")
-                .header("accept", APPLICATION_JSON_VALUE)
-                .header("content-type", APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String::class.java)
