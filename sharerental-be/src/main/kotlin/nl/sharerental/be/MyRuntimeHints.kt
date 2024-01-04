@@ -10,6 +10,7 @@ import be.woutschoovaerts.mollie.data.payment.SequenceType
 import org.springframework.aot.hint.MemberCategory
 import org.springframework.aot.hint.RuntimeHints
 import org.springframework.aot.hint.RuntimeHintsRegistrar
+import org.springframework.aot.hint.TypeReference
 import java.lang.management.LockInfo
 import java.lang.management.MemoryUsage
 import java.lang.management.MonitorInfo
@@ -23,12 +24,12 @@ class MyRuntimeHints : RuntimeHintsRegistrar {
         hints.reflection().registerType(LockInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(MonitorInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(StackTraceElement::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
-        hints.reflection().registerType(PaymentRequest::class.java)
-        hints.reflection().registerType(Amount::class.java)
-        hints.reflection().registerType(PaymentMethod::class.java)
-        hints.reflection().registerType(Locale::class.java)
-        hints.reflection().registerType(SequenceType::class.java)
-        hints.reflection().registerType(AddressRequest::class.java)
-        hints.reflection().registerType(ApplicationFee::class.java)
+        hints.serialization().registerType(TypeReference.of(PaymentRequest::class.java))
+        hints.serialization().registerType(TypeReference.of(Amount::class.java))
+        hints.serialization().registerType(PaymentMethod::class.java)
+        hints.serialization().registerType(Locale::class.java)
+        hints.serialization().registerType(SequenceType::class.java)
+        hints.serialization().registerType(TypeReference.of(AddressRequest::class.java))
+        hints.serialization().registerType(TypeReference.of(ApplicationFee::class.java))
     }
 }
