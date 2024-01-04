@@ -36,7 +36,7 @@ class TransactionService(
         }
 
         if (transactions.isNotEmpty()) {
-            logger.info("Expired {} transactions with payment status INITIALIZED", transactions.size)
+            logger.info("Expired {} transactions with status INITIALIZED that were older than 30 minutes", transactions.size)
         }
     }
 
