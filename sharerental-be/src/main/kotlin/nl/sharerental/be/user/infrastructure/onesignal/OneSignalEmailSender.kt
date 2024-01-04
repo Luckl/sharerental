@@ -68,7 +68,11 @@ class OneSignalEmailSender(
                 .accept(APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(String::class.java)
+                .bodyToMono(Void::class.java)
+                .onErrorResume { error ->
+                    logger.error("Error sending email", error)
+                    return@onErrorResume null
+                }
                 .block()
         }
     }
