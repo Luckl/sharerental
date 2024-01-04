@@ -74,29 +74,17 @@ class OneSignalEmailSender(
     }
 }
 
-/**
- * {
- *   "include_email_tokens": [
- *     "${user.email}"
- *   ],
- *   "app_id": "$appId",
- *   "template_id": "$welcomeEmailTemplateId",
- *   "include_unsubscribed": true,
- *   "custom_data": {
- *     "username": "${user.username}"
- *   }
- * }
- */
 data class OneSignalEmailRequest(
     val includeEmailTokens: List<String>,
     val appId: String,
     val templateId: String,
     val customData: CustomData,
 ) {
+
     val includeUnsubscribed = true
 }
 
-interface CustomData;
+interface CustomData
 
 data class WelcomeEmailCustomData(
     val username: String,

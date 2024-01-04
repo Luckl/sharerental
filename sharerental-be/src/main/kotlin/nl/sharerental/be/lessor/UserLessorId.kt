@@ -2,6 +2,7 @@ package nl.sharerental.be.lessor
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
+import java.io.Serializable
 
 @Embeddable
 class UserLessorId(
@@ -10,7 +11,7 @@ class UserLessorId(
 
     @Column(name = "lessor_id", nullable = false)
     var lessorId: Long? = null
-) {
+): Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
