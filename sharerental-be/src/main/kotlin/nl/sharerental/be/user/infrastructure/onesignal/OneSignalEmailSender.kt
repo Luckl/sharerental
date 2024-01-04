@@ -39,7 +39,7 @@ class OneSignalEmailSender(
     }
 
     fun sendItemRentedEmail(transaction: Transaction) {
-        logger.info("Sending item rented email to user ${transaction.rentalItem.owner.id}")
+        logger.info("Sending item rented email to users of lessor ${transaction.rentalItem.owner.id}")
         val userEmails = transaction.rentalItem.owner.userLessors.mapNotNull { it.user?.email }
         val body = OneSignalEmailRequest(
             includeEmailTokens = userEmails,
@@ -101,7 +101,7 @@ data class OneSignalEmailRequest(
     @JsonProperty("custom_data")
     val customData: CustomData,
 ) {
-
+    @JsonProperty("include_unsubscribed")
     val includeUnsubscribed = true
 }
 
