@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/sharerental</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="sharerental@35.205.42.84" uuid="bea41658-4c31-46b3-83ef-324b57b48e0e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://35.205.42.84:5432/sharerental</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
