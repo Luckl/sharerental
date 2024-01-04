@@ -6,10 +6,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 
@@ -34,19 +32,7 @@ class OneSignalEmailSender(
             )
         )
 
-        if (mock) {
-            logger.info("MOCK WebClient POST request body: $body")
-        } else {
-            logger.debug("WebClient POST request body: {}", body)
-            oneSignalWebClient.post()
-                .uri("notifications")
-                .contentType(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .bodyValue(body)
-                .retrieve()
-                .bodyToMono(String::class.java)
-                .block()
-        }
+        sendEmail(body)
     }
 
     fun sendItemRentedEmail(transaction: Transaction) {
@@ -67,10 +53,15 @@ class OneSignalEmailSender(
                 price = transaction.price.setScale(2, RoundingMode.HALF_UP).toString(),
                 )
         )
+
+        sendEmail(body)
+    }
+
+    private fun sendEmail(body: OneSignalEmailRequest) {
         if (mock) {
             logger.info("MOCK WebClient POST request body: $body")
         } else {
-            logger.debug("WebClient POST request body: $body")
+            logger.debug("WebClient POST request body: {}", body)
             oneSignalWebClient.post()
                 .uri("notifications")
                 .contentType(APPLICATION_JSON)
