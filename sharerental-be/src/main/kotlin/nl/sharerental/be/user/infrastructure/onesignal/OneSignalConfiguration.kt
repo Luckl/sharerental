@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.codec.json.Jackson2JsonDecoder
-import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -30,11 +28,6 @@ class OneSignalConfiguration(
     fun oneSignalWebClient(): WebClient = WebClient.builder()
         .baseUrl("https://onesignal.com/api/v1/")
         .defaultHeader("Authorization", "Basic $apiKey")
-        .codecs {
-            it.registerDefaults(false)
-            it.customCodecs().register(Jackson2JsonDecoder())
-            it.customCodecs().register(Jackson2JsonEncoder())
-        }
         .filter(logResponse())
         .build()
 }

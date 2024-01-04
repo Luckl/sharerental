@@ -1,5 +1,6 @@
 package nl.sharerental.be.user.infrastructure.onesignal
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.user.User
 import org.slf4j.Logger
@@ -18,6 +19,7 @@ class OneSignalEmailSender(
     @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
     @Value("\${one-signal.templates.item-rented}") private val itemRentedEmailTemplate: String,
     @Value("\${one-signal.mock}") private val mock: Boolean,
+    private val objectMapper: ObjectMapper,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(OneSignalEmailSender::class.java)
 
@@ -58,21 +60,18 @@ class OneSignalEmailSender(
     }
 
     private fun sendEmail(body: OneSignalEmailRequest) {
+        val bodyString = objectMapper.writeValueAsString(body)
         if (mock) {
-            logger.info("MOCK WebClient POST request body: $body")
+            logger.info("MOCK WebClient POST request body: $bodyString")
         } else {
-            logger.debug("WebClient POST request body: {}", body)
+            logger.debug("WebClient POST request body: {}", bodyString)
             oneSignalWebClient.post()
                 .uri("notifications")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .bodyValue(body)
+                .bodyValue(bodyString)
                 .retrieve()
                 .bodyToMono(Void::class.java)
-                .onErrorResume { error ->
-                    logger.error("Error sending email", error)
-                    return@onErrorResume null
-                }
                 .block()
         }
     }
