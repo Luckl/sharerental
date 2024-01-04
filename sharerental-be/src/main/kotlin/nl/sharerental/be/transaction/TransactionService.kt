@@ -31,7 +31,7 @@ class TransactionService(
             ZoneOffset.UTC))
 
         transactions.forEach {
-            it.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = it)
+            it.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = it, notes = "Transaction expired after 30 minutes")
             transactionRepository.save(it)
         }
 
