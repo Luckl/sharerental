@@ -24,6 +24,8 @@ import org.springframework.context.annotation.Configuration
         be.woutschoovaerts.mollie.data.payment.PaymentMethod::class,
         be.woutschoovaerts.mollie.data.payment.SequenceType::class,
         be.woutschoovaerts.mollie.data.payment.PaymentRequest::class,
+        be.woutschoovaerts.mollie.data.payment.PaymentResponse::class,
+        be.woutschoovaerts.mollie.data.payment.PaymentStatus::class,
     ]
 )
 class MollieConfiguration(@Value("\${mollie.apiKey}") private val mollieApiKey: String) {
