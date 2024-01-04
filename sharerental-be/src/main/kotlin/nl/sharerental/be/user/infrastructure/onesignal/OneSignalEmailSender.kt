@@ -1,5 +1,6 @@
 package nl.sharerental.be.user.infrastructure.onesignal
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.user.User
@@ -77,10 +78,27 @@ class OneSignalEmailSender(
     }
 }
 
+/**
+ * {
+ *   "include_email_tokens": [
+ *     "${user.email}"
+ *   ],
+ *   "app_id": "$appId",
+ *   "template_id": "$welcomeEmailTemplateId",
+ *   "include_unsubscribed": true,
+ *   "custom_data": {
+ *     "username": "${user.username}"
+ *   }
+ * }
+ */
 data class OneSignalEmailRequest(
+    @JsonProperty("include_email_tokens")
     val includeEmailTokens: List<String>,
+    @JsonProperty("app_id")
     val appId: String,
+    @JsonProperty("template_id")
     val templateId: String,
+    @JsonProperty("custom_data")
     val customData: CustomData,
 ) {
 
