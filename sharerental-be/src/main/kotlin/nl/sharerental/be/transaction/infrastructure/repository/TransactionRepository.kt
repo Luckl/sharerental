@@ -1,6 +1,5 @@
 package nl.sharerental.be.transaction.infrastructure.repository
 
-import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.transaction.TransactionStatusEnum
 import org.springframework.data.domain.Page
@@ -8,6 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -46,5 +46,14 @@ interface TransactionRepository : CrudRepository<Transaction, Long> {
         @Param("statusFilter") statusFilter: List<TransactionStatusEnum>,
         pageable: Pageable
     ): Page<Transaction>
+
+    @Query("select t from Transaction t " +
+            " where t.currentStatus.status = :currentStatus " +
+            " and t.currentStatus.createdTimestamp < :olderThan")
+    fun findAllByCurrentStatusAndOlderThan(
+        @Param("currentStatus") status: TransactionStatusEnum,
+        @Param("olderThan") olderThan: Instant,
+    ): List<Transaction>
+
 
 }
