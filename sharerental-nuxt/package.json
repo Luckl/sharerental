@@ -13,6 +13,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "overrides": {
+    "vue": "latest"
+  },
   "engines": {
     "node": ">=18"
   },
