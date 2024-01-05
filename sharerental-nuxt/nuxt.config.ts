@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    modules: ['nuxt-vuefire',  '@nuxt/image'],
+    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt'],
     ssr: true,
     devtools: {enabled: true},
     image: {

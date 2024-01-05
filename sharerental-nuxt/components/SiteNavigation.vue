@@ -1,13 +1,13 @@
 <template>
   <div class="site-navigation-header-container">
     <div class="m-2">
-      <NuxtLink to="/"><img alt="Logo" width="262" height="91"  src="../assets/logo-transparent-resized.png"/></NuxtLink>
+      <NuxtLink to="/"><img alt="Logo" width="262" height="91" src="../assets/logo-transparent-resized.png"/></NuxtLink>
     </div>
     <div class="desktop-menu">
       <div v-if="user">
         <div class="right-menu">
           <h2 class="desktop-button">Welkom, {{ user.displayName }}</h2>
-          <Button  class="m-3 desktop-button" label="Menu" icon="pi pi-align-justify" iconPos="right"
+          <Button class="m-3 desktop-button" label="Menu" icon="pi pi-align-justify" iconPos="right"
                   @click="menuOpened = !menuOpened">
           </Button>
         </div>
@@ -34,7 +34,7 @@
   <Sidebar v-model:visible="menuOpened" position="right">
     <div v-if="user">
       <NuxtLink to="/lessor/profile">
-        <Button  @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
+        <Button @click="menuOpened = false" label="Gegevens" icon="pi pi-building" class="menu-button">
         </Button>
       </NuxtLink>
 
@@ -70,14 +70,22 @@
 </template>
 
 <script setup lang="ts">
-import {useCurrentUser, useFirebaseAuth} from "vuefire";
+import {useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
 import {useNuxtApp} from "#app";
 import {signOut} from "firebase/auth";
 import LessorClient, {Lessor} from "~/services/api/LessorClient";
+import {useUserStore} from "~/services/stores/userStore";
 
 const menuOpened = ref(false);
-const user = useCurrentUser()
+let userStore = useUserStore();
+
+const user = ref(userStore.user)
+
+userStore.$subscribe((mutation, state) => {
+  user.value = state.user
+  fetchLessors()
+})
 
 const auth = useFirebaseAuth()!
 const lessors = ref<Lessor[]>([])
@@ -98,7 +106,8 @@ function fetchLessors() {
         loaded.value = true;
       })
 }
-onMounted( () => fetchLessors())
+
+onMounted(() => fetchLessors())
 </script>
 
 <style>
