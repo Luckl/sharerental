@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import {GoogleAuthProvider, signInWithEmailAndPassword, signOut,} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithEmailAndPassword,signOut as signOutFirebase} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
+import {useUserStore} from "~/services/stores/userStore";
 
 definePageMeta({
   linkTitle: 'Login',
@@ -9,7 +10,8 @@ definePageMeta({
 })
 
 const auth = useFirebaseAuth()! // only exists on client side
-const user = useCurrentUser()
+const userStore = useUserStore()
+const user = userStore.user
 const router = useRouter()
 const email = ref("")
 const password = ref("")
@@ -19,9 +21,15 @@ const googleProvider = new GoogleAuthProvider();
 
 googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
+function signOut() {
+  signOutFirebase(auth)
+  userStore.refreshUser()
+}
+
 function signIn() {
   signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
+        userStore.refreshUser()
         router.push("/")
       }, (reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
@@ -48,7 +56,7 @@ const sticky = ref(false)
         <template v-else>
           <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
           <template v-if="user">
-            <Button @click="signOut(auth)">Uitloggen</Button>
+            <Button @click="signOut()">Uitloggen</Button>
           </template>
           <template v-else>
             <h2>Inloggen</h2>

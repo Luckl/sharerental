@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {createUserWithEmailAndPassword, GoogleAuthProvider, updateProfile} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
+import {useUserStore} from "~/services/stores/userStore";
 
 definePageMeta({
   linkTitle: 'Login',
@@ -8,7 +9,8 @@ definePageMeta({
 })
 
 const auth = useFirebaseAuth()! // only exists on client side
-const user = useCurrentUser()
+const userStore = useUserStore()
+const user = ref(userStore.user)
 const router = useRouter()
 const email = ref("")
 const password = ref("")
@@ -18,11 +20,20 @@ const errorParser = new RegExp('.*\\((.*)\\).*')
 function register() {
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((result) => updateProfile(result.user, {displayName: username.value, photoURL: "null"}))
-      .then(() => router.push("/lessor/profile"))
+      .then(() => {
+        router.push("/lessor/profile")
+      })
       .catch((reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })
 }
+
+onMounted(() => {
+  userStore.refreshUser()
+  if (userStore.user) {
+    router.push("/")
+  }
+})
 
 // display errors if any
 const error = ref<String | undefined>(undefined)
@@ -37,10 +48,7 @@ const sticky = ref(false)
   <form-page>
       <template #header></template>
       <template #content>
-        <div v-if="user === undefined">
-          <p>Laden...</p>
-        </div>
-        <div v-else>
+        <div>
           <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
           <div v-if="!user">
             <h2>Registreren</h2>

@@ -50,7 +50,7 @@
           </NuxtLink>
         </div>
       </client-only>
-      <Button @click="menuOpened = false; signOut(auth); goToHome()" label="Uitloggen" icon="pi pi-sign-out"
+      <Button @click="menuOpened = false; signOut(); goToHome()" label="Uitloggen" icon="pi pi-sign-out"
               class="menu-button">
       </Button>
     </div>
@@ -73,7 +73,7 @@
 import {useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
 import {useNuxtApp} from "#app";
-import {signOut} from "firebase/auth";
+import {signOut as signOutFirebase} from "firebase/auth";
 import LessorClient, {Lessor} from "~/services/api/LessorClient";
 import {useUserStore} from "~/services/stores/userStore";
 
@@ -86,6 +86,12 @@ userStore.$subscribe((mutation, state) => {
   user.value = state.user
   fetchLessors()
 })
+
+function signOut() {
+  signOutFirebase(auth)
+  userStore.refreshUser()
+  user.value = null
+}
 
 const auth = useFirebaseAuth()!
 const lessors = ref<Lessor[]>([])
