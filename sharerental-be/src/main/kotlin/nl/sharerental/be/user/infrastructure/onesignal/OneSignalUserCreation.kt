@@ -44,7 +44,7 @@ class OneSignalUserCreation(
         if (mock) {
             logger.info("MOCK WebClient POST request body: $body")
         } else {
-            logger.debug("WebClient POST request body: $body")
+            logger.debug("WebClient POST request body: {}", body)
             oneSignalWebClient.post()
                 .uri("apps/$appId/users")
                 .header("accept", "application/json")

@@ -66,14 +66,18 @@ class OneSignalEmailSender(
             logger.info("MOCK WebClient POST request body: $bodyString")
         } else {
             logger.debug("WebClient POST request body: {}", bodyString)
-            oneSignalWebClient.post()
+            val result = oneSignalWebClient.post()
                 .uri("notifications")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .bodyValue(bodyString)
                 .retrieve()
-                .bodyToMono(Void::class.java)
+                .bodyToMono(OneSignalEmailResponse::class.java)
                 .block()
+
+            if (result?.errors?.isNotEmpty() == true) {
+                logger.error("Error sending email: {}", result)
+            }
         }
     }
 }
@@ -110,6 +114,11 @@ interface CustomData
 data class WelcomeEmailCustomData(
     val username: String,
 ) : CustomData
+
+data class OneSignalEmailResponse(
+    val id: String,
+    val errors: Map<String, List<String>>,
+)
 
 data class ItemRentedEmailCustomData(
     val recipientName: String,
