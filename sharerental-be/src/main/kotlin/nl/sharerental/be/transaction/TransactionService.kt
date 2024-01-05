@@ -1,5 +1,6 @@
 package nl.sharerental.be.transaction
 
+import jakarta.transaction.Transactional
 import jakarta.validation.constraints.NotNull
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
@@ -24,6 +25,7 @@ class TransactionService(
      * runs every minute
      */
     @Scheduled(cron = "0 * * * * *")
+    @Transactional
     fun expireTransactions() {
         logger.debug("Running expireTransactions cronjob")
         val transactions = transactionRepository.findAllByCurrentStatusAndOlderThan(
@@ -33,7 +35,6 @@ class TransactionService(
 
         transactions.forEach {
             it.currentStatus = TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = it, notes = "Transaction expired after 30 minutes")
-            transactionRepository.save(it)
         }
 
         if (transactions.isNotEmpty()) {
