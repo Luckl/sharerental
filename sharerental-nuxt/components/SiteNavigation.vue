@@ -113,7 +113,10 @@ function fetchLessors() {
       })
 }
 
-onMounted(() => fetchLessors())
+onMounted(() => {
+      userStore.refreshUser()
+      fetchLessors()
+})
 </script>
 
 <style>
