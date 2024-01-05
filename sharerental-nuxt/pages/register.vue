@@ -63,7 +63,7 @@ const sticky = ref(false)
               </div>
             </div>
             <div class="form-input">
-              <Button label="Registreer" @click="register()"></Button>
+              <Button type="submit" label="Registreer" @click="register()"></Button>
             </div>
           </div>
         </div>

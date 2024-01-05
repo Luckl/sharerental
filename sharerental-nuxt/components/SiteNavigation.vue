@@ -50,7 +50,7 @@
           </NuxtLink>
         </div>
       </client-only>
-      <Button @click="menuOpened = false; signOut(auth); goToStart()" label="Uitloggen" icon="pi pi-sign-out"
+      <Button @click="menuOpened = false; signOut(auth); goToHome()" label="Uitloggen" icon="pi pi-sign-out"
               class="menu-button">
       </Button>
     </div>
@@ -85,7 +85,7 @@ const loaded = ref(false)
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 const router = useRouter()
 
-const goToStart = function () {
+const goToHome = function () {
   router.push("/")
 }
 

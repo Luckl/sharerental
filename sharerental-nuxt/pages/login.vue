@@ -22,7 +22,7 @@ googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 function signIn() {
   signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        router.push("/lessor/profile")
+        router.push("/")
       }, (reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })
@@ -56,13 +56,13 @@ const sticky = ref(false)
               <div class="form-input">
                 <label for="username">Email</label>
                 <div>
-                  <InputText type="text" v-model="email"/>
+                  <InputText inputId="email" type="text" v-model="email"/>
                 </div>
               </div>
               <div class="form-input">
                 <label for="password">Wachtwoord</label>
                 <div>
-                  <Password v-model="password" :feedback="false"/>
+                  <Password inputId="password" v-model="password" :feedback="false"/>
                 </div>
               </div>
               <div class="form-input">
