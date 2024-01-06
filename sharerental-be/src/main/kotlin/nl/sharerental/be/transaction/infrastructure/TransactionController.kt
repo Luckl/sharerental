@@ -1,21 +1,15 @@
 package nl.sharerental.be.transaction.infrastructure
 
-import be.woutschoovaerts.mollie.data.payment.PaymentStatus
 import jakarta.transaction.Transactional
 import nl.sharerental.be.infrastructure.PageableHelper
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
-import nl.sharerental.be.transaction.Transaction
 import nl.sharerental.be.transaction.TransactionService
-import nl.sharerental.be.transaction.TransactionStatus
 import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
-import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
-import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
-import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -24,16 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 import kotlin.math.max
+import nl.sharerental.contract.http.model.TransactionStatus as HttpTransactionStatus
 
 @RestController
 class TransactionController(
     private val rentalItemRepository: RentalItemRepository,
-    private val transactionProcessor: TransactionProcessor,
     private val currentUserService: CurrentUserService,
     private val transactionRepository: TransactionRepository,
     private val transactionService: TransactionService,
     private val lessorRepository: LessorRepository,
-    private val oneSignalEmailSender: OneSignalEmailSender,
 ) : TransactionApi {
 
     private val logger: Logger = LoggerFactory.getLogger(TransactionController::class.java)
@@ -41,15 +34,7 @@ class TransactionController(
     override fun calculatePrice(transactionCalculationInput: TransactionCalculationInput?): ResponseEntity<TransactionCalculationResult> {
         transactionCalculationInput ?: ResponseStatusException(HttpStatus.BAD_REQUEST)
 
-        return rentalItemRepository.findById(transactionCalculationInput!!.rentalItemId)
-            .map {
-                Transaction.calculatePrice(
-                    it,
-                    transactionCalculationInput.startDate,
-                    transactionCalculationInput.endDate,
-                    transactionCalculationInput.amount
-                )
-            }
+        return transactionService.calculatePrice(transactionCalculationInput!!)
             .map { ResponseEntity.ok(TransactionCalculationResult(it)) }
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
@@ -59,36 +44,8 @@ class TransactionController(
         logger.info("Received mollie webhook call for mollie payment reference {}", id)
 
         id ?: ResponseStatusException(HttpStatus.BAD_REQUEST)
-        val molliePaymentStatus = transactionProcessor.getMolliePaymentStatus(id)
 
-        logger.info("Received status {} for mollie payment reference {}", molliePaymentStatus, id)
-
-        val transaction = transactionRepository.findByMolliePaymentReference(id).orElseThrow {
-            logger.error("Could not find shareRental transaction related to mollie payment reference {}", id)
-            ResponseStatusException(HttpStatus.NOT_FOUND)
-        }
-
-        when (molliePaymentStatus) {
-            PaymentStatus.PAID -> transaction.currentStatus =
-                TransactionStatus(status = TransactionStatusEnum.PAID, transaction = transaction)
-
-            PaymentStatus.CANCELED -> transaction.currentStatus =
-                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
-
-            PaymentStatus.EXPIRED -> transaction.currentStatus =
-                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
-
-            PaymentStatus.FAILED -> transaction.currentStatus =
-                TransactionStatus(status = TransactionStatusEnum.CANCELLED, transaction = transaction)
-
-            else -> {
-                logger.error("Received invalid status from Mollie after webhook.")
-            }
-        }
-
-        if (molliePaymentStatus == PaymentStatus.PAID) {
-            oneSignalEmailSender.sendItemRentedEmail(transaction)
-        }
+        transactionService.processMollieCallback(id!!)
 
         return ResponseEntity.ok().build()
     }
@@ -113,6 +70,7 @@ class TransactionController(
 
         status?.map { it.toEntityEnum() } ?: listOf(TransactionStatusEnum.ACCEPTED, TransactionStatusEnum.PAID, TransactionStatusEnum.COMPLETED)
 
+        // Should maybe be in service instead, but it'll just be a pass through to the repository.
         val findAll = transactionRepository.findByLessorIdAndSearch(
             lessors[0],
             filter,
@@ -146,61 +104,14 @@ class TransactionController(
         val rentalItem = rentalItemRepository.findById(createTransactionRequest!!.rentalItemId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
 
-        if (transactionService.getAmountOfRentedOutItems(
-                rentalItem,
-                createTransactionRequest.startDate,
-                createTransactionRequest.endDate
-            ) + createTransactionRequest.amount > rentalItem.amount
-        ) {
-            logger.warn("Tried to rent {} items but that many are not available.", createTransactionRequest.amount)
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-        }
-
-        val price =
-            Transaction.calculatePrice(
-                rentalItem,
-                createTransactionRequest.startDate,
-                createTransactionRequest.endDate,
-                createTransactionRequest.amount
-            )
-
-        logger.info(
-            "Creating transaction for rentalItem {} at price {} from {} to {}",
-            rentalItem.id,
-            price,
+        val mollieTransactionCheckoutUrl = transactionService.startTransaction(
+            rentalItem,
             createTransactionRequest.startDate,
-            createTransactionRequest.endDate
+            createTransactionRequest.endDate,
+            createTransactionRequest.amount
         )
 
-        val transaction = Transaction(
-            rentalItem = rentalItem,
-            renter = currentUserService.get(),
-            startDate = createTransactionRequest.startDate,
-            endDate = createTransactionRequest.endDate,
-            amount = createTransactionRequest.amount,
-            price = price
-        )
-
-        //First save so TransactionStatus entity won't get a null value for transaction_id
-        val savedTransaction = transactionRepository.save(transaction)
-
-        val currentStatus = TransactionStatus(
-            transaction = savedTransaction
-        )
-
-        savedTransaction.currentStatus = currentStatus
-
-        val mollieTransaction = transactionProcessor.initializeTransaction(
-            amount = price,
-            description = "${savedTransaction.id} - ${rentalItem.name}",
-            transactionId = savedTransaction.id,
-            userId = currentUserService.get().id
-        )
-
-        savedTransaction.molliePaymentReference = mollieTransaction.molliePaymentReference
-
-        logger.info("Successfully created transaction {}", savedTransaction.id)
-        return ResponseEntity.ok(CreateTransactionResponse().redirectUrl(mollieTransaction.checkoutUrl))
+        return ResponseEntity.ok(CreateTransactionResponse().redirectUrl(mollieTransactionCheckoutUrl))
     }
 }
 
