@@ -36,7 +36,6 @@ class TransactionService(
 
     /**
      * expires transactions with currentStatus INITIALIZED and currentStatus time is older than 30 minutes
-     * runs every minute
      */
     @Scheduled(cron = "0 * * * * *")
     @Transactional

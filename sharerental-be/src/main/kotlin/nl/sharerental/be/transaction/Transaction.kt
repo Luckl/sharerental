@@ -10,22 +10,6 @@ import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-/**
- *
- * private fun DisplayStatus.toHttp(): nl.sharerental.contract.http.model.DisplayStatus {
- *     return when (this) {
- *         DisplayStatus.ACTIVE -> nl.sharerental.contract.http.model.DisplayStatus.ACTIVE
- *         DisplayStatus.INACTIVE -> nl.sharerental.contract.http.model.DisplayStatus.INACTIVE
- *     }
- * }
- */
-//private fun TransactionStatus?.toResponse(): TransactionStatus? {
-//    return when (this?.status) {
-//        // INITIALIZED, PAID, ACCEPTED, COMPLETED, PAID_OUT, CANCELLED
-//        TransactionStatusEnum.PAID ->
-//    }
-//}
-
 @Entity
 @Table(name = "transaction")
 data class Transaction(
@@ -51,18 +35,6 @@ data class Transaction(
     @OneToMany(mappedBy = "transaction")
     val statusHistory: List<TransactionStatus> = emptyList()
 ) {
-
-    fun Transaction.toResponse(): nl.sharerental.contract.http.model.Transaction {
-        val transaction = this
-        return nl.sharerental.contract.http.model.Transaction().apply {
-            id = transaction.id
-            rentalItem = transaction.rentalItem.toResponse()
-            startDate = transaction.startDate
-            endDate = transaction.endDate
-            amount = transaction.amount
-            price = transaction.price
-        }
-    }
 
     init {
         if (amount < 1) {
