@@ -1,6 +1,7 @@
 package nl.sharerental.be.user.infrastructure.onesignal
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -39,10 +40,8 @@ class OneSignalConfiguration(
      */
     @Bean
     fun objectMapper(): ObjectMapper = ObjectMapper()
-        .apply {
-            registerModule(KotlinModule.Builder().build())
-        }
-
+        .registerModule(KotlinModule.Builder().build())
+        .registerModule(JavaTimeModule())
 
     @Bean
     fun oneSignalWebClient(): WebClient = WebClient.builder()
