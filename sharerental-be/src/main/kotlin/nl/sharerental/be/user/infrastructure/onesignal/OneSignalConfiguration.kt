@@ -1,5 +1,7 @@
 package nl.sharerental.be.user.infrastructure.onesignal
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
@@ -31,6 +33,16 @@ class OneSignalConfiguration(
                     clientResponse
                 }
         }
+
+    /**
+     * configure objectMapper with kotlin module
+     */
+    @Bean
+    fun objectMapper(): ObjectMapper = ObjectMapper()
+        .apply {
+            registerModule(KotlinModule.Builder().build())
+        }
+
 
     @Bean
     fun oneSignalWebClient(): WebClient = WebClient.builder()
