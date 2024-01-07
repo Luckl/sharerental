@@ -3,7 +3,7 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
-  /me/rental-items/{id}:
+  /rental-items/{id}:
     get:
       tags:
         - rentalItem
@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 $ref: './utils/RentalItem.yaml#/components/schemas/RentalItem'
-  /me/rental-items/{id}/images/{imageId}:
+  /rental-items/{id}/images/{imageId}:
     delete:
       tags:
         - rentalItemImage
@@ -76,7 +76,7 @@ paths:
       responses:
         200:
           description: Successfully deleted
-  /me/rental-items/{id}/images:
+  /rental-items/{id}/images:
     get:
       tags:
         - rentalItemImage
@@ -127,7 +127,7 @@ paths:
       responses:
         200:
           description: Successful result
-  /me/rental-items:
+  /rental-items:
     get:
       tags:
         - rentalItem

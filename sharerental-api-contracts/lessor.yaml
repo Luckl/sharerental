@@ -3,7 +3,7 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
-  /me/lessor:
+  /lessors:
     get:
       tags:
         - lessor
@@ -67,7 +67,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Lessor'
-  /me/lessor/{id}:
+  /lessors/{id}:
     put:
       summary: Update a lessor
       operationId: updateLessor

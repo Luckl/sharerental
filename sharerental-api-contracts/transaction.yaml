@@ -3,7 +3,7 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
-  /transaction/mollie-callback:
+  /transactions/mollie-callback:
     post:
       summary: callback for mollie payment
       description: https://docs.mollie.com/overview/webhooks
@@ -25,7 +25,7 @@ paths:
       responses:
         200:
           description: Webhook successfully processed.
-  /me/transactions:
+  /transactions:
     get:
       tags:
         - transaction
@@ -84,7 +84,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetTransactionsResult'
-  /transaction:
     post:
       summary: Create a transaction between a lessor and renter
       operationId: startTransaction
@@ -103,7 +102,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateTransactionResponse'
-  /transaction/calculate-price:
+  /transactions/calculate-price:
     post:
       summary: Calculate the price for a transaction
       operationId: calculatePrice
@@ -122,7 +121,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionCalculationResult'
-  /transaction/get-amount-available-for-date:
+  /transactions/get-amount-available-for-date:
     post:
       summary: Get the available amount of items for a specific date range.
       operationId: getAmountAvailableForDate
