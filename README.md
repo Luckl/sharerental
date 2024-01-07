@@ -26,12 +26,14 @@ A state diagram describing the status of a transaction.
 
 # Development
 
-### Running ngrok for webhook callbacks from mollie
-
-```bash
- docker run -it -e NGROK_AUTHTOKEN=<token> ngrok/ngrok http 8080
-```
+### Ngrok for webhook callbacks from mollie (localhost)
 
 Token can be retrieved by creating an account on [ngrok.com](https://dashboard.ngrok.com/)
 
-Copy the `Forwarding` url to your local configuration as key `sharerental.webhookUrl`
+in `application.yaml` update the key `ngrok.token` with the token from ngrok
+
+when starting the application, a tunnel will be created to your localhost on port 8080
+
+The ngrok plugin will log the forwarding url to the console. Copy it and use it as the webhook url in the mollie configuration in `application.yaml` under `sharerental.webhookUrl`
+
+Restart the application, and you should be able to receive webhook callbacks from mollie
