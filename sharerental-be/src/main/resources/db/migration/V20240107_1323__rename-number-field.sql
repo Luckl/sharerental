@@ -1,0 +1,1 @@
+alter table rental_item rename column number to external_reference;

@@ -49,7 +49,7 @@ class OneSignalEmailSender(
                 recipientName = transaction.rentalItem.owner.name,
                 renterName = transaction.renter.username,
                 rentalItemName = transaction.rentalItem.name,
-                rentalItemReference = transaction.rentalItem.number?: "",
+                rentalItemReference = transaction.rentalItem.externalReference?: "",
                 amount = transaction.amount.toString(),
                 startDate = transaction.startDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),
                 endDate = transaction.endDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),

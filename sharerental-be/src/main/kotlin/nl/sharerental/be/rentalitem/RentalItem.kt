@@ -25,7 +25,7 @@ data class RentalItem(
     )
     var images: MutableList<Image> = mutableListOf(),
 
-    var number: String?,
+    var externalReference: String?,
     var shortDescription: String?,
     var longDescription: String?,
 
@@ -80,7 +80,7 @@ data class RentalItem(
             .apply {
                 id = item.id
                 name = item.name
-                number = item.number
+                externalReference = item.externalReference
                 displayStatus = item.displayStatus.toHttp()
                 shortDescription = item.shortDescription
                 longDescription = item.longDescription

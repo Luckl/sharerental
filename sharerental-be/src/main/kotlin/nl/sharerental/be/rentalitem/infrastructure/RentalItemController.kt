@@ -52,7 +52,7 @@ class RentalItemController(
 
         entity.apply {
             name = rentalItemInput.name
-            number = rentalItemInput.number
+            externalReference = rentalItemInput.externalReference
             shortDescription = rentalItemInput.shortDescription
             longDescription = rentalItemInput.longDescription
             displayStatus = rentalItemInput.displayStatus.toEntity()
@@ -100,7 +100,7 @@ class RentalItemController(
         val rentalItem = RentalItem(
             name = rentalItemInput!!.name,
             slug = "${lessor.name} ${rentalItemInput.name}".normalizeString(),
-            number = rentalItemInput.number,
+            externalReference = rentalItemInput.externalReference,
             shortDescription = rentalItemInput.shortDescription,
             longDescription = rentalItemInput.longDescription,
             price24h = rentalItemInput.price24h?.toBigDecimal()!!,
@@ -161,9 +161,7 @@ class RentalItemController(
         )
         return ResponseEntity.ok(getRentalItemsResult)
     }
-
 }
-
 
 private fun HttpDisplayStatus.toEntity(): DisplayStatus {
     return when (this) {

@@ -22,7 +22,7 @@ components:
       properties:
         name:
           type: string
-        number:
+        externalReference:
           type: string
         amount:
           type: integer
@@ -114,7 +114,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Image'
-        number:
+        externalReference:
           type: string
         amount:
           type: integer

@@ -5,8 +5,8 @@
       <InputText inputId="fName" class="mb-1" v-model="props.rentalItem.name"></InputText>
     </div>
     <div class="flexbox-column">
-    <label for="fNumber" class="data-label mb-1">Eigen referentie</label>
-    <InputText inputId="fNumber" class="mb-1" v-model="props.rentalItem.number"></InputText>
+    <label for="fExternalReference" class="data-label mb-1">Eigen referentie</label>
+    <InputText inputId="fExternalReference" class="mb-1" v-model="props.rentalItem.externalReference"></InputText>
   </div>
     <div class="flexbox-column">
       <label for="fCategory" class="data-label mb-1">Categorie</label>

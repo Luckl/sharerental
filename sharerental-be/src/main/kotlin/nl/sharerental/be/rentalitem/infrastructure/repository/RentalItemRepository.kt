@@ -19,7 +19,7 @@ interface RentalItemRepository: PagingAndSortingRepository<RentalItem, Long>, Cr
             from RentalItem r
             where r.owner.id = :ownerId 
             and (upper(r.name) like upper(concat('%', :query, '%')) 
-            or upper(r.number) like upper(concat('%', :query, '%')) 
+            or upper(r.externalReference) like upper(concat('%', :query, '%')) 
             or upper(r.brand) like upper(concat('%', :query, '%')) 
             or upper(r.shortDescription) like upper(concat('%', :query, '%')) 
             or upper(r.longDescription) like upper(concat('%', :query, '%')))

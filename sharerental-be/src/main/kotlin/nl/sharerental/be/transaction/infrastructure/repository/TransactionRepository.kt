@@ -34,7 +34,7 @@ interface TransactionRepository : CrudRepository<Transaction, Long> {
             where t.rentalItem.owner.id = :ownerId 
             and t.currentStatus.status in (:statusFilter)
             and (upper(t.renter.email) like upper(concat('%', :query, '%')) 
-            or upper(t.rentalItem.number) like upper(concat('%', :query, '%')) 
+            or upper(t.rentalItem.externalReference) like upper(concat('%', :query, '%')) 
             or upper(t.rentalItem.brand) like upper(concat('%', :query, '%')) 
             or upper(t.rentalItem.shortDescription) like upper(concat('%', :query, '%')) 
             or upper(t.rentalItem.longDescription) like upper(concat('%', :query, '%')))

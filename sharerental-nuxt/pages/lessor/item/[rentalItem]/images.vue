@@ -5,7 +5,7 @@
     <FormPage>
       <template #header>
       <span class="font-bold text-xl m-1">Afbeeldingen uploaden voor {{ rentalItem.name }} ({{
-          rentalItem.number
+          rentalItem.externalReference
         }})</span>
       </template>
 
