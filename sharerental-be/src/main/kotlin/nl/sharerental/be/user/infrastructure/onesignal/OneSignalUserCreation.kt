@@ -12,7 +12,6 @@ import java.time.Instant
 class OneSignalUserCreation(
     private val oneSignalWebClient: WebClient,
     @Value("\${one-signal.app-id}") private val appId: String,
-    @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
     @Value("\${one-signal.mock}") private val mock: Boolean,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(OneSignalUserCreation::class.java)

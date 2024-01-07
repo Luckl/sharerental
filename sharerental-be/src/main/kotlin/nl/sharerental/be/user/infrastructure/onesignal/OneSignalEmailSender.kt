@@ -70,7 +70,7 @@ class OneSignalEmailSender(
                 .uri("notifications")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .bodyValue(bodyString)
+                .bodyValue(body)
                 .retrieve()
                 .bodyToMono(OneSignalEmailResponse::class.java)
                 .block()
@@ -82,19 +82,6 @@ class OneSignalEmailSender(
     }
 }
 
-/**
- * {
- *   "include_email_tokens": [
- *     "${user.email}"
- *   ],
- *   "app_id": "$appId",
- *   "template_id": "$welcomeEmailTemplateId",
- *   "include_unsubscribed": true,
- *   "custom_data": {
- *     "username": "${user.username}"
- *   }
- * }
- */
 data class OneSignalEmailRequest(
     @JsonProperty("include_email_tokens")
     val includeEmailTokens: List<String>,

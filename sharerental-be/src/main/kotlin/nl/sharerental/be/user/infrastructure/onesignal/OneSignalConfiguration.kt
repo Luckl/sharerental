@@ -2,6 +2,7 @@ package nl.sharerental.be.user.infrastructure.onesignal
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,6 +10,13 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
+@RegisterReflectionForBinding(
+    classes= [
+        OneSignalEmailRequest::class,
+        WelcomeEmailCustomData::class,
+        ItemRentedEmailCustomData::class,
+    ]
+)
 class OneSignalConfiguration(
     @Value("\${one-signal.api-key}") private val apiKey: String,
 ) {
