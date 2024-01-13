@@ -63,7 +63,8 @@ class TransactionController(
         val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
         if (lessors.size != 1) {
-            throw RuntimeException("Multiple or no lessors for user, cannot find transactions.")
+            logger.warn("User {} has {} lessors, cannot retrieve transactions because we dont know for which lessor", currentUserService.get().id, lessors.size)
+            throw ResponseStatusException(HttpStatus.NOT_FOUND)
         }
 
         val actualSort = if (sort?.isEmpty() == true) mutableListOf("startDate;desc") else sort

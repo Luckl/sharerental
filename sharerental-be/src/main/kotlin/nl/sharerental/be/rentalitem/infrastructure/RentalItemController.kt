@@ -92,7 +92,8 @@ class RentalItemController(
         val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
         if (lessors.size != 1) {
-            throw RuntimeException("Multiple or no lessors for user, cannot create rental items.")
+            logger.warn("User {} has {} lessors, cannot create rentalItem since we don't know for which lessor", currentUserService.get().id, lessors.size)
+            throw ResponseStatusException(HttpStatus.NOT_FOUND)
         }
 
         val lessor = lessorRepository.findById(lessors[0]).orElseThrow()
