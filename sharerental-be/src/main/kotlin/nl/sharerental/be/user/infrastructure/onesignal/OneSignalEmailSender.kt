@@ -47,7 +47,7 @@ class OneSignalEmailSender(
             templateId = itemRentedEmailTemplate,
             customData = ItemRentedEmailCustomData(
                 recipientName = transaction.rentalItem.owner.name,
-                renterName = transaction.renter.username,
+                renterName = "${transaction.renter.firstName} ${transaction.renter.lastName}",
                 rentalItemName = transaction.rentalItem.name,
                 rentalItemReference = transaction.rentalItem.externalReference?: "",
                 amount = transaction.amount.toString(),

@@ -2,7 +2,7 @@ package nl.sharerental.be.transaction
 
 import jakarta.persistence.*
 import nl.sharerental.be.rentalitem.RentalItem
-import nl.sharerental.be.user.User
+import nl.sharerental.be.user.Renter
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
@@ -20,8 +20,8 @@ data class Transaction(
     @ManyToOne
     val rentalItem: RentalItem,
 
-    @ManyToOne
-    val renter: User,
+    @ManyToOne(cascade = [CascadeType.PERSIST])
+    val renter: Renter,
 
     // Future performance improvement:  https://stackoverflow.com/questions/34889644/what-are-the-benefits-of-using-postgresql-daterange-type-instead-of-two-date-fie
     val startDate: LocalDate,

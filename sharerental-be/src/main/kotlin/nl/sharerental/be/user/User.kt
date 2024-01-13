@@ -11,6 +11,9 @@ class User(
     val id: String,
     val email: String,
     var username: String,
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "renter_information", referencedColumnName = "id")
+    var renterInformation: Renter? = null,
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     var userLessors: Set<UserLessor> = setOf()
 )

@@ -20,6 +20,7 @@ export const useUserStore = defineStore({
     actions: {
         async refreshUser(): Promise<void> {
             this.user = await getCurrentUser();
+            console.log("Setting analytics uid: " + this.user?.uid)
             getAnalytics(useFirebaseApp()).setUserId(this.user?.uid)
         },
     },

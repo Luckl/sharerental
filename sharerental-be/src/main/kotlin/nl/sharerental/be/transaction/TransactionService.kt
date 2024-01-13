@@ -8,6 +8,7 @@ import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemReposito
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
+import nl.sharerental.be.user.Renter
 import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
 import nl.sharerental.contract.http.model.TransactionCalculationInput
 import org.slf4j.Logger
@@ -101,7 +102,7 @@ class TransactionService(
     fun processMollieCallback(id: String) {
         val molliePaymentStatus = transactionProcessor.getMolliePaymentStatus(id)
 
-        logger.info("Received status {} for mollie payment reference {}", molliePaymentStatus, id)
+        logger.debug("Received status {} for mollie payment reference {}", molliePaymentStatus, id)
 
         val transaction = transactionRepository.findByMolliePaymentReference(id).orElseThrow {
             logger.error("Could not find shareRental transaction related to mollie payment reference {}", id)
@@ -151,7 +152,7 @@ class TransactionService(
                 amount
             )
 
-        logger.info(
+        logger.debug(
             "Creating transaction for rentalItem {} at price {} from {} to {}",
             rentalItem.id,
             price,
@@ -159,9 +160,20 @@ class TransactionService(
             endDate
         )
 
+        //TODO: Fetch from request, so renters can supply different renter information for each transaction potentially.
+        val user = currentUserService.get()
+        val renter = user.renterInformation ?: Renter(
+            firstName = user.username,
+            lastName = null,
+            email = user.email,
+            phoneNumber = null,
+        )
+
+        user.renterInformation = renter
+
         val transaction = Transaction(
             rentalItem = rentalItem,
-            renter = currentUserService.get(),
+            renter = renter,
             startDate = startDate,
             endDate = endDate,
             amount = amount,
@@ -181,12 +193,12 @@ class TransactionService(
             amount = price,
             description = "${savedTransaction.id} - ${rentalItem.name}",
             transactionId = savedTransaction.id,
-            userId = currentUserService.get().id
+            userId = user.id
         )
 
         savedTransaction.molliePaymentReference = mollieTransaction.molliePaymentReference
 
-        logger.info("Successfully created transaction {}", savedTransaction.id)
+        logger.debug("Successfully created transaction {}", savedTransaction.id)
 
         return mollieTransaction.checkoutUrl
     }
