@@ -7,6 +7,8 @@ spring:
     username: sharerental-be
     password: mysecretpassword
     url: jdbc:postgresql://localhost:5432/sharerental?stringtype=unspecified
+    tomcat:
+      max-active: 15
   security:
     oauth2:
       resourceserver:
