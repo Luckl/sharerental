@@ -8,6 +8,8 @@ spring:
     password: mysecretpassword
     url: jdbc:postgresql://localhost:5432/sharerental?stringtype=unspecified
     tomcat:
+#      max connections for postgresql is 25, where the last 5 are reserved for admin connections.
+#      Set this to 15 so manual connections can be made to the database.
       max-active: 15
   security:
     oauth2:
