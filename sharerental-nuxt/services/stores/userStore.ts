@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {type User} from "@firebase/auth";
-import {getAnalytics} from "@firebase/analytics";
+import {getAnalytics, setUserId} from "@firebase/analytics";
 
 
 export type UserState = {
@@ -21,7 +21,12 @@ export const useUserStore = defineStore({
         async refreshUser(): Promise<void> {
             this.user = await getCurrentUser();
             console.log("Setting analytics uid: " + this.user?.uid)
-            getAnalytics(useFirebaseApp()).setUserId(this.user?.uid)
+
+            if (this.user?.uid) {
+                setUserId(getAnalytics(), this.user?.uid)
+            } else {
+                setUserId(getAnalytics(), null)
+            }
         },
     },
 })
