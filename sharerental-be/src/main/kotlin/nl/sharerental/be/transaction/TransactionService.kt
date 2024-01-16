@@ -167,6 +167,7 @@ class TransactionService(
             lastName = null,
             email = user.email,
             phoneNumber = null,
+            createdByUser = user
         )
 
         user.renterInformation = renter

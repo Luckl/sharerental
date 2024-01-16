@@ -22,4 +22,7 @@ data class Renter(
     val location: Location? = null,
     @Column(name = "created_at")
     val createdAt: Instant = Instant.now(),
+    @OneToOne(cascade = [CascadeType.PERSIST])
+    @JoinColumn(name = "entered_by_user", referencedColumnName = "id")
+    val createdByUser: User? = null,
 )
