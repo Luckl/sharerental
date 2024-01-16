@@ -217,6 +217,8 @@ components:
         amount:
           type: integer
           minimum: 1
+        renter:
+          $ref: './utils/Renter.yaml#/components/schemas/RenterInput'
     CreateTransactionResponse:
       type: object
       properties:

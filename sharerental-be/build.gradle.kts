@@ -7,7 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.20"
 	kotlin("plugin.jpa") version "1.9.20"
 	kotlin("plugin.noarg") version "1.9.20"
-	id("org.openapi.generator") version "7.0.1"
+	id("org.openapi.generator") version "7.2.0"
 	id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
@@ -22,7 +22,7 @@ tasks.bootBuildImage {
 tasks.openApiGenerate {
 	inputs.dir("$rootDir/../sharerental-api-contracts")
 	generatorName.set("spring")
-	inputSpec.set("$rootDir/../sharerental-api-contracts/merged.yaml")
+	inputSpecRootDirectory.set("$rootDir/../sharerental-api-contracts")
 	mergedFileName.set("sharerental.yaml")
 	outputDir.set("$buildDir/generated")
 	apiPackage.set("nl.sharerental.contract.http")

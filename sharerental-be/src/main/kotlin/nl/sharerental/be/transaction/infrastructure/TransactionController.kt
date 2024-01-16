@@ -2,12 +2,15 @@ package nl.sharerental.be.transaction.infrastructure
 
 import jakarta.transaction.Transactional
 import nl.sharerental.be.infrastructure.PageableHelper
+import nl.sharerental.be.lessor.Location
 import nl.sharerental.be.lessor.infrastructure.repository.LessorRepository
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.transaction.TransactionService
 import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
 import nl.sharerental.be.user.CurrentUserService
+import nl.sharerental.be.user.Renter
+import nl.sharerental.be.user.User
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
 import org.slf4j.Logger
@@ -109,7 +112,8 @@ class TransactionController(
             rentalItem,
             createTransactionRequest.startDate,
             createTransactionRequest.endDate,
-            createTransactionRequest.amount
+            createTransactionRequest.amount,
+            createTransactionRequest.renter?.toRenter(currentUserService.get())
         )
 
         return ResponseEntity.ok(CreateTransactionResponse().redirectUrl(mollieTransactionCheckoutUrl))
@@ -126,3 +130,22 @@ private fun HttpTransactionStatus.toEntityEnum(): TransactionStatusEnum {
         HttpTransactionStatus.CANCELLED -> TransactionStatusEnum.CANCELLED
     }
 }
+
+private fun RenterInput.toRenter(user: User): Renter = Renter(
+    firstName = firstName,
+    lastName = lastName,
+    phoneNumber = phoneNumber,
+    email = email,
+    location = Location(
+        street = street,
+        houseNumber = houseNumber,
+        postalCode = postalCode,
+        city = city,
+        country = country,
+        addressLine1 = addressLine1,
+        addressLine2 = addressLine2,
+        addressLine3 = addressLine3,
+        geoLocation = null
+    ),
+    createdByUser = user
+)

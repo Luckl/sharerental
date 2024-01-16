@@ -1,31 +1,21 @@
 components:
   schemas:
-    LocationInput:
+    RenterInput:
       type: object
+      required:
+        - firstName
+        - lastName
+        - phoneNumber
+        - email
       properties:
-        addressLine1:
+        firstName:
           type: string
-        addressLine2:
+        lastName:
           type: string
-        addressLine3:
+        phoneNumber:
           type: string
-        street:
+        email:
           type: string
-        houseNumber:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-    Location:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
         addressLine1:
           type: string
         addressLine2:

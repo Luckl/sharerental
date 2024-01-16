@@ -132,7 +132,13 @@ class TransactionService(
         }
     }
 
-    fun startTransaction(rentalItem: RentalItem, startDate: LocalDate, endDate: LocalDate, amount: Int): String {
+    fun startTransaction(
+        rentalItem: RentalItem,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        amount: Int,
+        renterOptional: Renter?
+    ): String {
 
         if (getAmountOfRentedOutItems(
                 rentalItem,
@@ -160,9 +166,10 @@ class TransactionService(
             endDate
         )
 
-        //TODO: Fetch from request, so renters can supply different renter information for each transaction potentially.
         val user = currentUserService.get()
-        val renter = user.renterInformation ?: Renter(
+
+        //TODO: Enforce always having a renter, and when not available take last renter info from user
+        val renter = renterOptional ?: Renter(
             firstName = user.username,
             lastName = null,
             email = user.email,
@@ -216,5 +223,3 @@ class TransactionService(
             }
 
 }
-
-

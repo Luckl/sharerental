@@ -3,6 +3,7 @@ package nl.sharerental.be.user
 import jakarta.persistence.*
 import nl.sharerental.be.lessor.Location
 import nl.sharerental.be.user.User
+import nl.sharerental.contract.http.model.RenterInput
 import java.time.Instant
 
 @Entity

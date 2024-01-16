@@ -26,7 +26,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RenterInput'
+              $ref: './utils/Renter.yaml#/components/schemas/RenterInput'
       responses:
         '201':
           description: Created
@@ -59,35 +59,3 @@ components:
           type: string
         location:
           $ref: './utils/Location.yaml#/components/schemas/Location'
-    RenterInput:
-      type: object
-      required:
-        - firstName
-        - lastName
-        - phoneNumber
-        - email
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        phoneNumber:
-          type: string
-        email:
-          type: string
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        addressLine3:
-          type: string
-        street:
-          type: string
-        houseNumber:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
