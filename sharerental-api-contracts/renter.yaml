@@ -16,24 +16,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Renter'
-    post:
-      summary: Create renter
-      tags:
-          - renter
-      operationId: createRenter
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './utils/Renter.yaml#/components/schemas/RenterInput'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Renter'
 components:
   schemas:
     Renter:
