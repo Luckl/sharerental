@@ -2,8 +2,10 @@ package nl.sharerental.be.rentalitem
 
 import jakarta.persistence.*
 import nl.sharerental.be.images.Image
+import nl.sharerental.contract.http.model.Image as HttpImage
 import nl.sharerental.be.lessor.Lessor
 import java.math.BigDecimal
+import java.net.URI
 
 @Entity
 @Table(name = "rental_item")
@@ -79,6 +81,7 @@ data class RentalItem(
          return nl.sharerental.contract.http.model.RentalItem()
             .apply {
                 id = item.id
+                images = item.images.map { HttpImage(it.id, it.imageUrl) }
                 name = item.name
                 externalReference = item.externalReference
                 displayStatus = item.displayStatus.toHttp()
