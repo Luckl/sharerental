@@ -1,7 +1,7 @@
 import {
     Configuration,
     TransactionApi, TransactionStatus
-} from '~/schemas/openapi/merged';
+} from '~/schemas/openapi/transaction';
 
 class TransactionClient {
     private transactionApi: TransactionApi;
