@@ -2,7 +2,7 @@ import {
     FetchParams,
     Middleware,
     ResponseContext,
-} from '~~/schemas/openapi/merged';
+} from '~~/schemas/openapi/transaction';
 import {getCurrentUser} from "vuefire";
 
 export class ApiMiddleware implements Middleware {

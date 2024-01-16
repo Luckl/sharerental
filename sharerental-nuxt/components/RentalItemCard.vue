@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import {SearchResultItem} from "~/schemas/openapi/merged";
+import {SearchResultItem} from "~/schemas/openapi/search";
 
 interface Props {
   item: SearchResultItem;

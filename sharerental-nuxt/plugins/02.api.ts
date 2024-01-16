@@ -2,7 +2,10 @@ import {defineNuxtPlugin, useRuntimeConfig} from "#app";
 import SearchClient from "~/services/api/SearchClient";
 import LessorClient from "~/services/api/LessorClient";
 import RentalItemClient from "~/services/api/RentalItemClient";
-import {Configuration} from '~/schemas/openapi/merged';
+import {Configuration as TransactionConfiguration} from '~/schemas/openapi/transaction';
+import {Configuration as RentalItemConfiguration} from '~/schemas/openapi/rentalItem';
+import {Configuration as LessorConfiguration} from '~/schemas/openapi/lessor';
+import {Configuration as SearchConfiguration} from '~/schemas/openapi/search';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
 import TransactionClient from "~/services/api/TransactionClient";
@@ -14,13 +17,16 @@ export default defineNuxtPlugin((nuxtApp) => {
         middleware: [new ApiMiddleware()]
     };
 
-    const config = new Configuration(configuration)
+    const transactionConfiguration = new TransactionConfiguration(configuration)
+    const rentalItemConfiguration = new RentalItemConfiguration(configuration)
+    const lessorConfiguration = new LessorConfiguration(configuration)
+    const searchConfiguration = new SearchConfiguration(configuration)
 
-    const searchClient = new SearchClient(config)
-    const lessorClient = new LessorClient(config)
-    const rentalItemClient = new RentalItemClient(config)
-    const rentalItemImageClient = new RentalItemImageClient(config)
-    const transactionClient = new TransactionClient(config)
+    const searchClient = new SearchClient(searchConfiguration)
+    const lessorClient = new LessorClient(lessorConfiguration)
+    const rentalItemClient = new RentalItemClient(rentalItemConfiguration)
+    const rentalItemImageClient = new RentalItemImageClient(rentalItemConfiguration)
+    const transactionClient = new TransactionClient(transactionConfiguration)
 
     nuxtApp.provide('searchClient', searchClient)
     nuxtApp.provide('lessorClient', lessorClient)

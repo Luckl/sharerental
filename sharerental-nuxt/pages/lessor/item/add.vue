@@ -11,7 +11,7 @@
   </FormPage>
 </template>
 <script setup lang="ts">
-import {RentalItemInput} from "~/schemas/openapi/merged";
+import {RentalItemInput} from "~/schemas/openapi/rentalItem";
 import RentalItemClient from "~/services/api/RentalItemClient";
 
 const router = useRouter()

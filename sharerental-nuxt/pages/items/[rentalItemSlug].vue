@@ -65,7 +65,7 @@
 <script setup lang="ts">
 
 import {useRoute} from "#app";
-import {Image, RentalItem} from "~/schemas/openapi/merged";
+import {Image, RentalItem} from "~/schemas/openapi/rentalItem";
 import SearchClient from "~/services/api/SearchClient";
 import TransactionClient from "~/services/api/TransactionClient";
 

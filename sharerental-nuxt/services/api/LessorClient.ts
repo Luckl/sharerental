@@ -3,7 +3,7 @@ import {
     LessorApi,
     GetLessorResult,
     Lessor, LessorInput,
-} from '~/schemas/openapi/merged';
+} from '~/schemas/openapi/lessor';
 
 export type {
     GetLessorResult,

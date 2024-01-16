@@ -3,7 +3,7 @@ import {
     SearchApi,
     SearchResult,
     SearchResultItem,
-} from '~~/schemas/openapi/merged';
+} from '~~/schemas/openapi/search';
 
 export type {
     SearchResult,

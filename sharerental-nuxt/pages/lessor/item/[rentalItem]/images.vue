@@ -35,7 +35,7 @@
 import {useRoute, useRuntimeConfig} from "#app";
 import RentalItemClient from "~/services/api/RentalItemClient";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
-import {Image as HttpImage, RentalItem} from "~/schemas/openapi/merged";
+import {Image as HttpImage, RentalItem} from "~/schemas/openapi/rentalItem";
 
 const route = useRoute();
 let itemIdString = Array.isArray(route.params.rentalItem) ? route.params.rentalItem[0] : route.params.rentalItem;

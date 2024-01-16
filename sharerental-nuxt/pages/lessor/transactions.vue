@@ -68,7 +68,7 @@ import {
   DisplayStatus,
   GetTransactionsResult,
   Transaction, TransactionStatus
-} from "~/schemas/openapi/merged";
+} from "~/schemas/openapi/transaction";
 import TransactionClient from "~/services/api/TransactionClient";
 
 const error = ref<String | undefined>(undefined)
