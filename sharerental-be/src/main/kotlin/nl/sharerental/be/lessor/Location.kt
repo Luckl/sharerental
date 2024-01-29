@@ -1,6 +1,7 @@
 package nl.sharerental.be.lessor
 
 import jakarta.persistence.*
+import nl.sharerental.contract.http.model.Location as HttpLocation
 
 @Entity
 class Location(
@@ -22,4 +23,19 @@ class Location(
     val country: String?,
     @Column(name = "geo_location")
     val geoLocation: String?
-)
+) {
+    fun toResponse(): HttpLocation {
+        val httpLocation = HttpLocation()
+
+        httpLocation.addressLine1 = addressLine1
+        httpLocation.addressLine2 = addressLine2
+        httpLocation.addressLine3 = addressLine3
+        httpLocation.street = street
+        httpLocation.houseNumber = houseNumber
+        httpLocation.postalCode = postalCode
+        httpLocation.city = city
+        httpLocation.country = country
+
+        return httpLocation
+    }
+}

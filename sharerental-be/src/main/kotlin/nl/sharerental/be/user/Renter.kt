@@ -2,8 +2,7 @@ package nl.sharerental.be.user
 
 import jakarta.persistence.*
 import nl.sharerental.be.lessor.Location
-import nl.sharerental.be.user.User
-import nl.sharerental.contract.http.model.RenterInput
+import nl.sharerental.contract.http.model.Renter as HttpRenter
 import java.time.Instant
 
 @Entity
@@ -26,4 +25,17 @@ data class Renter(
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "entered_by_user", referencedColumnName = "id")
     val createdByUser: User? = null,
-)
+) {
+    fun toResponse(): HttpRenter {
+        val renter = HttpRenter()
+
+        renter.firstName = firstName
+        renter.lastName = lastName
+        renter.phoneNumber = phoneNumber
+        renter.id = id
+        renter.email = email
+        renter.location = location?.toResponse()
+
+        return renter
+    }
+}
