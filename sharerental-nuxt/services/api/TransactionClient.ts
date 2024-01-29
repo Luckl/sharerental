@@ -1,5 +1,5 @@
 import {
-    Configuration,
+    Configuration, RenterInput,
     TransactionApi, TransactionStatus
 } from '~/schemas/openapi/transaction';
 
@@ -10,13 +10,14 @@ class TransactionClient {
         this.transactionApi = new TransactionApi(configuration);
     }
 
-    startTransaction(id: number, startDate: Date, endDate: Date, amount: number) {
+    startTransaction(id: number, startDate: Date, endDate: Date, amount: number, renter: RenterInput | undefined) {
         return this.transactionApi.startTransaction({
             createTransactionRequest: {
                 endDate: endDate,
                 startDate: startDate,
                 rentalItemId: id,
-                amount: amount
+                amount: amount,
+                renter: renter
             }
         })
     }

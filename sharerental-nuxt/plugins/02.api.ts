@@ -6,9 +6,11 @@ import {Configuration as TransactionConfiguration} from '~/schemas/openapi/trans
 import {Configuration as RentalItemConfiguration} from '~/schemas/openapi/rentalItem';
 import {Configuration as LessorConfiguration} from '~/schemas/openapi/lessor';
 import {Configuration as SearchConfiguration} from '~/schemas/openapi/search';
+import {Configuration as RenterConfiguration} from '~/schemas/openapi/renter';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
 import TransactionClient from "~/services/api/TransactionClient";
+import RenterClient from "~/services/api/RenterClient";
 
 export default defineNuxtPlugin((nuxtApp) => {
 
@@ -21,10 +23,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     const rentalItemConfiguration = new RentalItemConfiguration(configuration)
     const lessorConfiguration = new LessorConfiguration(configuration)
     const searchConfiguration = new SearchConfiguration(configuration)
+    const renterConfiguration = new RenterConfiguration(configuration)
 
     const searchClient = new SearchClient(searchConfiguration)
     const lessorClient = new LessorClient(lessorConfiguration)
     const rentalItemClient = new RentalItemClient(rentalItemConfiguration)
+    const renterClient = new RenterClient(renterConfiguration)
     const rentalItemImageClient = new RentalItemImageClient(rentalItemConfiguration)
     const transactionClient = new TransactionClient(transactionConfiguration)
 
@@ -33,4 +37,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.provide('rentalItemClient', rentalItemClient)
     nuxtApp.provide('rentalItemImageClient', rentalItemImageClient)
     nuxtApp.provide('transactionClient', transactionClient)
+    nuxtApp.provide('renterClient', renterClient)
 })
