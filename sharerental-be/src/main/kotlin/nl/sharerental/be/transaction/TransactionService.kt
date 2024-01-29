@@ -168,14 +168,8 @@ class TransactionService(
 
         val user = currentUserService.get()
 
-        //TODO: Enforce always having a renter, and when not available take last renter info from user
-        val renter = renterOptional ?: Renter(
-            firstName = user.username,
-            lastName = null,
-            email = user.email,
-            phoneNumber = null,
-            createdByUser = user
-        )
+        val renter = renterOptional ?: user.renterInformation
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         user.renterInformation = renter
 
