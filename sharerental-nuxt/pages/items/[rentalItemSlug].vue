@@ -82,23 +82,23 @@
           </div>
           <div class="flexbox-column">
             <label for="street" class="data-label mb-1">Straat</label>
-            <span>{{ renter.location.street }}</span>
+            <span>{{ renter.location?.street }}</span>
           </div>
           <div class="flexbox-column">
             <label for="houseNumber" class="data-label mb-1">Huisnummer</label>
-            <span>{{ renter.location.houseNumber }}</span>
+            <span>{{ renter.location?.houseNumber }}</span>
           </div>
           <div class="flexbox-column">
             <label for="postalCode" class="data-label mb-1">Postcode</label>
-            <span>{{ renter.location.postalCode }}</span>
+            <span>{{ renter.location?.postalCode }}</span>
           </div>
           <div class="flexbox-column">
             <label for="city" class="data-label mb-1">Stad</label>
-            <span>{{ renter.location.city }}</span>
+            <span>{{ renter.location?.city }}</span>
           </div>
           <div class="flexbox-column">
             <label for="country" class="data-label mb-1">Land</label>
-            <span>{{ renter.location.country }}</span>
+            <span>{{ renter.location?.country }}</span>
           </div>
         </div>
         <div v-else>
@@ -171,7 +171,7 @@ const route = useRoute();
 const toast = useToast();
 const amount = ref(0);
 const price = ref(0);
-const amountAvailable = ref(10);
+const amountAvailable = ref(0);
 const slug = Array.isArray(route.params.rentalItemSlug) ? route.params.rentalItemSlug[0] : route.params.rentalItemSlug;
 const item = ref<RentalItem>({
   name: "",
