@@ -23,8 +23,6 @@ class WebSecurityConfiguration {
             }
             .authorizeHttpRequests {
             it
-                .requestMatchers("/me/**")
-                .authenticated()
                 .anyRequest()
                 .permitAll()
         }

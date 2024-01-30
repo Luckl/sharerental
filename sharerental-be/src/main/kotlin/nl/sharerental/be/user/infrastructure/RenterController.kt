@@ -17,8 +17,7 @@ class RenterController(
     private val logger = LoggerFactory.getLogger(RenterController::class.java)
 
     override fun getRenter(): ResponseEntity<HttpRenter> {
-        logger.info("Get renter information")
-        currentUserService.get().renterInformation?.let {
+        currentUserService.getOptional()?.renterInformation?.let {
             return ResponseEntity.ok(it.toResponse())
         } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }

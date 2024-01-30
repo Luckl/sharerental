@@ -34,6 +34,13 @@ class CurrentUserService(private val userService: UserService,
         return currentUser
     }
 
+    fun getOptional(): User? {
+        if (!this::currentUser.isInitialized) {
+            return init()
+        }
+        return currentUser
+    }
+
     private fun processJwt(principal: Jwt): User {
         val userId = principal.claims["user_id"] as String
         val email = principal.claims["email"] as String

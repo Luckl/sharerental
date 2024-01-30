@@ -113,7 +113,7 @@ class TransactionController(
             createTransactionRequest.startDate,
             createTransactionRequest.endDate,
             createTransactionRequest.amount,
-            createTransactionRequest.renter?.toRenter(currentUserService.get())
+            createTransactionRequest.renter?.toRenter(currentUserService.getOptional())
         )
 
         return ResponseEntity.ok(CreateTransactionResponse().redirectUrl(mollieTransactionCheckoutUrl))
@@ -131,7 +131,7 @@ private fun HttpTransactionStatus.toEntityEnum(): TransactionStatusEnum {
     }
 }
 
-private fun RenterInput.toRenter(user: User): Renter = Renter(
+private fun RenterInput.toRenter(user: User?): Renter = Renter(
     firstName = firstName,
     lastName = lastName,
     phoneNumber = phoneNumber,
