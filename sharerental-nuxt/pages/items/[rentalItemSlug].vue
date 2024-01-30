@@ -169,7 +169,7 @@ const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
 const route = useRoute();
 const toast = useToast();
-const amount = ref(1);
+const amount = ref(0);
 const price = ref(0);
 const amountAvailable = ref(10);
 const slug = Array.isArray(route.params.rentalItemSlug) ? route.params.rentalItemSlug[0] : route.params.rentalItemSlug;
@@ -223,8 +223,6 @@ watch(amount, () => {
 
 function startTransaction() {
   if (dates.value[0] != null && dates.value[1] != null) {
-    console.log(dates.value[0])
-    console.log(dates.value[1])
     $transactionClient.startTransaction(
         item.value.id,
         dates.value[0],
