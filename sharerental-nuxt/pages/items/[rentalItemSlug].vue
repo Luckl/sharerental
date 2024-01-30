@@ -248,7 +248,6 @@ function onUpdateTransactionInformation() {
 }
 
 const showError = (message: String) => {
-  console.log('an error occurred')
   toast.add({severity: 'error', summary: 'Er is iets fout gegaan', detail: message, life: 5000});
 };
 

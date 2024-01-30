@@ -7,29 +7,25 @@ import {getCurrentUser} from "vuefire";
 
 export class ApiMiddleware implements Middleware {
     public async pre(context: ResponseContext): Promise<FetchParams | void> {
+
         const accessToken = await this.acquireToken();
-        if (accessToken != null) {
-            return {
-                url: context.url,
-                init: {
-                    ...context.init,
-                    headers: new Headers({
-                        ...context.init.headers,
-                        Authorization: `Bearer ${accessToken}`,
-                    }),
-                },
-            };
-        } else {
-            return {
-                url: context.url,
-                init: {
-                    ...context.init,
-                    headers: new Headers({
-                        ...context.init.headers
-                    }),
-                },
-            };
+        let xsrfToken = useCookie("XSRF-TOKEN").value;
+        let headers = new Headers({
+            ...context.init.headers
+        });
+        if (xsrfToken != null) {
+            headers.append("X-XSRF-TOKEN", xsrfToken);
         }
+        if (accessToken != null) {
+            headers.append("Authorization", "Bearer " + accessToken);
+        }
+        return {
+            url: context.url,
+            init: {
+                ...context.init,
+                headers: headers,
+            },
+        };
     }
 
     public post(context: ResponseContext): Promise<Response | void> {
