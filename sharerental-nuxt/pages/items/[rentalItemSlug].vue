@@ -281,17 +281,15 @@ function showRenterInfo() {
 }
 
 function enableRenterEditMode() {
-  console.log(dates.value[0])
-  console.log(dates.value[1])
   renterInput.value.firstName = renter.value.firstName
   renterInput.value.lastName = renter.value.lastName
   renterInput.value.email = renter.value.email
   renterInput.value.phoneNumber = renter.value.phoneNumber
-  renterInput.value.street = renter.value.location.street
-  renterInput.value.houseNumber = renter.value.location.houseNumber
-  renterInput.value.postalCode = renter.value.location.postalCode
-  renterInput.value.city = renter.value.location.city
-  renterInput.value.country = renter.value.location.country
+  renterInput.value.street = renter.value.location?.street
+  renterInput.value.houseNumber = renter.value.location?.houseNumber
+  renterInput.value.postalCode = renter.value.location?.postalCode
+  renterInput.value.city = renter.value.location?.city
+  renterInput.value.country = renter.value.location?.country
 
   editRenterInfo.value = true
 }
