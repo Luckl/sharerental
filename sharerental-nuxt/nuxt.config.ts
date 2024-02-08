@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt'],
+    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt', '@nuxtjs/google-fonts'],
     ssr: true,
     devtools: {enabled: true},
     image: {
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
     },
     googleFonts: {
         families: {
-            Roboto: true
+            Roboto: '100..1000'
         }
     },
 })
