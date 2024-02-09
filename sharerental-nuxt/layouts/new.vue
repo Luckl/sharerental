@@ -9,5 +9,6 @@
 * {
   font-family: 'Roboto', sans-serif;
   font-weight: normal;
+  font-kerning: normal;
 }
 </style>
