@@ -5,15 +5,32 @@ definePageMeta({
   description: 'New layout',
   layout: 'new'
 })
+const img = useImage()
 
+const category1Background = computed(() => {
+  const imgUrl = img('categories/stijgers-trappen-hoogwerkers.jpg')
+  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
+})
+const category2Background = computed(() => {
+  const imgUrl = img('categories/Betonbewerking.jpg')
+  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')`, }
+})
+const category3Background = computed(() => {
+  const imgUrl = img('categories/hef-en-hijswerktuigen.jpg')
+  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
+})
+const category4Background = computed(() => {
+  const imgUrl = img('categories/electrisch-gereedschap-3.jpg')
+  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
+})
 </script>
 
 <template>
-  <div class="top-bar side-padding black-style">
+  <div class="top-bar side-padding black-area">
     <div>
-      Iemand spreken over verhuren? <span class="font-light">+31 6 43209314</span>
+      <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
     </div>
-    <div><span>Huren</span> | <span>Verhuren</span></div>
+    <div><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
   </div>
   <section class="side-padding font-bold flex orange-area">
     <h1>ShareRental</h1>
@@ -37,15 +54,17 @@ definePageMeta({
       <div class=" w-1/2 justify-center">
         <h1>Vind het beste materiaal voor je project via ShareRental!</h1>
         <div class="flex">
-          <input-text type="text" class="w-3/4 rounded-l-lg" placeholder="Wat heb je nodig?"
-                      :pt="{root: {class: 'p-4 w-full font-bold', style: 'outline: none;'}}"
-          />
-          <Button class="w-1/4 rounded-r-lg black-style" label="Zoeken" unstyled/>
+          <input-text unstyled
+                      type="text"
+                      class="w-3/4 rounded-l-lg"
+                      placeholder="Wat heb je nodig?"
+                      :pt="{root: {class: 'p-3 w-full font-bold', style: 'outline: none;'}}"
+          ></input-text>
+          <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" unstyled/>
         </div>
       </div>
       <div class="w-1/2">
-        <!--    Is hidden for some reason?    -->
-        <image height="400" src="../assets/forklift-transparent-background.png" alt="rental"/>
+        <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
       </div>
     </div>
   </section>
@@ -63,6 +82,25 @@ definePageMeta({
       1000+ producten bij 100+ aanbieders
     </span>
   </section>
+  <section>
+    <div class="side-padding">
+      <h1>Categorieën</h1>
+      <div class="grid grid-cols-4 gap-4">
+        <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category1Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
+        </div>
+        <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category2Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
+        </div>
+        <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category3Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
+        </div>
+        <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category4Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
@@ -71,7 +109,7 @@ definePageMeta({
   color: #242635;
 }
 
-.black-style {
+.black-area {
   background-color: #242635;
   color: white;
 }

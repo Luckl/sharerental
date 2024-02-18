@@ -54,7 +54,7 @@ export default defineNuxtConfig({
     },
     googleFonts: {
         families: {
-            Roboto: '100..1000'
+            Roboto: true
         }
     },
 })
