@@ -7,83 +7,90 @@ definePageMeta({
 })
 const img = useImage()
 
-const category1Background = computed(() => {
-  const imgUrl = img('categories/stijgers-trappen-hoogwerkers.jpg')
-  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
-})
-const category2Background = computed(() => {
-  const imgUrl = img('categories/Betonbewerking.jpg')
-  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')`, }
-})
-const category3Background = computed(() => {
-  const imgUrl = img('categories/hef-en-hijswerktuigen.jpg')
-  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
-})
-const category4Background = computed(() => {
-  const imgUrl = img('categories/electrisch-gereedschap-3.jpg')
-  return { backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 1)), url('${imgUrl}')` }
-})
+const categoryBackground = (image: string) => {
+  return computed(() => {
+    const imgUrl = img(image)
+    return {backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(102, 102, 102, 1)), url('${imgUrl}')`}
+  })
+}
+
+const category1Background = categoryBackground('categories/stijgers-trappen-hoogwerkers.jpg')
+const category2Background = categoryBackground('categories/Betonbewerking.jpg')
+const category3Background = categoryBackground('categories/hef-en-hijswerktuigen.jpg')
+const category4Background = categoryBackground('categories/electrisch-gereedschap-3.jpg')
+
 </script>
 
 <template>
-  <div class="top-bar side-padding black-area">
-    <div>
-      <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
+  <div class=" black-area">
+    <div class="container top-bar">
+      <div>
+        <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
+      </div>
+      <div><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
     </div>
-    <div><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
   </div>
-  <section class="side-padding font-bold flex orange-area">
-    <h1>ShareRental</h1>
-    <nav class="flex justify-between items-center w-full py-4">
-      <div class="flex justify-start">
-        <NuxtLink class="text-base m-4 font-semibold" to="/">Assortiment</NuxtLink>
-        <NuxtLink class="text-base m-4 font-semibold" to="/about">Hoe het werkt</NuxtLink>
-        <NuxtLink class="text-base m-4 font-semibold" to="/contact">Contact</NuxtLink>
-      </div>
-      <div class="flex justify-end">
-        <NuxtLink to="/register">
-          <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
-                  label="Inloggen" text unstyled>
-          </Button>
-        </NuxtLink>
-      </div>
-    </nav>
-  </section>
-  <section class="side-padding orange-area">
-    <div class="flex py-40 align-middle justify-center">
-      <div class=" w-1/2 justify-center">
-        <h1>Vind het beste materiaal voor je project via ShareRental!</h1>
-        <div class="flex">
-          <input-text unstyled
-                      type="text"
-                      class="w-3/4 rounded-l-lg"
-                      placeholder="Wat heb je nodig?"
-                      :pt="{root: {class: 'p-3 w-full font-bold', style: 'outline: none;'}}"
-          ></input-text>
-          <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" unstyled/>
+  <section class=" orange-area">
+    <div class="container font-bold flex">
+      <h1>ShareRental</h1>
+      <nav class="flex justify-between items-center w-full py-4">
+        <div class="flex justify-start">
+          <NuxtLink class="text-base m-4 font-semibold" to="/">Assortiment</NuxtLink>
+          <NuxtLink class="text-base m-4 font-semibold" to="/about">Hoe het werkt</NuxtLink>
+          <NuxtLink class="text-base m-4 font-semibold" to="/contact">Contact</NuxtLink>
         </div>
-      </div>
-      <div class="w-1/2">
-        <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+        <div class="flex justify-end">
+          <NuxtLink to="/register">
+            <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
+                    label="Inloggen" text unstyled>
+            </Button>
+          </NuxtLink>
+        </div>
+      </nav>
+    </div>
+  </section>
+  <section class="orange-area">
+    <div class="container">
+
+      <div class="flex py-40 align-middle justify-center">
+        <div class=" w-1/2 justify-center">
+          <h1>Vind het beste materiaal voor je project via ShareRental!</h1>
+          <div class="flex">
+            <input-text unstyled
+                        type="text"
+                        class="w-3/4 rounded-l-lg"
+                        placeholder="Wat heb je nodig?"
+                        :pt="{root: {class: 'p-3 w-full font-bold', style: 'outline: none;'}}"
+            ></input-text>
+            <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" unstyled/>
+          </div>
+        </div>
+        <div class="w-1/2">
+          <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+        </div>
       </div>
     </div>
   </section>
   <section class="side-padding bg-gray-200 flex justify-between gap-10">
+    <div class="container">
+
     <span class="m-5 font-bold">
       <i class="pi pi-check"></i>
       Makkelijk en snel huren
     </span>
-    <span class="m-5 font-bold">
+      <span class="m-5 font-bold">
       <i class="pi pi-check"></i>
       Vergelijk en maak de beste deal
     </span>
-    <span class="m-5 font-bold">
+      <span class="m-5 font-bold">
       <i class="pi pi-check"></i>
       1000+ producten bij 100+ aanbieders
     </span>
+    </div>
   </section>
   <section>
-    <div class="side-padding">
+
+    <div class="container">
       <h1>Categorieën</h1>
       <div class="grid grid-cols-4 gap-4">
         <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category1Background">
@@ -97,6 +104,81 @@ const category4Background = computed(() => {
         </div>
         <div class="rounded-lg relative bg-cover bg-center h-48 w-48" :style="category4Background">
           <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
+        </div>
+      </div>
+      <div class="mt-5 flex flex-col justify-center w-full">
+        <div class="flex justify-center">
+          Toon alle categorieën
+        </div>
+        <div class="flex justify-center">
+          <Button unstyled>
+            <i class="pi pi-chevron-down"></i>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="orange-area mt-5">
+    <div class="container">
+
+      <div class="w-full flex justify-center">
+        <h1>Hoe werkt het?</h1>
+      </div>
+      <div class="grid grid-cols-2 gap-8">
+        <div class="flex flex-col m-20 w-80">
+          <span class="text-xl font-bold">Ga op zoek naar wat jij nodig hebt</span>
+          <span class="mt-2">Afhankelijk van je regio, het type toestel en de huurperiode selecteren
+        wij voor jou automatisch de beste verhuurpartners. Je krijgt onmiddelijk een
+        prijs te zien en kunt het toestel reserveren. Verlengen en annuleren is altijd
+        mogelijk. </span>
+        </div>
+        <div class="flex flex-col m-20 w-80">
+          <span class="text-xl font-bold">Image</span>
+          <span class="mt-2"></span>
+        </div>
+        <div>
+          <div class="flex flex-col m-20 w-80">
+            <span class="text-xl font-bold">Image</span>
+            <span class="mt-2"></span>
+          </div>
+        </div>
+        <div>
+          <div class="flex flex-col m-20 w-80">
+            <span class="text-xl font-bold">Vergelijk verschillende aanbieders</span>
+            <span class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            ut aliquip ex ea commodo consequat.</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex flex-col m-20 w-80">
+            <span class="text-xl font-bold">En dan kan je nu gaan huren</span>
+            <span class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            ut aliquip ex ea commodo consequat.</span>
+            <button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="grid grid-cols-2 mt-5">
+        <div>
+          <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+        </div>
+        <div>
+          <h3 class="font-bold">Registreer nu!</h3>
+          <h1>Huur vandaag nog alles voor je volgende project!</h1>
+          <NuxtLink to="/register">
+            <button unstyled class="rounded-lg black-area p-3 h-12 m-4">Gratis registreren</button>
+          </NuxtLink>
+          <NuxtLink to="/login">
+            <button unstyled class="rounded-lg black-area p-3 h-12 m-4">Inloggen</button>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -120,6 +202,11 @@ const category4Background = computed(() => {
   justify-content: space-between;
 }
 
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
 @media screen and (min-width: 820px) {
   h1 {
     padding-top: 20px;
@@ -127,10 +214,6 @@ const category4Background = computed(() => {
     margin-right: 50px;
     font-size: 2em;
     font-weight: 600;
-  }
-
-  .side-padding {
-    padding: 0 200px;
   }
 }
 
@@ -141,10 +224,6 @@ const category4Background = computed(() => {
     margin-right: 50px;
     font-size: 1.5em;
     font-weight: 600;
-  }
-
-  .side-padding {
-    padding: 0 50px;
   }
 }
 </style>
