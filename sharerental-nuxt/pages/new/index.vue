@@ -23,16 +23,16 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
 
 <template>
   <div class=" black-area">
-    <div class="container top-bar">
+    <div class="container flex justify-between">
       <div>
         <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
       </div>
       <div><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
     </div>
   </div>
-  <section class=" orange-area">
+  <section class=" green-area">
     <div class="container font-bold flex">
-      <h1>ShareRental</h1>
+      <h1 class="my-10">ShareRental</h1>
       <nav class="flex justify-between items-center w-full py-4">
         <div class="flex justify-start">
           <NuxtLink class="text-base m-4 font-semibold" to="/">Assortiment</NuxtLink>
@@ -49,12 +49,11 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
       </nav>
     </div>
   </section>
-  <section class="orange-area">
+  <section class="green-area">
     <div class="container">
-
       <div class="flex py-40 align-middle justify-center">
         <div class=" w-1/2 justify-center">
-          <h1>Vind het beste materiaal voor je project via ShareRental!</h1>
+          <h1 class="my-10">Vind het beste materiaal voor je project via ShareRental!</h1>
           <div class="flex">
             <input-text unstyled
                         type="text"
@@ -71,25 +70,24 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
       </div>
     </div>
   </section>
-  <section class="side-padding bg-gray-200 flex justify-between gap-10">
-    <div class="container">
+  <section class="side-padding bg-gray-200 ">
+    <div class="container flex justify-between gap-10">
 
-    <span class="m-5 font-bold">
+    <span class="m-5 font-bold flex items-center">
       <i class="pi pi-check"></i>
-      Makkelijk en snel huren
+      <span class="text-center">Makkelijk en snel huren</span>
     </span>
-      <span class="m-5 font-bold">
+      <span class="m-5 font-bold flex items-center">
       <i class="pi pi-check"></i>
-      Vergelijk en maak de beste deal
+      <span class="text-center">Vergelijk en maak de beste deal</span>
     </span>
-      <span class="m-5 font-bold">
+      <span class="m-5 font-bold flex items-center">
       <i class="pi pi-check"></i>
-      1000+ producten bij 100+ aanbieders
+      <span class="text-center">1000+ producten bij 100+ aanbieders</span>
     </span>
     </div>
   </section>
   <section>
-
     <div class="container">
       <h1>Categorieën</h1>
       <div class="grid grid-cols-4 gap-4">
@@ -118,11 +116,11 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
       </div>
     </div>
   </section>
-  <section class="orange-area mt-5">
+  <section class="green-area mt-5">
     <div class="container">
 
       <div class="w-full flex justify-center">
-        <h1>Hoe werkt het?</h1>
+        <h1 class="my-10">Hoe werkt het?</h1>
       </div>
       <div class="grid grid-cols-2 gap-8">
         <div class="flex flex-col m-20 w-80">
@@ -172,13 +170,46 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
         </div>
         <div>
           <h3 class="font-bold">Registreer nu!</h3>
-          <h1>Huur vandaag nog alles voor je volgende project!</h1>
+          <h1 class="my-10">Huur vandaag nog alles voor je volgende project!</h1>
           <NuxtLink to="/register">
-            <button unstyled class="rounded-lg black-area p-3 h-12 m-4">Gratis registreren</button>
+            <button unstyled class="rounded-lg black-area p-3 h-12 mr-8">Gratis registreren</button>
           </NuxtLink>
           <NuxtLink to="/login">
-            <button unstyled class="rounded-lg black-area p-3 h-12 m-4">Inloggen</button>
+            <button unstyled class="rounded-lg black-area p-3 h-12">Inloggen</button>
           </NuxtLink>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="green-area mt-5 pt-10">
+    <div class="container">
+      <div class="grid grid-cols-2 mt-5">
+        <div>
+          <div class="grid grid-cols-2">
+            <span class="font-bold">Over ShareRental</span>
+            <span class="font-bold">Verhuren</span>
+            <span class="my-1 text-sm">Hoe het werkt</span>
+            <span class="my-1 text-sm">Zo werkt het</span>
+            <span class="my-1 text-sm">FAQ</span>
+            <span class="my-1 text-sm">Veelgestelde vragen</span>
+            <span class="my-1 text-sm">Over ons</span>
+            <span class="my-1 text-sm">Service</span>
+            <span class="my-1 text-sm">Nieuwsbrief</span>
+            <span class="my-1 text-sm"></span>
+            <span class="my-1 text-sm">Contact</span>
+          </div>
+          <div class="mt-10 flex gap-5">
+            <i class="pi pi-facebook" style="font-size: 2rem"></i>
+            <i class="pi pi-instagram" style="font-size: 2rem"></i>
+            <i class="pi pi-linkedin" style="font-size: 2rem"></i>
+          </div>
+        </div>
+        <div class="flex flex-col mb-20">
+          <h1>Direct beginnen met verhuren?</h1>
+          <span class="mt-1">Ben je op zoek naar een extra verkoopkanaal?</span>
+          <span>Ben je benieuwd naar alle opties een mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
+          <span>Neem dan direct gratis contact op!</span>
+          <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4">Neem contact op</button>
         </div>
       </div>
     </div>
@@ -186,20 +217,14 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
 </template>
 
 <style scoped>
-.orange-area {
-  background-color: #F9AD4D;
-  color: #242635;
+.green-area {
+  background-color: #004E1B;
+  color: white;
 }
 
 .black-area {
   background-color: #242635;
   color: white;
-}
-
-.top-bar {
-  padding: 20px 0;
-  display: flex;
-  justify-content: space-between;
 }
 
 .container {
@@ -209,9 +234,6 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
 
 @media screen and (min-width: 820px) {
   h1 {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-right: 50px;
     font-size: 2em;
     font-weight: 600;
   }
@@ -219,9 +241,6 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
 
 @media screen and (max-width: 820px) {
   h1 {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-right: 50px;
     font-size: 1.5em;
     font-weight: 600;
   }
