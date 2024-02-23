@@ -23,7 +23,7 @@ tasks.openApiGenerate {
 	inputs.dir("$rootDir/../sharerental-api-contracts")
 	generatorName.set("spring")
 	inputSpecRootDirectory.set("$rootDir/../sharerental-api-contracts")
-	mergedFileName.set("sharerental.yaml")
+	mergedFileName.set("sharerental")
 	outputDir.set("$buildDir/generated")
 	apiPackage.set("nl.sharerental.contract.http")
 	invokerPackage.set("nl.sharerental.contract.http.invoker")
