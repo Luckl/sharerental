@@ -36,7 +36,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
       <nav class="flex justify-between items-center w-full">
         <div class="flex justify-start">
           <NuxtLink class="text-base mr-5 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink class="text-base mr-5 font-semibold" to="/about">Hoe het werkt</NuxtLink>
+          <NuxtLink class="text-base mr-5 font-semibold" to="#hoe_het_werkt">Hoe het werkt</NuxtLink>
           <NuxtLink class="text-base mr-5 font-semibold" to="/contact">Contact</NuxtLink>
         </div>
         <div class="flex justify-end">
@@ -120,7 +120,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
     <div class="container">
 
       <div class="w-full flex justify-center">
-        <h1 class="my-10">Hoe werkt het?</h1>
+        <h1 class="my-10"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
       </div>
       <div class="grid grid-cols-2 gap-8">
         <div class="flex flex-col m-20 w-80">
