@@ -32,12 +32,12 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   </div>
   <section class=" green-area">
     <div class="container font-bold flex">
-      <h1 class="my-10">ShareRental</h1>
-      <nav class="flex justify-between items-center w-full py-4">
+      <h1 class="mr-5">ShareRental</h1>
+      <nav class="flex justify-between items-center w-full">
         <div class="flex justify-start">
-          <NuxtLink class="text-base m-4 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink class="text-base m-4 font-semibold" to="/about">Hoe het werkt</NuxtLink>
-          <NuxtLink class="text-base m-4 font-semibold" to="/contact">Contact</NuxtLink>
+          <NuxtLink class="text-base mr-5 font-semibold" to="/">Assortiment</NuxtLink>
+          <NuxtLink class="text-base mr-5 font-semibold" to="/about">Hoe het werkt</NuxtLink>
+          <NuxtLink class="text-base mr-5 font-semibold" to="/contact">Contact</NuxtLink>
         </div>
         <div class="flex justify-end">
           <NuxtLink to="/register">
