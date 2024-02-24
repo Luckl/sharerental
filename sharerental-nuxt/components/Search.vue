@@ -1,9 +1,14 @@
 <template>
-  <span class="p-input-icon-left button">
-          <i class="pi pi-search"/>
-          <InputText v-model="searchText" placeholder="Zoek gereedschap" class="border-right-none"/>
-          <Button label="Zoeken" v-on:click="search" class="border-left-none"/>
-        </span>
+  <div class="flex">
+    <input-text unstyled
+                type="text"
+                class="rounded-l-lg"
+                placeholder="Wat heb je nodig?"
+                v-model="searchText"
+                :pt="{root: {class: 'p-3 w-full font-bold text-black', style: 'outline: none;'}}"
+    ></input-text>
+    <Button class="rounded-r-lg black-area p-1" label="Zoeken" @click="search()" unstyled/>
+  </div>
 </template>
 
 <script lang="ts" setup>

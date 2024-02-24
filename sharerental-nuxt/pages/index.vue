@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-
 import menu from "primevue/menu/Menu.vue";
+import SrTopBar from "~/components/SrTopBar.vue";
 
 definePageMeta({
-  title: 'ShareRental - Home',
-  description: 'New layout',
+  title: 'Home - ShareRental',
+  description: 'Gereedschap en machines huren en verhuren',
   layout: 'new'
 })
+
 const img = useImage()
 const router = useRouter();
 const searchText = ref("")
-const menuOpened = ref(false)
 const categoriesCollapsed = ref(true)
 
 const screenWidth = ref(process.client ? window.innerWidth : 0);
@@ -49,87 +49,19 @@ const category6Background = categoryBackground('categories/grondverzetters-bouwm
 const category7Background = categoryBackground('categories/Luchtdrukgereedschap.jpg')
 const category8Background = categoryBackground('categories/verwarmen-drogen-reinigen.jpg')
 
-function test() {
-  console.log(categoriesCollapsed.value)
-}
 </script>
 
 <template>
-  <div class="black-area">
-    <div class="md:max-w-[840px] md:mx-auto flex justify-between px-4 md:px-0">
-      <div>
-        <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
-          class="font-thin">+31 6 43209314</span>
-      </div>
-      <div class="hidden md:block"><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
-    </div>
-  </div>
-  <section class=" green-area">
-    <div class="w-full md:max-w-[840px] md:mx-auto font-bold flex pt-5 px-4 md:px-0">
-      <h1 class="mr-5 text-4xl">ShareRental</h1>
-      <nav class="justify-between items-center w-full hidden md:flex">
-        <div class="flex justify-start">
-          <NuxtLink class="text-base mr-5 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink class="text-base mr-5 font-semibold" to="#hoe_het_werkt">Hoe het werkt</NuxtLink>
-          <NuxtLink class="text-base mr-5 font-semibold" to="/contact">Contact</NuxtLink>
-        </div>
-        <div class="flex justify-end">
-          <NuxtLink to="/register">
-            <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
-                    label="Inloggen" text unstyled>
-            </Button>
-          </NuxtLink>
-        </div>
-      </nav>
-      <nav class="flex md:hidden w-full">
-        <div class="flex w-full justify-end items-center gap-2">
-          <NuxtLink to="/register">
-            <i class="pi pi-user" style="font-size: 1.5rem">
-            </i>
-          </NuxtLink>
-          <Button unstyled @click="menuOpened = !menuOpened">
-            <i class="pi pi-bars" style="font-size: 2rem">
-            </i>
-          </Button>
-        </div>
-      </nav>
-    </div>
-    <Sidebar v-model:visible="menuOpened" position="right">
-      <template #header>
-        <h1 class="text-4xl">ShareRental</h1>
-      </template>
-      <div class="grid grid-cols-1">
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/">
-          <span>Assortiment</span>
-          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
-        </NuxtLink>
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="#hoe_het_werkt"
-                  @click="menuOpened = false">
-          <span>Hoe het werkt</span>
-          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
-        </NuxtLink>
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/contact">
-          <span>Contact</span>
-          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
-        </NuxtLink>
-      </div>
-    </Sidebar>
-  </section>
+  <Head>
+    <Title>Home - ShareRental</Title>
+  </Head>
+  <sr-top-bar />
   <section class="green-area">
     <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
       <div class="flex py-40 align-middle justify-center">
         <div class="w-full md:w-1/2 justify-center">
           <h1 class="my-10 text-xl md:text-4xl">Vind het beste materiaal voor je project via ShareRental!</h1>
-          <div class="flex">
-            <input-text unstyled
-                        type="text"
-                        class="w-3/4 rounded-l-lg"
-                        placeholder="Wat heb je nodig?"
-                        v-model="searchText"
-                        :pt="{root: {class: 'p-3 w-full font-bold text-black', style: 'outline: none;'}}"
-            ></input-text>
-            <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" @click="search()" unstyled/>
-          </div>
+          <Search></Search>
         </div>
         <div class="w-1/2 hidden md:block">
           <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
@@ -302,13 +234,5 @@ function test() {
 </template>
 
 <style scoped>
-.green-area {
-  background-color: #004E1B;
-  color: white;
-}
 
-.black-area {
-  background-color: #242635;
-  color: white;
-}
 </style>

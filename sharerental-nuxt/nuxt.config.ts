@@ -6,6 +6,13 @@ export default defineNuxtConfig({
     image: {
         inject: true
     },
+    app: {
+        head: {
+            htmlAttrs: {
+                lang: 'nl'
+            }
+        }
+    },
     vuefire: {
         auth: true,
         admin: {},
