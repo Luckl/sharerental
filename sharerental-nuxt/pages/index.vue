@@ -141,15 +141,15 @@ function test() {
     <div class="md:max-w-[840px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">Makkelijk en snel huren</span>
+        <span class="text-center">Vind je lokale aanbieder</span>
       </div>
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">Vergelijk en maak de beste deal</span>
+        <span class="text-center">Altijd de juiste prijs</span>
       </div>
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">1000+ producten bij 100+ aanbieders</span>
+        <span class="text-center">One-stop-shop voor ieder project</span>
       </div>
     </div>
   </section>
