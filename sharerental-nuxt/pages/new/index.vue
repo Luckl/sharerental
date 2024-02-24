@@ -6,12 +6,17 @@ definePageMeta({
   layout: 'new'
 })
 const img = useImage()
-
+const router = useRouter();
+const searchText = ref("")
 const categoryBackground = (image: string) => {
   return computed(() => {
     const imgUrl = img(image)
     return {backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(102, 102, 102, 1)), url('${imgUrl}')`}
   })
+}
+
+function search() {
+  router.push("/search/" + searchText.value)
 }
 
 const category1Background = categoryBackground('categories/stijgers-trappen-hoogwerkers.jpg')
@@ -71,9 +76,10 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
                         type="text"
                         class="w-3/4 rounded-l-lg"
                         placeholder="Wat heb je nodig?"
-                        :pt="{root: {class: 'p-3 w-full font-bold', style: 'outline: none;'}}"
+                        v-model="searchText"
+                        :pt="{root: {class: 'p-3 w-full font-bold text-black', style: 'outline: none;'}}"
             ></input-text>
-            <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" unstyled/>
+            <Button class="w-1/4 rounded-r-lg black-area" label="Zoeken" @click="search()" unstyled/>
           </div>
         </div>
         <div class="w-1/2 hidden md:block">
