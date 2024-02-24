@@ -23,7 +23,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
 
 <template>
   <div class="black-area">
-    <div class="md:max-w-[840px] md:mx-auto flex justify-between">
+    <div class="md:max-w-[840px] md:mx-auto flex justify-between px-4 md:px-0">
       <div>
         <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
       </div>
@@ -32,7 +32,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   </div>
   <section class=" green-area">
     <div class="w-full md:max-w-[840px] md:mx-auto font-bold flex pt-5 px-4 md:px-0">
-      <h1 class="mr-5 text-xl md:text-4xl">ShareRental</h1>
+      <h1 class="mr-5 text-4xl">ShareRental</h1>
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start ">
           <NuxtLink class="text-base mr-5 font-semibold" to="/">Assortiment</NuxtLink>
@@ -100,7 +100,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   </section>
   <section>
     <div class="md:max-w-[840px] md:mx-auto  px-4 md:px-0">
-      <h1 class="text-xl md:text-4xl mt-5">Categorieën</h1>
+      <h1 class="text-4xl my-5">Categorieën</h1>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
           <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
@@ -131,7 +131,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
     <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
 
       <div class="w-full flex justify-center">
-        <h1 class="my-10 text-xl md:text-4xl"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
+        <h1 class="my-10 text-4xl"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
         <div class="flex flex-col m-5 md:m-20 w-80">
@@ -175,13 +175,13 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   </section>
   <section>
     <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
-      <div class="grid grid-cols-2 mt-5">
-        <div>
+      <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
+        <div class="hidden md:block">
           <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
         </div>
         <div>
           <h3 class="font-bold">Registreer nu!</h3>
-          <h1 class="my-10 text-xl md:text-4xl">Huur vandaag nog alles voor je volgende project!</h1>
+          <h1 class="my-10 text-3xl">Huur vandaag nog alles voor je volgende project!</h1>
           <NuxtLink to="/register">
             <button unstyled class="rounded-lg black-area p-3 h-12 mr-8">Gratis registreren</button>
           </NuxtLink>
@@ -194,9 +194,9 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   </section>
   <section class="green-area mt-5 pt-10">
     <div class="md:max-w-[840px] md:mx-auto  px-4 md:px-0">
-      <div class="grid grid-cols-2 mt-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
         <div>
-          <div class="grid grid-cols-2">
+          <div class="grid grid-cols-2 ">
             <span class="font-bold">Over ShareRental</span>
             <span class="font-bold">Verhuren</span>
             <span class="my-1 text-sm">Hoe het werkt</span>
@@ -215,7 +215,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
             <i class="pi pi-linkedin" style="font-size: 2rem"></i>
           </div>
         </div>
-        <div class="flex flex-col mb-20">
+        <div class="flex flex-col mb-20 order-first md:order-last">
           <h1 class="text-xl md:text-4xl">Direct beginnen met verhuren?</h1>
           <span class="mt-1">Ben je op zoek naar een extra verkoopkanaal?</span>
           <span>Ben je benieuwd naar alle opties een mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
