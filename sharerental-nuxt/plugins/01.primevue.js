@@ -27,7 +27,15 @@ import Galleria from "primevue/galleria";
 import Tag from "primevue/tag";
 
 export default defineNuxtPlugin(nuxtApp => {
-    nuxtApp.vueApp.use(PrimeVue, { ripple: true })
+    nuxtApp.vueApp.use(PrimeVue, {
+        pt: {
+            sidebar: {
+                header: {
+                    class: 'gap-16'
+                }
+            }
+        }
+    })
     nuxtApp.vueApp.use(ToastService)
     nuxtApp.vueApp.component('Button', Button)
     nuxtApp.vueApp.component('InputText', InputText)

@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 
+import menu from "primevue/menu/Menu.vue";
+
 definePageMeta({
   title: 'ShareRental - Home',
   description: 'New layout',
@@ -8,6 +10,7 @@ definePageMeta({
 const img = useImage()
 const router = useRouter();
 const searchText = ref("")
+const menuOpened = ref(false)
 const categoryBackground = (image: string) => {
   return computed(() => {
     const imgUrl = img(image)
@@ -30,7 +33,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
   <div class="black-area">
     <div class="md:max-w-[840px] md:mx-auto flex justify-between px-4 md:px-0">
       <div>
-        <span class="font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
+        <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
       </div>
       <div class="hidden md:block"><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
     </div>
@@ -39,7 +42,7 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
     <div class="w-full md:max-w-[840px] md:mx-auto font-bold flex pt-5 px-4 md:px-0">
       <h1 class="mr-5 text-4xl">ShareRental</h1>
       <nav class="justify-between items-center w-full hidden md:flex">
-        <div class="flex justify-start ">
+        <div class="flex justify-start">
           <NuxtLink class="text-base mr-5 font-semibold" to="/">Assortiment</NuxtLink>
           <NuxtLink class="text-base mr-5 font-semibold" to="#hoe_het_werkt">Hoe het werkt</NuxtLink>
           <NuxtLink class="text-base mr-5 font-semibold" to="/contact">Contact</NuxtLink>
@@ -58,13 +61,32 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
             <i class="pi pi-user" style="font-size: 1.5rem">
             </i>
           </NuxtLink>
-          <Button unstyled>
+          <Button unstyled @click="menuOpened = !menuOpened">
             <i class="pi pi-bars" style="font-size: 2rem">
             </i>
           </Button>
         </div>
       </nav>
     </div>
+    <Sidebar v-model:visible="menuOpened" position="right">
+      <template #header>
+        <h1 class="text-4xl">ShareRental</h1>
+      </template>
+      <div class="grid grid-cols-1">
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/">
+          <span>Assortiment</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="#hoe_het_werkt" @click="menuOpened = false">
+          <span>Hoe het werkt</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/contact">
+          <span>Contact</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+      </div>
+    </Sidebar>
   </section>
   <section class="green-area">
     <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
