@@ -11,6 +11,24 @@ const img = useImage()
 const router = useRouter();
 const searchText = ref("")
 const menuOpened = ref(false)
+const categoriesCollapsed = ref(true)
+
+const screenWidth = ref(process.client ? window.innerWidth : 0);
+
+const isSmallScreen = computed(() => screenWidth.value < 768);
+
+const handleResize = () => {
+  screenWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 const categoryBackground = (image: string) => {
   return computed(() => {
     const imgUrl = img(image)
@@ -26,14 +44,22 @@ const category1Background = categoryBackground('categories/stijgers-trappen-hoog
 const category2Background = categoryBackground('categories/Betonbewerking.jpg')
 const category3Background = categoryBackground('categories/hef-en-hijswerktuigen.jpg')
 const category4Background = categoryBackground('categories/electrisch-gereedschap-3.jpg')
+const category5Background = categoryBackground('categories/Evenementen.jpg')
+const category6Background = categoryBackground('categories/grondverzetters-bouwmachines-tuinmateriaal.jpg')
+const category7Background = categoryBackground('categories/Luchtdrukgereedschap.jpg')
+const category8Background = categoryBackground('categories/verwarmen-drogen-reinigen.jpg')
 
+function test() {
+  console.log(categoriesCollapsed.value)
+}
 </script>
 
 <template>
   <div class="black-area">
     <div class="md:max-w-[840px] md:mx-auto flex justify-between px-4 md:px-0">
       <div>
-        <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span class="font-thin">+31 6 43209314</span>
+        <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
+          class="font-thin">+31 6 43209314</span>
       </div>
       <div class="hidden md:block"><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
     </div>
@@ -77,7 +103,8 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
           <span>Assortiment</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="#hoe_het_werkt" @click="menuOpened = false">
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="#hoe_het_werkt"
+                  @click="menuOpened = false">
           <span>Hoe het werkt</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
@@ -136,11 +163,23 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
         <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
           <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
         </div>
-        <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
+        <div v-if="!categoriesCollapsed || !isSmallScreen" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
           <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
         </div>
-        <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
+        <div  v-if="!categoriesCollapsed || !isSmallScreen" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
           <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
+        </div>
+        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category5Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
+        </div>
+        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category6Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
+        </div>
+        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category7Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
+        </div>
+        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category8Background">
+          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
         </div>
       </div>
       <div class="mt-5 flex flex-col justify-center w-full">
@@ -148,9 +187,16 @@ const category4Background = categoryBackground('categories/electrisch-gereedscha
           Toon alle categorieën
         </div>
         <div class="flex justify-center">
-          <Button unstyled>
-            <i class="pi pi-chevron-down"></i>
-          </Button>
+          <div v-if="categoriesCollapsed">
+            <Button unstyled @click="categoriesCollapsed = !categoriesCollapsed">
+              <i class="pi pi-chevron-down"></i>
+            </Button>
+          </div>
+          <div v-else>
+            <Button unstyled @click="categoriesCollapsed = !categoriesCollapsed">
+              <i class="pi pi-chevron-up"></i>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
