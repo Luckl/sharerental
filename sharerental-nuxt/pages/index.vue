@@ -283,7 +283,7 @@ function test() {
             <span class="my-1 text-sm"></span>
             <span class="my-1 text-sm">Contact</span>
           </div>
-          <div class="mt-10 flex gap-5">
+          <div class="mt-10 flex gap-5 mb-5">
             <i class="pi pi-facebook" style="font-size: 2rem"></i>
             <i class="pi pi-instagram" style="font-size: 2rem"></i>
             <i class="pi pi-linkedin" style="font-size: 2rem"></i>
