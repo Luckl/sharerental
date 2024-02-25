@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import SrBlackBar from "~/components/SrTopBar.vue";
 
 definePageMeta({
   layout: 'new'

@@ -1,19 +1,19 @@
 <template>
   <Card>
     <template #header>
-      <div class="p-2">
-        <Image :src="determineImageUrl()" width="250"/>
+      <div class="p-2 w-60">
+        <Image :src="determineImageUrl()"/>
       </div>
     </template>
     <template #title>{{ item.title }}</template>
     <template #subtitle>{{ item.shortDescription }}</template>
     <template #content>
-      <p>
-        <span class="font-bold">Prijs per dag</span> {{ formatCurrency(item.pricePerDay) }}
-      </p>
+      <div class="flex justify-between">
+        <span class="font-bold">Prijs per dag</span> <span>{{ formatCurrency(item.pricePerDay) }}</span>
+      </div>
     </template>
     <template #footer>
-      <NuxtLink :to="'/items/' + item.rentalItemSlug"><Button label="Huren"></Button></NuxtLink>
+      <NuxtLink :to="'/items/' + item.rentalItemSlug"><button unstyled class="rounded-lg black-area p-3 h-12">Huren</button></NuxtLink>
     </template>
   </Card>
 </template>
