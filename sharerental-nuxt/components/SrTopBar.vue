@@ -23,7 +23,7 @@
           <slot></slot>
         </div>
         <div class="flex justify-end">
-          <NuxtLink to="/register">
+          <NuxtLink to="/login">
             <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
                     label="Inloggen" text unstyled>
             </Button>

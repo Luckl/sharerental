@@ -1,8 +1,8 @@
 <template>
   <Card>
     <template #header>
-      <div class="flex p-2 w-60 h-60">
-        <Image :src="determineImageUrl()"/>
+      <div class="flex align-center p-2 w-60 h-60">
+        <NuxtImg fit="contain" loading="lazy" :src="determineImageUrl()" />
       </div>
     </template>
     <template #title>
@@ -45,7 +45,7 @@ const formatter = new Intl.NumberFormat('nl-NL', {
 
 function determineImageUrl() {
   if (props.item.imageUrl === undefined) {
-    return '/assets/logo-transparent-2.png'
+    return '/logo-transparent-2.png'
   } else {
     return props.item.imageUrl
   }
