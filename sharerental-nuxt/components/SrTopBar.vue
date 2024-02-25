@@ -23,16 +23,16 @@
           <slot></slot>
         </div>
         <div class="flex justify-end">
-          <NuxtLink to="/login">
+          <NuxtLink @click="clickAccountBtn()">
             <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
-                    label="Inloggen" text unstyled>
+                    :label="accountBtnText"  text unstyled>
             </Button>
           </NuxtLink>
         </div>
       </nav>
       <nav class="flex md:hidden w-full">
         <div class="flex w-full justify-end items-center gap-2">
-          <NuxtLink to="/register">
+          <NuxtLink @click="clickAccountBtn()">
             <i class="pi pi-user" style="font-size: 1.5rem">
             </i>
           </NuxtLink>
@@ -69,6 +69,32 @@
   </section>
 </template>
 <script setup lang="ts">
+import {useUserStore} from "~/services/stores/userStore";
+import {ref} from "vue";
+
+const router = useRouter();
+let userStore = useUserStore();
+
+const user = ref(userStore.user)
 const menuOpened = ref(false)
+
+const accountBtnText = computed(() => {
+  if (user.value) {
+    return user.value.displayName
+  }
+  return "Inloggen"
+})
+
+userStore.$subscribe((mutation, state) => {
+  user.value = state.user
+})
+
+const clickAccountBtn = () => {
+  if (user.value) {
+    router.push('/lessor/items')
+  } else {
+    router.push('/login')
+  }
+}
 
 </script>

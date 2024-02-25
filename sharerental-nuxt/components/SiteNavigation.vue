@@ -87,10 +87,12 @@ userStore.$subscribe((mutation, state) => {
   fetchLessors()
 })
 
-function signOut() {
-  signOutFirebase(auth)
-  userStore.refreshUser()
-  user.value = null
+async function signOut() {
+  await signOutFirebase(auth)
+      .then(() => {
+        userStore.refreshUser()
+        user.value = null
+      })
 }
 
 const auth = useFirebaseAuth()!
