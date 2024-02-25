@@ -7,7 +7,7 @@
   </SrTopBar>
   <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
     <div class="flex pt-10 justify-center">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10">
         <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem" @submit="submit(rentalItem)"/>
       </div>
     </div>

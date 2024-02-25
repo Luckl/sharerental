@@ -10,7 +10,9 @@
   </div>
   <section class=" green-area">
     <div class="w-full md:max-w-[840px] md:mx-auto font-bold flex p-4 md:px-0">
-      <h1 class="mr-5 text-4xl"><nuxtLink to="/">ShareRental</nuxtLink></h1>
+      <h1 class="mr-5 text-4xl">
+        <nuxtLink to="/">ShareRental</nuxtLink>
+      </h1>
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
           <NuxtLink class="text-sm mr-2 font-semibold" to="/">Assortiment</NuxtLink>
@@ -39,8 +41,10 @@
             </i>
           </Button>
         </div>
-        <slot></slot>
       </nav>
+    </div>
+    <div class="p-5 w-full block md:hidden">
+      <slot></slot>
     </div>
     <Sidebar v-model:visible="menuOpened" position="right">
       <template #header>
