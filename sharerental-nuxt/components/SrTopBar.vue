@@ -15,9 +15,9 @@
       </h1>
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
-          <NuxtLink class="text-sm mr-2 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink class="text-sm mr-2 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
-          <NuxtLink class="text-sm font-semibold" to="/contact">Contact</NuxtLink>
+          <NuxtLink class="text-sm text-center mr-2 font-semibold" to="/">Assortiment</NuxtLink>
+          <NuxtLink class="text-sm text-center mr-2 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
+          <NuxtLink class="text-sm text-center mr-2 font-semibold" to="/contact">Contact</NuxtLink>
         </div>
         <div>
           <slot></slot>
