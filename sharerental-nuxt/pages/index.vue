@@ -55,9 +55,9 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
   <Head>
     <Title>Home - ShareRental</Title>
   </Head>
-  <sr-top-bar />
+  <sr-top-bar/>
   <section class="green-area">
-    <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
+    <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
       <div class="flex py-40 align-middle justify-center">
         <div class="w-full md:w-1/2 justify-center">
           <h1 class="my-10 text-xl md:text-4xl">Vind het beste materiaal voor je project via ShareRental!</h1>
@@ -70,7 +70,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </div>
   </section>
   <section class="side-padding bg-gray-200">
-    <div class="md:max-w-[840px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
+    <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
         <span class="text-center">Vind je lokale aanbieder</span>
@@ -86,32 +86,40 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </div>
   </section>
   <section>
-    <div class="md:max-w-[840px] md:mx-auto  px-4 md:px-0">
+    <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
       <h1 class="text-4xl my-5">Categorieën</h1>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
-        </div>
-        <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
-        </div>
-        <div v-if="!categoriesCollapsed || !isSmallScreen" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
-        </div>
-        <div  v-if="!categoriesCollapsed || !isSmallScreen" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
-        </div>
-        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category5Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
-        </div>
-        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category6Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
-        </div>
-        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category7Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
-        </div>
-        <div  v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category8Background">
-          <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
+      <div class="flex justify-center">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
+          </div>
+          <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
+          </div>
+          <div v-if="!categoriesCollapsed || !isSmallScreen"
+               class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
+          </div>
+          <div v-if="!categoriesCollapsed || !isSmallScreen"
+               class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
+          </div>
+          <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+               :style="category5Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
+          </div>
+          <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+               :style="category6Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
+          </div>
+          <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+               :style="category7Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
+          </div>
+          <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+               :style="category8Background">
+            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
+          </div>
         </div>
       </div>
       <div class="mt-5 flex flex-col justify-center w-full">
@@ -134,7 +142,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </div>
   </section>
   <section class="green-area mt-5">
-    <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
+    <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
 
       <div class="w-full flex justify-center">
         <h1 class="my-10 text-4xl"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
@@ -180,7 +188,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </div>
   </section>
   <section>
-    <div class="md:max-w-[840px] md:mx-auto px-4 md:px-0">
+    <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
       <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
         <div class="hidden md:block">
           <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
@@ -199,7 +207,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </div>
   </section>
   <section class="green-area mt-5 pt-10">
-    <div class="md:max-w-[840px] md:mx-auto  px-4 md:px-0">
+    <div class="md:max-w-[1240px] md:mx-auto  px-4 md:px-0">
       <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
         <div>
           <div class="grid grid-cols-2 ">
