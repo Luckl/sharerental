@@ -3,20 +3,20 @@
     <div class="flex align-center p-2 w-60 h-60">
       <NuxtImg class="rounded-lg" fit="contain" loading="lazy" :src="determineImageUrl()"/>
     </div>
-    <div class="my-1">
+    <div class="my-2">
       <span class="font-bold text-lg">{{ item.title }}</span>
     </div>
-    <div class="flex justify-between my-1">
+    <div class="flex justify-between my-2">
       <span>Prijs per dag: </span>
       <span>{{ formatCurrency(item.pricePerDay) }}</span>
     </div>
-    <div class="my-1">
+    <div class="my-2">
       <NuxtLink :to="'/items/' + item.rentalItemSlug">
         <Button unstyled class="rounded-lg green-area p-2">Direct huren</Button>
       </NuxtLink>
     </div>
     <div>
-      <span class="text-sm text-gray-500">Beschikbaar bij 0 aanbieders</span>
+      <span class="text-sm text-gray-500">Beschikbaar bij 1 aanbieder</span>
     </div>
   </div>
 </template>

@@ -4,6 +4,8 @@ definePageMeta({
   layout: 'new'
 })
 
+
+
 const menuOpened = ref(false)
 </script>
 <template>
@@ -13,6 +15,7 @@ const menuOpened = ref(false)
   <SrTopBar>
     <Search></Search>
   </SrTopBar>
+
 
 
 </template>
