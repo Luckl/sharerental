@@ -22,6 +22,5 @@ useSeoMeta({
 html {
   font-family: Roboto, sans-serif;
   height: 100%;
-  background-color: #f5f8fa;
 }
 </style>

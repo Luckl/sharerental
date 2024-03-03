@@ -5,7 +5,7 @@
   <SrTopBar>
     <Search></Search>
   </SrTopBar>
-  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0 bg-white">
     <div class="flex pt-10 justify-center">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-10">
         <RentalItemCard v-for="rentalItem in rentalItems" :item="rentalItem" @submit="submit(rentalItem)"/>
