@@ -37,6 +37,20 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         )
     }
 
+    override fun searchCategory(
+        category: String?,
+        page: Int?,
+        size: Int?,
+        sort: MutableList<String>?
+    ): ResponseEntity<SearchResult> {
+        return rentalItemRepository.findByCategory(
+            category,
+            pageRequest(page, size, sort)
+        )
+            .toResponseObject()
+            .let { ResponseEntity.ok(it) }
+    }
+
     override fun searchDetails(slug: String?): ResponseEntity<HttpRentalItem>? {
         slug ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 

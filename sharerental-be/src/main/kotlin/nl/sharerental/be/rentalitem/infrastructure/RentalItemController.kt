@@ -137,6 +137,8 @@ class RentalItemController(
         return ResponseEntity.ok(HttpRentalItem(result.id, result.name))
     }
 
+
+
     override fun getRentalItems(
         page: Int?,
         size: Int?,

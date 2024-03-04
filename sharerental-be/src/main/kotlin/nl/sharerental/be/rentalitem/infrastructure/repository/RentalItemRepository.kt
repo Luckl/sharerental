@@ -44,6 +44,16 @@ interface RentalItemRepository: PagingAndSortingRepository<RentalItem, Long>, Cr
     )
     fun search(@Param("filter") filter: String?, pageRequest: PageRequest): Page<RentalItem>
 
+    @Query(
+        """
+            select r 
+            from RentalItem r
+            where r.displayStatus = 'ACTIVE'
+            and r.category = :category
+"""
+    )
+    fun findByCategory(@Param("category") category: String?, pageRequest: PageRequest): Page<RentalItem>
+
     fun findBySlugAndDisplayStatus(slug: String, displayStatus: DisplayStatus = DisplayStatus.ACTIVE): Optional<RentalItem>
 
 

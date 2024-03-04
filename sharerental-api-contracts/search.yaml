@@ -23,6 +23,54 @@ paths:
             application/json:
               schema:
                 $ref: './utils/RentalItem.yaml#/components/schemas/RentalItem'
+  /category/{category}:
+    get:
+      tags:
+        - search
+      summary: Retrieve items based on category
+      operationId: searchCategory
+      parameters:
+        - in: path
+          name: category
+          schema:
+            type: string
+          required: true
+          description: the category of the rental item
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            example: '5'
+          required: false
+          description: Pagenumber, default value is 0 (first page).
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+            default: 8
+            example: '25'
+          description: The page size, number of items to return. Default value is 8.
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 50
+            example: 'price;desc,name;asc'
+          required: false
+          description: Page sort, each item represents a sort column
+      responses:
+        200:
+          description: Successful category search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
   /search:
     get:
       tags:
