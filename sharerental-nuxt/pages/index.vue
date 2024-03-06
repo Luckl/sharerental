@@ -150,10 +150,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
         <div class="flex flex-col m-5 md:m-20 w-80">
           <span class="text-xl font-bold">Ga op zoek naar wat jij nodig hebt</span>
-          <span class="mt-2">Afhankelijk van je regio, het type toestel en de huurperiode selecteren
-        wij voor jou automatisch de beste verhuurpartners. Je krijgt onmiddelijk een
-        prijs te zien en kunt het toestel reserveren. Verlengen en annuleren is altijd
-        mogelijk. </span>
+          <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een paar uur of een paar weken nodig hebt.</span>
         </div>
         <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
           <span class="text-xl font-bold">Image</span>
@@ -167,20 +164,14 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
         <div>
           <div class="flex flex-col m-5 md:m-20 w-80">
-            <span class="text-xl font-bold">Vergelijk verschillende aanbieders</span>
-            <span class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-            ut aliquip ex ea commodo consequat.</span>
+            <span class="text-xl font-bold">Vergelijken & Boeken</span>
+            <span class="mt-2"> Vergelijk prijzen, beschikbaarheid en verhuurvoorwaarden van meerdere aanbieders om de beste deal te vinden. Zodra je het juiste gereedschap of machine hebt gevonden, boek het dan direct via het platform.</span>
           </div>
         </div>
         <div>
           <div class="flex flex-col m-5 md:m-20 w-80">
-            <span class="text-xl font-bold">En dan kan je nu gaan huren</span>
-            <span class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-            ut aliquip ex ea commodo consequat.</span>
+            <span class="text-xl font-bold">Huren & Retourneren</span>
+            <span class="mt-2">Na het boeken, regel het ophalen van je gehuurde item of laat het bezorgen op jouw locatie. Als je klaar bent, retourneer eenvoudig de apparatuur naar het verhuurbedrijf. Je wordt alleen in rekening gebracht voor de daadwerkelijke verhuurperiode, zonder verborgen kosten of verplichtingen.</span>
             <button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button>
           </div>
         </div>
