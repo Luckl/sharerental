@@ -149,7 +149,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
         <div class="flex flex-col m-5 md:m-20 w-80">
-          <span class="text-xl font-bold">Ga op zoek naar wat jij nodig hebt</span>
+          <span class="text-xl font-bold">Zoeken</span>
           <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een paar uur of een paar weken nodig hebt.</span>
         </div>
         <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
