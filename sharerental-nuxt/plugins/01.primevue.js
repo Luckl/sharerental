@@ -26,6 +26,8 @@ import Calendar from "primevue/calendar";
 import Galleria from "primevue/galleria";
 import Tag from "primevue/tag";
 import Panel from "primevue/panel";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, {
@@ -62,6 +64,8 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Galleria', Galleria)
     nuxtApp.vueApp.component('Tag', Tag)
     nuxtApp.vueApp.component('Panel', Panel)
+    nuxtApp.vueApp.component('Accordion', Accordion)
+    nuxtApp.vueApp.component('AccordionTab', AccordionTab)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 

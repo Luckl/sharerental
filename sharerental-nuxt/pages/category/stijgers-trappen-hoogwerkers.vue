@@ -5,8 +5,10 @@ definePageMeta({
 })
 
 
-
+const materialTypes = ref(["Aluminium", "Staal", "Hout"])
+const selectedMaterialType = ref([])
 const menuOpened = ref(false)
+
 </script>
 <template>
   <Head>
@@ -20,6 +22,28 @@ const menuOpened = ref(false)
 
     <div class="w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
+      <Divider></Divider>
+      <Accordion unstyled>
+        <AccordionTab header="Prijs">
+
+        </AccordionTab>
+        <AccordionTab header="Regio">
+
+        </AccordionTab>
+        <AccordionTab header="Maximale werkhoogte">
+
+        </AccordionTab>
+        <AccordionTab header="Type materiaal">
+          <div v-for="category of materialTypes" :key="category" class="flex align-items-center">
+            <Checkbox v-model="selectedMaterialType" :inputId="category" name="category" :value="category" />
+            <label :for="category">{{ category }}</label>
+          </div>
+        </AccordionTab>
+        <AccordionTab header="Bereik">
+        </AccordionTab>
+
+
+      </Accordion>
     </div>
     <div class="w-5/6">
       <div>
