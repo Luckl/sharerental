@@ -73,15 +73,15 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">Vind je lokale aanbieder</span>
+        <span class="text-center ml-3">Vind je lokale aanbieder</span>
       </div>
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">Altijd de juiste prijs</span>
+        <span class="text-center ml-3">Altijd de juiste prijs</span>
       </div>
       <div class="m-5 font-bold flex items-center">
         <i class="pi pi-check"></i>
-        <span class="text-center">One-stop-shop voor ieder project</span>
+        <span class="text-center ml-3">One-stop-shop voor ieder project</span>
       </div>
     </div>
   </section>
@@ -90,9 +90,11 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       <h1 class="text-4xl my-5">Categorieën</h1>
       <div class="flex justify-center">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
-            <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
-          </div>
+          <nuxtLink to="/category/stijgers-trappen-hoogwerkers">
+            <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
+              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
+            </div>
+          </nuxtLink>
           <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
             <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
           </div>
