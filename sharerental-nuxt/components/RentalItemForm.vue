@@ -157,7 +157,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import {RentalItemInput} from "~/schemas/openapi/rentalItem";
+import type {RentalItemInput} from "~/schemas/openapi/rentalItem";
 
 interface Props {
   rentalItem: RentalItemInput;

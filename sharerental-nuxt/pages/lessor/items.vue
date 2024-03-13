@@ -41,7 +41,8 @@
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import {DisplayStatus, GetRentalItemsResult, RentalItem} from "~/schemas/openapi/rentalItem";
+import {DisplayStatus} from "~/schemas/openapi/rentalItem";
+import type {GetRentalItemsResult, RentalItem} from "~/schemas/openapi/rentalItem";
 import RentalItemClient from "~/services/api/RentalItemClient";
 
 const error = ref<String | undefined>(undefined)
