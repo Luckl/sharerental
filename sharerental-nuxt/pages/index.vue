@@ -36,10 +36,6 @@ const categoryBackground = (image: string) => {
   })
 }
 
-function search() {
-  router.push("/search/" + searchText.value)
-}
-
 const category1Background = categoryBackground('categories/stijgers-trappen-hoogwerkers.jpg')
 const category2Background = categoryBackground('categories/Betonbewerking.jpg')
 const category3Background = categoryBackground('categories/hef-en-hijswerktuigen.jpg')

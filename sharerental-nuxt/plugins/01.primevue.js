@@ -28,6 +28,7 @@ import Tag from "primevue/tag";
 import Panel from "primevue/panel";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import Slider from "primevue/slider";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, {
@@ -66,6 +67,7 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Panel', Panel)
     nuxtApp.vueApp.component('Accordion', Accordion)
     nuxtApp.vueApp.component('AccordionTab', AccordionTab)
+    nuxtApp.vueApp.component('Slider', Slider)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 

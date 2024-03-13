@@ -17,7 +17,7 @@
         <div class="flex justify-start">
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
           <NuxtLink class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
-          <NuxtLink class="text-center mr-4 font-semibold" to="/contact">Contact</NuxtLink>
+          <NuxtLink class="text-center mr-4 font-semibold" to="/">Contact</NuxtLink>
         </div>
         <div class="w-1/2">
           <slot></slot>
@@ -60,7 +60,7 @@
           <span>Hoe het werkt</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/contact">
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/">
           <span>Contact</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>

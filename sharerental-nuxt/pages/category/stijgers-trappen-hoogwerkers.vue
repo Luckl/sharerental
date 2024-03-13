@@ -8,6 +8,7 @@ definePageMeta({
 const materialTypes = ref(["Aluminium", "Staal", "Hout"])
 const selectedMaterialType = ref([])
 const menuOpened = ref(false)
+const priceRange = ref([0, 1000])
 
 </script>
 <template>
@@ -25,7 +26,7 @@ const menuOpened = ref(false)
       <Divider></Divider>
       <Accordion unstyled>
         <AccordionTab header="Prijs">
-
+          <Slider v-model="priceRange" range class="w-full" />
         </AccordionTab>
         <AccordionTab header="Regio">
 
