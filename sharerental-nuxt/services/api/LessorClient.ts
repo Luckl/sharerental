@@ -1,8 +1,11 @@
 import {
     Configuration as LessorConfiguration,
     LessorApi,
+} from '~/schemas/openapi/lessor';
+
+import type {
     GetLessorResult,
-    Lessor, LessorInput,
+    Lessor, LessorInput
 } from '~/schemas/openapi/lessor';
 
 export type {

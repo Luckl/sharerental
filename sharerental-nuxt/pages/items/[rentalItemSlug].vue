@@ -154,12 +154,12 @@
 <script setup lang="ts">
 
 import {useRoute} from "#app";
-import {Image, RentalItem} from "~/schemas/openapi/rentalItem";
+import type {Image, RentalItem} from "~/schemas/openapi/rentalItem";
 import SearchClient from "~/services/api/SearchClient";
 import TransactionClient from "~/services/api/TransactionClient";
 import RenterClient from "~/services/api/RenterClient";
-import {Renter} from "~/schemas/openapi/renter";
-import {RenterInput} from "~/schemas/openapi/transaction";
+import type {Renter} from "~/schemas/openapi/renter";
+import type {RenterInput} from "~/schemas/openapi/transaction";
 import {useToast} from "primevue/usetoast";
 
 const router = useRouter()

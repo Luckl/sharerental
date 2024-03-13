@@ -75,8 +75,9 @@ import {useFirebaseAuth} from "vuefire";
 import {ref} from "vue";
 import {useNuxtApp} from "#app";
 import {signOut as signOutFirebase} from "firebase/auth";
-import LessorClient, {Lessor} from "~/services/api/LessorClient";
+import LessorClient from "~/services/api/LessorClient";
 import {useUserStore} from "~/services/stores/userStore";
+import type {Lessor} from "~/schemas/openapi/sharerental";
 
 const menuOpened = ref(false);
 let userStore = useUserStore();

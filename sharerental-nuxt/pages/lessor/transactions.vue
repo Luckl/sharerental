@@ -65,9 +65,12 @@
 </template>
 <script lang="ts" setup>
 import {
+   TransactionStatus
+} from "~/schemas/openapi/transaction";
+import type {
   DisplayStatus,
   GetTransactionsResult,
-  Transaction, TransactionStatus
+  Transaction
 } from "~/schemas/openapi/transaction";
 import TransactionClient from "~/services/api/TransactionClient";
 

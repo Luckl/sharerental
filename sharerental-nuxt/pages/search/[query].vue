@@ -18,7 +18,8 @@
 import RentalItemCard from "~/components/RentalItemCard.vue";
 import {reactive, ref} from "vue";
 import {useAsyncData, useNuxtApp, useRoute} from "#app";
-import SearchClient, {SearchResultItem} from '~/services/api/SearchClient';
+import SearchClient from '~/services/api/SearchClient';
+import type { SearchResultItem } from '~/schemas/openapi/search';
 
 definePageMeta({
   layout: 'new'
@@ -68,6 +69,7 @@ async function fetchResult() {
   padding-left: 10%;
   padding-right: 10%;
 }
+
 @media screen and (max-width: 678px) {
 
 }

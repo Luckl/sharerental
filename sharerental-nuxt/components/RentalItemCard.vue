@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import {SearchResultItem} from "~/schemas/openapi/search";
+import type { SearchResultItem } from "~/schemas/openapi/search";
 
 definePageMeta({
   layout: 'new'
