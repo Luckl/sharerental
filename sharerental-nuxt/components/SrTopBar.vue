@@ -23,7 +23,7 @@
           <slot></slot>
         </div>
         <div class="flex justify-end">
-          <NuxtLink @click="clickAccountBtn()">
+          <NuxtLink :to="accountButtonLink">
             <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
                     :label="accountBtnText"  text unstyled>
             </Button>
@@ -32,7 +32,7 @@
       </nav>
       <nav class="flex md:hidden w-full">
         <div class="flex w-full justify-end items-center gap-2">
-          <NuxtLink @click="clickAccountBtn()">
+          <NuxtLink @click="accountButtonLink">
             <i class="pi pi-user" style="font-size: 1.5rem">
             </i>
           </NuxtLink>
@@ -89,12 +89,12 @@ userStore.$subscribe((mutation, state) => {
   user.value = state.user
 })
 
-const clickAccountBtn = () => {
+const accountButtonLink = computed(() => {
   if (user.value) {
-    router.push('/lessor/items')
+    return '/lessor/items'
   } else {
-    router.push('/login')
+    return '/login'
   }
-}
+})
 
 </script>

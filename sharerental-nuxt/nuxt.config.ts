@@ -1,10 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt', '@nuxtjs/google-fonts'],
+    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt', '@nuxtjs/google-fonts', '@nuxtjs/seo'],
     ssr: true,
     devtools: {enabled: true},
     image: {
         inject: true
+    },
+    site: {
+        url: 'https://sharerental.nl',
+        name: 'ShareRental',
+        description: 'Gereedschap huren en verhuren',
+        defaultLocale: 'nl', // not needed if you have @nuxtjs/i18n installed
     },
     app: {
         head: {
@@ -32,6 +38,9 @@ export default defineNuxtConfig({
         }
     },
     routeRules: {
+        // Don't add any /lessor/** URLs to the sitemap.xml since you need to be logged in for those
+        '/lessor/**': { robots: false },
+        '/transaction/**': { robots: false },
         '/backend/**': {
             proxy: { to: "http://localhost:8080/backend/**", },
         }
