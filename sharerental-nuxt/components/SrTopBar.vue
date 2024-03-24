@@ -16,13 +16,18 @@
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
-          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/">Contact</NuxtLink>
+          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
+            het werkt
+          </NuxtLink>
+          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/">Contact
+          </NuxtLink>
           <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile">Gegevens</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
-                    to="/lessor/items">Artikelen</NuxtLink>
+                    to="/lessor/items">Artikelen
+          </NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
-                    to="/lessor/transactions">Transacties</NuxtLink>
+                    to="/lessor/transactions">Transacties
+          </NuxtLink>
         </div>
         <div class="w-1/2">
           <slot></slot>
@@ -56,7 +61,8 @@
         <h1 class="text-4xl">ShareRental</h1>
       </template>
       <div class="grid grid-cols-1">
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/">
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/"
+                  @click="menuOpened = false">
           <span>Assortiment</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
@@ -65,29 +71,32 @@
           <span>Hoe het werkt</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
-        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/">
+        <NuxtLink class="text-3xl my-3 items-center flex justify-between font-semibold" to="/"
+                  @click="menuOpened = false">
           <span>Contact</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
         <divider v-if="user"></divider>
         <NuxtLink v-if="user" class="text-3xl my-3 items-center flex justify-between font-semibold"
-                  to="/lessor/profile">
+                  to="/lessor/profile" @click="menuOpened = false">
           <span>Gegevens</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
         <NuxtLink v-if="user && loaded && lessors?.length > 0"
-                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/items">
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/items"
+                  @click="menuOpened = false">
           <span>Artikelen</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
         <NuxtLink v-if="user && loaded && lessors?.length > 0"
-                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/transactions">
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/transactions"
+                  @click="menuOpened = false">
           <span>Transacties</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
         <divider v-if="user"></divider>
         <NuxtLink v-if="user"
-                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/" @click="signOut()">
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/" @click="signOut(); menuOpened = false">
           <span>Uitloggen</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>

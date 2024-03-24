@@ -46,8 +46,7 @@ const sticky = ref(false)
   <Head>
     <Title>Inloggen - ShareRental</Title>
   </Head>
-  <main>
-    <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
+  <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
 
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
     <template v-if="user">
@@ -56,27 +55,31 @@ const sticky = ref(false)
       </NuxtLink>
     </template>
     <template v-else>
-      <h2>Inloggen</h2>
-      <form @submit.prevent>
-        <div class="form-input">
-          <label for="username">Email</label>
-          <div>
-            <InputText inputId="email" type="text" v-model="email"/>
+      <div>
+        <h2>Inloggen</h2>
+        <form @submit.prevent>
+          <div class="form-input">
+            <label for="username">Email</label>
+            <div>
+              <InputText inputId="email" type="text" v-model="email"/>
+            </div>
           </div>
-        </div>
-        <div class="form-input">
-          <label for="password">Wachtwoord</label>
-          <div>
-            <Password inputId="password" v-model="password" :feedback="false"/>
+          <div class="form-input">
+            <label for="password">Wachtwoord</label>
+            <div>
+              <Password inputId="password" v-model="password" :feedback="false"/>
+            </div>
           </div>
-        </div>
-        <div class="form-input">
-          <Button type="submit" @click="signIn()" label="Login"></Button>
-        </div>
-      </form>
+          <div class="form-input flex gap-2">
+            <Button type="submit" @click="signIn()" label="Inloggen"></Button>
+            <NuxtLink to="/register">
+              <Button type="button" label="Registreren"></Button>
+            </NuxtLink>
+          </div>
+        </form>
+      </div>
     </template>
-    </div>
-  </main>
+  </div>
 
 </template>
 
