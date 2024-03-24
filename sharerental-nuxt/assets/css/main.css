@@ -10,3 +10,30 @@
     background-color: #004E1B;
     color: white;
 }
+
+/* override primevue primary color */
+.p-button {
+    background-color: #004E1B !important;
+    color: white !important;
+}
+
+/* override primevue secondary color */
+.p-button.p-button-secondary {
+    background-color: #242635 !important;
+    color: white !important;
+}
+
+/* override primevue border color */
+.p-inputtext {
+    border-color: #004E1B !important;
+}
+
+/* override primevue input focus color */
+.p-inputtext:focus {
+    border-color: #004E1B !important;
+}
+
+/* override primevue button border color */
+.p-button {
+    border-color: #004E1B !important;
+}

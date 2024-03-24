@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {GoogleAuthProvider, signInWithEmailAndPassword,signOut as signOutFirebase} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithEmailAndPassword, signOut as signOutFirebase} from 'firebase/auth'
 import {useCurrentUser, useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 import {useUserStore} from "~/services/stores/userStore";
@@ -56,7 +56,9 @@ const sticky = ref(false)
         <template v-else>
           <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
           <template v-if="user">
-            <Button @click="signOut()">Uitloggen</Button>
+            <NuxtLink @click="signOut()" to="/">
+              <Button>Uitloggen</Button>
+            </NuxtLink>
           </template>
           <template v-else>
             <h2>Inloggen</h2>

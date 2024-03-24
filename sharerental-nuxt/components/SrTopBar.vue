@@ -16,13 +16,13 @@
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
-          <NuxtLink class="text-center mr-4 font-semibold" to="/">Contact</NuxtLink>
-          <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile"></NuxtLink>
+          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
+          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/">Contact</NuxtLink>
+          <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile">Gegevens</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
-                    to="/lessor/items"></NuxtLink>
+                    to="/lessor/items">Artikelen</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
-                    to="/lessor/transactions"></NuxtLink>
+                    to="/lessor/transactions">Transacties</NuxtLink>
         </div>
         <div class="w-1/2">
           <slot></slot>
@@ -86,7 +86,7 @@
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
         <divider v-if="user"></divider>
-        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+        <NuxtLink v-if="user"
                   class="text-3xl my-3 items-center flex justify-between font-semibold" to="/" @click="signOut()">
           <span>Uitloggen</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
@@ -137,7 +137,7 @@ userStore.$subscribe((mutation, state) => {
 
 const accountButtonLink = computed(() => {
   if (user.value) {
-    return '/lessor/items'
+    return '/login'
   } else {
     return '/login'
   }
