@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 definePageMeta({
-  layout: 'new'
+  layout: 'no-header'
 })
 
 
@@ -26,19 +26,27 @@ const priceRange = ref([0, 1000])
       <Divider></Divider>
       <Accordion unstyled>
         <AccordionTab header="Prijs">
+          <div class="p-2 m-2">
           <Slider v-model="priceRange" range class="w-full" />
+          </div>
         </AccordionTab>
         <AccordionTab header="Regio">
-
+          <div class="p-2 m-2">
+          </div>
         </AccordionTab>
         <AccordionTab header="Maximale werkhoogte">
-
+          <div class="p-2 m-2">
+          </div>
         </AccordionTab>
         <AccordionTab header="Type materiaal">
-          <div v-for="category of materialTypes" :key="category" class="flex align-items-center">
-            <Checkbox v-model="selectedMaterialType" :inputId="category" name="category" :value="category" />
-            <label :for="category">{{ category }}</label>
+
+          <div class="p-2 m-2">
+            <div v-for="category of materialTypes" :key="category" class="flex align-items-center">
+              <Checkbox v-model="selectedMaterialType" :inputId="category" name="category" :value="category" />
+              <label :for="category">{{ category }}</label>
+            </div>
           </div>
+
         </AccordionTab>
         <AccordionTab header="Bereik">
         </AccordionTab>

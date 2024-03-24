@@ -22,7 +22,7 @@ import SearchClient from '~/services/api/SearchClient';
 import type { SearchResultItem } from '~/schemas/openapi/search';
 
 definePageMeta({
-  layout: 'new'
+  layout: 'no-header'
 })
 
 const state = reactive({

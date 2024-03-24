@@ -4,7 +4,6 @@ import SrTopBar from "~/components/SrTopBar.vue";
 definePageMeta({
   title: 'Home - ShareRental',
   description: 'Gereedschap en machines huren en verhuren',
-  layout: 'new'
 })
 
 const img = useImage()
@@ -50,7 +49,6 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     <Head>
       <Title>Home - ShareRental</Title>
     </Head>
-    <sr-top-bar/>
     <section class="green-area">
       <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
         <div class="flex py-40 align-middle justify-center">

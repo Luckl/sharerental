@@ -37,3 +37,24 @@
 .p-button {
     border-color: #004E1B !important;
 }
+
+/* override primevue slider color */
+.p-slider .p-slider-handle {
+    background-color: #004E1B !important;
+}
+
+/* override primevue slider color */
+.p-slider .p-slider-range {
+    background-color: #004E1B !important;
+}
+
+/* override primevue slider border color */
+.p-slider {
+    border-color: #004E1B !important;
+}
+
+/* override primevue checkbox color */
+.p-checkbox-box {
+    border-color: #004E1B !important;
+    background: #004E1B !important;
+}
