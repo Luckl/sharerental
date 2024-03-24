@@ -18,6 +18,11 @@
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
           <NuxtLink class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe het werkt</NuxtLink>
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Contact</NuxtLink>
+          <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile"></NuxtLink>
+          <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
+                    to="/lessor/items"></NuxtLink>
+          <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
+                    to="/lessor/transactions"></NuxtLink>
         </div>
         <div class="w-1/2">
           <slot></slot>
@@ -25,14 +30,14 @@
         <div class="flex justify-end">
           <NuxtLink :to="accountButtonLink">
             <Button :pt="{ label:  'ml-2' }" icon="pi pi-user"
-                    :label="accountBtnText"  text unstyled>
+                    :label="accountBtnText" text unstyled>
             </Button>
           </NuxtLink>
         </div>
       </nav>
       <nav class="flex md:hidden w-full">
         <div class="flex w-full justify-end items-center gap-2">
-          <NuxtLink @click="accountButtonLink">
+          <NuxtLink :to="accountButtonLink">
             <i class="pi pi-user" style="font-size: 1.5rem">
             </i>
           </NuxtLink>
@@ -64,6 +69,28 @@
           <span>Contact</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
+        <divider v-if="user"></divider>
+        <NuxtLink v-if="user" class="text-3xl my-3 items-center flex justify-between font-semibold"
+                  to="/lessor/profile">
+          <span>Gegevens</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/items">
+          <span>Artikelen</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/transactions">
+          <span>Transacties</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
+        <divider v-if="user"></divider>
+        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/" @click="signOut()">
+          <span>Uitloggen</span>
+          <i class="pi pi-angle-right" style="font-size: 2rem"></i>
+        </NuxtLink>
       </div>
     </Sidebar>
   </section>
@@ -71,12 +98,23 @@
 <script setup lang="ts">
 import {useUserStore} from "~/services/stores/userStore";
 import {ref} from "vue";
+import LessorClient from "~/services/api/LessorClient";
+import {useNuxtApp} from "#app";
+import type {Lessor} from "~/schemas/openapi/sharerental";
+import {signOut as signOutFirebase} from "@firebase/auth";
+import {useFirebaseAuth} from "vuefire";
+
 
 const router = useRouter();
 let userStore = useUserStore();
+const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+
+const lessors = ref<Lessor[]>([])
+const loaded = ref(false)
 
 const user = ref(userStore.user)
 const menuOpened = ref(false)
+const auth = useFirebaseAuth()!
 
 const accountBtnText = computed(() => {
   if (user.value) {
@@ -84,6 +122,14 @@ const accountBtnText = computed(() => {
   }
   return "Inloggen"
 })
+
+async function signOut() {
+  await signOutFirebase(auth)
+      .then(() => {
+        userStore.refreshUser()
+        user.value = null
+      })
+}
 
 userStore.$subscribe((mutation, state) => {
   user.value = state.user
@@ -95,6 +141,21 @@ const accountButtonLink = computed(() => {
   } else {
     return '/login'
   }
+})
+
+function fetchLessors() {
+  $lessorClient.findAll(0, 20, []).then(success => {
+        loaded.value = true;
+        lessors.value = success.embedded
+      },
+      failure => {
+        loaded.value = true;
+      })
+}
+
+onMounted(() => {
+  userStore.refreshUser()
+  fetchLessors()
 })
 
 </script>

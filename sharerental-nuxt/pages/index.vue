@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import menu from "primevue/menu/Menu.vue";
 import SrTopBar from "~/components/SrTopBar.vue";
 
 definePageMeta({
@@ -10,7 +9,6 @@ definePageMeta({
 
 const img = useImage()
 const router = useRouter();
-const searchText = ref("")
 const categoriesCollapsed = ref(true)
 
 const screenWidth = ref(process.client ? window.innerWidth : 0);
@@ -86,7 +84,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
         <h1 class="text-4xl my-5">Categorieën</h1>
         <div class="flex justify-center">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
             <nuxtLink to="/category/stijgers-trappen-hoogwerkers">
               <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>

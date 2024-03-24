@@ -2,7 +2,6 @@ import {defineStore} from 'pinia'
 import {type User} from "@firebase/auth";
 import {getAnalytics, setUserId} from "@firebase/analytics";
 
-
 export type UserState = {
     user: User | null;
 }
