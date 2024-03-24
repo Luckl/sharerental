@@ -39,19 +39,15 @@ const priceRange = ref([0, 1000])
           </div>
         </AccordionTab>
         <AccordionTab header="Type materiaal">
-
           <div class="p-2 m-2">
-            <div v-for="category of materialTypes" :key="category" class="flex align-items-center">
+            <div v-for="category of materialTypes" :key="category" class="flex gap-2 align-items-center">
               <Checkbox v-model="selectedMaterialType" :inputId="category" name="category" :value="category" />
               <label :for="category">{{ category }}</label>
             </div>
           </div>
-
         </AccordionTab>
         <AccordionTab header="Bereik">
         </AccordionTab>
-
-
       </Accordion>
     </div>
     <div class="w-5/6">
@@ -61,7 +57,8 @@ const priceRange = ref([0, 1000])
           Welkom bij ons uitgebreide assortiment aan stijgers, trappen en hoogwerkers - de essentiële uitrusting voor elke taak die hoogtes vereist. Of je nu een professionele aannemer, een enthousiaste doe-het-zelver of een evenementenplanner bent, wij bieden een scala aan opties, van lichte draagbare steigers tot robuuste industriële stijgers, evenals snelle en betrouwbare trappen en hoogwerkers voor mobiliteit. Onze hoogwaardige gereedschappen zorgen voor optimale stabiliteit en veiligheid. Ontdek ons assortiment en til uw projecten naar nieuwe hoogten.
         </div>
       </div>
-      <div>
+      <div class="mt-10">
+        <h1>Er zijn op dit moment nog geen artikelen beschikbaar in deze categorie</h1>
       </div>
     </div>
 

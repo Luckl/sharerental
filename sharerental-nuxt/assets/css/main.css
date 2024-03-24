@@ -56,5 +56,9 @@
 /* override primevue checkbox color */
 .p-checkbox-box {
     border-color: #004E1B !important;
-    background: #004E1B !important;
+}
+
+/* override primevue checkbox color */
+.p-checkbox-box.p-highlight {
+    background-color: #004E1B !important;
 }
