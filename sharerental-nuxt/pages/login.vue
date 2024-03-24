@@ -46,44 +46,37 @@ const sticky = ref(false)
   <Head>
     <Title>Inloggen - ShareRental</Title>
   </Head>
-  <form-page>
-    <template #header></template>
-    <template #content>
-      <main>
-        <template v-if="user === undefined">
-          <p>Laden...</p>
-        </template>
-        <template v-else>
-          <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-          <template v-if="user">
-            <NuxtLink @click="signOut()" to="/">
-              <Button>Uitloggen</Button>
-            </NuxtLink>
-          </template>
-          <template v-else>
-            <h2>Inloggen</h2>
-            <form @submit.prevent>
-              <div class="form-input">
-                <label for="username">Email</label>
-                <div>
-                  <InputText inputId="email" type="text" v-model="email"/>
-                </div>
-              </div>
-              <div class="form-input">
-                <label for="password">Wachtwoord</label>
-                <div>
-                  <Password inputId="password" v-model="password" :feedback="false"/>
-                </div>
-              </div>
-              <div class="form-input">
-                <Button type="submit" @click="signIn()" label="Login"></Button>
-              </div>
-            </form>
-          </template>
-        </template>
-      </main>
+  <main>
+    <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
+
+    <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+    <template v-if="user">
+      <NuxtLink @click="signOut()" to="/">
+        <Button>Uitloggen</Button>
+      </NuxtLink>
     </template>
-  </form-page>
+    <template v-else>
+      <h2>Inloggen</h2>
+      <form @submit.prevent>
+        <div class="form-input">
+          <label for="username">Email</label>
+          <div>
+            <InputText inputId="email" type="text" v-model="email"/>
+          </div>
+        </div>
+        <div class="form-input">
+          <label for="password">Wachtwoord</label>
+          <div>
+            <Password inputId="password" v-model="password" :feedback="false"/>
+          </div>
+        </div>
+        <div class="form-input">
+          <Button type="submit" @click="signIn()" label="Login"></Button>
+        </div>
+      </form>
+    </template>
+    </div>
+  </main>
 
 </template>
 

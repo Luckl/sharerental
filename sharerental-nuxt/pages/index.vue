@@ -64,7 +64,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
       </div>
     </section>
-    <section class="side-padding bg-gray-200">
+    <section class="bg-gray-200">
       <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
         <div class="m-5 font-bold flex items-center">
           <i class="pi pi-check"></i>

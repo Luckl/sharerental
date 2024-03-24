@@ -65,14 +65,7 @@ async function fetchResult() {
 </script>
 
 <style scoped>
-.side-padding {
-  padding-left: 10%;
-  padding-right: 10%;
-}
 
-@media screen and (max-width: 678px) {
-
-}
 
 
 @media screen and (min-width: 2270px) {
