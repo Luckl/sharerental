@@ -3,7 +3,7 @@
     <div class="md:max-w-[1240px] md:mx-auto flex justify-between px-4 md:px-0">
       <div>
         <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
-          class="font-thin"><a href="info@sharerental.app">info@sharerental.app</a></span>
+          class="font-thin"><a href="mailto:info@sharerental.app">info@sharerental.app</a></span>
       </div>
       <div class="hidden md:block"><span class="font-bold">Huren</span> | <span class="font-thin">Verhuren</span></div>
     </div>

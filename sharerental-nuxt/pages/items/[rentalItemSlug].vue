@@ -60,6 +60,11 @@
         <SearchDetailsItem :field="item.powerWatt" label="Vermogen" suffix="W"/>
         <SearchDetailsItem :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
       </div>
+      <Dialog v-model:visible="showNotPossibleModal" modal header="Sorry!" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <div>
+          <span class="p-text-secondary block mb-5">Het is helaas nog niet mogelijk om dit item te huren.</span>
+        </div>
+      </Dialog>
       <Dialog v-model:visible="showRenterInfoModal" modal header="Jouw gegevens" :style="{ width: '50vw' }"
               :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div v-if="!editRenterInfo">
@@ -180,6 +185,7 @@ const item = ref<RentalItem>({
 const dates = ref([]);
 const images = ref<Image[]>([]);
 const showRenterInfoModal = ref(false);
+const showNotPossibleModal = ref(false);
 const editRenterInfo = ref(false);
 const renterInput = ref<RenterInput>({
   firstName: "",
@@ -271,7 +277,7 @@ function calculatePrice() {
 
 function showRenterInfo() {
   if (dates.value[0] != null && dates.value[1] != null) {
-    showRenterInfoModal.value = true
+    showNotPossibleModal.value = true
   } else {
     showError("Selecteer een begin en einddatum");
   }
