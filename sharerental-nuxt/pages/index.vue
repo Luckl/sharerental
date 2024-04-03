@@ -87,33 +87,47 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
               </div>
             </nuxtLink>
+            <nuxtLink to="/category/betonbewerking">
             <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/hef-hijswerktuigen">
             <div v-if="!categoriesCollapsed || !isSmallScreen"
                  class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/elektrisch-gereedschap">
             <div v-if="!categoriesCollapsed || !isSmallScreen"
                  class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/evenementen">
             <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                  :style="category5Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/grondverzetters-bouwmachines-tuinmateriaal">
             <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                  :style="category6Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/luchtdrukgereedschap">
             <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                  :style="category7Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
             </div>
+            </nuxtLink>
+            <nuxtLink to="/category/verwarmen-drogen-reinigen">
             <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                  :style="category8Background">
               <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
             </div>
+            </nuxtLink>
           </div>
         </div>
         <div class="mt-5 flex flex-col justify-center w-full">
