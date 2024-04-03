@@ -19,8 +19,8 @@
           <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
             het werkt
           </NuxtLink>
-          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/">Contact
-          </NuxtLink>
+          <a href="mailto: info@sharerental.app" v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold">Contact
+          </a>
           <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile">Gegevens</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/items">Artikelen

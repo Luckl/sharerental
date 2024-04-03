@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import SrTopBar from "~/components/SrTopBar.vue";
 
 definePageMeta({
   title: 'Home - ShareRental',
@@ -220,7 +219,9 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <span class="mt-1">Ben je op zoek naar een extra verkoopkanaal?</span>
             <span>Ben je benieuwd naar alle opties een mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
             <span>Neem dan direct gratis contact op!</span>
-            <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4">Neem contact op</button>
+            <a href="mailto:info@sharerental.app">
+              <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4">Neem contact op</button>
+            </a>
           </div>
         </div>
       </div>
