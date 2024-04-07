@@ -46,7 +46,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
 <template>
   <div>
     <Head>
-      <Title>Home - ShareRental</Title>
+      <Title>ShareRental</Title>
     </Head>
     <section class="green-area">
       <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
