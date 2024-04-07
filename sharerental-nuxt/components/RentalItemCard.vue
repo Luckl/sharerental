@@ -40,7 +40,7 @@ const formatter = new Intl.NumberFormat('nl-NL', {
 
 function determineImageUrl() {
   if (props.item.imageUrl === undefined) {
-    return '/logo-transparent-2.png'
+    return '/SR_s_green_white.png'
   } else {
     return props.item.imageUrl
   }

@@ -9,11 +9,11 @@ useSeoMeta({
   description: 'Huur en verhuur jouw machines en gereedschap',
   ogTitle: 'ShareRental',
   ogDescription: 'Huur en verhuur jouw machines en gereedschap',
-  ogImage: '/assets/logo-transparent-with-border.png',
+  ogImage: '/assets/SR_full_green_white.png',
   ogUrl: 'https://sharerental.nl?utm_campaign=social-redirect',
   twitterTitle: 'ShareRental',
   twitterDescription: 'Huur en verhuur jouw machines en gereedschap',
-  twitterImage: '/assets/logo-transparent-2.png',
+  twitterImage: '/assets/SR_s_green_white.png',
   twitterCard: 'summary'
 })
 </script>
