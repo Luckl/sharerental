@@ -13,7 +13,7 @@ const priceRange = ref([0, 1000])
 </script>
 <template>
   <Head>
-    <Title>Betonbewerking - ShareRental</Title>
+    <Title>Betonbewerking</Title>
   </Head>
   <SrTopBar>
     <Search></Search>

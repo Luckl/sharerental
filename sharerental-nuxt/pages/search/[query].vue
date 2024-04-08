@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>Zoeken - ShareRental</Title>
+    <Title>Zoeken</Title>
   </Head>
   <SrTopBar>
     <Search></Search>

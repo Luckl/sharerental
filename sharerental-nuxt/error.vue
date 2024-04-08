@@ -1,7 +1,4 @@
 <template>
-  <Head>
-    <Title>ShareRental</Title>
-  </Head>
   <SrTopBar></SrTopBar>
   <form-page>
     <template #content>

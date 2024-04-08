@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>Gegevens - ShareRental</Title>
+    <Title>Gegevens</Title>
   </Head>
   <client-only>
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>

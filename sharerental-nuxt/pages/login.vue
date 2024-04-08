@@ -44,7 +44,7 @@ const sticky = ref(false)
 
 <template>
   <Head>
-    <Title>Inloggen - ShareRental</Title>
+    <Title>Inloggen</Title>
   </Head>
   <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
 
