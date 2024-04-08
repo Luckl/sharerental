@@ -16,14 +16,17 @@ class ContactFormController(
     private val logger = LoggerFactory.getLogger(ContactFormController::class.java)
 
     override fun sendContactForm(contactForm: HttpContactForm?): ResponseEntity<Void> {
-        contactFormRepository.save(
-            ContactForm(
-                name = contactForm?.name,
-                email = contactForm?.email,
-                phone = contactForm?.phone,
-                analyticsToken = contactForm?.analyticsToken
-            )
+        val entity = ContactForm(
+            name = contactForm?.name,
+            email = contactForm?.email,
+            phone = contactForm?.phone,
+            analyticsToken = contactForm?.analyticsToken
         )
+        contactFormRepository.save(
+            entity
+        )
+
+        logger.error("Iemand heeft zijn gegevens achtergelaten: {}", entity.toString())
 
         return ResponseEntity.ok().build()
     }
