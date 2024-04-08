@@ -54,7 +54,7 @@ const priceRange = ref([0, 1000])
       <div>
         <span class=" text-4xl font-bold text-center">Electrisch gereedschap</span>
         <div class="mt-5">
-          Welkom bij onze uitgebreide collectie voor betonbewerking. Of je nu een professional bent in de bouwsector of een enthousiaste klusser die betonklussen aanpakt, wij hebben de juiste gereedschappen voor jou. Van betonmixers tot betonmolens en betonschuurmachines, ons assortiment biedt hoogwaardige apparatuur om jouw projecten soepel te laten verlopen. Ontdek onze selectie en bereid je voor om betonwerk van topkwaliteit te leveren.
+          Welkom bij ons uitgebreide assortiment elektrisch gereedschap. Of je nu een professionele vakman bent of een enthousiaste doe-het-zelver, wij hebben het juiste gereedschap voor elke klus. Van boormachines en cirkelzagen tot schuurmachines en decoupeerzagen, ons assortiment biedt hoogwaardige elektrische gereedschappen voor diverse toepassingen. Ontdek ons aanbod en voltooi je projecten met gemak en precisie.
         </div>
       </div>
       <div class="mt-10">
