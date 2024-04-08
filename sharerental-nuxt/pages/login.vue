@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {GoogleAuthProvider, signInWithEmailAndPassword, signOut as signOutFirebase} from 'firebase/auth'
-import {useCurrentUser, useFirebaseAuth} from 'vuefire'
+import {useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 import {useUserStore} from "~/services/stores/userStore";
 

@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import type ContactFormClient from "~/services/api/ContactFormClient";
+import {useUserStore} from "~/services/stores/userStore";
+import {reactive, ref} from "vue";
 
 definePageMeta({
   description: 'Gereedschap en machines huren en verhuren',
@@ -9,8 +12,35 @@ const router = useRouter();
 const categoriesCollapsed = ref(true)
 
 const screenWidth = ref(process.client ? window.innerWidth : 0);
-
 const isSmallScreen = computed(() => screenWidth.value < 768);
+
+/** todo use primevue dialogService  https://primevue.org/dynamicdialog/#example */
+const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+const userStore = useUserStore()
+const user = ref(userStore.user)
+
+const showInfoDialog = ref(false);
+const showThanksDialog = ref(false);
+const contactForm = reactive({
+  name: '',
+  email: '',
+  phone: ''
+});
+
+const shareContactDetails = () => {
+  contactFormClient.sendContactForm({
+    name: contactForm.name,
+    email: contactForm.email,
+    phone: contactForm.phone,
+    analyticsToken: user.value?.uid ?? ''
+  })
+
+  contactForm.name = ''
+  contactForm.email = ''
+  contactForm.phone = ''
+  showInfoDialog.value = false
+  showThanksDialog.value = true
+}
 
 const handleResize = () => {
   screenWidth.value = window.innerWidth;
@@ -87,45 +117,45 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
               </div>
             </nuxtLink>
             <nuxtLink to="/category/betonbewerking">
-            <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
-            </div>
+              <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/hef-hijswerktuigen">
-            <div v-if="!categoriesCollapsed || !isSmallScreen"
-                 class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
-            </div>
+              <div v-if="!categoriesCollapsed || !isSmallScreen"
+                   class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/elektrisch-gereedschap">
-            <div v-if="!categoriesCollapsed || !isSmallScreen"
-                 class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
-            </div>
+              <div v-if="!categoriesCollapsed || !isSmallScreen"
+                   class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/evenementen">
-            <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
-                 :style="category5Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
-            </div>
+              <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+                   :style="category5Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/grondverzetters-bouwmachines-tuinmateriaal">
-            <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
-                 :style="category6Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
-            </div>
+              <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+                   :style="category6Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/luchtdrukgereedschap">
-            <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
-                 :style="category7Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
-            </div>
+              <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+                   :style="category7Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
+              </div>
             </nuxtLink>
             <nuxtLink to="/category/verwarmen-drogen-reinigen">
-            <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
-                 :style="category8Background">
-              <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
-            </div>
+              <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
+                   :style="category8Background">
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
+              </div>
             </nuxtLink>
           </div>
         </div>
@@ -232,13 +262,35 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <span class="mt-1">Ben je op zoek naar een extra verkoopkanaal?</span>
             <span>Ben je benieuwd naar alle opties een mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
             <span>Neem dan direct gratis contact op!</span>
-            <a href="mailto:info@sharerental.app">
-              <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4">Neem contact op</button>
-            </a>
+            <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4"
+                    @click="showInfoDialog = true">Neem contact op
+            </button>
           </div>
         </div>
       </div>
     </section>
+    <Dialog v-model:visible="showInfoDialog" modal header="Contact" :style="{ width: '50vw' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <form @submit.prevent>
+        <div class="flex flex-col">
+          <span class="p-text-secondary block mb-5">Laat je gegevens achter en we nemen zo snel mogelijk contact met je op</span>
+          <label for="name">Naam</label>
+          <InputText id="name" v-model="contactForm.name" class="rounded-lg p-2"></InputText>
+          <label for="email">Email</label>
+          <InputText id="email" v-model="contactForm.email" type="email" class="rounded-lg p-2"></InputText>
+          <label for="phone">Telefoon</label>
+          <InputText id="phone" v-model="contactForm.phone" class="rounded-lg p-2"></InputText>
+          <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
+        </div>
+      </form>
+    </Dialog>
+    <Dialog v-model:visible="showThanksDialog" modal header="Bedankt!" :style="{ width: '50vw' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <div class="flex flex-col">
+        <span class="p-text-secondary block mb-5">Bedankt! We nemen zo snel mogelijk contact met je op.</span>
+        <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
+      </div>
+    </Dialog>
   </div>
 </template>
 

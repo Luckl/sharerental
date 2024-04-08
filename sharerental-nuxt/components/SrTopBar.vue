@@ -19,7 +19,7 @@
           <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
             het werkt
           </NuxtLink>
-          <a href="mailto: info@sharerental.app" v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold">Contact
+          <a v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" @click="showInfoDialog = true">Contact
           </a>
           <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile">Gegevens</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
@@ -103,15 +103,38 @@
       </div>
     </Sidebar>
   </section>
+  <Dialog v-model:visible="showInfoDialog" modal header="Contact" :style="{ width: '50vw' }"
+          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <form @submit.prevent>
+      <div class="flex flex-col">
+        <span class="p-text-secondary block mb-5">Laat je gegevens achter en we nemen zo snel mogelijk contact met je op</span>
+        <label for="name">Naam</label>
+        <InputText id="name" v-model="contactForm.name" class="rounded-lg p-2"></InputText>
+        <label for="email">Email</label>
+        <InputText id="email" v-model="contactForm.email" type="email" class="rounded-lg p-2"></InputText>
+        <label for="phone">Telefoon</label>
+        <InputText id="phone" v-model="contactForm.phone" class="rounded-lg p-2"></InputText>
+        <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
+      </div>
+    </form>
+  </Dialog>
+  <Dialog v-model:visible="showThanksDialog" modal header="Bedankt!" :style="{ width: '50vw' }"
+          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div class="flex flex-col">
+      <span class="p-text-secondary block mb-5">Bedankt! We nemen zo snel mogelijk contact met je op.</span>
+      <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
+    </div>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import {useUserStore} from "~/services/stores/userStore";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import LessorClient from "~/services/api/LessorClient";
 import {useNuxtApp} from "#app";
 import type {Lessor} from "~/schemas/openapi/sharerental";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
+import type ContactFormClient from "~/services/api/ContactFormClient";
 
 
 const router = useRouter();
@@ -120,7 +143,7 @@ const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
-
+const showContactDialog = ref(false);
 const user = ref(userStore.user)
 const menuOpened = ref(false)
 const auth = useFirebaseAuth()!
@@ -166,5 +189,30 @@ onMounted(() => {
   userStore.refreshUser()
   fetchLessors()
 })
+
+const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+
+const showInfoDialog = ref(false);
+const showThanksDialog = ref(false);
+const contactForm = reactive({
+  name: '',
+  email: '',
+  phone: ''
+});
+
+const shareContactDetails = () => {
+  contactFormClient.sendContactForm({
+    name: contactForm.name,
+    email: contactForm.email,
+    phone: contactForm.phone,
+    analyticsToken: user.value?.uid ?? ''
+  })
+
+  contactForm.name = ''
+  contactForm.email = ''
+  contactForm.phone = ''
+  showInfoDialog.value = false
+  showThanksDialog.value = true
+}
 
 </script>

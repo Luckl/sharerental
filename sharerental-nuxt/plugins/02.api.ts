@@ -7,10 +7,12 @@ import {Configuration as RentalItemConfiguration} from '~/schemas/openapi/rental
 import {Configuration as LessorConfiguration} from '~/schemas/openapi/lessor';
 import {Configuration as SearchConfiguration} from '~/schemas/openapi/search';
 import {Configuration as RenterConfiguration} from '~/schemas/openapi/renter';
+import {Configuration as ContactFormConfiguration} from '~/schemas/openapi/contactForm';
 import {ApiMiddleware} from "~/services/api/ApiMiddleware";
 import RentalItemImageClient from "~/services/api/RentalItemImageClient";
 import TransactionClient from "~/services/api/TransactionClient";
 import RenterClient from "~/services/api/RenterClient";
+import ContactFormClient from "~/services/api/ContactFormClient";
 
 export default defineNuxtPlugin((nuxtApp) => {
 
@@ -24,6 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const lessorConfiguration = new LessorConfiguration(configuration)
     const searchConfiguration = new SearchConfiguration(configuration)
     const renterConfiguration = new RenterConfiguration(configuration)
+    const contactFormConfiguration = new ContactFormConfiguration(configuration)
 
     const searchClient = new SearchClient(searchConfiguration)
     const lessorClient = new LessorClient(lessorConfiguration)
@@ -31,6 +34,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const renterClient = new RenterClient(renterConfiguration)
     const rentalItemImageClient = new RentalItemImageClient(rentalItemConfiguration)
     const transactionClient = new TransactionClient(transactionConfiguration)
+    const contactFormClient = new ContactFormClient(contactFormConfiguration)
 
     nuxtApp.provide('searchClient', searchClient)
     nuxtApp.provide('lessorClient', lessorClient)
@@ -38,4 +42,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.provide('rentalItemImageClient', rentalItemImageClient)
     nuxtApp.provide('transactionClient', transactionClient)
     nuxtApp.provide('renterClient', renterClient)
+    nuxtApp.provide('contactFormClient', contactFormClient)
 })
