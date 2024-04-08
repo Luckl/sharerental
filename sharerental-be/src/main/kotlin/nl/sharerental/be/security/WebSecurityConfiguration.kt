@@ -20,7 +20,7 @@ class WebSecurityConfiguration {
     fun filterChain(http: HttpSecurity) =
         http
             .csrf {
-                it.ignoringRequestMatchers("/transaction/mollie-callback")
+                it.ignoringRequestMatchers("/transaction/mollie-callback", "/contact-form")
                 it.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             }
             .authorizeHttpRequests {
