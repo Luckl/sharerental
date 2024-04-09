@@ -53,23 +53,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
-
-const categoryBackground = (image: string) => {
-  return computed(() => {
-    const imgUrl = img(image)
-    return {backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(102, 102, 102, 1)), url('${imgUrl}')`}
-  })
-}
-
-const category1Background = categoryBackground('categories/stijgers-trappen-hoogwerkers.jpg')
-const category2Background = categoryBackground('categories/Betonbewerking.jpg')
-const category3Background = categoryBackground('categories/hef-en-hijswerktuigen.jpg')
-const category4Background = categoryBackground('categories/electrisch-gereedschap-3.jpg')
-const category5Background = categoryBackground('categories/Evenementen.jpg')
-const category6Background = categoryBackground('categories/grondverzetters-bouwmachines-tuinmateriaal.jpg')
-const category7Background = categoryBackground('categories/Luchtdrukgereedschap.jpg')
-const category8Background = categoryBackground('categories/verwarmen-drogen-reinigen.jpg')
-
 </script>
 
 <template>
@@ -99,7 +82,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
           <div class="flex flex-col w-full md:w-1/2 justify-center">
             <h1 class="my-10 font-extrabold text-4xl md:text-4xl">ShareRental</h1>
             <span class="my-10 text-xl">Hét nieuwe online machineverhuurplatform. Registreer je nu en begin vandaag nog met verhuren.</span>
-            <NuxtLink>
+            <NuxtLink to="/register">
               <Button unstyled class="rounded-lg bg-white font-bold text-black w-36 h-12 mt-4">Gratis registreren</Button>
             </NuxtLink>
           </div>
