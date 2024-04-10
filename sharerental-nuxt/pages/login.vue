@@ -24,8 +24,6 @@ const errorParser = new RegExp('.*\\((.*)\\).*')
 
 const googleProvider = new GoogleAuthProvider();
 
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-
 function signOut() {
   signOutFirebase(auth).then(() => {
     userStore.refreshUser()
