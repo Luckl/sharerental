@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import {GoogleAuthProvider, signInWithEmailAndPassword, signOut as signOutFirebase} from 'firebase/auth'
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut as signOutFirebase
+} from 'firebase/auth'
 import {useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 import {useUserStore} from "~/services/stores/userStore";
@@ -22,12 +27,23 @@ const googleProvider = new GoogleAuthProvider();
 googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 function signOut() {
-  signOutFirebase(auth)
-  userStore.refreshUser()
+  signOutFirebase(auth).then(() => {
+    userStore.refreshUser()
+  })
 }
 
-function signIn() {
+function signInCredentials() {
   signInWithEmailAndPassword(auth, email.value, password.value)
+      .then(() => {
+        userStore.refreshUser()
+        router.push("/")
+      }, (reason) => {
+        error.value = errorParser.exec(reason.message)?.pop()
+      })
+}
+
+function signInGoogle() {
+  signInWithPopup(auth, googleProvider)
       .then(() => {
         userStore.refreshUser()
         router.push("/")
@@ -71,12 +87,15 @@ const sticky = ref(false)
             </div>
           </div>
           <div class="form-input flex gap-2">
-            <Button type="submit" @click="signIn()" label="Inloggen"></Button>
+            <Button type="submit" @click="signInCredentials()" label="Inloggen"></Button>
             <NuxtLink to="/register">
               <Button type="button" label="Registreren"></Button>
             </NuxtLink>
           </div>
         </form>
+        <div class="form-input">
+          <Button type="button" @click="signInGoogle()" label="Inloggen met Google"></Button>
+        </div>
       </div>
     </template>
   </div>

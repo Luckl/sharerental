@@ -9,6 +9,8 @@ definePageMeta({
 })
 
 const auth = useFirebaseAuth()! // only exists on client side
+auth.languageCode = "nl"
+const provider = new GoogleAuthProvider()
 const userStore = useUserStore()
 const user = ref(userStore.user)
 const router = useRouter()
