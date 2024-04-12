@@ -24,7 +24,7 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImM2MGI5ZGUwODBmZmFmYmZjMTgzMz
 
 
 ### test mollie webhook
-POST http://localhost:8080/backend/transaction/mollie-callback
+POST http://localhost:8080/backend/transactions/mollie-callback
 Content-Type: application/x-www-form-urlencoded
 
-id=6
+id=tr_Seoafnyzsd

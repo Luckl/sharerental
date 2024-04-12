@@ -45,7 +45,7 @@ one-signal:
 
 share-rental:
   callback-url: http://localhost:3000/transaction/completed
-  webhook-url: https://2722-185-132-108-115.ngrok-free.app/backend/transaction/mollie-callback
+  webhook-url: https://aa03-185-132-108-115.ngrok-free.app/backend/transactions/mollie-callback
 
 ngrok:
   enabled: true

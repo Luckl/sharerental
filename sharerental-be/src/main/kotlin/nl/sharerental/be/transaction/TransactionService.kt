@@ -167,12 +167,14 @@ class TransactionService(
             endDate
         )
 
-        val user = currentUserService.get()
+        val user = currentUserService.getOptional()
 
-        val renter = renterOptional ?: user.renterInformation
+        val renter = renterOptional ?: user?.renterInformation
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
-        user.renterInformation = renter
+        user?.apply {
+            this.renterInformation = renter
+        }
 
         val transaction = Transaction(
             rentalItem = rentalItem,
@@ -196,7 +198,7 @@ class TransactionService(
             amount = price,
             description = "${savedTransaction.id} - ${rentalItem.name}",
             transactionId = savedTransaction.id,
-            userId = user.id
+            userId = user?.id ?: renter.email
         )
 
         savedTransaction.molliePaymentReference = mollieTransaction.molliePaymentReference
