@@ -23,6 +23,7 @@ function register() {
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((result) => updateProfile(result.user, {displayName: username.value, photoURL: "null"}))
       .then(() => {
+        userStore.refreshUser()
         router.push("/lessor/profile")
       })
       .catch((reason) => {
