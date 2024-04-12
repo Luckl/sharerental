@@ -19,6 +19,7 @@ class OneSignalEmailSender(
     @Value("\${one-signal.app-id}") private val appId: String,
     @Value("\${one-signal.templates.welcome-email}") private val welcomeEmailTemplateId: String,
     @Value("\${one-signal.templates.item-rented}") private val itemRentedEmailTemplate: String,
+    @Value("\${one-signal.templates.item-rented-renter}") private val itemRentedRenterEmailTemplate: String,
     @Value("\${one-signal.mock}") private val mock: Boolean,
     private val objectMapper: ObjectMapper,
 ) {
@@ -38,14 +39,14 @@ class OneSignalEmailSender(
         sendEmail(body)
     }
 
-    fun sendItemRentedEmail(transaction: Transaction) {
+    fun sendItemRentedEmailToLessor(transaction: Transaction) {
         logger.info("Sending item rented email to users of lessor ${transaction.rentalItem.owner.id}")
         val userEmails = transaction.rentalItem.owner.userLessors.mapNotNull { it.user?.email }
         val body = OneSignalEmailRequest(
             includeEmailTokens = userEmails,
             appId = appId,
             templateId = itemRentedEmailTemplate,
-            customData = ItemRentedEmailCustomData(
+            customData = ItemRentedLessorEmailCustomData(
                 recipientName = transaction.rentalItem.owner.name,
                 renterName = "${transaction.renter.firstName} ${transaction.renter.lastName}",
                 rentalItemName = transaction.rentalItem.name,
@@ -54,6 +55,30 @@ class OneSignalEmailSender(
                 startDate = transaction.startDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),
                 endDate = transaction.endDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),
                 price = transaction.price.setScale(2, RoundingMode.HALF_UP).toString(),
+                )
+        )
+
+        sendEmail(body)
+    }
+
+    fun sendItemRentedEmailToRenter(transaction: Transaction) {
+        logger.info("Sending item rented email to renter ${transaction.renter.id}")
+        val userEmail = transaction.renter.email
+
+        val body = OneSignalEmailRequest(
+            includeEmailTokens = listOf(userEmail),
+            appId = appId,
+            templateId = itemRentedRenterEmailTemplate,
+            customData = ItemRentedRenterEmailCustomData(
+                recipientName = transaction.renter.firstName,
+                lessorName = transaction.rentalItem.owner.name,
+                rentalItemName = transaction.rentalItem.name,
+                startDate = transaction.startDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),
+                endDate = transaction.endDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy")),
+                lessorCity = transaction.rentalItem.owner.primaryLocation.city,
+                lessorStreet = transaction.rentalItem.owner.primaryLocation.street,
+                lessorHouseNumber = transaction.rentalItem.owner.primaryLocation.houseNumber,
+                lessorPostalCode = transaction.rentalItem.owner.primaryLocation.postalCode,
                 )
         )
 
@@ -107,7 +132,7 @@ data class OneSignalEmailResponse(
     val errors: Map<String, List<String>>,
 )
 
-data class ItemRentedEmailCustomData(
+data class ItemRentedLessorEmailCustomData(
     val recipientName: String,
     val renterName: String,
     val rentalItemName: String,
@@ -116,4 +141,15 @@ data class ItemRentedEmailCustomData(
     val price: String,
     val startDate: String,
     val endDate: String,
+) : CustomData
+data class ItemRentedRenterEmailCustomData(
+    val recipientName: String,
+    val lessorName: String,
+    val rentalItemName: String,
+    val startDate: String,
+    val endDate: String,
+    val lessorCity: String?,
+    val lessorStreet: String?,
+    val lessorHouseNumber: String?,
+    val lessorPostalCode: String?,
 ) : CustomData

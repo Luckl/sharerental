@@ -128,7 +128,8 @@ class TransactionService(
         }
 
         if (molliePaymentStatus == PaymentStatus.PAID) {
-            oneSignalEmailSender.sendItemRentedEmail(transaction)
+            oneSignalEmailSender.sendItemRentedEmailToLessor(transaction)
+            oneSignalEmailSender.sendItemRentedEmailToRenter(transaction)
         }
     }
 

@@ -17,7 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient
     classes= [
         OneSignalEmailRequest::class,
         WelcomeEmailCustomData::class,
-        ItemRentedEmailCustomData::class,
+        ItemRentedLessorEmailCustomData::class,
     ]
 )
 class OneSignalConfiguration(

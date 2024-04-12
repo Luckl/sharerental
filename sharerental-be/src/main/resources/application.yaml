@@ -41,6 +41,7 @@ one-signal:
   templates:
     welcome-email: 81429d3e-cde7-45b4-8385-790ee1ab9875
     item-rented: 1591f7aa-7148-4f26-89ef-3f5f08b3c22c
+    item-rented-renter: 1174927b-5e63-4c6c-8852-3b8f9b7ef28b
 
 share-rental:
   callback-url: http://localhost:3000/transaction/completed
