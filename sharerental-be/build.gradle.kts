@@ -108,7 +108,7 @@ jooq {
 			jooqConfiguration.apply {
 				jdbc.apply {
 					driver = "org.postgresql.Driver"
-					url = "jdbc:postgresql://localhost:5432/postgres"
+					url = "jdbc:postgresql://postgres:5432/postgres"
 					user = "postgres"
 					password = "postgres"
 				}
@@ -135,17 +135,6 @@ jooq {
 	}
 }
 
-tasks.register("generateDatabaseTypes") {
-	// Execute the needed Gradle tasks
-	dependsOn("composeUp")
-	dependsOn("generateJooq")
-	dependsOn("composeDown")
-
-	// Ensure correct execution order of the tasks
-	tasks.findByName("generateJooq")?.shouldRunAfter("composeUp")
-	tasks.findByName("composeDown")?.shouldRunAfter("generateJooq")
-}
-
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
@@ -156,7 +145,7 @@ tasks.withType<KotlinCompile> {
 tasks {
 	compileKotlin {
 		dependsOn("openApiGenerate")
-		dependsOn("generateDatabaseTypes")
+		dependsOn("generateJooq")
 	}
 }
 

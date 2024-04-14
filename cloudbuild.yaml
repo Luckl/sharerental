@@ -1,8 +1,20 @@
 steps:
+
+  - id: 'docker-compose-up'
+    name: 'docker/compose:1.19.0'
+    dir: 'sharerental-be'
+    args: [ '-f', 'build-pipeline-compose.yml', 'up', '-d' ]
+
   - name: 'gradle:8.3.0-jdk17'
     entrypoint: 'gradle'
     dir: 'sharerental-be'
     args: ['processAot', 'bootBuildImage']
+
+  - name: 'docker/compose:1.19.0'
+    id: 'docker-compose-down'
+    dir: 'sharerental-be'
+    args: [ '-f', 'build-pipeline-compose.yml', 'down' ]
+
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest' ]
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
