@@ -8,7 +8,6 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://local-postgres:5432/sharerental?stringtype=unspecified
       GOOGLE_APPLICATION_CREDENTIALS: /service-account.json
-      SPRING_PROFILES_ACTIVE: prod
     volumes:
       - "../sharerental-nuxt/service-account.json:/service-account.json"
   postgres:

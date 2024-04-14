@@ -27,7 +27,7 @@ import java.net.URI
 @RestController
 class SearchController(
     private val rentalItemRepository: RentalItemRepository,
-    private val create: DSLContext,
+    private val filterService: FilterService,
     ) : SearchApi {
 
     override fun search(
@@ -40,33 +40,15 @@ class SearchController(
 
         val pageRequest = pageRequest(page, size, sort)
 
+        filterService.getAllCounts(query)
+
         val toResponseObject = rentalItemRepository.search(query, pageRequest)
             .toResponseObject()
-
-        val baseRentalItemQuery = create.selectCount()
-            .from(RENTAL_ITEM)
-            .where(RENTAL_ITEM.DISPLAY_STATUS.eq(RentalItemDisplayStatus.ACTIVE))
-            .and(
-                RENTAL_ITEM.NAME.likeIgnoreCase("%$query%")
-                    .or(RENTAL_ITEM.BRAND.likeIgnoreCase("%$query%"))
-                    .or(RENTAL_ITEM.SHORT_DESCRIPTION.likeIgnoreCase("%$query%"))
-                    .or(RENTAL_ITEM.LONG_DESCRIPTION.likeIgnoreCase("%$query%"))
-            )
-
-        val count = getCountForEnumFilter(
-            RENTAL_ITEM.FUEL_TYPE.`in`(listOf(FuelTypeEnum.PETROL)),
-            baseRentalItemQuery
-        )
-
-        logger.info("count: {}", count.execute())
 
         return ResponseEntity.ok(
             toResponseObject
         )
     }
-
-    private fun getCountForEnumFilter(condition: Condition, baseRentalItemQuery: SelectConditionStep<Record1<Int>>) = baseRentalItemQuery
-        .and(condition)
 
     override fun searchCategory(
         category: String?,

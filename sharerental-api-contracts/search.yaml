@@ -140,7 +140,7 @@ components:
     FilterOption:
       type: object
       properties:
-        key:
+        field:
           type: string
           format: text
           description: filter key
@@ -150,7 +150,7 @@ components:
           items:
             type: object
             properties:
-              key:
+              value:
                 type: string
                 format: text
                 description: filter option key
