@@ -14,34 +14,7 @@ plugins {
 	id("org.openapi.generator") version "7.2.0"
 	id("org.graalvm.buildtools.native") version "0.9.28"
 	id("nu.studer.jooq") version "9.0"
-}
-
-configurations.all {
-	exclude(group="commons-logging", module="commons-logging")
-}
-
-tasks.bootBuildImage {
-	imageName.set("europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest")
-}
-
-tasks.openApiGenerate {
-	inputs.dir("$rootDir/../sharerental-api-contracts")
-	generatorName.set("spring")
-	inputSpecRootDirectory.set("$rootDir/../sharerental-api-contracts")
-	mergedFileName.set("sharerental")
-	outputDir.set("$buildDir/generated")
-	apiPackage.set("nl.sharerental.contract.http")
-	invokerPackage.set("nl.sharerental.contract.http.invoker")
-	modelPackage.set("nl.sharerental.contract.http.model")
-	configOptions.set(mapOf(
-		"annotationLibrary" to "none",
-		"documentationProvider" to "none",
-		"useTags" to "true",
-		"interfaceOnly" to "true",
-		"useSwaggerUI" to "false",
-		"useJakartaEe" to "true",
-		"useBeanValidation" to "false",
-	))
+	id("com.avast.gradle.docker-compose") version "0.17.6"
 }
 
 group = "nl.sharerental.be"
@@ -94,6 +67,39 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 }
 
+configurations.all {
+	exclude(group="commons-logging", module="commons-logging")
+}
+
+tasks.bootBuildImage {
+	imageName.set("europe-west4-docker.pkg.dev/sharerental-b66f7/sharerental/sharerental-be:latest")
+}
+
+tasks.openApiGenerate {
+	inputs.dir("$rootDir/../sharerental-api-contracts")
+	generatorName.set("spring")
+	inputSpecRootDirectory.set("$rootDir/../sharerental-api-contracts")
+	mergedFileName.set("sharerental")
+	outputDir.set("$buildDir/generated")
+	apiPackage.set("nl.sharerental.contract.http")
+	invokerPackage.set("nl.sharerental.contract.http.invoker")
+	modelPackage.set("nl.sharerental.contract.http.model")
+	configOptions.set(mapOf(
+		"annotationLibrary" to "none",
+		"documentationProvider" to "none",
+		"useTags" to "true",
+		"interfaceOnly" to "true",
+		"useSwaggerUI" to "false",
+		"useJakartaEe" to "true",
+		"useBeanValidation" to "false",
+	))
+}
+
+dockerCompose {
+	useComposeFiles = listOf("build-pipeline-compose.yaml")
+	projectNamePrefix = "sharerental"
+}
+
 jooq {
 	configurations {
 		create("main") {  // name of the jOOQ configuration
@@ -102,9 +108,9 @@ jooq {
 			jooqConfiguration.apply {
 				jdbc.apply {
 					driver = "org.postgresql.Driver"
-					url = "jdbc:postgresql://localhost:5432/sharerental"
-					user = "sharerental-be"
-					password = "mysecretpassword"
+					url = "jdbc:postgresql://localhost:5432/postgres"
+					user = "postgres"
+					password = "postgres"
 				}
 				generator.apply {
 					name = "org.jooq.codegen.DefaultGenerator"
@@ -129,6 +135,17 @@ jooq {
 	}
 }
 
+tasks.register("generateDatabaseTypes") {
+	// Execute the needed Gradle tasks
+	dependsOn("composeUp")
+	dependsOn("generateJooq")
+	dependsOn("composeDown")
+
+	// Ensure correct execution order of the tasks
+	tasks.findByName("generateJooq")?.shouldRunAfter("composeUp")
+	tasks.findByName("composeDown")?.shouldRunAfter("generateJooq")
+}
+
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
@@ -139,6 +156,7 @@ tasks.withType<KotlinCompile> {
 tasks {
 	compileKotlin {
 		dependsOn("openApiGenerate")
+		dependsOn("generateDatabaseTypes")
 	}
 }
 

@@ -1,0 +1,23 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:15'
+    container_name: "postgres"
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
+  flyway:
+    # Use Docker image containing Flyway CLI
+    image: flyway/flyway:9.22.1
+    container_name: "flyway-migration"
+    # Execute migration command with input parameters on container startup
+    command: -locations=filesystem:/flyway/migration -user=postgres -password=postgres -url="jdbc:postgresql://postgres:5432/postgres" -connectRetries=5 migrate
+    # Copy migration script folder into container
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/migration
+    # Wait for Postgres container to start
+    depends_on:
+      - postgres

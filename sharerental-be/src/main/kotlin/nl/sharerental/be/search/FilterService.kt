@@ -86,10 +86,10 @@ class FilterService(
 
         FilterOption()
             .apply {
-                this.key = tableField.name
+                this.field = tableField.name
                 this.options = result.map {
                     FilterOptionOptionsInner().apply {
-                        this.key = it.value1().toString()
+                        this.value = it.value1().toString()
                         this.count = it.value2()
                     }
                 }
