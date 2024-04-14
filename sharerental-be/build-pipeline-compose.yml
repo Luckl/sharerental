@@ -21,7 +21,6 @@ services:
     # Wait for Postgres container to start
     depends_on:
       - postgres
-      -
 networks:
   default:
     external:
