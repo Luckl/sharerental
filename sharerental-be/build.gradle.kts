@@ -109,9 +109,9 @@ jooq {
 				jdbc.apply {
 					driver = "org.postgresql.Driver"
 					// Change to localhost for building locally. Don't forget to run either build-pipeline-compose.yml, or run docker-compose.yml and boot up the application.
-					url = "jdbc:postgresql://postgres:5432/postgres"
-					user = "postgres"
-					password = "postgres"
+					url = "jdbc:postgresql://postgres:5432/sharerental"
+					user = "sharerental-be"
+					password = "mysecretpassword"
 				}
 				generator.apply {
 					name = "org.jooq.codegen.KotlinGenerator"
@@ -145,15 +145,13 @@ tasks.withType<KotlinCompile> {
 tasks {
 	compileKotlin {
 		dependsOn("openApiGenerate")
-		dependsOn("generateJooq")
+//		dependsOn("generateJooq")
 	}
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
-tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") { allInputsDeclared.set(true) }
 
 tasks.bootJar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE

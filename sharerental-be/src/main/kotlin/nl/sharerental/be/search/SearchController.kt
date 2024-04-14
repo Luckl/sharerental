@@ -4,6 +4,7 @@ import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
+import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
@@ -33,10 +34,10 @@ class SearchController(
 
         val pageRequest = pageRequest(page, size, sort)
 
-        filterService.getAllCounts(query)
+        val filterOptions = filterService.getFilterOptions(query)
 
         val toResponseObject = rentalItemRepository.search(query, pageRequest)
-            .toResponseObject()
+            .toResponseObject(filterOptions)
 
         return ResponseEntity.ok(
             toResponseObject
@@ -49,11 +50,14 @@ class SearchController(
         size: Int?,
         sort: MutableList<String>?
     ): ResponseEntity<SearchResult> {
+
+        val filterOptions = filterService.getFilterOptions(null)
+
         return rentalItemRepository.findByCategory(
             category,
             pageRequest(page, size, sort)
         )
-            .toResponseObject()
+            .toResponseObject(filterOptions)
             .let { ResponseEntity.ok(it) }
     }
 
@@ -71,12 +75,15 @@ class SearchController(
     }
 }
 
-private fun Page<RentalItem>.toResponseObject(): SearchResult {
+private fun Page<RentalItem>.toResponseObject(filterOptions: List<FilterOption>): SearchResult {
     val toList = this.get()
         .map { it.toSearchResultItem() }
         .toList()
 
-    return SearchResult(toList, PaginationResponse(this.totalElements, this.totalPages, this.number))
+    return SearchResult()
+        .embedded(toList)
+        .filterOptions(filterOptions)
+        .page(PaginationResponse(this.totalElements, this.totalPages, this.number))
 }
 
 private fun RentalItem.toSearchResultItem(): SearchResultItem {

@@ -19,6 +19,7 @@ class FilterService(
 ) {
 
     val filterFields = listOf(
+        RENTAL_ITEM.PRICE_24H,
         RENTAL_ITEM.BRAND,
         RENTAL_ITEM.CATEGORY,
         RENTAL_ITEM.FUEL_TYPE,
@@ -42,11 +43,11 @@ class FilterService(
         RENTAL_ITEM.INTRINSIC_WEIGHT_KILOGRAMS,
     )
 
-    fun getAllCounts(query: String?) {
+    fun getFilterOptions(query: String?): List<FilterOption> {
         // time duration in milliseconds
         val start = Instant.now()
 
-        filterFields.forEach { tableField ->
+        val filterOptions = filterFields.map { tableField ->
             getCountsForDistinctFieldValuesWithFilter(
                 query,
                 RENTAL_ITEM.DISPLAY_STATUS.eq(RentalItemDisplayStatus.ACTIVE),
@@ -56,6 +57,8 @@ class FilterService(
 
         val end = Instant.now()
         logger.debug("Time taken to get all counts: {} ms", end.toEpochMilli() - start.toEpochMilli())
+
+        return filterOptions
     }
 
     fun getCountsForDistinctFieldValuesWithFilter(
@@ -77,10 +80,6 @@ class FilterService(
             .and(filterCondition)
             .groupBy(tableField)
             .fetch()
-
-        result.map {
-            logger.debug("{}: {} - Count: {}", tableField.name, it.value1(), it.value2())
-        }
 
         return FilterOption()
             .apply {

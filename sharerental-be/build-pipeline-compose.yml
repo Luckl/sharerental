@@ -6,9 +6,9 @@ services:
     image: 'postgres:15'
     container_name: "postgres"
     environment:
-      - 'POSTGRES_DB=postgres'
-      - 'POSTGRES_PASSWORD=postgres'
-      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_DB=sharerental'
+      - 'POSTGRES_PASSWORD=mysecretpassword'
+      - 'POSTGRES_USER=sharerental-be'
     ports:
       - '5432:5432'
   flyway:
@@ -16,7 +16,7 @@ services:
     image: flyway/flyway:9.22.1
     container_name: "flyway-migration"
     # Execute migration command with input parameters on container startup
-    command: -locations=filesystem:/flyway/migration -user=postgres -password=postgres -url="jdbc:postgresql://postgres:5432/postgres" -connectRetries=5 migrate
+    command: -locations=filesystem:/flyway/migration -user=sharerental-be -password=mysecretpassword -url="jdbc:postgresql://postgres:5432/sharerental" -connectRetries=5 migrate
     # Copy migration script folder into container
     volumes:
       - ./src/main/resources/db/migration:/flyway/migration
