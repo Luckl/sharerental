@@ -1,3 +1,5 @@
+# This docker compose file is used specifically for JOOQ code generation which requires a Postgres database to be running with flyway schema applied.
+# see cloudbuild.yaml in the root directory of this repository for more information.
 version: '3'
 services:
   postgres:

@@ -1,19 +1,12 @@
 package nl.sharerental.be.search
 
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
-import nl.sharerental.be.jooq.generated.enums.FuelTypeEnum
-import nl.sharerental.be.jooq.generated.enums.RentalItemDisplayStatus
-import nl.sharerental.be.jooq.generated.tables.RentalItem.RENTAL_ITEM
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
-import org.jooq.Condition
-import org.jooq.DSLContext
-import org.jooq.Record1
-import org.jooq.SelectConditionStep
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page

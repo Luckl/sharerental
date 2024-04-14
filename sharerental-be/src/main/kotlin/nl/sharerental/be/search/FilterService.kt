@@ -1,7 +1,7 @@
 package nl.sharerental.be.search
 
 import nl.sharerental.be.jooq.generated.enums.RentalItemDisplayStatus
-import nl.sharerental.be.jooq.generated.tables.RentalItem.RENTAL_ITEM
+import nl.sharerental.be.jooq.generated.tables.RentalItem.Companion.RENTAL_ITEM
 import nl.sharerental.be.jooq.generated.tables.records.RentalItemRecord
 import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.FilterOptionOptionsInner
@@ -62,9 +62,7 @@ class FilterService(
         query: String?,
         filterCondition: Condition,
         tableField: TableField<RentalItemRecord, out Any>
-    ) {
-
-        tableField.name
+    ): FilterOption {
 
         val result = create.select(tableField, count())
             .from(RENTAL_ITEM)
@@ -84,7 +82,7 @@ class FilterService(
             logger.debug("{}: {} - Count: {}", tableField.name, it.value1(), it.value2())
         }
 
-        FilterOption()
+        return FilterOption()
             .apply {
                 this.field = tableField.name
                 this.options = result.map {
@@ -95,7 +93,6 @@ class FilterService(
                 }
 
             }
-
     }
 
     companion object {

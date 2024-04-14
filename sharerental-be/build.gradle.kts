@@ -23,8 +23,8 @@ sourceSets {
 	main {
 		java {
 			srcDir("$buildDir/generated/src/main/java")
+			srcDir("$buildDir/generated-src/jooq/main")
 			srcDir("$rootDir/src/main/kotlin")
-			srcDir("$rootDir/src/main/java")
 		}
 	}
 }
@@ -113,7 +113,7 @@ jooq {
 					password = "postgres"
 				}
 				generator.apply {
-					name = "org.jooq.codegen.DefaultGenerator"
+					name = "org.jooq.codegen.KotlinGenerator"
 					database.apply {
 						name = "org.jooq.meta.postgres.PostgresDatabase"
 						inputSchema = "public"
@@ -126,7 +126,6 @@ jooq {
 					}
 					target.apply {
 						packageName = "nl.sharerental.be.jooq.generated"
-						directory = "src/main/java"  // default (can be omitted)
 					}
 					strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
 				}
