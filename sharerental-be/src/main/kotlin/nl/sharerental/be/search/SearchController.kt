@@ -1,13 +1,19 @@
 package nl.sharerental.be.search
 
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
+import nl.sharerental.be.jooq.generated.enums.FuelTypeEnum
+import nl.sharerental.be.jooq.generated.enums.RentalItemDisplayStatus
+import nl.sharerental.be.jooq.generated.tables.RentalItem.RENTAL_ITEM
 import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
-import nl.sharerental.contract.http.model.Image
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchResult
 import nl.sharerental.contract.http.model.SearchResultItem
+import org.jooq.Condition
+import org.jooq.DSLContext
+import org.jooq.Record1
+import org.jooq.SelectConditionStep
 import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -19,7 +25,10 @@ import java.net.URI
 
 
 @RestController
-class SearchController(val rentalItemRepository: RentalItemRepository) : SearchApi {
+class SearchController(
+    private val rentalItemRepository: RentalItemRepository,
+    private val create: DSLContext,
+    ) : SearchApi {
 
     override fun search(
         query: String?,
@@ -34,10 +43,30 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
         val toResponseObject = rentalItemRepository.search(query, pageRequest)
             .toResponseObject()
 
+        val baseRentalItemQuery = create.selectCount()
+            .from(RENTAL_ITEM)
+            .where(RENTAL_ITEM.DISPLAY_STATUS.eq(RentalItemDisplayStatus.ACTIVE))
+            .and(
+                RENTAL_ITEM.NAME.likeIgnoreCase("%$query%")
+                    .or(RENTAL_ITEM.BRAND.likeIgnoreCase("%$query%"))
+                    .or(RENTAL_ITEM.SHORT_DESCRIPTION.likeIgnoreCase("%$query%"))
+                    .or(RENTAL_ITEM.LONG_DESCRIPTION.likeIgnoreCase("%$query%"))
+            )
+
+        val count = getCountForEnumFilter(
+            RENTAL_ITEM.FUEL_TYPE.`in`(listOf(FuelTypeEnum.PETROL)),
+            baseRentalItemQuery
+        )
+
+        logger.info("count: {}", count.execute())
+
         return ResponseEntity.ok(
             toResponseObject
         )
     }
+
+    private fun getCountForEnumFilter(condition: Condition, baseRentalItemQuery: SelectConditionStep<Record1<Int>>) = baseRentalItemQuery
+        .and(condition)
 
     override fun searchCategory(
         category: String?,

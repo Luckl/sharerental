@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jooq.meta.jaxb.Generator
 
 extra["hibernate.version"] = "6.4.2.Final"
+ext["jooq.version"] = jooq.version.get()
 
 plugins {
 	id("org.springframework.boot") version "3.2.3"
@@ -11,6 +13,7 @@ plugins {
 	kotlin("plugin.noarg") version "1.9.20"
 	id("org.openapi.generator") version "7.2.0"
 	id("org.graalvm.buildtools.native") version "0.9.28"
+	id("nu.studer.jooq") version "9.0"
 }
 
 configurations.all {
@@ -48,6 +51,7 @@ sourceSets {
 		java {
 			srcDir("$buildDir/generated/src/main/java")
 			srcDir("$rootDir/src/main/kotlin")
+			srcDir("$rootDir/src/main/java")
 		}
 	}
 }
@@ -75,6 +79,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("com.google.cloud:spring-cloud-gcp-starter-storage:4.8.3")
 	implementation("com.bucket4j:bucket4j-core:8.4.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -82,10 +87,46 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.kafka:spring-kafka")
 	runtimeOnly("org.postgresql:postgresql")
+	jooqGenerator("org.postgresql:postgresql")
 	testImplementation("io.zonky.test:embedded-database-spring-test:2.3.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.springframework.security:spring-security-test")
+}
+
+jooq {
+	configurations {
+		create("main") {  // name of the jOOQ configuration
+			generateSchemaSourceOnCompilation.set(true)  // default (can be omitted)
+
+			jooqConfiguration.apply {
+				jdbc.apply {
+					driver = "org.postgresql.Driver"
+					url = "jdbc:postgresql://localhost:5432/sharerental"
+					user = "sharerental-be"
+					password = "mysecretpassword"
+				}
+				generator.apply {
+					name = "org.jooq.codegen.DefaultGenerator"
+					database.apply {
+						name = "org.jooq.meta.postgres.PostgresDatabase"
+						inputSchema = "public"
+					}
+					generate.apply {
+						isDeprecated = false
+						isRecords = true
+						isImmutablePojos = true
+						isFluentSetters = true
+					}
+					target.apply {
+						packageName = "nl.sharerental.be.jooq.generated"
+						directory = "src/main/java"  // default (can be omitted)
+					}
+					strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+				}
+			}
+		}
+	}
 }
 
 tasks.withType<KotlinCompile> {
@@ -104,7 +145,7 @@ tasks {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
+tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") { allInputsDeclared.set(true) }
 tasks.bootJar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
