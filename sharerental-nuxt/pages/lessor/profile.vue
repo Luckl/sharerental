@@ -109,10 +109,12 @@
 <script setup lang="ts">
 
 import LessorClient, {type Lessor} from "~/services/api/LessorClient";
+import {useUserStore} from "~/services/stores/userStore";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
+const userStore = useUserStore()
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
 const message = ref<String | undefined>(undefined)
@@ -150,6 +152,7 @@ function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {
             message.value = "Succesvol aangemaakt"
+            userStore.refreshUser()
             fetchLessors()
           },
           failureReason => {
