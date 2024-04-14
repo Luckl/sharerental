@@ -108,6 +108,7 @@ jooq {
 			jooqConfiguration.apply {
 				jdbc.apply {
 					driver = "org.postgresql.Driver"
+					// Change to localhost for building locally. Don't forget to run either build-pipeline-compose.yml, or run docker-compose.yml and boot up the application.
 					url = "jdbc:postgresql://postgres:5432/postgres"
 					user = "postgres"
 					password = "postgres"
