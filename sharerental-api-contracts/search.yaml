@@ -131,8 +131,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SearchResultItem'
+        _filterOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterOption'
         page:
           $ref: './utils/PaginationResponse.yaml'
+    FilterOption:
+      type: object
+      properties:
+        key:
+          type: string
+          format: text
+          description: filter key
+          example: 'price_24h'
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                format: text
+                description: filter option key
+                example: '0-25'
+              count:
+                type: integer
+                format: int32
+                description: number of items with this filter option
+                example: 5
     SearchResultItem:
       type: object
       required:

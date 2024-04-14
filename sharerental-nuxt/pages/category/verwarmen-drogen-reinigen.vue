@@ -34,11 +34,11 @@ const priceRange = ref([0, 1000])
           <div class="p-2 m-2">
           </div>
         </AccordionTab>
-        <AccordionTab header="Maximale werkhoogte">
+        <AccordionTab header="Benodigde stroomtoevoer">
           <div class="p-2 m-2">
           </div>
         </AccordionTab>
-        <AccordionTab header="Type materiaal">
+        <AccordionTab header="Vermogen">
           <div class="p-2 m-2">
             <div v-for="materialType of materialTypes" :key="materialType" class="flex gap-2 align-items-center">
               <Checkbox v-model="selectedMaterialType" :inputId="materialType" name="category" :value="materialType" />
@@ -46,7 +46,7 @@ const priceRange = ref([0, 1000])
             </div>
           </div>
         </AccordionTab>
-        <AccordionTab header="Bereik">
+        <AccordionTab header="Oppervlakte">
         </AccordionTab>
       </Accordion>
     </div>

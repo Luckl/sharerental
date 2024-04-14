@@ -31,9 +31,11 @@ class SearchController(val rentalItemRepository: RentalItemRepository) : SearchA
 
         val pageRequest = pageRequest(page, size, sort)
 
+        val toResponseObject = rentalItemRepository.search(query, pageRequest)
+            .toResponseObject()
+
         return ResponseEntity.ok(
-            rentalItemRepository.search(query, pageRequest)
-                .toResponseObject()
+            toResponseObject
         )
     }
 
