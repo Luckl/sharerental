@@ -1,19 +1,64 @@
 <script lang="ts" setup>
 
+import {useFilterStore} from "~/services/stores/filterStore";
+import {useAsyncData} from "#app";
+import {reactive} from "vue";
+import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
+import type SearchClient from "~/services/api/SearchClient";
+import RentalItemCard from "~/components/RentalItemCard.vue";
+
 definePageMeta({
   layout: 'no-header'
 })
 
+const category = ref('Verwarmen, drogen en reinigen')
+const {filters} = useFilterStore();
 
-const materialTypes = ref(["Aluminium", "Staal", "Hout"])
-const selectedMaterialType = ref([])
-const menuOpened = ref(false)
+const getFilterName = (filter: FilterOption) => {
+  return filters.find(f => f.key === filter.field)?.name || filter.field
+}
+
+const usedFilters = ref<SearchRequestFiltersInner[]>([
+  {
+    field: 'category',
+    values: [category.value]
+  }
+])
+const availableFilters = ref<FilterOption[]>([])
+
+const $searchClient: SearchClient = useNuxtApp().$searchClient;
+
+const state = reactive({
+  results: undefined as SearchResultItem[] | undefined,
+  pageable: {
+    page: 0,
+    pageSize: 30,
+    sort: [],
+  },
+});
+
+onMounted(() => {
+  useAsyncData('searchWithText', async () => {
+    return await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
+      filters: usedFilters.value
+    }, "");
+  }).then(
+      success => {
+        state.results = success.data.value?.embedded
+        availableFilters.value = success.data.value?.filterOptions || []
+      },
+      failure => {
+
+      }
+  )
+})
+
 const priceRange = ref([0, 1000])
 
 </script>
 <template>
   <Head>
-    <Title>Verwarmen, drogen en reinigen</Title>
+    <Title>{{ category }}</Title>
   </Head>
   <SrTopBar>
     <Search></Search>
@@ -25,28 +70,10 @@ const priceRange = ref([0, 1000])
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled>
-        <AccordionTab header="Prijs">
+        <AccordionTab v-for="filter in availableFilters" :header="getFilterName(filter)">
           <div class="p-2 m-2">
-          <Slider v-model="priceRange" range class="w-full" />
+            <span v-for="value in filter.options">{{ value.value }} ({{ value.count }} beschikbaar)</span>
           </div>
-        </AccordionTab>
-        <AccordionTab header="Regio">
-          <div class="p-2 m-2">
-          </div>
-        </AccordionTab>
-        <AccordionTab header="Benodigde stroomtoevoer">
-          <div class="p-2 m-2">
-          </div>
-        </AccordionTab>
-        <AccordionTab header="Vermogen">
-          <div class="p-2 m-2">
-            <div v-for="materialType of materialTypes" :key="materialType" class="flex gap-2 align-items-center">
-              <Checkbox v-model="selectedMaterialType" :inputId="materialType" name="category" :value="materialType" />
-              <label :for="materialType">{{ materialType }}</label>
-            </div>
-          </div>
-        </AccordionTab>
-        <AccordionTab header="Oppervlakte">
         </AccordionTab>
       </Accordion>
     </div>
@@ -54,10 +81,17 @@ const priceRange = ref([0, 1000])
       <div>
         <span class=" text-4xl font-bold text-center">Verwarmen, drogen en reinigen</span>
         <div class="mt-5">
-          Welkom bij onze selectie voor verwarmen, drogen en reinigen. Of je nu bezig bent met bouwwerkzaamheden, renovaties of het organiseren van evenementen, wij hebben de juiste apparatuur om je te helpen. Van bouwdrogers en heaters tot hogedrukreinigers en stoomreinigers, ons assortiment biedt hoogwaardige oplossingen voor het verwarmen, drogen en reinigen van verschillende ruimtes en oppervlakken. Ontdek ons aanbod en maak jouw projecten efficiënter en effectiever met onze kwaliteitsapparatuur.        </div>
+          Welkom bij onze selectie voor verwarmen, drogen en reinigen. Of je nu bezig bent met bouwwerkzaamheden,
+          renovaties of het organiseren van evenementen, wij hebben de juiste apparatuur om je te helpen. Van
+          bouwdrogers en heaters tot hogedrukreinigers en stoomreinigers, ons assortiment biedt hoogwaardige oplossingen
+          voor het verwarmen, drogen en reinigen van verschillende ruimtes en oppervlakken. Ontdek ons aanbod en maak
+          jouw projecten efficiënter en effectiever met onze kwaliteitsapparatuur.
+        </div>
       </div>
-      <div class="mt-10">
-        <h1>Er zijn op dit moment nog geen artikelen beschikbaar in deze categorie</h1>
+      <div class="flex pt-10 justify-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-10">
+          <RentalItemCard v-for="rentalItem in state.results" :item="rentalItem"/>
+        </div>
       </div>
     </div>
 

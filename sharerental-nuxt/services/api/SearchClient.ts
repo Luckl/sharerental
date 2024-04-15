@@ -1,6 +1,6 @@
 import {
     Configuration as SearchConfiguration,
-    SearchApi,
+    SearchApi, type SearchRequest,
 } from '~~/schemas/openapi/search';
 import type {
     SearchResult,
@@ -22,12 +22,13 @@ class SearchClient {
         return this.searchApi.searchDetails({slug: slug})
     }
 
-    search(page: number, size: number, sort: string[], query?: string) {
+    search(page: number, size: number, sort: string[], searchRequest: SearchRequest, query?: string) {
         return this.searchApi.search({
             query: query ?? "",
             page: page,
             size: size,
-            sort: sort
+            sort: sort,
+            searchRequest: searchRequest
         });
     }
 }
