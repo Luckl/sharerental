@@ -37,6 +37,8 @@ class FilterService(
                 tableField,
             )
         }
+            .filter { it.options.isNotEmpty() }
+            .filter { it.options.size > 1 }
 
         val end = Instant.now()
         logger.debug("Time taken to get filters: {} ms", end.toEpochMilli() - start.toEpochMilli())
