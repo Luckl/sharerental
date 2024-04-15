@@ -39,7 +39,7 @@ class FilterService(
         }
 
         val end = Instant.now()
-        logger.debug("Time taken to get all counts: {} ms", end.toEpochMilli() - start.toEpochMilli())
+        logger.debug("Time taken to get filters: {} ms", end.toEpochMilli() - start.toEpochMilli())
 
         return filterOptions
     }
