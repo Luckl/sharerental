@@ -1,6 +1,10 @@
 import {
-    Configuration, RenterInput,
-    TransactionApi, TransactionStatus
+    Configuration,
+    TransactionApi,
+    TransactionStatus
+} from '~/schemas/openapi/transaction';
+import type {
+    RenterInput,
 } from '~/schemas/openapi/transaction';
 
 class TransactionClient {

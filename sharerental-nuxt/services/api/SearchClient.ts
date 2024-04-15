@@ -1,6 +1,8 @@
 import {
     Configuration as SearchConfiguration,
     SearchApi,
+} from '~~/schemas/openapi/search';
+import type {
     SearchResult,
     SearchResultItem,
 } from '~~/schemas/openapi/search';

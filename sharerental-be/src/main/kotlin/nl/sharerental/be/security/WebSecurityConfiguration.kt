@@ -25,7 +25,8 @@ class WebSecurityConfiguration {
                     "/contact-form",
                     "/transactions/get-amount-available-for-date",
                     "/transactions/calculate-price",
-                    "/transactions")
+                    "/transactions",
+                    "/search")
                 it.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             }
             .authorizeHttpRequests {
