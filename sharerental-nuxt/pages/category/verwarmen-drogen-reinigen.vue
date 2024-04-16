@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 
-import {useFilterStore} from "~/services/stores/filterStore";
-import {useAsyncData} from "#app";
+import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterStore";
 import {reactive} from "vue";
 import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
@@ -14,16 +13,17 @@ definePageMeta({
 const category = ref('Verwarmen, drogen en reinigen')
 const {filters} = useFilterStore();
 
-const getFilterName = (filter: FilterOption) => {
-  return filters.find(f => f.key === filter.field)?.name || filter.field
+const getFilter = (filter: FilterOption): Filter | undefined => {
+  return filters.find(f => f.key === filter.field)
 }
 
-const usedFilters = ref<SearchRequestFiltersInner[]>([
+const categoryFilter = ref<SearchRequestFiltersInner[]>([
   {
     field: 'category',
     values: [category.value]
   }
 ])
+
 const availableFilters = ref<FilterOption[]>([])
 
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
@@ -38,22 +38,40 @@ const state = reactive({
 });
 
 onMounted(() => {
-  useAsyncData('searchWithText', async () => {
-    return await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
-      filters: usedFilters.value
-    }, "");
-  }).then(
-      success => {
-        state.results = success.data.value?.embedded
-        availableFilters.value = success.data.value?.filterOptions || []
-      },
-      failure => {
-
-      }
-  )
+  fetchItems()
 })
 
-const priceRange = ref([0, 1000])
+const fetchItems = () => {
+  let filters1 = categoryFilter.value.concat(mapToFilter());
+  $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
+    filters: filters1
+  }, "").then(
+      success => {
+        state.results = success.embedded
+        availableFilters.value = success.filterOptions || []
+
+        availableFilters.value
+            .filter(value => value.field !== 'category')
+            .filter(value => value.options?.length || 0 > 0)
+            .filter(filter => activatedFilters.value[filter.field || ""] === undefined)
+            .forEach(filter => {
+              activatedFilters.value[filter.field || ""] = []
+            })
+      }
+  )
+}
+
+const activatedFilters = ref<any>({})
+const mapToFilter = (): SearchRequestFiltersInner[] => {
+  return Object.entries(activatedFilters.value)
+      .filter(([key, value]) => Array.isArray(value) && value.length > 0)
+      .map(([key, value]) => {
+    return {
+      field: key,
+      values: Array.isArray(value) ? value as string[] : [value as string]
+    }
+  })
+}
 
 </script>
 <template>
@@ -70,12 +88,35 @@ const priceRange = ref([0, 1000])
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled>
-        <AccordionTab v-for="filter in availableFilters" :header="getFilterName(filter)">
-          <div class="p-2 m-2">
+        <AccordionTab v-for="filter in availableFilters">
+          <template #header>
+            <span class="m-2 ">{{ getFilter(filter)?.name || '' }}</span>
+          </template>
+          <div class="p-2 m-2" v-if="getFilter(filter)?.type === FilterType.Choice">
+            <div class="flex" v-for="value in filter.options">
+              <Checkbox v-model="activatedFilters[filter.field]"
+                        :value="value.value"/>
+              <label :for="value.value" class="ml-2">
+                {{ value.value }}{{ getFilter(filter)?.suffix }}
+                <span class="text-sm text-gray-600">({{ value.count }} beschikbaar)</span>
+              </label>
+            </div>
+          </div>
+          <div class="p-2 m-2" v-else-if="getFilter(filter)?.type === FilterType.Boolean">
+            <div class="flex" v-for="value in filter.options">
+              <Checkbox v-model="activatedFilters[filter.field]" :value="value.value"/>
+              <label :for="value.value" class="ml-2">
+                {{ value.value == 'true' ? 'Ja' : 'Nee' }}
+                <span class="text-sm text-gray-600">({{ value.count }} beschikbaar)</span>
+              </label>
+            </div>
+          </div>
+          <div class="p-2 m-2" v-else>
             <span v-for="value in filter.options">{{ value.value }} ({{ value.count }} beschikbaar)</span>
           </div>
         </AccordionTab>
       </Accordion>
+      <Button @click="fetchItems()">Filteren</Button>
     </div>
     <div class="w-5/6">
       <div>
@@ -98,6 +139,3 @@ const priceRange = ref([0, 1000])
   </div>
 
 </template>
-<style scoped>
-
-</style>

@@ -1,6 +1,9 @@
 
-export type FilterType = "number" | "choice" | "boolean";
-
+export enum FilterType {
+    Number = "number",
+    Choice = "choice",
+    Boolean = "boolean"
+}
 export type Filter = {
     name: string;
     key: string;
@@ -19,7 +22,7 @@ export const useFilterStore = defineStore({
             {
                 name: 'Prijs per dag',
                 key: "price_24h",
-                type: "number"
+                type: "choice"
             },
             {
                 name: 'Merk',
@@ -62,6 +65,7 @@ export const useFilterStore = defineStore({
             {
                 name: 'Werkbreedte',
                 key: "work_width_meters",
+                type: "choice"
             },
             {
                 name: 'Stofzuiger aansluiting',
@@ -71,26 +75,38 @@ export const useFilterStore = defineStore({
             {
                 name: 'Capaciteit',
                 key: "capacity_liters",
+                type: "choice",
+                suffix: "L"
             },
             {
                 name: 'Hoogte',
                 key: "item_height",
+                type: "choice",
+                suffix: "m"
             },
             {
                 name: 'Breedte',
                 key: "item_width",
+                type: "choice",
+                suffix: "m"
             },
             {
                 name: 'Lengte',
                 key: "item_length",
+                type: "choice",
+                suffix: "m"
             },
             {
                 name: 'Vermogen (W)',
                 key: "power_watt",
+                type: "choice",
+                suffix: "W"
             },
             {
                 name: 'Maximale oppervlakte',
                 key: "maximum_surface_square_meters",
+                type: "choice",
+                suffix: "m²"
             },
             {
                 name: 'Levering mogelijk',
@@ -100,23 +116,31 @@ export const useFilterStore = defineStore({
             {
                 name: 'Leveringsprijs',
                 key: "delivery_price",
-                type: "number"
+                type: "choice"
             },
             {
                 name: 'Bereik',
                 key: "reach_meters",
+                type: "choice",
+                suffix: "m"
             },
             {
                 name: 'Draagvermogen',
                 key: "carrying_weight_kilograms",
+                type: "choice",
+                suffix: "kg"
             },
             {
                 name: 'Maximale werkhoogte',
                 key: "maximum_work_height_meters",
+                type: "choice",
+                suffix: "m"
             },
             {
                 name: 'Intrinsiek gewicht',
                 key: "intrinsic_weight_kilograms",
+                type: "choice",
+                suffix: "kg"
             },
         ]
     } as FilterState),
