@@ -68,11 +68,11 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
   return Object.entries(activatedFilters.value)
       .filter(([key, value]) => Array.isArray(value) && value.length > 0)
       .map(([key, value]) => {
-    return {
-      field: key,
-      values: Array.isArray(value) ? value as string[] : [value as string]
-    }
-  })
+        return {
+          field: key,
+          values: Array.isArray(value) ? value as string[] : [value as string]
+        }
+      })
 }
 
 </script>
@@ -132,8 +132,6 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
         </div>
       </div>
       <div class="flex pt-10 justify-center">
-        <div v-if="state.results?.length || 0 < 1"> Er zijn op dit moment nog geen producten van deze categorie beschikbaar </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-10">
           <RentalItemCard v-for="rentalItem in state.results" :item="rentalItem"/>
         </div>

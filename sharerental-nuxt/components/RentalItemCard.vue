@@ -15,9 +15,6 @@
         <Button unstyled class="rounded-lg green-area p-2">Direct huren</Button>
       </NuxtLink>
     </div>
-    <div>
-      <span class="text-sm text-gray-500">Beschikbaar bij 1 aanbieder</span>
-    </div>
   </div>
 </template>
 
