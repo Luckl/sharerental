@@ -42,13 +42,15 @@ onMounted(() => {
 })
 
 const fetchItems = () => {
-  let filters1 = categoryFilter.value.concat(mapToFilter());
+  let allFilters = categoryFilter.value.concat(mapToFilter());
   $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
-    filters: filters1
+    filters: allFilters
   }, "").then(
       success => {
         state.results = success.embedded
-        availableFilters.value = success.filterOptions || []
+        let allAvailableFilters = success.filterOptions || [];
+        availableFilters.value = allAvailableFilters
+            .filter(value => value.field !== 'category')
 
         availableFilters.value
             .filter(value => value.field !== 'category')
@@ -130,6 +132,8 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
         </div>
       </div>
       <div class="flex pt-10 justify-center">
+        <div v-if="state.results?.length || 0 < 1"> Er zijn op dit moment nog geen producten van deze categorie beschikbaar </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-10">
           <RentalItemCard v-for="rentalItem in state.results" :item="rentalItem"/>
         </div>
