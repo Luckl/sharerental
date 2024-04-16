@@ -22,7 +22,7 @@ class SearchClient {
         return this.searchApi.searchDetails({slug: slug})
     }
 
-    search(page: number, size: number, sort: string[], searchRequest: SearchRequest, query?: string) {
+    search(page: number, size: number, sort: string[], searchRequest?: SearchRequest, query?: string) {
         return this.searchApi.search({
             query: query ?? "",
             page: page,

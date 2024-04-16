@@ -51,7 +51,7 @@ function submit(data: SearchResultItem) {
 
 async function fetchResult() {
   useAsyncData('searchWithText', async () => {
-    return await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, query);
+    return await $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, undefined, query);
   }).then(
       success => {
         rentalItems.value = success.data.value?.embedded
