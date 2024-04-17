@@ -77,6 +77,13 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
       })
 }
 
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('nl-NL', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(value)
+}
+
 </script>
 <template>
   <Head>
@@ -91,7 +98,7 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
     <div class="w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
-      <Accordion unstyled :multiple="true">
+      <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
         <AccordionTab  v-for="filter in availableFilters">
           <template #header>
             <span class="m-2 font-bold">{{ getFilter(filter)?.name || '' }}</span>
@@ -101,7 +108,7 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
               <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
-                <span >{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
+                <span >{{ getFilter(filter)?.prefix }}{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>
@@ -111,6 +118,16 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
               <Checkbox v-model="activatedFilters[filter.field]" :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span >{{ value.value == 'true' ? 'Ja' : 'Nee' }}</span>
+                <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
+              </label>
+            </div>
+          </div>
+          <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Currency">
+            <div class="flex w-full" v-for="value in filter.options">
+              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
+                        :value="value.value"/>
+              <label :for="value.value" class="ml-2 w-full flex flex-wrap">
+                <span >{{ getFilter(filter)?.prefix }}{{ formatCurrency(value.value) }}{{ getFilter(filter)?.suffix }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>

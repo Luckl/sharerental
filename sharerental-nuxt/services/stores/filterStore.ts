@@ -2,6 +2,7 @@
 export enum FilterType {
     Number = "number",
     Choice = "choice",
+    Currency = "currency",
     Boolean = "boolean"
 }
 export type Filter = {
@@ -9,6 +10,8 @@ export type Filter = {
     key: string;
     type: FilterType;
     suffix?: string;
+    prefix?: string;
+    format?: (value: any) => string;
 }
 
 export type FilterState = {
@@ -22,7 +25,7 @@ export const useFilterStore = defineStore({
             {
                 name: 'Prijs per dag',
                 key: "price_24h",
-                type: "choice"
+                type: "currency"
             },
             {
                 name: 'Merk',
