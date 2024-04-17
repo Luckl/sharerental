@@ -13,7 +13,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-
 const {filters} = useFilterStore();
 
 const getFilter = (filter: FilterOption): Filter | undefined => {
@@ -99,7 +98,7 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
           </template>
           <div class="m-1" v-if="getFilter(filter)?.type === FilterType.Choice">
             <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox v-model="activatedFilters[filter.field]"
+              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span >{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
@@ -121,7 +120,6 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
           </div>
         </AccordionTab>
       </Accordion>
-      <Button @click="fetchItems()">Filteren</Button>
     </div>
     <div class="w-5/6">
       <div>
