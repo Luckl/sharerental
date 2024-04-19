@@ -10,8 +10,7 @@ import {useRouter} from "#app";
 import {useUserStore} from "~/services/stores/userStore";
 
 definePageMeta({
-  linkTitle: 'Login',
-  order: 1,
+  linkTitle: 'Login'
 })
 
 const auth = useFirebaseAuth()! // only exists on client side
@@ -61,7 +60,7 @@ const sticky = ref(false)
     <Title>Inloggen</Title>
   </Head>
   <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
-
+    <h1></h1>
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
     <template v-if="user">
       <NuxtLink @click="signOut()" to="/">

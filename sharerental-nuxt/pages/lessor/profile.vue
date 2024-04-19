@@ -5,6 +5,13 @@
   <client-only>
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
     <Message severity="success" v-if="message" v-bind:sticky="false">{{ message }}</Message>
+
+    <form-page>
+      <template #content>
+      <Button v-if="user" @click="signOut()">Uitloggen</Button>
+      </template>
+    </form-page>
+
     <div v-show="loaded && lessors?.length == 0">
       <form-page>
         <template #header>
@@ -110,11 +117,13 @@
 
 import LessorClient, {type Lessor} from "~/services/api/LessorClient";
 import {useUserStore} from "~/services/stores/userStore";
+import {signOut as signOutFirebase} from "@firebase/auth";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
 const userStore = useUserStore()
+const router = useRouter()
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
 const message = ref<String | undefined>(undefined)
@@ -135,6 +144,16 @@ const selectedLessor = ref<Lessor | undefined>(undefined)
 
 const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
 
+async function signOut() {
+  await signOutFirebase(auth)
+      .then(() => {
+        userStore.refreshUser()
+            .then(() => {
+              router.push("/")
+            })
+      })
+}
+
 function fetchLessors() {
   $lessorClient.findAll(0, 20, []).then(success => {
         loaded.value = true;
@@ -152,8 +171,8 @@ function onSubmitNewLessor() {
   $lessorClient.create(formInput)
       .then(success => {
             message.value = "Succesvol aangemaakt"
-            userStore.refreshUser()
             fetchLessors()
+            userStore.refreshUser()
           },
           failureReason => {
             error.value = "Er is iets fout gegaan"

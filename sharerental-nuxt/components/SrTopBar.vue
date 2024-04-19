@@ -169,7 +169,7 @@ userStore.$subscribe((mutation, state) => {
 
 const accountButtonLink = computed(() => {
   if (user.value) {
-    return '/login'
+    return '/lessor/profile'
   } else {
     return '/login'
   }
