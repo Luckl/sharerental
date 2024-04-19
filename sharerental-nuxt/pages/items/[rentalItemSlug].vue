@@ -60,7 +60,8 @@
         <SearchDetailsItem :field="item.powerWatt" label="Vermogen" suffix="W"/>
         <SearchDetailsItem :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
       </div>
-      <Dialog v-model:visible="showNotPossibleModal" modal header="Sorry!" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <Dialog v-model:visible="showNotPossibleModal" modal header="Sorry!" :style="{ width: '50vw' }"
+              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div>
           <span class="p-text-secondary block mb-5">Het is helaas nog niet mogelijk om dit item te huren.</span>
         </div>
@@ -228,23 +229,27 @@ watch(amount, () => {
 })
 
 function startTransaction() {
-  if (dates.value[0] != null && dates.value[1] != null) {
-    $transactionClient.startTransaction(
-        item.value.id,
-        dates.value[0],
-        dates.value[1],
-        amount.value,
-        editRenterInfo ? renterInput.value : undefined
-    ).then(
-        success => {
-          navigateTo(success.redirectUrl, {external: true})
-        },
-        failure => {
-          showError(failure.message);
-        }
-    )
+  if (true) {
+    showNotPossibleModal.value = true
   } else {
-    showError("Selecteer een begin en einddatum");
+    if (dates.value[0] != null && dates.value[1] != null) {
+      $transactionClient.startTransaction(
+          item.value.id,
+          dates.value[0],
+          dates.value[1],
+          amount.value,
+          editRenterInfo ? renterInput.value : undefined
+      ).then(
+          success => {
+            navigateTo(success.redirectUrl, {external: true})
+          },
+          failure => {
+            showError(failure.message);
+          }
+      )
+    } else {
+      showError("Selecteer een begin en einddatum");
+    }
   }
 }
 
@@ -277,7 +282,7 @@ function calculatePrice() {
 
 function showRenterInfo() {
   if (dates.value[0] != null && dates.value[1] != null) {
-    showNotPossibleModal.value = true
+    showRenterInfoModal.value = true
   } else {
     showError("Selecteer een begin en einddatum");
   }
