@@ -5,6 +5,9 @@
 </template>
 
 <script setup lang="ts">
+import {setLocale} from "yup";
+import {nl} from "yup-locales";
+
 useSeoMeta({
   description: 'Huur en verhuur jouw machines en gereedschap',
   ogTitle: 'ShareRental',
@@ -18,6 +21,8 @@ useSeoMeta({
   twitterImage: '/SR_full_green_white_opengraph_sizing.png',
   twitterCard: 'summary'
 })
+
+setLocale(nl)
 </script>
 
 <style>
