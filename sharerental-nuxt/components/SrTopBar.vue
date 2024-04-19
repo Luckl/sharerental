@@ -21,7 +21,6 @@
           </NuxtLink>
           <a v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" @click="showInfoDialog = true">Contact
           </a>
-          <NuxtLink v-if="user" class="text-center mr-4 font-semibold" to="/lessor/profile">Gegevens</NuxtLink>
           <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/items">Artikelen
           </NuxtLink>
@@ -150,7 +149,7 @@ const auth = useFirebaseAuth()!
 
 const accountBtnText = computed(() => {
   if (user.value) {
-    return user.value.displayName
+    return "Account"
   }
   return "Inloggen"
 })
