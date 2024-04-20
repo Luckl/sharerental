@@ -8,6 +8,7 @@ import {
 import {useFirebaseAuth} from 'vuefire'
 import {useRouter} from "#app";
 import {useUserStore} from "~/services/stores/userStore";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 definePageMeta({
   linkTitle: 'Login'
@@ -15,6 +16,7 @@ definePageMeta({
 
 const auth = useFirebaseAuth()! // only exists on client side
 const userStore = useUserStore()
+const lessorStore = useLessorStore()
 const user = userStore.user
 const router = useRouter()
 const email = ref("")
@@ -23,17 +25,15 @@ const errorParser = new RegExp('.*\\((.*)\\).*')
 
 const googleProvider = new GoogleAuthProvider();
 
-function signOut() {
-  signOutFirebase(auth).then(() => {
-    userStore.refreshUser()
-  })
-}
-
 function signInCredentials() {
   signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
         userStore.refreshUser()
-        router.push("/")
+            .then(() => {
+              lessorStore.loadLessors()
+            }).then(() => {
+          router.push("/")
+        })
       }, (reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })
@@ -43,7 +43,11 @@ function signInGoogle() {
   signInWithPopup(auth, googleProvider)
       .then(() => {
         userStore.refreshUser()
-        router.push("/")
+            .then(() => {
+              lessorStore.loadLessors()
+            }).then(() => {
+          router.push("/")
+        })
       }, (reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
       })
@@ -62,39 +66,32 @@ const sticky = ref(false)
   <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
     <h1></h1>
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-    <template v-if="user">
-      <NuxtLink @click="signOut()" to="/">
-        <Button>Uitloggen</Button>
-      </NuxtLink>
-    </template>
-    <template v-else>
-      <div>
-        <h2>Inloggen</h2>
-        <form @submit.prevent>
-          <div class="form-input">
-            <label for="username">Email</label>
-            <div>
-              <InputText inputId="email" type="text" v-model="email"/>
-            </div>
-          </div>
-          <div class="form-input">
-            <label for="password">Wachtwoord</label>
-            <div>
-              <Password inputId="password" v-model="password" :feedback="false"/>
-            </div>
-          </div>
-          <div class="form-input flex gap-2">
-            <Button type="submit" @click="signInCredentials()" label="Inloggen"></Button>
-            <NuxtLink to="/register">
-              <Button type="button" label="Registreren"></Button>
-            </NuxtLink>
-          </div>
-        </form>
+    <div>
+      <h2>Inloggen</h2>
+      <form @submit.prevent>
         <div class="form-input">
-          <Button type="button" @click="signInGoogle()" label="Inloggen met Google"></Button>
+          <label for="username">Email</label>
+          <div>
+            <InputText inputId="email" type="text" v-model="email"/>
+          </div>
         </div>
+        <div class="form-input">
+          <label for="password">Wachtwoord</label>
+          <div>
+            <Password inputId="password" v-model="password" :feedback="false"/>
+          </div>
+        </div>
+        <div class="form-input flex gap-2">
+          <Button type="submit" @click="signInCredentials()" label="Inloggen"></Button>
+          <NuxtLink to="/register">
+            <Button type="button" label="Registreren"></Button>
+          </NuxtLink>
+        </div>
+      </form>
+      <div class="form-input">
+        <Button type="button" @click="signInGoogle()" label="Inloggen met Google"></Button>
       </div>
-    </template>
+    </div>
   </div>
 
 </template>

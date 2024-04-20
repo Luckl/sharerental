@@ -134,15 +134,15 @@ import type {Lessor} from "~/schemas/openapi/sharerental";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
 import type ContactFormClient from "~/services/api/ContactFormClient";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 
 const router = useRouter();
-let userStore = useUserStore();
-const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+const userStore = useUserStore();
+const lessorStore = useLessorStore();
 
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
-const showContactDialog = ref(false);
 const user = ref(userStore.user)
 const menuOpened = ref(false)
 const auth = useFirebaseAuth()!
@@ -166,6 +166,11 @@ userStore.$subscribe((mutation, state) => {
   user.value = state.user
 })
 
+lessorStore.$subscribe((mutation, state) => {
+  console.log("event lessors updated received in srTopBar")
+  lessors.value = state.availableLessors
+})
+
 const accountButtonLink = computed(() => {
   if (user.value) {
     return '/lessor/profile'
@@ -174,19 +179,13 @@ const accountButtonLink = computed(() => {
   }
 })
 
-function fetchLessors() {
-  $lessorClient.findAll(0, 20, []).then(success => {
-        loaded.value = true;
-        lessors.value = success.embedded
-      },
-      failure => {
-        loaded.value = true;
-      })
-}
-
 onMounted(() => {
   userStore.refreshUser()
-  fetchLessors()
+  lessorStore.loadLessors()
+      .then(() => {
+        lessors.value = lessorStore.availableLessors
+        loaded.value = true
+      })
 })
 
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;

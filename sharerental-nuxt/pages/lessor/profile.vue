@@ -118,11 +118,13 @@
 import LessorClient, {type Lessor} from "~/services/api/LessorClient";
 import {useUserStore} from "~/services/stores/userStore";
 import {signOut as signOutFirebase} from "@firebase/auth";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
 const username = user.value?.displayName
 const userStore = useUserStore()
+const lessorStore = useLessorStore()
 const router = useRouter()
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
@@ -149,8 +151,11 @@ async function signOut() {
       .then(() => {
         userStore.refreshUser()
             .then(() => {
-              router.push("/")
-            })
+              console.log("refreshing lessors")
+              lessorStore.loadLessors()
+            }).then(() => {
+          router.push("/")
+        })
       })
 }
 
