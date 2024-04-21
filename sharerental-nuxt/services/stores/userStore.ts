@@ -19,7 +19,6 @@ export const useUserStore = defineStore({
     actions: {
         async refreshUser(): Promise<void> {
             this.user = await getCurrentUser();
-            console.log("Setting analytics uid: " + this.user?.uid)
 
             if (this.user?.uid) {
                 setUserId(getAnalytics(), this.user?.uid)

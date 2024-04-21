@@ -151,7 +151,6 @@ async function signOut() {
       .then(() => {
         userStore.refreshUser()
             .then(() => {
-              console.log("refreshing lessors")
               lessorStore.loadLessors()
             }).then(() => {
           router.push("/")

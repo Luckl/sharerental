@@ -167,7 +167,6 @@ userStore.$subscribe((mutation, state) => {
 })
 
 lessorStore.$subscribe((mutation, state) => {
-  console.log("event lessors updated received in srTopBar")
   lessors.value = state.availableLessors
 })
 

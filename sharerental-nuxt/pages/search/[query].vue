@@ -45,10 +45,6 @@ onMounted(async () => {
   await fetchResult()
 })
 
-function submit(data: SearchResultItem) {
-  console.log("clicked " + data)
-}
-
 async function fetchResult() {
 
     $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, undefined, query)

@@ -75,7 +75,6 @@ const customUploader = async (event) => {
             } else {
               error.value = "Afbeeldingen upload mislukt"
             }
-            console.log(failure)
           })
 };
 
@@ -97,8 +96,6 @@ function fetchImagesForItem() {
           success => {
             if (success.embedded !== undefined) {
               images.value = success.embedded
-            } else {
-              console.log("no images found")
             }
           },
           failure => {

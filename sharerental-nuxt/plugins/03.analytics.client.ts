@@ -11,10 +11,7 @@ export default defineNuxtPlugin(async () => {
     let analytics: Analytics | null = null
     if (await isSupported()) {
         analytics = initializeAnalytics(firebaseApp)
-    } else {
-        console.log('Analytics not supported')
     }
-
     return {
         provide: {
             analytics,
