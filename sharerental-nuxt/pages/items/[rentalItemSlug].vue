@@ -122,10 +122,9 @@ watch(amount, () => {
 })
 
 const startTransaction = () => {
-  if (false) {
+  if (true) {
     showNotPossibleModal.value = true
   } else {
-    console.log(renter.value)
     if (dates.value[0] != null && dates.value[1] != null) {
       $transactionClient.startTransaction(
           item.value.id,
