@@ -4,6 +4,8 @@ import {useFirebaseAuth} from 'vuefire'
 import {useUserStore} from "~/services/stores/userStore";
 import {useForm} from "vee-validate";
 import * as yup from 'yup';
+import type ContactFormClient from "~/services/api/ContactFormClient";
+import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
 
 definePageMeta({
   linkTitle: 'Login'
@@ -16,6 +18,7 @@ const userStore = useUserStore()
 const user = ref(userStore.user)
 const router = useRouter()
 const errorParser = new RegExp('.*\\((.*)\\).*')
+const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
 const schema = yup.object({
   email: yup.string().email().required().label("Emailadres"),
@@ -43,7 +46,11 @@ const onSubmit = handleSubmit(async () => {
   await createUserWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
         userStore.refreshUser()
-            .then(() => router.push("/lessor/profile"))
+            .then(() =>
+                contactFormClient.registerUser(type.value.toLowerCase() === 'huren' ? UserUserTypeEnum.Renter : UserUserTypeEnum.Lessor)
+                    .then(() =>
+                        router.push("/lessor/profile")))
+
       })
       .catch((reason) => {
         error.value = errorParser.exec(reason.message)?.pop()

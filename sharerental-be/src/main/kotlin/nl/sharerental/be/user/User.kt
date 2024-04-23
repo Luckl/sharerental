@@ -15,5 +15,6 @@ class User(
     @JoinColumn(name = "renter_information", referencedColumnName = "id")
     var renterInformation: Renter? = null,
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    var userLessors: Set<UserLessor> = setOf()
+    var userLessors: Set<UserLessor> = setOf(),
+    var signedUpAs: String
 )

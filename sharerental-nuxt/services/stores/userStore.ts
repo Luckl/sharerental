@@ -1,8 +1,6 @@
 import {defineStore} from 'pinia'
 import {type User} from "@firebase/auth";
 import {getAnalytics, setUserId} from "@firebase/analytics";
-import {createUserWithEmailAndPassword} from "firebase/auth";
-import {useFirebaseAuth} from "vuefire";
 
 export type UserState = {
     user: User | null;

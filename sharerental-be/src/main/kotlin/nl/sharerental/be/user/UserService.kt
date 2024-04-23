@@ -19,7 +19,8 @@ class UserService(
                     User(
                         id = id,
                         email = email,
-                        username = name ?: email.substringBefore('@')
+                        username = name ?: email.substringBefore('@'),
+                        signedUpAs = "unknown"
                     )
                 ).also { setupMessaging(it, subscribedToNews) }
             }

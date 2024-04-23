@@ -1,0 +1,1 @@
+alter table usr add column signed_up_as text default 'unknown' not null;

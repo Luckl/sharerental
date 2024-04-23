@@ -3,6 +3,21 @@ info:
   title: ShareRental - OpenAPI 3.0
   version: 0.0.1
 paths:
+  /registered:
+    post:
+      summary: Register a new user
+      operationId: registerUser
+      tags:
+          - user
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: successful operation
   /contact-form:
     post:
       summary: Send a contact form
@@ -25,6 +40,21 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    User:
+      type: object
+      required:
+          - email
+          - userType
+      properties:
+        name:
+          type: string
+          example: "frans@bouwmans.nl"
+        userType:
+          type: string
+          format: enum
+          enum:
+              - RENTER
+              - LESSOR
     ContactForm:
       type: object
       required:

@@ -120,7 +120,6 @@ watch(amount, () => {
 
 const startTransaction = () => {
   if (true) {
-    console.log("starting transaction")
     showNotPossibleModal.value = true
   } else {
     if (dates.value[0] != null && dates.value[1] != null) {

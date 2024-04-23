@@ -6,8 +6,11 @@ import {useForm} from "vee-validate";
 import {useUserStore} from "~/services/stores/userStore";
 import {useToast} from "primevue/usetoast";
 import {createUserWithEmailAndPassword} from "firebase/auth";
+import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
+import type ContactFormClient from "~/services/api/ContactFormClient";
 
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
+const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
 const props = defineProps<{
   modelValue: Renter,
@@ -128,7 +131,9 @@ const onSubmit = handleSubmit(async () => {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
         .then(() => {
               userStore.refreshUser()
-                  .then(() => props.saveAction())
+                  .then(() =>
+                      contactFormClient.registerUser(UserUserTypeEnum.Renter)
+                          .then(() => props.saveAction()))
             },
             (reason) => {
               toast.add({
