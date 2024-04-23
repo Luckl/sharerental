@@ -41,13 +41,31 @@ const schema = yup.object({
   houseNumber: yup.string().required().label("Huisnummer"),
   postalCode: yup.string().required().label("Postcode"),
   city: yup.string().required().label("Stad"),
-  country: yup.string().required().label("Land")
+  country: yup.string().required().label("Land"),
+
+  createAccount: yup.boolean().label("Maak een account aan"),
+
+  password: yup.string()
+      .when('createAccount',
+          ([createAccount], password) =>
+              createAccount === true
+                  ? password.label("Wachtwoord").required().min(6)
+                  : password),
+
+  passwordConfirm: yup.string()
+      .when('createAccount',
+          ([createAccount], passwordConfirm) =>
+              createAccount === true
+                  ? passwordConfirm.label("Wachtwoord herhalen").required().oneOf([yup.ref('password')], 'Wachtwoorden moeten overeenkomen')
+              : passwordConfirm),
+
 });
 
 const {defineField, handleSubmit, errors} = useForm({
   validationSchema: schema,
 });
 
+const [createAccount] = defineField("createAccount")
 const [firstName] = defineField("firstName")
 const [lastName] = defineField("lastName")
 const [email] = defineField("email")
@@ -57,6 +75,8 @@ const [houseNumber] = defineField("houseNumber")
 const [postalCode] = defineField("postalCode")
 const [city] = defineField("city")
 const [country] = defineField("country")
+const [password] = defineField("password")
+const [passwordConfirm] = defineField("passwordConfirm")
 
 const editRenterInfo = ref(false);
 
@@ -81,6 +101,7 @@ const options = ['Nederland', 'België'].map((o) => ({
 
 
 const onSubmit = handleSubmit(async () => {
+  console.log('submitting')
   renter.value = {
     id: renter.value.id,
     firstName: firstName.value,
@@ -151,40 +172,62 @@ function getRenter() {
     </div>
   </div>
   <div class="flex flex-col" v-else>
-    <span class="p-text-secondary block mb-5">Vul je gegevens in.</span>
-    <sr-text-field label="Emailadres" v-model="email" :errors="errors.email"></sr-text-field>
-    <div class="flex gap-2">
-      <sr-text-field label="Voornaam" v-model="firstName" :errors="errors.firstName"></sr-text-field>
-      <sr-text-field label="Achternaam" v-model="lastName" :errors="errors.lastName"></sr-text-field>
-    </div>
-    <div>
-      <sr-text-field label="Telefoonnummer" v-model="phoneNumber" :errors="errors.phoneNumber"></sr-text-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-text-field label="Postcode" v-model="postalCode" :errors="errors.postalCode"></sr-text-field>
-      <sr-text-field label="Huisnummer" v-model="houseNumber" :errors="errors.houseNumber"></sr-text-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-text-field label="Straat" v-model="street" :errors="errors.street"></sr-text-field>
-      <sr-text-field label="Plaatsnaam" v-model="city" :errors="errors.city"></sr-text-field>
-    </div>
-    <label for="country">Land</label>
-    <div>
-      <Dropdown
-          v-model="country"
-          :options="options"
-          optionLabel="name"
-          optionValue="value"
-          :class="{ 'p-invalid': errors.country }"
-          placeholder="Selecteer een land"
-      />
-    </div>
-    <small id="country-help" class="p-error">{{ errors.country }}</small>
+    <form novalidate @submit="onSubmit">
+      <span class="p-text-secondary block mb-5">Vul je gegevens in.</span>
+      <div class="flex gap-2">
+        <sr-text-field label="Emailadres" type="email" v-model="email" :errors="errors.email"></sr-text-field>
+        <div class="flex gap-2 items-center">
+          <div>
+            <label for="createAccount">Maak een account aan</label>
+          </div>
+          <Checkbox v-model="createAccount"
+                    :class="{ 'p-invalid': errors.terms }"
+                    binary
+          ></Checkbox>
+        </div>
+      </div>
+      <div class="flex gap-2" v-if="createAccount">
+        <sr-text-field label="Wachtwoord" type="password" v-model="password" :errors="errors.password"></sr-text-field>
+        <sr-text-field label="Wachtwoord herhalen" type="password" v-model="passwordConfirm"
+                       :errors="errors.passwordConfirm"></sr-text-field>
+      </div>
+      <divider></divider>
+      <div class="flex gap-2">
+        <sr-text-field label="Voornaam" v-model="firstName" :errors="errors.firstName"></sr-text-field>
+        <sr-text-field label="Achternaam" v-model="lastName" :errors="errors.lastName"></sr-text-field>
+      </div>
+      <div class="flex gap-2">
+        <sr-text-field label="Telefoonnummer" v-model="phoneNumber" :errors="errors.phoneNumber"></sr-text-field>
+      </div>
+      <div class="flex gap-2">
+        <sr-text-field label="Postcode" v-model="postalCode" :errors="errors.postalCode"></sr-text-field>
+        <sr-text-field label="Huisnummer" v-model="houseNumber" :errors="errors.houseNumber"></sr-text-field>
+      </div>
+      <div class="flex gap-2">
+        <sr-text-field label="Straat" v-model="street" :errors="errors.street"></sr-text-field>
+        <sr-text-field label="Plaatsnaam" v-model="city" :errors="errors.city"></sr-text-field>
+      </div>
+      <label for="country">Land</label>
+      <div>
+        <Dropdown
+            v-model="country"
+            :options="options"
+            optionLabel="name"
+            optionValue="value"
+            :class="{ 'p-invalid': errors.country }"
+            placeholder="Selecteer een land"
+        />
+      </div>
+      <small id="country-help" class="p-error">{{ errors.country }}</small>
+      <div class="flex justify-content-end gap-2">
+        <Button type="submit" label="Huren"></Button>
+      </div>
+    </form>
   </div>
   <div v-if="!editRenterInfo">
     <Button type="button" label="Aanpassen" @click="enableRenterEditMode()"></Button>
   </div>
-  <div class="flex justify-content-end gap-2">
+  <div v-if="!editRenterInfo" class="flex justify-content-end gap-2">
     <Button type="button" label="Huren" @click="onSubmit"></Button>
   </div>
 </template>

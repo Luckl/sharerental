@@ -72,7 +72,6 @@
                                  :save-action="startTransaction">
         </SrRenterInformationForm>
       </Dialog>
-      <Toast/>
     </template>
   </form-page>
 </template>
@@ -82,9 +81,7 @@ import {useRoute} from "#app";
 import type {Image, RentalItem} from "~/schemas/openapi/rentalItem";
 import SearchClient from "~/services/api/SearchClient";
 import TransactionClient from "~/services/api/TransactionClient";
-import RenterClient from "~/services/api/RenterClient";
 import type {Renter} from "~/schemas/openapi/renter";
-import type {RenterInput} from "~/schemas/openapi/transaction";
 import {useToast} from "primevue/usetoast";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 
@@ -123,6 +120,7 @@ watch(amount, () => {
 
 const startTransaction = () => {
   if (true) {
+    console.log("starting transaction")
     showNotPossibleModal.value = true
   } else {
     if (dates.value[0] != null && dates.value[1] != null) {

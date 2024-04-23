@@ -19,7 +19,7 @@ const errorParser = new RegExp('.*\\((.*)\\).*')
 
 const schema = yup.object({
   email: yup.string().email().required().label("Emailadres"),
-  password: yup.string().required().length(6).label("Wachtwoord"),
+  password: yup.string().required().min(6).label("Wachtwoord"),
   passwordConfirm: yup.string().required().oneOf([yup.ref('password')], 'Wachtwoorden moeten overeenkomen')
       .label("Wachtwoord herhalen"),
   type: yup.string().required().label('Gebruikerstype'),
