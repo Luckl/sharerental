@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast/>
     <slot></slot>
   </div>
 </template>

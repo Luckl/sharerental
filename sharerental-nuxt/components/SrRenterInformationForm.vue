@@ -3,6 +3,9 @@ import RenterClient from "~/services/api/RenterClient";
 import type {Renter} from "~/schemas/openapi/renter";
 import * as yup from "yup";
 import {useForm} from "vee-validate";
+import {useUserStore} from "~/services/stores/userStore";
+import {useToast} from "primevue/usetoast";
+import {createUserWithEmailAndPassword} from "firebase/auth";
 
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
 
@@ -10,6 +13,10 @@ const props = defineProps<{
   modelValue: Renter,
   saveAction: () => void
 }>()
+
+const auth = useFirebaseAuth()! // only exists on client side
+const userStore = useUserStore()
+const toast = useToast()
 
 const emits = defineEmits(['update:modelValue'])
 
@@ -57,7 +64,7 @@ const schema = yup.object({
           ([createAccount], passwordConfirm) =>
               createAccount === true
                   ? passwordConfirm.label("Wachtwoord herhalen").required().oneOf([yup.ref('password')], 'Wachtwoorden moeten overeenkomen')
-              : passwordConfirm),
+                  : passwordConfirm),
 
 });
 
@@ -101,7 +108,6 @@ const options = ['Nederland', 'België'].map((o) => ({
 
 
 const onSubmit = handleSubmit(async () => {
-  console.log('submitting')
   renter.value = {
     id: renter.value.id,
     firstName: firstName.value,
@@ -117,7 +123,22 @@ const onSubmit = handleSubmit(async () => {
     }
   }
   emits('update:modelValue', renter.value)
-  props.saveAction()
+
+  if (createAccount.value) {
+    await createUserWithEmailAndPassword(auth, email.value, password.value)
+        .then(() => {
+              userStore.refreshUser()
+                  .then(() => props.saveAction())
+            },
+            (reason) => {
+              toast.add({
+                severity: 'error', summary: 'Er is iets fout gegaan', detail: reason,
+                life: 5000
+              })
+            })
+  } else {
+    props.saveAction()
+  }
 })
 
 function getRenter() {

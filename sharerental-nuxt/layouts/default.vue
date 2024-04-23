@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast/>
     <SrTopBar></SrTopBar>
     <slot/>
   </div>
