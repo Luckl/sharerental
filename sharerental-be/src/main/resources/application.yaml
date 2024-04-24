@@ -47,6 +47,9 @@ share-rental:
   callback-url: http://localhost:3000/transaction/completed
   webhook-url: https://aa03-185-132-108-115.ngrok-free.app/backend/transactions/mollie-callback
 
+  slack:
+    platform-events-url:
+
 ngrok:
   enabled: true
   auth-token: 2VtukgpNnE6MmsmLeAIyoSmX1iv_2dRWq8zfkE9YsVhzsTzqS

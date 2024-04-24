@@ -12,6 +12,10 @@ gcp:
 share-rental:
   callback-url: https://sharerental.nl/transaction/completed
   webhook-url: https://sharerental.nl/backend/transactions/mollie-callback
+
+  slack:
+    platform-events-url:
+
 one-signal:
   mock: false
 ngrok:
