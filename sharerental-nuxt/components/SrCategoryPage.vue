@@ -115,7 +115,7 @@ const formatCurrency = (value: number) => {
           </div>
           <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Boolean">
             <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox v-model="activatedFilters[filter.field]" :value="value.value"/>
+              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]" :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span >{{ value.value == 'true' ? 'Ja' : 'Nee' }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
