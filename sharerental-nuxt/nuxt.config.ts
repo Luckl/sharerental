@@ -48,7 +48,6 @@ export default defineNuxtConfig({
     css: [
         '~/assets/css/reset.css',
         '~/assets/css/main.css',
-        // '~/assets/css/theme.css',
         'primevue/resources/primevue.css',
         'primevue/resources/themes/saga-green/theme.css',
         'primeicons/primeicons.css',
