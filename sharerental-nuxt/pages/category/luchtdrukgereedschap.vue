@@ -4,7 +4,6 @@ import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterS
 import {reactive} from "vue";
 import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
-import RentalItemCard from "~/components/RentalItemCard.vue";
 
 definePageMeta({
   layout: 'no-header'

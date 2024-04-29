@@ -1,82 +1,4 @@
-<template>
-  <form-page>
-    <template #header>
-      <div class="flex flex-col">
-        <span class="font-bold text-xl mx-1">{{ item.name }}</span>
-        <span class="mx-3">{{ item.shortDescription }}</span>
-      </div>
-    </template>
-    <template #content>
-      <div class="grid grid-cols-1 lg:grid-cols-2">
-        <div class="p-3 flex justify-center">
-          <Galleria :value="images" :numVisible="5" containerStyle="max-width: 340px"
-                    :showThumbnails="false" :showIndicators="true">
-            <template #item="slotProps: {item: Image}">
-              <img :src="slotProps.item.url" alt="image" style="width: 100%; display: block"/>
-            </template>
-          </Galleria>
-        </div>
-        <div class="p-5 flex flex-col gap-2">
-          <Calendar v-model="dates" selectionMode="range" inline @dateSelect="onUpdateTransactionInformation()"
-                    @change="onUpdateTransactionInformation()" :minDate="new Date()"/>
-          <div class="flex flex-row justify-between">
-
-            <div class="align-middle text-xl">
-              Aantal:
-            </div>
-            <div>
-              <InputNumber @change="onUpdateTransactionInformation()" v-model="amount" showButtons :min="0"
-                           :max="amountAvailable"></InputNumber>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between">
-            <div class="align-middle text-xl">
-              Prijs: € {{ price }}
-            </div>
-            <div class="flex justify-end">
-              <Button label="Huren" :disabled="amount < 1" @click="showRenterInfo()"></Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col gap-5">
-        <span class="font-bold text-xl m-1">Details</span>
-        <SearchDetailsItem :field="item.brand" label="Merk"/>
-        <SearchDetailsItem :field="item.longDescription" label="Omschrijving"/>
-        <SearchDetailsItem :field="item.reachMeters" label="Bereik" suffix="m"/>
-        <SearchDetailsItem :field="item.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg"/>
-        <SearchDetailsItem :field="item.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m"/>
-        <SearchDetailsItem :field="item.intrinsicWeightKilograms" label="Gewicht" suffix="kg"/>
-        <SearchDetailsItem :field="item.materialType" label="Type materiaal"/>
-        <SearchDetailsItem :field="item.maximumPressureBars" label="Maximale drukvermogen" suffix="bar"/>
-        <SearchDetailsItem :field="item.maximumHorsePower" label="Maximale vermogen" suffix="pk"/>
-        <SearchDetailsItem :field="item.requiredPowerVoltageVolt" label="Benodigde stroomtoevoer" suffix="V"/>
-        <SearchDetailsItem :field="item.workWidthMeters" label="Werkbreedte" suffix="m"/>
-        <SearchDetailsItem :field="item.vacuumAttachmentPossible" label="Stofzuiger aansluiting"/>
-        <SearchDetailsItem :field="item.capacityLiters" label="Bakinhoud" suffix="l"/>
-        <SearchDetailsItem :field="item.itemHeight" label="Artikelhoogte" suffix="m"/>
-        <SearchDetailsItem :field="item.itemWidth" label="Artikelbreedte" suffix="m"/>
-        <SearchDetailsItem :field="item.itemLength" label="Artikellengte" suffix="m"/>
-        <SearchDetailsItem :field="item.powerWatt" label="Vermogen" suffix="W"/>
-        <SearchDetailsItem :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
-      </div>
-      <Dialog v-model:visible="showNotPossibleModal" modal header="Sorry!" :style="{ width: '50vw' }"
-              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <div>
-          <span class="p-text-secondary block mb-5">Het is helaas nog niet mogelijk om dit item te huren.</span>
-        </div>
-      </Dialog>
-      <Dialog v-model:visible="showRenterInfoModal" modal header="Jouw gegevens" :style="{ width: '50vw' }"
-              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <SrRenterInformationForm v-model="renter"
-                                 :save-action="startTransaction">
-        </SrRenterInformationForm>
-      </Dialog>
-    </template>
-  </form-page>
-</template>
 <script setup lang="ts">
-
 import {useRoute} from "#app";
 import type {Image, RentalItem} from "~/schemas/openapi/rentalItem";
 import SearchClient from "~/services/api/SearchClient";
@@ -84,6 +6,7 @@ import TransactionClient from "~/services/api/TransactionClient";
 import type {Renter} from "~/schemas/openapi/renter";
 import {useToast} from "primevue/usetoast";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
+import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
@@ -205,3 +128,108 @@ async function fetchItem() {
   }
 }
 </script>
+<template>
+  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-12">
+      <div class="m-4">
+        <h1 class="font-bold text-4xl">{{ item.name }}</h1>
+        <div class="flex align-middle">
+          <Galleria :value="images" :numVisible="5"
+                    :showThumbnails="false" :showIndicators="true">
+            <template #item="slotProps: {item: Image}">
+              <img :src="slotProps.item.url" alt="image" style="width: 100%; display: block"/>
+            </template>
+          </Galleria>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <div class="flex gap-16">
+          <div class="flex flex-col">
+            <span class="font-bold ">Per dag</span>
+            <span class="font-extrabold text-3xl">€ {{ item.price24h }}</span>
+          </div>
+          <div class="flex flex-col" v-if="item.price168h">
+            <span class="font-bold">Per week</span>
+            <span class="font-extrabold text-3xl">€ {{ item.price168h }}</span>
+          </div>
+        </div>
+        <divider></divider>
+        <div class="flex flex-col gap-4 py-5">
+          <span class="font-bold text-xl">Wanneer heb je dit nodig?</span>
+          <div>
+            <Calendar v-model="dates" selectionMode="range" @dateSelect="onUpdateTransactionInformation()"
+                      @change="onUpdateTransactionInformation()" :minDate="new Date()"
+                      showIcon iconDisplay="input" touchUI
+            >
+            </Calendar>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 py-5">
+          <span class="font-bold text-xl">Hoeveel heb je er nodig?</span>
+          <div>
+            <InputNumber @change="onUpdateTransactionInformation()"
+                         v-model="amount" showButtons :min="0"
+                         :max="amountAvailable"
+                         inputId="horizontal-buttons"
+                         buttonLayout="horizontal"
+                         :pt="{ input: 'w-40'}"
+            >
+              <template #incrementbuttonicon>
+                <span class="pi pi-plus"/>
+              </template>
+              <template #decrementbuttonicon>
+                <span class="pi pi-minus"/>
+              </template>
+            </InputNumber>
+          </div>
+        </div>
+        <divider></divider>
+        <div class="flex gap-4 items-center">
+          <div class="flex flex-col">
+            <span class="font-bold text-green-900">Jouw prijs</span>
+            <span class="font-bold text-green-900 text-3xl">€ {{ price }}</span>
+          </div>
+          <div>
+            <Button label="Direct reserveren" :disabled="amount < 1" @click="showRenterInfo()"></Button>
+          </div>
+        </div>
+      </div>
+      <div >
+        <div class="flex flex-col">
+          <span class="font-bold text-xl">Specificaties</span>
+          <divider></divider>
+          <SrRentalItemProperty :field="item.brand" label="Merk"/>
+          <SrRentalItemProperty :field="item.longDescription" label="Omschrijving"/>
+          <SrRentalItemProperty :field="item.reachMeters" label="Bereik" suffix="m"/>
+          <SrRentalItemProperty :field="item.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg"/>
+          <SrRentalItemProperty :field="item.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m"/>
+          <SrRentalItemProperty :field="item.intrinsicWeightKilograms" label="Gewicht" suffix="kg"/>
+          <SrRentalItemProperty :field="item.materialType" label="Type materiaal"/>
+          <SrRentalItemProperty :field="item.maximumPressureBars" label="Maximale drukvermogen" suffix="bar"/>
+          <SrRentalItemProperty :field="item.maximumHorsePower" label="Maximale vermogen" suffix="pk"/>
+          <SrRentalItemProperty :field="item.requiredPowerVoltageVolt" label="Benodigde stroomtoevoer" suffix="V"/>
+          <SrRentalItemProperty :field="item.workWidthMeters" label="Werkbreedte" suffix="m"/>
+          <SrRentalItemProperty :field="item.vacuumAttachmentPossible" label="Stofzuiger aansluiting"/>
+          <SrRentalItemProperty :field="item.capacityLiters" label="Bakinhoud" suffix="l"/>
+          <SrRentalItemProperty :field="item.itemHeight" label="Artikelhoogte" suffix="m"/>
+          <SrRentalItemProperty :field="item.itemWidth" label="Artikelbreedte" suffix="m"/>
+          <SrRentalItemProperty :field="item.itemLength" label="Artikellengte" suffix="m"/>
+          <SrRentalItemProperty :field="item.powerWatt" label="Vermogen" suffix="W"/>
+          <SrRentalItemProperty :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <Dialog v-model:visible="showNotPossibleModal" modal header="Sorry!" :style="{ width: '50vw' }"
+          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div>
+      <span class="p-text-secondary block mb-5">Het is helaas nog niet mogelijk om dit item te huren.</span>
+    </div>
+  </Dialog>
+  <Dialog v-model:visible="showRenterInfoModal" modal header="Jouw gegevens" :style="{ width: '50vw' }"
+          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <SrRenterInformationForm v-model="renter"
+                             :save-action="startTransaction">
+    </SrRenterInformationForm>
+  </Dialog>
+</template>

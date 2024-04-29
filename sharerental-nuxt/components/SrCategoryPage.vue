@@ -4,7 +4,6 @@ import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterS
 import {reactive} from "vue";
 import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
-import RentalItemCard from "~/components/RentalItemCard.vue";
 
 interface Props {
   category: string;
@@ -90,7 +89,7 @@ const formatCurrency = (value: number) => {
     <Title>{{ category }}</Title>
   </Head>
   <SrTopBar>
-    <Search></Search>
+    <SrSearch></SrSearch>
   </SrTopBar>
 
   <div class="md:max-w-[1240px] md:mx-auto mt-10 flex px-4 md:px-0">
@@ -147,7 +146,7 @@ const formatCurrency = (value: number) => {
       </div>
       <div class="flex pt-10">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-10">
-          <RentalItemCard v-for="rentalItem in state.results" :item="rentalItem"/>
+          <SrRentalItemCard v-for="rentalItem in state.results" :item="rentalItem"/>
         </div>
       </div>
     </div>

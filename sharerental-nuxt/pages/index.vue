@@ -84,7 +84,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         <div class="flex py-40 align-middle justify-center">
           <div class="w-full md:w-1/2 justify-center">
             <h1 class="my-10 text-xl md:text-4xl">Vind het beste materiaal voor je project via ShareRental!</h1>
-            <Search></Search>
+            <SrSearch></SrSearch>
           </div>
           <div class="w-1/2 hidden md:block">
             <NuxtImg src="forklift-transparent-background.png" alt="rental"/>

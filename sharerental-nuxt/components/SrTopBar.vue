@@ -8,7 +8,7 @@
       <div class="hidden md:block"><span class="font-bold">Huren</span> | <NuxtLink to="/verhuren"><span class="font-thin">Verhuren</span></NuxtLink></div>
     </div>
   </div>
-  <section class=" green-area">
+  <section class=" green-area h-20">
     <div class="w-full md:max-w-[1240px] md:mx-auto font-bold flex p-4 md:px-0">
       <h1 class="mr-5 text-4xl">
         <nuxtLink to="/">ShareRental</nuxtLink>

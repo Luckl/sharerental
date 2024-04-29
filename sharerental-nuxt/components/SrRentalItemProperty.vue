@@ -1,9 +1,9 @@
-<!--TODO: Oude meuk-->
 <template>
-  <div v-if="field" class="grid grid-cols-2 lg:grid-cols-4">
+  <div v-if="field" class="flex justify-between">
     <span class="font-bold">{{ label }}</span>
-    <span class="col-span-1 lg:col-span-3">{{ field }} {{ suffix }}</span>
+    <span class="text-end">{{ field }} {{ suffix }}</span>
   </div>
+  <divider  v-if="field"></divider>
 </template>
 <script setup lang="ts">
 
