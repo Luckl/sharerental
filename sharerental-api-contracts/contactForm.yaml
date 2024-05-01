@@ -33,6 +33,50 @@ paths:
       responses:
         201:
           description: Item created successfully
+  /zipcode:
+    get:
+      summary: Get address information based on a zipcode
+      operationId: getAddressByZipcode
+      tags:
+        - zipcode
+      parameters:
+        - name: zipcode
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "1234AB"
+        - name: houseNumber
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "1"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  street:
+                    type: string
+                    example: "Kerkstraat"
+                  city:
+                    type: string
+                    example: "Amsterdam"
+                  province:
+                    type: string
+                    example: "Noord-Holland"
+                  country:
+                    type: string
+                    example: "Nederland"
+                  additions:
+                    type: array
+                    items:
+                      type: string
+                      example: ["A", "B"]
 components:
   securitySchemes:
     BearerAuth:
