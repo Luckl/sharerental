@@ -13,8 +13,9 @@ data class PostalCodeLocation(
     @EmbeddedId
     val id: PostalCodeId,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-) {
-}
+    val latitude: Double,
+    val longitude: Double,
+)
 
 @Embeddable
 data class PostalCodeId(

@@ -15,7 +15,9 @@ class LocationService(
 
         postalCodeLocationRepository.save(
             PostalCodeLocation(
-                id = PostalCodeId(zip, houseNumber)
+                id = PostalCodeId(zip, houseNumber),
+                latitude = zipInfo.latitude,
+                longitude = zipInfo.longitude
             )
         )
 
