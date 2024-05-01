@@ -49,6 +49,10 @@ share-rental:
 
   slack:
     platform-events-url:
+  postcode-eu:
+    key:
+    secret:
+    dutch-zip-lookup-url: https://api.postcode.eu/nl/v1/addresses/postcode/
 
 ngrok:
   enabled: true
