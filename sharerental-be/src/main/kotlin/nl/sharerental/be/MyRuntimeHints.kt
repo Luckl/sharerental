@@ -17,6 +17,5 @@ class MyRuntimeHints : RuntimeHintsRegistrar {
         hints.reflection().registerType(LockInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(MonitorInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(StackTraceElement::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
-        hints.reflection().registerType(ZipInfo::class.java)
     }
 }
