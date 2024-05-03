@@ -109,51 +109,51 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       </div>
     </section>
     <section>
-      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0 flex flex-col justify-center">
         <h1 class="text-4xl my-5">Categorieën</h1>
         <div class="flex justify-center">
           <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
-            <nuxtLink to="/category/stijgers-trappen-hoogwerkers">
+            <nuxtLink to="/category/stijgers-trappen-hoogwerkers" class="flex justify-center">
               <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/betonbewerking">
+            <nuxtLink to="/category/betonbewerking" class="flex justify-center">
               <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category2Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Betonbewerking</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/hef-hijswerktuigen">
+            <nuxtLink to="/category/hef-hijswerktuigen" class="flex justify-center">
               <div v-if="!categoriesCollapsed || !isSmallScreen"
                    class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category3Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Hef- en hijswerktuigen</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/elektrisch-gereedschap">
+            <nuxtLink to="/category/elektrisch-gereedschap" class="flex justify-center">
               <div v-if="!categoriesCollapsed || !isSmallScreen"
                    class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category4Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Electrisch gereedschap</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/evenementen">
+            <nuxtLink to="/category/evenementen" class="flex justify-center">
               <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                    :style="category5Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Evenementen</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/grondverzetters-bouwmachines-tuinmateriaal">
+            <nuxtLink to="/category/grondverzetters-bouwmachines-tuinmateriaal" class="flex justify-center">
               <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                    :style="category6Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Grondverzetters, bouwmachines en tuinmateriaal</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/luchtdrukgereedschap">
+            <nuxtLink to="/category/luchtdrukgereedschap" class="flex justify-center">
               <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                    :style="category7Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Luchtdrukgereedschap</span>
               </div>
             </nuxtLink>
-            <nuxtLink to="/category/verwarmen-drogen-reinigen">
+            <nuxtLink to="/category/verwarmen-drogen-reinigen" class="flex justify-center">
               <div v-if="!categoriesCollapsed" class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48"
                    :style="category8Background">
                 <span class="absolute bottom-0 left-0 font-bold text-white m-2">Verwarmen, drogen en reinigen</span>
