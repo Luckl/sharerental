@@ -21,6 +21,7 @@ const userStore = useUserStore()
 const user = ref(userStore.user)
 
 const showInfoDialog = ref(false);
+const showRenterTypeDialog = ref(true);
 const showThanksDialog = ref(false);
 const contactForm = reactive({
   name: '',
@@ -79,6 +80,15 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     <Head>
       <Title>Huren</Title>
     </Head>
+    <Dialog v-model:visible="showRenterTypeDialog" :close-on-escape="false" :closable="false" :style="{ width: '25rem' }"
+            :breakpoints="{ '1199px': '25rem', '575px': '25rem' }" modal>
+      <div class="w-full flex flex-col justify-center">
+        <span class="text-3xl font-bold text-black text-center">Wat voor klant ben je?</span>
+        <span class="text-gray-500 text-center">Je kunt dit later nog aanpassen</span>
+        <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="showRenterTypeDialog = false">Particulier (Incl. BTW)</Button>
+        <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4" @click="showRenterTypeDialog = false">Zakelijk (Excl. BTW)</Button>
+      </div>
+    </Dialog>
     <section class="green-area">
       <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
         <div class="flex py-40 align-middle justify-center">
