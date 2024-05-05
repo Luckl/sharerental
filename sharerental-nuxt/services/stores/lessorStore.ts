@@ -22,7 +22,7 @@ export const useLessorStore = defineStore({
     },
     actions: {
         async loadLessors(): Promise<void> {
-            const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+            const $lessorClient = useNuxtApp().$lessorClient;
 
             this.availableLessors = await $lessorClient.findAll(0, 20, [])
                 .then((result) => {

@@ -16,12 +16,11 @@ const screenWidth = ref(process.client ? window.innerWidth : 0);
 const isSmallScreen = computed(() => screenWidth.value < 768);
 
 /** todo use primevue dialogService  https://primevue.org/dynamicdialog/#example */
-const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+const { $contactFormClient } = useNuxtApp();
 const userStore = useUserStore()
 const user = ref(userStore.user)
 
 const showInfoDialog = ref(false);
-const showRenterTypeDialog = ref(true);
 const showThanksDialog = ref(false);
 const contactForm = reactive({
   name: '',
@@ -30,7 +29,7 @@ const contactForm = reactive({
 });
 
 const shareContactDetails = () => {
-  contactFormClient.sendContactForm({
+  $contactFormClient.sendContactForm({
     name: contactForm.name,
     email: contactForm.email,
     phone: contactForm.phone,
@@ -80,15 +79,6 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     <Head>
       <Title>Huren</Title>
     </Head>
-    <Dialog v-model:visible="showRenterTypeDialog" :close-on-escape="false" :closable="false" :style="{ width: '25rem' }"
-            :breakpoints="{ '1199px': '25rem', '575px': '25rem' }" modal>
-      <div class="w-full flex flex-col justify-center">
-        <span class="text-3xl font-bold text-black text-center">Wat voor klant ben je?</span>
-        <span class="text-gray-500 text-center">Je kunt dit later nog aanpassen</span>
-        <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="showRenterTypeDialog = false">Particulier (Incl. BTW)</Button>
-        <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4" @click="showRenterTypeDialog = false">Zakelijk (Excl. BTW)</Button>
-      </div>
-    </Dialog>
     <section class="green-area">
       <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
         <div class="flex py-40 align-middle justify-center">
@@ -292,7 +282,9 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
           <InputText id="email" v-model="contactForm.email" type="email" class="rounded-lg p-2"></InputText>
           <label for="phone">Telefoon</label>
           <InputText id="phone" v-model="contactForm.phone" class="rounded-lg p-2"></InputText>
-          <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
+          <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4"
+                  @click="shareContactDetails()">Versturen
+          </button>
         </div>
       </form>
     </Dialog>
@@ -300,7 +292,9 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <div class="flex flex-col">
         <span class="p-text-secondary block mb-5">Bedankt! We nemen zo snel mogelijk contact met je op.</span>
-        <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
+        <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4"
+                @click="showThanksDialog = false">Sluiten
+        </button>
       </div>
     </Dialog>
   </div>

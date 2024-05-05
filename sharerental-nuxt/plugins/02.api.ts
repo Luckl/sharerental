@@ -36,11 +36,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     const transactionClient = new TransactionClient(transactionConfiguration)
     const contactFormClient = new ContactFormClient(contactFormConfiguration)
 
-    nuxtApp.provide('searchClient', searchClient)
-    nuxtApp.provide('lessorClient', lessorClient)
-    nuxtApp.provide('rentalItemClient', rentalItemClient)
-    nuxtApp.provide('rentalItemImageClient', rentalItemImageClient)
-    nuxtApp.provide('transactionClient', transactionClient)
-    nuxtApp.provide('renterClient', renterClient)
-    nuxtApp.provide('contactFormClient', contactFormClient)
+    return {
+        provide: {
+            searchClient: searchClient,
+            lessorClient: lessorClient,
+            rentalItemClient: rentalItemClient,
+            rentalItemImageClient: rentalItemImageClient,
+            transactionClient: transactionClient,
+            renterClient: renterClient,
+            contactFormClient: contactFormClient
+        }
+    }
 })

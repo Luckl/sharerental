@@ -124,22 +124,31 @@
       <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
     </div>
   </Dialog>
+  <Dialog v-model:visible="showRenterTypeDialog" :close-on-escape="false" :closable="false" :style="{ width: '25rem' }"
+          :breakpoints="{ '1199px': '25rem', '575px': '25rem' }" modal>
+    <div class="w-full flex flex-col justify-center">
+      <span class="text-3xl font-bold text-black text-center">Wat voor klant ben je?</span>
+      <span class="text-gray-500 text-center">Je kunt dit later nog aanpassen</span>
+      <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="storeRenterType(RenterType.Private)">Particulier (Incl. BTW)</Button>
+      <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4" @click="storeRenterType(RenterType.Business)">Zakelijk (Excl. BTW)</Button>
+    </div>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import {useUserStore} from "~/services/stores/userStore";
 import {reactive, ref} from "vue";
-import LessorClient from "~/services/api/LessorClient";
 import {useNuxtApp} from "#app";
 import type {Lessor} from "~/schemas/openapi/sharerental";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
 import type ContactFormClient from "~/services/api/ContactFormClient";
 import {useLessorStore} from "~/services/stores/lessorStore";
-
+import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 const router = useRouter();
 const userStore = useUserStore();
 const lessorStore = useLessorStore();
+const renterTypeStore = useRenterTypeStore();
 
 const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
@@ -161,6 +170,7 @@ async function signOut() {
         user.value = null
       })
 }
+
 
 userStore.$subscribe((mutation, state) => {
   user.value = state.user
@@ -185,17 +195,27 @@ onMounted(() => {
         lessors.value = lessorStore.availableLessors
         loaded.value = true
       })
+  console.log(renterTypeStore.renterType)
+  if (!renterTypeStore.renterType) {
+    showRenterTypeDialog.value = true
+  }
 })
 
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
 const showInfoDialog = ref(false);
 const showThanksDialog = ref(false);
+const showRenterTypeDialog = ref(false);
 const contactForm = reactive({
   name: '',
   email: '',
   phone: ''
 });
+
+const storeRenterType = (renterType: RenterType) => {
+  renterTypeStore.setRenterType(renterType)
+  showRenterTypeDialog.value = false
+}
 
 const shareContactDetails = () => {
   contactFormClient.sendContactForm({

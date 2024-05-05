@@ -12,9 +12,6 @@ definePageMeta({
 const category = ref('Luchtdrukgereedschap')
 const {filters} = useFilterStore();
 
-const getFilter = (filter: FilterOption): Filter | undefined => {
-  return filters.find(f => f.key === filter.field)
-}
 
 const categoryFilter = ref<SearchRequestFiltersInner[]>([
   {

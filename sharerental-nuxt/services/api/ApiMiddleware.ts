@@ -1,4 +1,4 @@
-import {
+import type {
     FetchParams,
     Middleware,
     ResponseContext,

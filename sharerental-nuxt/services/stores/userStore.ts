@@ -9,14 +9,8 @@ export type UserState = {
 export const useUserStore = defineStore({
     id: 'userStore',
     state: () => ({
-        user: null,
-
+        user: null
     } as UserState),
-    getters: {
-        getUser(state: UserState) {
-            return this.user;
-        },
-    },
     actions: {
         async refreshUser(): Promise<void> {
             this.user = await getCurrentUser();
