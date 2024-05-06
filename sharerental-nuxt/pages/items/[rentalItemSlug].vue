@@ -130,8 +130,8 @@ async function fetchItem() {
 </script>
 <template>
   <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-12">
-      <div class="m-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 p-12">
+      <div class="m-8">
         <h1 class="font-bold text-4xl">{{ item.name }}</h1>
         <div class="flex align-middle">
           <Galleria :value="images" :numVisible="5"
@@ -142,7 +142,7 @@ async function fetchItem() {
           </Galleria>
         </div>
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col p-8">
         <div class="flex gap-16">
           <div class="flex flex-col">
             <span class="font-bold ">Per dag</span>
@@ -193,6 +193,9 @@ async function fetchItem() {
             <Button label="Direct reserveren" :disabled="amount < 1" @click="showRenterInfo()"></Button>
           </div>
         </div>
+      </div>
+      <div>
+        <h2>  </h2>
       </div>
       <div >
         <div class="flex flex-col">
