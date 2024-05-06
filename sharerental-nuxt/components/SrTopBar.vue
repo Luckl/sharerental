@@ -16,15 +16,15 @@
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
+          <NuxtLink v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
             het werkt
           </NuxtLink>
-          <a v-if="loaded && lessors?.length < 1" class="text-center mr-4 font-semibold" @click="showInfoDialog = true">Contact
+          <a v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold" @click="showInfoDialog = true">Contact
           </a>
-          <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
+          <NuxtLink v-if="user && loaded && availableLessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/items">Artikelen
           </NuxtLink>
-          <NuxtLink v-if="user && loaded && lessors?.length > 0" class="text-center mr-4 font-semibold"
+          <NuxtLink v-if="user && loaded && availableLessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/transactions">Transacties
           </NuxtLink>
         </div>
@@ -81,13 +81,13 @@
           <span>Gegevens</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
-        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+        <NuxtLink v-if="user && loaded && availableLessors?.length > 0"
                   class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/items"
                   @click="menuOpened = false">
           <span>Artikelen</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
-        <NuxtLink v-if="user && loaded && lessors?.length > 0"
+        <NuxtLink v-if="user && loaded && availableLessors?.length > 0"
                   class="text-3xl my-3 items-center flex justify-between font-semibold" to="/lessor/transactions"
                   @click="menuOpened = false">
           <span>Transacties</span>
@@ -138,7 +138,6 @@
 import {useUserStore} from "~/services/stores/userStore";
 import {reactive, ref} from "vue";
 import {useNuxtApp} from "#app";
-import type {Lessor} from "~/schemas/openapi/sharerental";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
 import type ContactFormClient from "~/services/api/ContactFormClient";
@@ -147,12 +146,13 @@ import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore"
 
 const router = useRouter();
 const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 const lessorStore = useLessorStore();
+const { availableLessors, activeLessor } = storeToRefs(lessorStore);
+
 const renterTypeStore = useRenterTypeStore();
 
-const lessors = ref<Lessor[]>([])
 const loaded = ref(false)
-const user = ref(userStore.user)
 const menuOpened = ref(false)
 const auth = useFirebaseAuth()!
 
@@ -171,15 +171,6 @@ async function signOut() {
       })
 }
 
-
-userStore.$subscribe((mutation, state) => {
-  user.value = state.user
-})
-
-lessorStore.$subscribe((mutation, state) => {
-  lessors.value = state.availableLessors
-})
-
 const accountButtonLink = computed(() => {
   if (user.value) {
     return '/lessor/profile'
@@ -192,10 +183,8 @@ onMounted(() => {
   userStore.refreshUser()
   lessorStore.loadLessors()
       .then(() => {
-        lessors.value = lessorStore.availableLessors
         loaded.value = true
       })
-  console.log(renterTypeStore.renterType)
   if (!renterTypeStore.renterType) {
     showRenterTypeDialog.value = true
   }
