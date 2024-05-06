@@ -78,6 +78,21 @@
     <div v-show="loaded && lessors?.length > 0">
       <form-page>
         <template #header>
+          <span class="font-bold text-xl m-1">Paginas</span>
+        </template>
+        <template #content>
+          <div class="flex gap-2">
+          <nuxt-link to="/lessor/items">
+            <Button>Artikelen</Button>
+          </nuxt-link>
+          <nuxt-link to="/lessor/transactions">
+            <Button>Transacties</Button>
+          </nuxt-link>
+          </div>
+        </template>
+      </form-page>
+      <form-page>
+        <template #header>
           <span class="font-bold text-xl m-1">Gegevens</span>
         </template>
         <template #content>
@@ -108,6 +123,7 @@
             <span>{{selectedLessor?.phoneNumber}}</span>
           </div>
         </template>
+
       </form-page>
     </div>
   </client-only>
