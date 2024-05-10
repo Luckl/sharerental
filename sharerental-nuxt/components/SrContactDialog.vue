@@ -8,8 +8,8 @@ const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 const userStore = useUserStore()
 const user = ref(userStore.user)
 
-const showInfoDialog = ref(false);
-const showThanksDialog = ref(false);
+const dialogRef = inject("dialogRef");
+
 const contactForm = reactive({
   name: '',
   email: '',
@@ -24,18 +24,13 @@ const shareContactDetails = () => {
     analyticsToken: user.value?.uid ?? ''
   })
 
-  contactForm.name = ''
-  contactForm.email = ''
-  contactForm.phone = ''
-  showInfoDialog.value = false
-  showThanksDialog.value = true
+  dialogRef.value.close();
+
 }
 
 </script>
 
 <template>
-  <Dialog v-model:visible="showInfoDialog" modal header="Contact" :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <form @submit.prevent>
       <div class="flex flex-col">
         <span class="p-text-secondary block mb-5">Laat je gegevens achter en we nemen zo snel mogelijk contact met je op</span>
@@ -48,14 +43,6 @@ const shareContactDetails = () => {
         <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
       </div>
     </form>
-  </Dialog>
-  <Dialog v-model:visible="showThanksDialog" modal header="Bedankt!" :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <div class="flex flex-col">
-      <span class="p-text-secondary block mb-5">Bedankt! We nemen zo snel mogelijk contact met je op.</span>
-      <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
-    </div>
-  </Dialog>
 </template>
 
 <style scoped>

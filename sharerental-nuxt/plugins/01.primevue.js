@@ -29,6 +29,8 @@ import Panel from "primevue/panel";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import Slider from "primevue/slider";
+import DialogService from "primevue/dialogservice";
+import DynamicDialog from "primevue/dynamicdialog";
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.use(PrimeVue, {
@@ -41,6 +43,7 @@ export default defineNuxtPlugin(nuxtApp => {
         }
     })
     nuxtApp.vueApp.use(ToastService)
+    nuxtApp.vueApp.use(DialogService)
     nuxtApp.vueApp.component('Button', Button)
     nuxtApp.vueApp.component('InputText', InputText)
     nuxtApp.vueApp.component('Toast', Toast)
@@ -68,6 +71,7 @@ export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.vueApp.component('Accordion', Accordion)
     nuxtApp.vueApp.component('AccordionTab', AccordionTab)
     nuxtApp.vueApp.component('Slider', Slider)
+    nuxtApp.vueApp.component('DynamicDialog', DynamicDialog)
 
     nuxtApp.vueApp.directive('Tooltip', Tooltip)
 

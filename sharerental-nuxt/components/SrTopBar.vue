@@ -5,7 +5,9 @@
         <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
           class="font-thin"><a href="mailto:info@sharerental.app">info@sharerental.app</a></span>
       </div>
-      <div class="hidden md:block"><span class="font-bold">Huren</span> | <NuxtLink to="/verhuren"><span class="font-thin">Verhuren</span></NuxtLink></div>
+      <div class="hidden md:block"><span class="font-bold">Huren</span> |
+        <NuxtLink to="/verhuren"><span class="font-thin">Verhuren</span></NuxtLink>
+      </div>
     </div>
   </div>
   <section class=" green-area md:h-20">
@@ -16,11 +18,15 @@
       <nav class="justify-between items-center w-full hidden md:flex">
         <div class="flex justify-start">
           <NuxtLink class="text-center mr-4 font-semibold" to="/">Assortiment</NuxtLink>
-          <NuxtLink v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold" to="/#hoe_het_werkt">Hoe
+          <NuxtLink v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold"
+                    to="/#hoe_het_werkt">Hoe
             het werkt
           </NuxtLink>
-          <a v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold" @click="showInfoDialog = true">Contact
-          </a>
+          <button>
+            <a v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold"
+               @click="showContactDialog()">Contact
+            </a>
+          </button>
           <NuxtLink v-if="user && loaded && availableLessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/items">Artikelen
           </NuxtLink>
@@ -95,42 +101,26 @@
         </NuxtLink>
         <divider v-if="user"></divider>
         <NuxtLink v-if="user"
-                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/" @click="signOut(); menuOpened = false">
+                  class="text-3xl my-3 items-center flex justify-between font-semibold" to="/"
+                  @click="signOut(); menuOpened = false">
           <span>Uitloggen</span>
           <i class="pi pi-angle-right" style="font-size: 2rem"></i>
         </NuxtLink>
       </div>
     </Sidebar>
   </section>
-  <Dialog v-model:visible="showInfoDialog" modal header="Contact" :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <form @submit.prevent>
-      <div class="flex flex-col">
-        <span class="p-text-secondary block mb-5">Laat je gegevens achter en we nemen zo snel mogelijk contact met je op</span>
-        <label for="name">Naam</label>
-        <InputText id="name" v-model="contactForm.name" class="rounded-lg p-2"></InputText>
-        <label for="email">Email</label>
-        <InputText id="email" v-model="contactForm.email" type="email" class="rounded-lg p-2"></InputText>
-        <label for="phone">Telefoon</label>
-        <InputText id="phone" v-model="contactForm.phone" class="rounded-lg p-2"></InputText>
-        <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
-      </div>
-    </form>
-  </Dialog>
-  <Dialog v-model:visible="showThanksDialog" modal header="Bedankt!" :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <div class="flex flex-col">
-      <span class="p-text-secondary block mb-5">Bedankt! We nemen zo snel mogelijk contact met je op.</span>
-      <button type="submit" unstyled class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="showThanksDialog = false">Sluiten</button>
-    </div>
-  </Dialog>
+
   <Dialog v-model:visible="showRenterTypeDialog" :close-on-escape="false" :closable="false" :style="{ width: '25rem' }"
           :breakpoints="{ '1199px': '25rem', '575px': '25rem' }" modal>
     <div class="w-full flex flex-col justify-center">
       <span class="text-3xl font-bold text-black text-center">Wat voor klant ben je?</span>
       <span class="text-gray-500 text-center">Je kunt dit later nog aanpassen</span>
-      <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="storeRenterType(RenterType.Private)">Particulier (Incl. BTW)</Button>
-      <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4" @click="storeRenterType(RenterType.Business)">Zakelijk (Excl. BTW)</Button>
+      <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="storeRenterType(RenterType.Private)">
+        Particulier (Incl. BTW)
+      </Button>
+      <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4"
+              @click="storeRenterType(RenterType.Business)">Zakelijk (Excl. BTW)
+      </Button>
     </div>
   </Dialog>
 </template>
@@ -143,12 +133,15 @@ import {useFirebaseAuth} from "vuefire";
 import type ContactFormClient from "~/services/api/ContactFormClient";
 import {useLessorStore} from "~/services/stores/lessorStore";
 import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import {useDialog} from "primevue/usedialog";
+import {SrContactDialog} from "#components";
 
 const router = useRouter();
 const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const {user} = storeToRefs(userStore);
 const lessorStore = useLessorStore();
-const { availableLessors, activeLessor } = storeToRefs(lessorStore);
+const {availableLessors} = storeToRefs(lessorStore);
+const dialog = useDialog();
 
 const renterTypeStore = useRenterTypeStore();
 
@@ -190,10 +183,7 @@ onMounted(() => {
   }
 })
 
-const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
-const showInfoDialog = ref(false);
-const showThanksDialog = ref(false);
 const showRenterTypeDialog = ref(false);
 const contactForm = reactive({
   name: '',
@@ -206,19 +196,8 @@ const storeRenterType = (renterType: RenterType) => {
   showRenterTypeDialog.value = false
 }
 
-const shareContactDetails = () => {
-  contactFormClient.sendContactForm({
-    name: contactForm.name,
-    email: contactForm.email,
-    phone: contactForm.phone,
-    analyticsToken: user.value?.uid ?? ''
-  })
-
-  contactForm.name = ''
-  contactForm.email = ''
-  contactForm.phone = ''
-  showInfoDialog.value = false
-  showThanksDialog.value = true
+const showContactDialog = () => {
+  dialog.open(SrContactDialog, {})
 }
 
 </script>
