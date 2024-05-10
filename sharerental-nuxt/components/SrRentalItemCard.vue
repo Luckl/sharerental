@@ -11,7 +11,7 @@
       <span>{{ formatCurrency(item.pricePerDay) }}</span>
     </div>
     <div class="my-2">
-      <NuxtLink :to="'/items/' + item.rentalItemSlug">
+      <NuxtLink :to="'/artikelen/' + item.rentalItemSlug">
         <Button unstyled class="rounded-lg green-area p-2">Direct huren</Button>
       </NuxtLink>
     </div>
