@@ -27,7 +27,7 @@ setLocale(nl)
 </script>
 
 <style>
-html {
+html, body, #__nuxt, #__layout {
   font-family: Roboto, sans-serif;
   height: 100%;
 }

@@ -152,5 +152,5 @@ const formatCurrency = (value: number) => {
     </div>
 
   </div>
-
+  <sr-cta-lessor></sr-cta-lessor>
 </template>

@@ -16,7 +16,7 @@ const showContactDialog = () => {
 
 </script>
 <template>
-  <section class="green-area mt-5 pt-10">
+  <section class="green-area mt-5 pt-10  sticky top-[100vh]">
     <div class="md:max-w-[1240px] md:mx-auto  px-4 md:px-0">
       <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
         <div>
