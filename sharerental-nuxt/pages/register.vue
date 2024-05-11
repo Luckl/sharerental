@@ -74,75 +74,62 @@ const sticky = ref(false)
   <Head>
     <Title>Registreren</Title>
   </Head>
-  <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
-
+  <div class="md:max-w-[1240px] md:mx-auto">
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-    <div v-if="!user">
-      <h2>Registreren</h2>
-      <form novalidate @submit="onSubmit">
-        <div class="form-input">
-          <label for="email">Email</label>
-          <div>
-            <InputText inputId="email"
-                       type="email"
-                       v-model="email"
-                       aria-describedby="email-help"
-                       :class="{ 'p-invalid': errors.email }"
-            />
-          </div>
+    <div class="max-w-[620px] mx-auto flex flex-col mt-10 gap-4">
+      <h1 class=" text-4xl font-bold text-green-900">ShareRental</h1>
+      <h1 class=" text-2xl">Registreren</h1>
+
+      <form @submit.prevent @submit="onSubmit">
+        <div class="flex flex-col gap-2 w-full">
+          <InputText inputId="email"
+                     placeholder="E-mailadres"
+                     type="email"
+                     v-model="email"
+                     aria-describedby="email-help"
+                     :class="{ 'p-invalid': errors.email }"
+          />
           <small id="email-help" class="p-error">{{ errors.email }}</small>
-        </div>
-        <div class="form-input">
-          <label for="password">Wachtwoord</label>
-          <div>
-            <Password inputId="password"
-                      v-model="password"
-                      :feedback="false"
-                      aria-describedby="password-help"
-                      :class="{ 'p-invalid': errors.password }"
-            />
-          </div>
+          <Password inputId="password"
+                    v-model="password"
+                    :feedback="false"
+                    placeholder="Wachtwoord"
+                    aria-describedby="password-help"
+                    :class="{ 'p-invalid': errors.password }"
+                    :pt="{input: 'w-full'}"
+                    toggleMask
+          />
           <small id="password-help" class="p-error">
             {{ errors.password }}
           </small>
-        </div>
-        <div class="form-input">
-          <label for="passwordConfirm">Wachtwoord herhalen</label>
-          <div>
-            <Password inputId="passwordConfirm"
-                      v-model="passwordConfirm"
-                      :feedback="false"
-                      aria-describedby="passwordConfirm-help"
-                      :class="{ 'p-invalid': errors.passwordConfirm }"
-            />
-          </div>
+          <Password inputId="passwordConfirm"
+                    v-model="passwordConfirm"
+                    :feedback="false"
+                    placeholder="Wachtwoord herhalen"
+                    aria-describedby="passwordConfirm-help"
+                    :class="{ 'p-invalid': errors.passwordConfirm }"
+                    :pt="{input: 'w-full'}"
+                    toggleMask
+          />
           <small id="passwordConfirm-help" class="p-error">
             {{ errors.passwordConfirm }}
           </small>
-        </div>
-        <div class="form-input">
-          <label for="type">Gebruikerstype</label>
-          <div>
-            <Dropdown
-                v-model="type"
-                :options="options"
-                optionLabel="name"
-                optionValue="value"
-                :class="{ 'p-invalid': errors.type }"
-                placeholder="Wat wil je doen?"
-            />
+          Wat kom je doen?
+          <div class="flex flex-row gap-8">
+            <div class=" h-8 align-middle">
+            <RadioButton v-model="type" inputId="Huren" name="fCountry" value="huren"/>
+            <label for="Huren" class="ml-2">Huren</label>
+            </div>
+            <div>
+            <RadioButton v-model="type" inputId="Verhuren" name="fCountry" value="verhuren"/>
+            <label for="Verhuren" class="ml-2">Verhuren</label>
+            </div>
           </div>
-          <small id="email-help" class="p-error">{{ errors.type }}</small>
-        </div>
-        <div class="form-input">
-          <Button type="submit" label="Registreer"></Button>
+          <Button type="submit" label="Registreren"></Button>
+
         </div>
       </form>
+
     </div>
   </div>
 </template>
-<style scoped>
-.form-input {
-  margin: 1em;
-}
-</style>

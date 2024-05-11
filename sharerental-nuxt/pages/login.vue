@@ -63,41 +63,28 @@ const sticky = ref(false)
   <Head>
     <Title>Inloggen</Title>
   </Head>
-  <div class="md:max-w-[1240px] md:mx-auto flex gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col mt-5">
-    <h1></h1>
+  <div class="md:max-w-[1240px] md:mx-auto">
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-    <div>
-      <h2>Inloggen</h2>
+    <div class="max-w-[620px] mx-auto flex flex-col mt-10 gap-4">
+      <h1 class=" text-4xl font-bold text-green-900">ShareRental</h1>
+      <h1 class=" text-2xl">Inloggen</h1>
+
       <form @submit.prevent>
-        <div class="form-input">
-          <label for="username">Email</label>
-          <div>
-            <InputText inputId="email" type="text" v-model="email"/>
-          </div>
-        </div>
-        <div class="form-input">
-          <label for="password">Wachtwoord</label>
-          <div>
-            <Password inputId="password" v-model="password" :feedback="false"/>
-          </div>
-        </div>
-        <div class="form-input flex gap-2">
+        <div class="flex flex-col gap-2 w-full">
+          <InputText placeholder="E-mailadres" inputId="email" type="text" v-model="email"/>
+          <Password :pt="{ input: 'w-full' }"  placeholder="Wachtwoord" inputId="password"
+                    toggleMask v-model="password" :feedback="false"/>
           <Button type="submit" @click="signInCredentials()" label="Inloggen"></Button>
-          <NuxtLink to="/register">
-            <Button type="button" label="Registreren"></Button>
-          </NuxtLink>
+          <Button type="button" @click="router.push('/register')" label="Registreren"></Button>
+          <Button type="button" @click="signInGoogle()" label="Inloggen met Google"></Button>
+
         </div>
       </form>
-      <div class="form-input">
-        <Button type="button" @click="signInGoogle()" label="Inloggen met Google"></Button>
-      </div>
+
     </div>
   </div>
 
 </template>
 
 <style scoped>
-.form-input {
-  margin: 1em;
-}
 </style>

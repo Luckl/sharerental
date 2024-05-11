@@ -93,7 +93,6 @@ const formatCurrency = (value: number) => {
   </SrTopBar>
 
   <div class="md:max-w-[1240px] md:mx-auto mt-10 flex px-4 md:px-0">
-
     <div class="w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
@@ -139,7 +138,9 @@ const formatCurrency = (value: number) => {
     </div>
     <div class="w-5/6">
       <div>
-        <span class=" text-4xl font-bold text-center">{{ props.category }}</span>
+        <h1>
+          <span class="text-4xl font-bold">{{ props.category }}</span>
+        </h1>
         <div class="mt-5">
           {{ props.categoryDescription }}
         </div>

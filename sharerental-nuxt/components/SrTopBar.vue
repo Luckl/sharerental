@@ -1,5 +1,5 @@
 <template>
-  <div class="black-area">
+  <div class="black-area px-2">
     <div class="md:max-w-[1240px] md:mx-auto flex justify-between px-4 md:px-0">
       <div>
         <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <section class=" green-area md:h-20">
+  <section class=" green-area px-2 md:h-20">
     <div class="w-full md:max-w-[1240px] md:mx-auto font-bold flex p-4 md:px-0">
       <h1 class="mr-5 text-4xl">
         <nuxtLink to="/">ShareRental</nuxtLink>

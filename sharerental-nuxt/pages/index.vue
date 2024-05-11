@@ -63,8 +63,8 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     <Head>
       <Title>Huren</Title>
     </Head>
-    <section class="green-area">
-      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <section class="green-area px-4">
+      <div class="md:max-w-[1240px] md:mx-auto">
         <div class="flex py-40 align-middle justify-center">
           <div class="w-full md:w-1/2 justify-center">
             <h1 class="my-10 text-xl md:text-4xl">Vind het beste materiaal voor je project via ShareRental!</h1>
@@ -77,7 +77,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       </div>
     </section>
     <section class="bg-gray-200">
-      <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
+      <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 md:flex-row flex-col">
         <div class="m-5 font-bold flex items-center">
           <i class="pi pi-check"></i>
           <span class="text-center ml-3">Vind je lokale aanbieder</span>
@@ -92,8 +92,8 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
       </div>
     </section>
-    <section>
-      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0 flex flex-col justify-center">
+    <section class="px-4">
+      <div class="md:max-w-[1240px] md:mx-auto flex flex-col justify-center">
         <h1 class="text-4xl my-5">Categorieën</h1>
         <div class="flex justify-center">
           <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -164,8 +164,8 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
       </div>
     </section>
-    <section class="green-area mt-5">
-      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <section class="green-area px-4 mt-5">
+      <div class="md:max-w-[1240px] md:mx-auto0">
 
         <div class="w-full flex justify-center">
           <h1 class="my-10 text-4xl"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
@@ -201,8 +201,8 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
       </div>
     </section>
-    <section>
-      <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <section class="px-4">
+      <div class="md:max-w-[1240px] md:mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
           <div class="hidden md:block">
             <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
