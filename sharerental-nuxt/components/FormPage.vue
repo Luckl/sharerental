@@ -1,16 +1,14 @@
 <template>
-  <div class="form-container">
-  <Card style="width: 100%">
-    <template class="header" #header>
-      <h1>
-        <slot name="header"/>
-      </h1>
-    </template>
-    <template class="content" #content>
-      <slot name="content"/>
-    </template>
-  </card>
-  </div>
+    <Card>
+      <template class="header" #header>
+        <h1 class="w-full text-xl font-bold">
+          <slot name="header"/>
+        </h1>
+      </template>
+      <template class="content" #content>
+        <slot name="content"/>
+      </template>
+    </card>
 </template>
 
 <script setup lang="ts">
@@ -19,21 +17,6 @@
 
 <style>
 
-
-@media screen and (max-width: 678px) {
-  .form-container {
-    padding-top: 2em;
-    height: 100%;
-  }
-}
-@media screen and (min-width: 678px) {
-  .form-container {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 5em;
-    height: 100%;
-  }
-}
 
 .header {
   padding: 1rem
