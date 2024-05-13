@@ -47,7 +47,7 @@ const fetchItems = () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
   $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
     filters: allFilters
-  }, "").then(
+  }, props.query).then(
       success => {
         state.results = success.embedded
         let allAvailableFilters = success.filterOptions || [];

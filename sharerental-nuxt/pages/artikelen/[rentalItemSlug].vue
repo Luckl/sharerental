@@ -8,8 +8,6 @@ import {useToast} from "primevue/usetoast";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
 
-const router = useRouter()
-const error = ref<String | undefined>(undefined)
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
 const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 
