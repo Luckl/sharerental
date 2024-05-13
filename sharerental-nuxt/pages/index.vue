@@ -11,21 +11,10 @@ definePageMeta({
 })
 
 const img = useImage()
-const router = useRouter();
 const categoriesCollapsed = ref(true)
 
 const screenWidth = ref(process.client ? window.innerWidth : 0);
 const isSmallScreen = computed(() => screenWidth.value < 768);
-
-const userStore = useUserStore()
-const user = ref(userStore.user)
-const dialog = useDialog();
-
-const contactForm = reactive({
-  name: '',
-  email: '',
-  phone: ''
-});
 
 const handleResize = () => {
   screenWidth.value = window.innerWidth;

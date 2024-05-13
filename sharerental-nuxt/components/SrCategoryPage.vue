@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 
 import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterStore";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
 
 interface Props {
-  category: string;
-  categoryDescription: string;
+  category?: string;
+  query?: string;
+  categoryDescription?: string;
 }
 
 const props = defineProps<Props>()
@@ -21,7 +22,7 @@ const getFilter = (filter: FilterOption): Filter | undefined => {
 const categoryFilter = ref<SearchRequestFiltersInner[]>([
   {
     field: 'category',
-    values: [props.category]
+    values: props.category ? [props.category] : []
   }
 ])
 
@@ -64,6 +65,21 @@ const fetchItems = () => {
   )
 }
 
+const screenWidth = ref(process.client ? window.innerWidth : 0);
+const isSmallScreen = computed(() => screenWidth.value < 1024);
+
+const handleResize = () => {
+  screenWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 const activatedFilters = ref<any>({})
 const mapToFilter = (): SearchRequestFiltersInner[] => {
   return Object.entries(activatedFilters.value)
@@ -104,8 +120,8 @@ const formatCurrency = (value: number) => {
       </div>
     </div>
   </div>
-  <div class="md:max-w-[1240px] md:mx-auto md:mt-10 flex flex-col md:flex-row md:m-5">
-    <div v-show="showFilters" class="md:px-0 md:w-1/6 m-5">
+  <div class="lg:max-w-[1240px] lg:mx-auto md:mt-10 flex flex-col lg:flex-row md:m-5">
+    <div v-show="showFilters || !isSmallScreen" class="lg:px-0 lg:w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
@@ -150,7 +166,7 @@ const formatCurrency = (value: number) => {
         </AccordionTab>
       </Accordion>
     </div>
-    <div class="w-5/6 md:w-full m-5">
+    <div class="w-5/6 lg:w-full m-5">
       <div>
         <h1>
           <span class="text-4xl font-bold">{{ props.category }}</span>
