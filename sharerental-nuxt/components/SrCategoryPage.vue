@@ -11,7 +11,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
+const showFilters = ref(false)
 const {filters} = useFilterStore();
 
 const getFilter = (filter: FilterOption): Filter | undefined => {
@@ -91,13 +91,25 @@ const formatCurrency = (value: number) => {
   <SrTopBar>
     <SrSearch></SrSearch>
   </SrTopBar>
-
-  <div class="md:max-w-[1240px] md:mx-auto mt-10 flex px-4 md:px-0">
-    <div class="w-1/6 m-5">
+  <div>
+    <div class="lg:hidden m-5 h-10 flex items-center">
+      <Button unstyled @click="showFilters = !showFilters">
+        <div class="flex items-center">
+          <i class="pi pi-sliders-h" style="font-size: 2rem"></i>
+          <span class="text-3xl pl-8">Filters</span>
+        </div>
+      </Button>
+      <div class="w-full text-end">
+        <span class="text-gray-600">{{ state.results ? state.results.length : 0 }} {{ state.results?.length === 1 ? "resultaat" : "resultaten" }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="md:max-w-[1240px] md:mx-auto md:mt-10 flex flex-col md:flex-row md:m-5">
+    <div v-show="showFilters" class="md:px-0 md:w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
-        <AccordionTab  v-for="filter in availableFilters">
+        <AccordionTab v-for="filter in availableFilters">
           <template #header>
             <span class="m-2 font-bold">{{ getFilter(filter)?.name || '' }}</span>
           </template>
@@ -106,7 +118,7 @@ const formatCurrency = (value: number) => {
               <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
-                <span >{{ getFilter(filter)?.prefix }}{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
+                <span>{{ getFilter(filter)?.prefix }}{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>
@@ -115,7 +127,7 @@ const formatCurrency = (value: number) => {
             <div class="flex w-full" v-for="value in filter.options">
               <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]" :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
-                <span >{{ value.value == 'true' ? 'Ja' : 'Nee' }}</span>
+                <span>{{ value.value == 'true' ? 'Ja' : 'Nee' }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>
@@ -125,7 +137,9 @@ const formatCurrency = (value: number) => {
               <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
-                <span >{{ getFilter(filter)?.prefix }}{{ formatCurrency(value.value) }}{{ getFilter(filter)?.suffix }}</span>
+                <span>{{ getFilter(filter)?.prefix }}{{ formatCurrency(value.value) }}{{
+                    getFilter(filter)?.suffix
+                  }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>
@@ -136,7 +150,7 @@ const formatCurrency = (value: number) => {
         </AccordionTab>
       </Accordion>
     </div>
-    <div class="w-5/6">
+    <div class="w-5/6 md:w-full m-5">
       <div>
         <h1>
           <span class="text-4xl font-bold">{{ props.category }}</span>
