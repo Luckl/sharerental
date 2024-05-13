@@ -42,18 +42,18 @@ onBeforeUnmount(() => {
       <Title>Verhuren</Title>
     </Head>
     <section class="bg-gray-200">
-      <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 px-4 md:px-0 md:flex-row flex-col">
+      <div class="md:max-w-[1240px] md:mx-auto flex justify-between gap-2 md:gap-10 md:flex-row flex-col">
         <div class="m-5 font-bold flex items-center">
           <i class="pi pi-check"></i>
-          <span class="text-center text-2xl ml-3">Vergroot je online bereik</span>
+          <span class="text-center text-xl ml-3">Vergroot je online bereik</span>
         </div>
         <div class="m-5 font-bold flex items-center">
           <i class="pi pi-check"></i>
-          <span class="text-center text-2xl ml-3">Verminder administratieve lasten</span>
+          <span class="text-center text-xl ml-3">Verminder administratieve lasten</span>
         </div>
         <div class="m-5 font-bold flex items-center">
           <i class="pi pi-check"></i>
-          <span class="text-center text-2xl ml-3">Versnel je afhandelingsproces</span>
+          <span class="text-center text-xl ml-3">Versnel je afhandelingsproces</span>
         </div>
       </div>
     </section>

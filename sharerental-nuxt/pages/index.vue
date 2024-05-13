@@ -54,7 +54,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
     </Head>
     <section class="green-area px-4">
       <div class="md:max-w-[1240px] md:mx-auto">
-        <div class="flex py-40 align-middle justify-center">
+        <div class="flex py-10 md:py-40 align-middle justify-center">
           <div class="w-full md:w-1/2 justify-center">
             <h1 class="my-10 text-xl md:text-4xl">Vind het beste materiaal voor je project via ShareRental!</h1>
             <SrSearch></SrSearch>
