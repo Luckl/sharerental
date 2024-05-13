@@ -50,7 +50,6 @@ const onSubmit = handleSubmit(async () => {
                 contactFormClient.registerUser(type.value.toLowerCase() === 'huren' ? UserUserTypeEnum.Renter : UserUserTypeEnum.Lessor)
                     .then(() =>
                         router.push("/lessor/profile")))
-
       })
       .catch((reason) => {
         error.value = errorParser.exec(reason.message)?.pop()
@@ -74,7 +73,7 @@ const sticky = ref(false)
   <Head>
     <Title>Registreren</Title>
   </Head>
-  <div class="md:max-w-[1240px] md:mx-auto">
+  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
     <div class="max-w-[620px] mx-auto flex flex-col mt-10 gap-4">
       <h1 class=" text-4xl font-bold text-green-900">ShareRental</h1>
