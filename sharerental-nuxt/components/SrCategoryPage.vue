@@ -121,7 +121,7 @@ const formatCurrency = (value: number) => {
     </div>
   </div>
   <div class="lg:max-w-[1240px] lg:mx-auto md:mt-10 flex flex-col lg:flex-row md:m-5">
-    <div v-show="showFilters || !isSmallScreen" class="px-0 w-1/6 m-5">
+    <div v-show="showFilters || !isSmallScreen" class="px-0 md:w-1/6 m-5">
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
