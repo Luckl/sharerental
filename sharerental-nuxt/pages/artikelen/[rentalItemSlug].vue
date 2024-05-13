@@ -159,7 +159,7 @@ async function fetchItem() {
           <div>
             <Calendar v-model="dates" selectionMode="range" @dateSelect="onUpdateTransactionInformation()"
                       @change="onUpdateTransactionInformation()" :minDate="new Date()"
-                      showIcon iconDisplay="input" touchUI
+                      showIcon iconDisplay="input" touchUI hideOnRangeSelection
             >
             </Calendar>
           </div>
