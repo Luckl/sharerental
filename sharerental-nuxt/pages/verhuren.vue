@@ -7,33 +7,6 @@ definePageMeta({
   description: 'Gereedschap en machines huren en verhuren',
 })
 
-const img = useImage()
-const router = useRouter();
-
-const screenWidth = ref(process.client ? window.innerWidth : 0);
-
-const userStore = useUserStore()
-const user = ref(userStore.user)
-
-const showInfoDialog = ref(false);
-const showThanksDialog = ref(false);
-const contactForm = reactive({
-  name: '',
-  email: '',
-  phone: ''
-});
-
-const handleResize = () => {
-  screenWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize);
-});
 </script>
 
 <template>
