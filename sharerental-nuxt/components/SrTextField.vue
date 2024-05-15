@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-const props = defineProps<{
+defineProps<{
   label: string,
-  modelValue: string,
+  modelValue: string | null,
   errors: Partial<Record<string, string | undefined>>,
 }>()
 
@@ -14,10 +14,11 @@ const updateModelValue = (value: string | undefined) => {
 
 </script>
 <template>
-  <div>
-    <label for="input">{{ label }}</label>
-    <div>
+  <div class="w-full">
+    <div class="my-2">
       <InputText inputId="input"
+                 :placeholder="label"
+                 :pt="{ root: 'w-full' }"
                  :model-value="modelValue"
                  v-bind="$attrs"
                  aria-describedby="help"

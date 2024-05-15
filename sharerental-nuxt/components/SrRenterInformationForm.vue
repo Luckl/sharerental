@@ -8,6 +8,7 @@ import {useToast} from "primevue/usetoast";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
 import type ContactFormClient from "~/services/api/ContactFormClient";
+import container from "parchment/src/blot/abstract/container";
 
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
@@ -39,7 +40,10 @@ const renter = ref<Renter>({
 });
 
 onMounted(() => {
-  getRenter()
+  if (userStore.user) {
+    getRenter()
+  }
+  subscribeToNewsletter.value = true
 })
 
 const schema = yup.object({
@@ -87,6 +91,7 @@ const [city] = defineField("city")
 const [country] = defineField("country")
 const [password] = defineField("password")
 const [passwordConfirm] = defineField("passwordConfirm")
+const [subscribeToNewsletter] = defineField("subscribeToNewsletter")
 
 const editRenterInfo = ref(false);
 
@@ -103,12 +108,6 @@ function enableRenterEditMode() {
 
   editRenterInfo.value = true
 }
-
-const options = ['Nederland', 'België'].map((o) => ({
-  name: o,
-  value: o.toLowerCase(),
-}));
-
 
 const onSubmit = handleSubmit(async () => {
   renter.value = {
@@ -145,6 +144,15 @@ const onSubmit = handleSubmit(async () => {
     props.saveAction()
   }
 })
+
+const fetchZipInfo = async () => {
+  if (postalCode.value.length === 6 && houseNumber.value.length > 0) {
+    const response = await contactFormClient.zipcode(postalCode.value, houseNumber.value)
+    street.value = response.street
+    city.value = response.city
+    country.value = response.country
+  }
+}
 
 function getRenter() {
   $renterClient.getRenter().then(
@@ -199,52 +207,60 @@ function getRenter() {
   </div>
   <div class="flex flex-col" v-else>
     <form novalidate @submit="onSubmit">
-      <span class="p-text-secondary block mb-5">Vul je gegevens in.</span>
-      <div class="flex gap-2">
-        <sr-text-field label="Emailadres" type="email" v-model="email" :errors="errors.email"></sr-text-field>
-        <div class="flex gap-2 items-center">
-          <div>
-            <label for="createAccount">Maak een account aan</label>
-          </div>
-          <Checkbox v-model="createAccount"
-                    :class="{ 'p-invalid': errors.terms }"
-                    binary
-          ></Checkbox>
+      <span class="text-xl font-bold block mb-5">Vul je gegevens in.</span>
+      <div v-if="userStore.user" class="flex gap-2 mb-5 w-full">
+        <sr-text-field label="Emailadres" disabled placeholder="Emailadres" type="email" v-model="userStore.user.email"
+                       :errors="errors.email"></sr-text-field>
+      </div>
+      <div v-if="!userStore.user" class="flex gap-2">
+        <sr-text-field label="Emailadres" placeholder="Emailadres" type="email" v-model="email"
+                       :errors="errors.email"></sr-text-field>
+      </div>
+      <div class="flex gap-2 my-1 items-center">
+        <Checkbox v-model="subscribeToNewsletter" binary></Checkbox>
+        <div>
+          <label for="subscribeToNewsletter">Hou me op de hoogte over nieuws en aanbiedingen</label>
         </div>
       </div>
-      <div class="flex gap-2" v-if="createAccount">
+      <div v-if="!userStore.user" class="flex gap-2 my-1 items-center">
+        <Checkbox v-model="createAccount"
+                  :class="{ 'p-invalid': errors.terms }"
+                  binary
+        ></Checkbox>
+        <div>
+          <label for="createAccount">Maak een account aan</label>
+        </div>
+      </div>
+      <div class="flex gap-2" v-if="createAccount && !userStore.user">
         <sr-text-field label="Wachtwoord" type="password" v-model="password" :errors="errors.password"></sr-text-field>
+      </div>
+      <div class="flex gap-2" v-if="createAccount && !userStore.user">
         <sr-text-field label="Wachtwoord herhalen" type="password" v-model="passwordConfirm"
                        :errors="errors.passwordConfirm"></sr-text-field>
       </div>
       <divider></divider>
       <div class="flex gap-2">
         <sr-text-field label="Voornaam" v-model="firstName" :errors="errors.firstName"></sr-text-field>
+      </div>
+      <div class="flex gap-2">
         <sr-text-field label="Achternaam" v-model="lastName" :errors="errors.lastName"></sr-text-field>
       </div>
       <div class="flex gap-2">
         <sr-text-field label="Telefoonnummer" v-model="phoneNumber" :errors="errors.phoneNumber"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Postcode" v-model="postalCode" :errors="errors.postalCode"></sr-text-field>
-        <sr-text-field label="Huisnummer" v-model="houseNumber" :errors="errors.houseNumber"></sr-text-field>
+        <sr-text-field label="Postcode" @change="fetchZipInfo()" v-model="postalCode" :errors="errors.postalCode"></sr-text-field>
+        <sr-text-field label="Huisnummer" @change="fetchZipInfo()" v-model="houseNumber" :errors="errors.houseNumber"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Straat" v-model="street" :errors="errors.street"></sr-text-field>
-        <sr-text-field label="Plaatsnaam" v-model="city" :errors="errors.city"></sr-text-field>
+        <sr-text-field label="Straat" disabled v-model="street" :errors="errors.street"></sr-text-field>
       </div>
-      <label for="country">Land</label>
-      <div>
-        <Dropdown
-            v-model="country"
-            :options="options"
-            optionLabel="name"
-            optionValue="value"
-            :class="{ 'p-invalid': errors.country }"
-            placeholder="Selecteer een land"
-        />
+      <div class="flex gap-2">
+        <sr-text-field label="Plaatsnaam" disabled v-model="city" :errors="errors.city"></sr-text-field>
       </div>
-      <small id="country-help" class="p-error">{{ errors.country }}</small>
+      <div class="flex gap-2">
+        <sr-text-field label="Land" disabled v-model="country" :errors="errors.country"></sr-text-field>
+      </div>
       <div class="flex justify-content-end gap-2">
         <Button type="submit" label="Huren"></Button>
       </div>

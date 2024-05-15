@@ -7,13 +7,14 @@ import type {Renter} from "~/schemas/openapi/renter";
 import {useToast} from "primevue/usetoast";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
+import {useCartStore} from "~/services/stores/cartStore";
 
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
 const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 
 const route = useRoute();
+const router = useRouter();
 const toast = useToast();
-const renter = ref<Renter | undefined>();
 const amount = ref(0);
 const price = ref(0);
 const amountAvailable = ref(0);
@@ -24,8 +25,8 @@ const item = ref<RentalItem>({
 });
 const dates = ref([]);
 const images = ref<Image[]>([]);
-const showRenterInfoModal = ref(false);
 const showNotPossibleModal = ref(false);
+const cartStore = useCartStore();
 
 onMounted(() => {
   fetchItem()
@@ -40,28 +41,15 @@ watch(amount, () => {
 })
 
 const startTransaction = () => {
-  if (true) {
-    showNotPossibleModal.value = true
-  } else {
-    if (dates.value[0] != null && dates.value[1] != null) {
-      $transactionClient.startTransaction(
-          item.value.id,
-          dates.value[0],
-          dates.value[1],
-          amount.value,
-          renter.value
-      ).then(
-          success => {
-            navigateTo(success.redirectUrl, {external: true})
-          },
-          failure => {
-            showError(failure.message);
-          }
-      )
-    } else {
-      showError("Selecteer een begin en einddatum");
-    }
-  }
+  cartStore.setCart(
+      item.value,
+      amount.value,
+      dates.value[1],
+      dates.value[0],
+      price.value
+  ).then(() => {
+    router.push("/transaction/checkout")
+  })
 }
 
 function onUpdateTransactionInformation() {
@@ -93,7 +81,7 @@ function calculatePrice() {
 
 function showRenterInfo() {
   if (dates.value[0] != null && dates.value[1] != null) {
-    showRenterInfoModal.value = true
+    startTransaction()
   } else {
     showError("Selecteer een begin en einddatum");
   }
@@ -193,9 +181,9 @@ async function fetchItem() {
         </div>
       </div>
       <div>
-        <h2>  </h2>
+        <h2></h2>
       </div>
-      <div >
+      <div>
         <div class="flex flex-col">
           <span class="font-bold text-xl">Specificaties</span>
           <divider></divider>
@@ -227,11 +215,5 @@ async function fetchItem() {
     <div>
       <span class="p-text-secondary block mb-5">Het is helaas nog niet mogelijk om dit item te huren.</span>
     </div>
-  </Dialog>
-  <Dialog v-model:visible="showRenterInfoModal" modal header="Jouw gegevens" :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <SrRenterInformationForm v-model="renter"
-                             :save-action="startTransaction">
-    </SrRenterInformationForm>
   </Dialog>
 </template>
