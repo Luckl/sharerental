@@ -154,7 +154,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       </div>
     </section>
     <section class="green-area px-4 mt-5">
-      <div class="md:max-w-[1240px] md:mx-auto0">
+      <div class="md:max-w-[1240px] md:mx-auto">
 
         <div class="w-full flex justify-center">
           <h1 class="my-10 text-4xl"><a id="hoe_het_werkt">Hoe werkt het?</a></h1>
