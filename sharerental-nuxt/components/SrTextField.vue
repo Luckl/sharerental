@@ -3,7 +3,7 @@
 defineProps<{
   label: string,
   modelValue: string | null,
-  errors: Partial<Record<string, string | undefined>>,
+  errors:  string | undefined,
 }>()
 
 const emits = defineEmits(['update:modelValue'])

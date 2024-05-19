@@ -22,9 +22,7 @@ const formatter = new Intl.NumberFormat('nl-NL', {
 })
 
 function formatCurrency(value: number) {
-  if (value !== undefined && value !== null) {
-    return formatter.format(value)
-  } else return "Niet bekend"
+  return formatter.format(value)
 }
 
 const startTransaction = () => {
@@ -70,7 +68,7 @@ const startTransaction = () => {
 
           </div>
         </div>
-        renter email: {{ renter?.email}}
+        renter email: {{ renter?.email }}
         <Button label="Nu betalen" @click="startTransaction()"></Button>
       </div>
 

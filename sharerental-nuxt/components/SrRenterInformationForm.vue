@@ -9,6 +9,7 @@ import {createUserWithEmailAndPassword} from "firebase/auth";
 import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
 import type ContactFormClient from "~/services/api/ContactFormClient";
 import container from "parchment/src/blot/abstract/container";
+import {syncRef, syncRefs} from "@vueuse/shared";
 
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
@@ -34,114 +35,111 @@ onMounted(() => {
     loadEmptyRenterObject()
   }
   subscribeToNewsletter.value = true
-
-  firstName.value = props.modelValue?.firstName
-  lastName.value = props.modelValue?.lastName
-  email.value = props.modelValue?.email
-  phoneNumber.value = props.modelValue?.phoneNumber
-  street.value = props.modelValue?.location?.street
-  houseNumber.value = props.modelValue?.location?.houseNumber
-  postalCode.value = props.modelValue?.location?.postalCode
-  city.value = props.modelValue?.location?.city
-  country.value = props.modelValue?.location?.country
 })
 
 const loadEmptyRenterObject = () => {
-  updateModelValue({
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    location: {
-      street: "",
-      houseNumber: "",
-      postalCode: "",
-      city: "",
-      country: ""
-    }
-  })
   editRenterInfo.value = true
 }
 
 const schema = yup.object({
-  firstName: yup.string().required().label("Voornaam"),
-  lastName: yup.string().required().label("Achternaam"),
-  email: yup.string().email().required().label("Emailadres"),
-  phoneNumber: yup.string().required().label("Telefoonnummer"),
-  street: yup.string().required().label("Straat"),
-  houseNumber: yup.string().required().label("Huisnummer"),
-  postalCode: yup.string().required().label("Postcode"),
-  city: yup.string().required().label("Stad"),
-  country: yup.string().required().label("Land"),
-
+  renter: yup.object({
+    firstName: yup.string().required().label("Voornaam"),
+    lastName: yup.string().required().label("Achternaam"),
+    email: yup.string().email().required().label("Emailadres"),
+    phoneNumber: yup.string().required().label("Telefoonnummer"),
+    location: yup.object({
+      street: yup.string().required().label("Straat"),
+      houseNumber: yup.string().required().label("Huisnummer"),
+      postalCode: yup.string().required().label("Postcode"),
+      city: yup.string().required().label("Stad"),
+      country: yup.string().required().label("Land"),
+    })
+  }),
   createAccount: yup.boolean().label("Maak een account aan"),
-
   password: yup.string()
       .when('createAccount',
           ([createAccount], password) =>
               createAccount === true
                   ? password.label("Wachtwoord").required().min(6)
                   : password),
-
   passwordConfirm: yup.string()
       .when('createAccount',
           ([createAccount], passwordConfirm) =>
               createAccount === true
                   ? passwordConfirm.label("Wachtwoord herhalen").required().oneOf([yup.ref('password')], 'Wachtwoorden moeten overeenkomen')
                   : passwordConfirm),
-
+  subscribeToNewsletter: yup.boolean().label("Hou me op de hoogte over nieuws en aanbiedingen")
 });
 
-const {defineField, handleSubmit, errors} = useForm({
+const {defineField, handleSubmit, errors, values, validate} = useForm({
   validationSchema: schema,
+  initialValues: {
+    renter: {
+      id: 0,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      location: {
+        street: "",
+        houseNumber: "",
+        postalCode: "",
+        city: "",
+        country: ""
+      }
+    },
+    createAccount: false,
+    password: "",
+    passwordConfirm: "",
+    subscribeToNewsletter: true
+  }
 });
+
+watch(values, (value) => {
+  updateModelValue(value.renter)
+})
 
 const [createAccount] = defineField("createAccount")
-const [firstName] = defineField("firstName")
-const [lastName] = defineField("lastName")
-const [email] = defineField("email")
-const [phoneNumber] = defineField("phoneNumber")
-const [street] = defineField("street")
-const [houseNumber] = defineField("houseNumber")
-const [postalCode] = defineField("postalCode")
-const [city] = defineField("city")
-const [country] = defineField("country")
+const [firstName] = defineField("renter.firstName")
+const [lastName] = defineField("renter.lastName")
+const [email] = defineField("renter.email")
+const [phoneNumber] = defineField("renter.phoneNumber")
+const [street] = defineField("renter.location.street")
+const [houseNumber] = defineField("renter.location.houseNumber")
+const [postalCode] = defineField("renter.location.postalCode")
+const [city] = defineField("renter.location.city")
+const [country] = defineField("renter.location.country")
 const [password] = defineField("password")
 const [passwordConfirm] = defineField("passwordConfirm")
 const [subscribeToNewsletter] = defineField("subscribeToNewsletter")
 
 const editRenterInfo = ref(false);
 
-watch(() => props.modelValue, (value) => {
-  updateModelValue(value)
-})
-
 const createUserIfSelected = async () => {
-  console.log("Successfully called child function")
-  if (createAccount.value) {
-    await createUserWithEmailAndPassword(auth, email.value, password.value)
-        .then(() => {
-              userStore.refreshUser()
-                  .then(() =>
-                      contactFormClient.registerUser(UserUserTypeEnum.Renter)
-                  )
-            },
-            (reason) => {
-              toast.add({
-                severity: 'error', summary: 'Er is iets fout gegaan', detail: reason,
-                life: 5000
-              })
-            })
-  }
+  await validate()
+      .then(() => {
+        createUserWithEmailAndPassword(auth, email.value, password.value)
+            .then(() => {
+                  userStore.refreshUser()
+                      .then(() =>
+                          contactFormClient.registerUser(UserUserTypeEnum.Renter)
+                      )
+                },
+                (reason) => {
+                  toast.add({
+                    severity: 'error', summary: 'Er is iets fout gegaan', detail: reason,
+                    life: 5000
+                  })
+                })
+      })
 }
 
 const fetchZipInfo = async () => {
   if (postalCode.value.length === 6 && houseNumber.value.length > 0) {
     const response = await contactFormClient.zipcode(postalCode.value, houseNumber.value)
-    street.value = response.street
-    city.value = response.city
-    country.value = response.country
+    street.value = response.street ?? ""
+    city.value = response.city ?? ""
+    country.value = response.country ?? ""
   }
 }
 
@@ -205,11 +203,11 @@ defineExpose({
       <span class="text-xl font-bold block mb-5">Vul je gegevens in.</span>
       <div v-if="userStore.user" class="flex gap-2 mb-5 w-full">
         <sr-text-field label="Emailadres" disabled placeholder="Emailadres" type="email" v-model="userStore.user.email"
-                       :errors="errors.email"></sr-text-field>
+                       :errors="errors['renter.email']"></sr-text-field>
       </div>
       <div v-if="!userStore.user" class="flex gap-2">
         <sr-text-field label="Emailadres" placeholder="Emailadres" type="email" v-model="email"
-                       :errors="errors.email"></sr-text-field>
+                       :errors="errors['renter.email']"></sr-text-field>
       </div>
       <div class="flex gap-2 my-1 items-center">
         <Checkbox v-model="subscribeToNewsletter" binary></Checkbox>
@@ -219,7 +217,7 @@ defineExpose({
       </div>
       <div v-if="!userStore.user" class="flex gap-2 my-1 items-center">
         <Checkbox v-model="createAccount"
-                  :class="{ 'p-invalid': errors.terms }"
+                  :class="{ 'p-invalid': errors.createAccount }"
                   binary
         ></Checkbox>
         <div>
@@ -235,28 +233,32 @@ defineExpose({
       </div>
       <divider></divider>
       <div class="flex gap-2">
-        <sr-text-field label="Voornaam" v-model="firstName" :errors="errors.firstName"></sr-text-field>
+        <sr-text-field label="Voornaam" v-model="firstName" :errors="errors['renter.firstName']"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Achternaam" v-model="lastName" :errors="errors.lastName"></sr-text-field>
+        <sr-text-field label="Achternaam" v-model="lastName" :errors="errors['renter.lastName']"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Telefoonnummer" v-model="phoneNumber" :errors="errors.phoneNumber"></sr-text-field>
+        <sr-text-field label="Telefoonnummer" v-model="phoneNumber"
+                       :errors="errors['renter.phoneNumber']"></sr-text-field>
       </div>
       <div class="flex gap-2">
         <sr-text-field label="Postcode" @change="fetchZipInfo()" v-model="postalCode"
-                       :errors="errors.postalCode"></sr-text-field>
+                       :errors="errors['renter.location.postalCode']"></sr-text-field>
         <sr-text-field label="Huisnummer" @change="fetchZipInfo()" v-model="houseNumber"
-                       :errors="errors.houseNumber"></sr-text-field>
+                       :errors="errors['renter.location.houseNumber']"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Straat" disabled v-model="street" :errors="errors.street"></sr-text-field>
+        <sr-text-field label="Straat" disabled v-model="street"
+                       :errors="errors['renter.location.street']"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Plaatsnaam" disabled v-model="city" :errors="errors.city"></sr-text-field>
+        <sr-text-field label="Plaatsnaam" disabled v-model="city"
+                       :errors="errors['renter.location.city']"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Land" disabled v-model="country" :errors="errors.country"></sr-text-field>
+        <sr-text-field label="Land" disabled v-model="country"
+                       :errors="errors['renter.location.country']"></sr-text-field>
       </div>
     </form>
   </div>
