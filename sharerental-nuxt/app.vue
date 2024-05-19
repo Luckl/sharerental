@@ -8,6 +8,13 @@
 <script setup lang="ts">
 import {setLocale} from "yup";
 import {nl} from "yup-locales";
+import type {SrRenterInformationForm} from "#components";
+
+const renterInformationForm = ref<InstanceType<typeof SrRenterInformationForm> | null>(null)
+
+const createUserIfSelected = () => {
+  renterInformationForm.value?.createUserIfSelected()
+}
 
 useSeoMeta({
   description: 'Huur en verhuur jouw machines en gereedschap',

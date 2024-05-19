@@ -14,8 +14,7 @@ const $renterClient: RenterClient = useNuxtApp().$renterClient;
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
 const props = defineProps<{
-  modelValue: Renter,
-  saveAction: () => void
+  modelValue: Renter | undefined
 }>()
 
 const auth = useFirebaseAuth()! // only exists on client side
@@ -24,27 +23,46 @@ const toast = useToast()
 
 const emits = defineEmits(['update:modelValue'])
 
-const renter = ref<Renter>({
-  id: 0,
-  firstName: "",
-  lastName: "",
-  email: "",
-  phoneNumber: "",
-  location: {
-    street: "",
-    houseNumber: "",
-    postalCode: "",
-    city: "",
-    country: ""
-  }
-});
+const updateModelValue = (value: Renter | undefined) => {
+  emits('update:modelValue', value);
+};
 
 onMounted(() => {
   if (userStore.user) {
     getRenter()
+  } else {
+    loadEmptyRenterObject()
   }
   subscribeToNewsletter.value = true
+
+  firstName.value = props.modelValue?.firstName
+  lastName.value = props.modelValue?.lastName
+  email.value = props.modelValue?.email
+  phoneNumber.value = props.modelValue?.phoneNumber
+  street.value = props.modelValue?.location?.street
+  houseNumber.value = props.modelValue?.location?.houseNumber
+  postalCode.value = props.modelValue?.location?.postalCode
+  city.value = props.modelValue?.location?.city
+  country.value = props.modelValue?.location?.country
 })
+
+const loadEmptyRenterObject = () => {
+  updateModelValue({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    location: {
+      street: "",
+      houseNumber: "",
+      postalCode: "",
+      city: "",
+      country: ""
+    }
+  })
+  editRenterInfo.value = true
+}
 
 const schema = yup.object({
   firstName: yup.string().required().label("Voornaam"),
@@ -95,44 +113,19 @@ const [subscribeToNewsletter] = defineField("subscribeToNewsletter")
 
 const editRenterInfo = ref(false);
 
-function enableRenterEditMode() {
-  firstName.value = renter.value.firstName
-  lastName.value = renter.value.lastName
-  email.value = renter.value.email
-  phoneNumber.value = renter.value.phoneNumber
-  street.value = renter.value.location?.street
-  houseNumber.value = renter.value.location?.houseNumber
-  postalCode.value = renter.value.location?.postalCode
-  city.value = renter.value.location?.city
-  country.value = renter.value.location?.country
+watch(() => props.modelValue, (value) => {
+  updateModelValue(value)
+})
 
-  editRenterInfo.value = true
-}
-
-const onSubmit = handleSubmit(async () => {
-  renter.value = {
-    id: renter.value.id,
-    firstName: firstName.value,
-    lastName: lastName.value,
-    email: email.value,
-    phoneNumber: phoneNumber.value,
-    location: {
-      street: street.value,
-      houseNumber: houseNumber.value,
-      postalCode: postalCode.value,
-      city: city.value,
-      country: country.value
-    }
-  }
-  emits('update:modelValue', renter.value)
-
+const createUserIfSelected = async () => {
+  console.log("Successfully called child function")
   if (createAccount.value) {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
         .then(() => {
               userStore.refreshUser()
                   .then(() =>
                       contactFormClient.registerUser(UserUserTypeEnum.Renter)
-                          .then(() => props.saveAction()))
+                  )
             },
             (reason) => {
               toast.add({
@@ -140,10 +133,8 @@ const onSubmit = handleSubmit(async () => {
                 life: 5000
               })
             })
-  } else {
-    props.saveAction()
   }
-})
+}
 
 const fetchZipInfo = async () => {
   if (postalCode.value.length === 6 && houseNumber.value.length > 0) {
@@ -157,56 +148,60 @@ const fetchZipInfo = async () => {
 function getRenter() {
   $renterClient.getRenter().then(
       success => {
-        renter.value = success
+        updateModelValue(success)
       },
       () => {
-        editRenterInfo.value = true
+        loadEmptyRenterObject()
       }
   )
 }
+
+defineExpose({
+  createUserIfSelected
+})
 </script>
 <template>
   <div v-if="!editRenterInfo">
     <span class="p-text-secondary block mb-5">Controleer je gegevens.</span>
     <div class="flexbox-column">
+      <label for="email" class="data-label mb-1">Email</label>
+      <span>{{ modelValue?.email }}</span>
+    </div>
+    <div class="flexbox-column">
       <label for="fName" class="data-label mb-1">Naam</label>
-      <span>{{ renter.firstName }}</span>
+      <span>{{ modelValue?.firstName }}</span>
     </div>
     <div class="flexbox-column">
       <label for="lName" class="data-label mb-1">Achternaam</label>
-      <span>{{ renter.lastName }}</span>
-    </div>
-    <div class="flexbox-column">
-      <label for="email" class="data-label mb-1">Email</label>
-      <span>{{ renter.email }}</span>
+      <span>{{ modelValue?.lastName }}</span>
     </div>
     <div class="flexbox-column">
       <label for="phoneNumber" class="data-label mb-1">Telefoonnummer</label>
-      <span>{{ renter.phoneNumber }}</span>
+      <span>{{ modelValue?.phoneNumber }}</span>
     </div>
     <div class="flexbox-column">
       <label for="street" class="data-label mb-1">Straat</label>
-      <span>{{ renter.location?.street }}</span>
+      <span>{{ modelValue?.location?.street }}</span>
     </div>
     <div class="flexbox-column">
       <label for="houseNumber" class="data-label mb-1">Huisnummer</label>
-      <span>{{ renter.location?.houseNumber }}</span>
+      <span>{{ modelValue?.location?.houseNumber }}</span>
     </div>
     <div class="flexbox-column">
       <label for="postalCode" class="data-label mb-1">Postcode</label>
-      <span>{{ renter.location?.postalCode }}</span>
+      <span>{{ modelValue?.location?.postalCode }}</span>
     </div>
     <div class="flexbox-column">
       <label for="city" class="data-label mb-1">Stad</label>
-      <span>{{ renter.location?.city }}</span>
+      <span>{{ modelValue?.location?.city }}</span>
     </div>
     <div class="flexbox-column">
       <label for="country" class="data-label mb-1">Land</label>
-      <span>{{ renter.location?.country }}</span>
+      <span>{{ modelValue?.location?.country }}</span>
     </div>
   </div>
   <div class="flex flex-col" v-else>
-    <form novalidate @submit="onSubmit">
+    <form novalidate>
       <span class="text-xl font-bold block mb-5">Vul je gegevens in.</span>
       <div v-if="userStore.user" class="flex gap-2 mb-5 w-full">
         <sr-text-field label="Emailadres" disabled placeholder="Emailadres" type="email" v-model="userStore.user.email"
@@ -249,8 +244,10 @@ function getRenter() {
         <sr-text-field label="Telefoonnummer" v-model="phoneNumber" :errors="errors.phoneNumber"></sr-text-field>
       </div>
       <div class="flex gap-2">
-        <sr-text-field label="Postcode" @change="fetchZipInfo()" v-model="postalCode" :errors="errors.postalCode"></sr-text-field>
-        <sr-text-field label="Huisnummer" @change="fetchZipInfo()" v-model="houseNumber" :errors="errors.houseNumber"></sr-text-field>
+        <sr-text-field label="Postcode" @change="fetchZipInfo()" v-model="postalCode"
+                       :errors="errors.postalCode"></sr-text-field>
+        <sr-text-field label="Huisnummer" @change="fetchZipInfo()" v-model="houseNumber"
+                       :errors="errors.houseNumber"></sr-text-field>
       </div>
       <div class="flex gap-2">
         <sr-text-field label="Straat" disabled v-model="street" :errors="errors.street"></sr-text-field>
@@ -261,15 +258,9 @@ function getRenter() {
       <div class="flex gap-2">
         <sr-text-field label="Land" disabled v-model="country" :errors="errors.country"></sr-text-field>
       </div>
-      <div class="flex justify-content-end gap-2">
-        <Button type="submit" label="Huren"></Button>
-      </div>
     </form>
   </div>
   <div v-if="!editRenterInfo">
-    <Button type="button" label="Aanpassen" @click="enableRenterEditMode()"></Button>
-  </div>
-  <div v-if="!editRenterInfo" class="flex justify-content-end gap-2">
-    <Button type="button" label="Huren" @click="onSubmit"></Button>
+    <Button type="button" label="Aanpassen" @click="editRenterInfo = true"></Button>
   </div>
 </template>

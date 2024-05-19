@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    modules: ['nuxt-vuefire',  '@nuxt/image', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@nuxtjs/google-fonts', '@nuxtjs/seo'],
+    modules: ['nuxt-vuefire', 'dayjs-nuxt',  '@nuxt/image', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@nuxtjs/google-fonts', '@nuxtjs/seo'],
     ssr: true,
     devtools: {enabled: true},
     image: {

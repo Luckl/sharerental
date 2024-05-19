@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jooq.meta.jaxb.Generator
 
 extra["hibernate.version"] = "6.4.2.Final"
 ext["jooq.version"] = jooq.version.get()
