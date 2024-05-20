@@ -3,8 +3,10 @@
 import type {Renter} from "~/schemas/openapi/renter";
 import {useCartStore} from "~/services/stores/cartStore";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
+import type TransactionClient from "~/services/api/TransactionClient";
 
 const srRenterInformationForm = ref<typeof SrRenterInformationForm | null>(null)
+const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
 
 const cartStore = useCartStore()
 
@@ -26,8 +28,43 @@ function formatCurrency(value: number) {
 }
 
 const startTransaction = () => {
-  srRenterInformationForm.value?.createUserIfSelected()
-  console.log(renter.value)
+  if (rentalItem.value?.id) {
+    srRenterInformationForm.value?.createUserIfSelected()
+    $transactionClient.startTransaction(
+        rentalItem.value?.id ?? 0,
+        startDate.value as Date,
+        endDate.value as Date,
+        amount.value ?? 1,
+        createRenterInputObject()
+    ).then(
+        success => {
+          debugger;
+          navigateTo(success.redirectUrl, {external: true})
+        },
+        failure => {
+          showError(failure.message);
+        }
+    )
+  }
+}
+
+const createRenterInputObject = () => {
+  console.log(renter.value?.id)
+  if (renter.value?.id == 0) {
+    return {
+      firstName: renter.value?.firstName ?? "",
+      lastName: renter.value?.lastName ?? "",
+      email: renter.value?.email ?? "",
+      phoneNumber: renter.value?.phoneNumber ?? "",
+      street: renter.value?.location.street,
+      houseNumber: renter.value?.location.houseNumber,
+      postalCode: renter.value?.location.postalCode,
+      city: renter.value?.location.city,
+      country: renter.value?.location.country,
+    }
+  } else {
+    return undefined
+  }
 }
 </script>
 <template>
@@ -68,7 +105,6 @@ const startTransaction = () => {
 
           </div>
         </div>
-        renter email: {{ renter?.email }}
         <Button label="Nu betalen" @click="startTransaction()"></Button>
       </div>
 

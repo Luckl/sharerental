@@ -8,13 +8,11 @@ import {useToast} from "primevue/usetoast";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
 import type ContactFormClient from "~/services/api/ContactFormClient";
-import container from "parchment/src/blot/abstract/container";
-import {syncRef, syncRefs} from "@vueuse/shared";
 
 const $renterClient: RenterClient = useNuxtApp().$renterClient;
 const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
 
-const props = defineProps<{
+defineProps<{
   modelValue: Renter | undefined
 }>()
 
@@ -25,11 +23,13 @@ const toast = useToast()
 const emits = defineEmits(['update:modelValue'])
 
 const updateModelValue = (value: Renter | undefined) => {
+  console.log(JSON.stringify(value))
   emits('update:modelValue', value);
 };
 
 onMounted(() => {
   if (userStore.user) {
+    email.value = userStore.user.email ?? ""
     getRenter()
   } else {
     loadEmptyRenterObject()
@@ -71,7 +71,7 @@ const schema = yup.object({
   subscribeToNewsletter: yup.boolean().label("Hou me op de hoogte over nieuws en aanbiedingen")
 });
 
-const {defineField, handleSubmit, errors, values, validate} = useForm({
+const {defineField, errors, values, validate} = useForm({
   validationSchema: schema,
   initialValues: {
     renter: {
@@ -96,7 +96,9 @@ const {defineField, handleSubmit, errors, values, validate} = useForm({
 });
 
 watch(values, (value) => {
-  updateModelValue(value.renter)
+  const tmpRenter = { ...value.renter }
+  tmpRenter.id = existingRenterId.value
+  updateModelValue(tmpRenter)
 })
 
 const [createAccount] = defineField("createAccount")
@@ -113,9 +115,13 @@ const [password] = defineField("password")
 const [passwordConfirm] = defineField("passwordConfirm")
 const [subscribeToNewsletter] = defineField("subscribeToNewsletter")
 
+const existingRenterId = ref(0);
 const editRenterInfo = ref(false);
 
 const createUserIfSelected = async () => {
+  if (!createAccount.value) {
+    return
+  }
   await validate()
       .then(() => {
         createUserWithEmailAndPassword(auth, email.value, password.value)
@@ -146,6 +152,18 @@ const fetchZipInfo = async () => {
 function getRenter() {
   $renterClient.getRenter().then(
       success => {
+
+        existingRenterId.value = success.id
+        email.value = success.email
+        firstName.value = success.firstName
+        lastName.value = success.lastName
+        phoneNumber.value = success.phoneNumber
+        street.value = success.location.street ?? ""
+        houseNumber.value = success.location.houseNumber ?? ""
+        postalCode.value = success.location.postalCode ?? ""
+        city.value = success.location.city ?? ""
+        country.value = success.location.country ?? ""
+
         updateModelValue(success)
       },
       () => {
@@ -201,12 +219,8 @@ defineExpose({
   <div class="flex flex-col" v-else>
     <form novalidate>
       <span class="text-xl font-bold block mb-5">Vul je gegevens in.</span>
-      <div v-if="userStore.user" class="flex gap-2 mb-5 w-full">
-        <sr-text-field label="Emailadres" disabled placeholder="Emailadres" type="email" v-model="userStore.user.email"
-                       :errors="errors['renter.email']"></sr-text-field>
-      </div>
-      <div v-if="!userStore.user" class="flex gap-2">
-        <sr-text-field label="Emailadres" placeholder="Emailadres" type="email" v-model="email"
+      <div class="flex gap-2">
+        <sr-text-field label="Emailadres" :disabled="userStore.user" placeholder="Emailadres" type="email" v-model="email"
                        :errors="errors['renter.email']"></sr-text-field>
       </div>
       <div class="flex gap-2 my-1 items-center">
@@ -263,6 +277,6 @@ defineExpose({
     </form>
   </div>
   <div v-if="!editRenterInfo">
-    <Button type="button" label="Aanpassen" @click="editRenterInfo = true"></Button>
+    <Button type="button" label="Aanpassen" @click="editRenterInfo = true; existingRenterId = 0"></Button>
   </div>
 </template>
