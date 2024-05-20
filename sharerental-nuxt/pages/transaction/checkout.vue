@@ -38,7 +38,6 @@ const startTransaction = () => {
         createRenterInputObject()
     ).then(
         success => {
-          debugger;
           navigateTo(success.redirectUrl, {external: true})
         },
         failure => {
