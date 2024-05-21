@@ -10,66 +10,6 @@ definePageMeta({
 })
 
 const category = ref('Luchtdrukgereedschap')
-const {filters} = useFilterStore();
-
-
-const categoryFilter = ref<SearchRequestFiltersInner[]>([
-  {
-    field: 'category',
-    values: [category.value]
-  }
-])
-
-const availableFilters = ref<FilterOption[]>([])
-
-const $searchClient: SearchClient = useNuxtApp().$searchClient;
-
-const state = reactive({
-  results: undefined as SearchResultItem[] | undefined,
-  pageable: {
-    page: 0,
-    pageSize: 30,
-    sort: [],
-  },
-});
-
-onMounted(() => {
-  fetchItems()
-})
-
-const fetchItems = () => {
-  let allFilters = categoryFilter.value.concat(mapToFilter());
-  $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
-    filters: allFilters
-  }, "").then(
-      success => {
-        state.results = success.embedded
-        let allAvailableFilters = success.filterOptions || [];
-        availableFilters.value = allAvailableFilters
-            .filter(value => value.field !== 'category')
-
-        availableFilters.value
-            .filter(value => value.field !== 'category')
-            .filter(value => value.options?.length || 0 > 0)
-            .filter(filter => activatedFilters.value[filter.field || ""] === undefined)
-            .forEach(filter => {
-              activatedFilters.value[filter.field || ""] = []
-            })
-      }
-  )
-}
-
-const activatedFilters = ref<any>({})
-const mapToFilter = (): SearchRequestFiltersInner[] => {
-  return Object.entries(activatedFilters.value)
-      .filter(([key, value]) => Array.isArray(value) && value.length > 0)
-      .map(([key, value]) => {
-        return {
-          field: key,
-          values: Array.isArray(value) ? value as string[] : [value as string]
-        }
-      })
-}
 
 </script>
 <template>

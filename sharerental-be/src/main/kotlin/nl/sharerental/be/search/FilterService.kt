@@ -140,6 +140,8 @@ class FilterService(
 
     private fun searchRequestToCondition(searchRequest: SearchRequest?): Condition {
 
+
+
         val map = searchRequest?.filters
             ?.map { filter ->
                 filterFields.firstOrNull { it.name == filter.field } to filter.values

@@ -2,8 +2,16 @@
 
 import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterStore";
 import {reactive, ref} from "vue";
-import type {FilterOption, SearchRequestFiltersInner, SearchResultItem} from "~/schemas/openapi/search";
+import type {
+  FilterOption,
+  SearchRequestFiltersInner,
+  SearchResultItem
+} from "~/schemas/openapi/search";
+import {
+  SearchRequestRenterTypeEnum
+} from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
+import {useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 interface Props {
   category?: string;
@@ -14,6 +22,7 @@ interface Props {
 const props = defineProps<Props>()
 const showFilters = ref(false)
 const {filters} = useFilterStore();
+const { renterType } = storeToRefs(useRenterTypeStore())
 
 const getFilter = (filter: FilterOption): Filter | undefined => {
   return filters.find(f => f.key === filter.field)
@@ -46,7 +55,8 @@ onMounted(() => {
 const fetchItems = () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
   $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
-    filters: allFilters
+    filters: allFilters,
+    renterType: SearchRequestRenterTypeEnum.PRIVATE
   }, props.query).then(
       success => {
         state.results = success.embedded

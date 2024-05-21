@@ -81,8 +81,17 @@ components:
     SearchRequest:
       type: object
       required:
+        - renterType
         - filters
       properties:
+        renterType:
+          type: string
+          format: enum
+          enum:
+              - 'business'
+              - 'private'
+          description: The type of renter
+          example: 'business'
         filters:
           type: array
           items:
