@@ -2,17 +2,13 @@
 
 import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterStore";
 import {reactive, ref} from "vue";
-import type {
-  FilterOption,
-  SearchRequestFiltersInner,
-  SearchResultItem
-} from "~/schemas/openapi/search";
 import {
-  SearchRequestRenterTypeEnum
+  type FilterOption, RenterType,
+  type SearchRequestFiltersInner,
+  type SearchResultItem
 } from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
-import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore";
-
+import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 interface Props {
   category?: string;
   query?: string;
@@ -56,7 +52,7 @@ const fetchItems = () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
   $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
     filters: allFilters,
-    renterType: renterType.value == RenterType.Private ? SearchRequestRenterTypeEnum.Private : SearchRequestRenterTypeEnum.Business
+    renterType: renterType.value == RenterTypeEnum.Private ? RenterType.Private : RenterType.Business,
   }, props.query).then(
       success => {
         state.results = success.embedded

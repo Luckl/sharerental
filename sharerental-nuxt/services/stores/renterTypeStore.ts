@@ -1,12 +1,12 @@
 import {defineStore} from 'pinia'
 
-export enum RenterType {
-    Private = "private",
-    Business = "business"
+export enum RenterTypeEnum {
+    Private = "PRIVATE",
+    Business = "PRIVATE"
 }
 
 export type RenterTypeState = {
-    renterType: RenterType | null;
+    renterType: RenterTypeEnum | null;
 }
 
 export const useRenterTypeStore = defineStore('renterTypeStore', {
@@ -14,7 +14,7 @@ export const useRenterTypeStore = defineStore('renterTypeStore', {
         renterType: null
     }),
     actions: {
-        async setRenterType(renterType: RenterType): Promise<void> {
+        async setRenterType(renterType: RenterTypeEnum): Promise<void> {
             this.renterType = renterType;
         }
     },

@@ -115,6 +115,7 @@ data class RentalItem(
                 powerWatt = item.powerWatt
                 maximumSurfaceSquareMeters = item.maximumSurfaceSquareMeters
                 fuelType = item.fuelType?.toHttpEnum()
+                rentToRenterType = item.rentToRenterType?.toHttpEnum()
             }
 
     }
@@ -129,6 +130,10 @@ private fun DisplayStatus.toHttp(): nl.sharerental.contract.http.model.DisplaySt
 private fun FuelType.toHttpEnum(): nl.sharerental.contract.http.model.FuelType {
     return nl.sharerental.contract.http.model.FuelType.valueOf(this.name)
 }
+private fun RenterType.toHttpEnum(): nl.sharerental.contract.http.model.RenterType {
+    return nl.sharerental.contract.http.model.RenterType.valueOf(this.name)
+}
+
 enum class DisplayStatus {
 ACTIVE, INACTIVE
 }

@@ -99,6 +99,8 @@ components:
           format: double
         fuelType:
           $ref: '#/components/schemas/FuelType'
+        rentToRenterType:
+          $ref: './RenterType.yaml#/components/schemas/RenterType'
       required:
         - name
         - price24h
@@ -191,6 +193,8 @@ components:
           format: double
         fuelType:
           $ref: '#/components/schemas/FuelType'
+        rentToRenterType:
+          $ref: './RenterType.yaml#/components/schemas/RenterType'
       required:
         - id
         - name

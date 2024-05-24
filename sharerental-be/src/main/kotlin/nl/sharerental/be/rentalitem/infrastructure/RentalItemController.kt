@@ -10,6 +10,7 @@ import nl.sharerental.be.rentalitem.RentalItem
 import nl.sharerental.be.rentalitem.RentalItemAuthorization
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.be.user.CurrentUserService
+import nl.sharerental.be.user.RenterType
 import nl.sharerental.contract.http.RentalItemApi
 import nl.sharerental.contract.http.model.GetRentalItemsResult
 import nl.sharerental.contract.http.model.PaginationResponse
@@ -80,6 +81,7 @@ class RentalItemController(
             powerWatt = rentalItemInput.powerWatt
             maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters
             fuelType = rentalItemInput.fuelType?.toEntityEnum()
+            rentToRenterType = rentalItemInput.rentToRenterType?.toEntityEnum()
         }
         logger.debug("Updated entity {}", entity.toString())
         logger.debug("Updated rentalItem {}", id)
@@ -128,6 +130,7 @@ class RentalItemController(
             powerWatt = rentalItemInput.powerWatt,
             maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters,
             fuelType = rentalItemInput.fuelType?.toEntityEnum(),
+            rentToRenterType = rentalItemInput.rentToRenterType?.toEntityEnum(),
             owner = lessor
         )
 
@@ -173,4 +176,5 @@ private fun HttpDisplayStatus.toEntity(): DisplayStatus {
     }
 }
 private fun nl.sharerental.contract.http.model.FuelType.toEntityEnum(): FuelType = FuelType.valueOf(this.value)
+private fun nl.sharerental.contract.http.model.RenterType.toEntityEnum(): RenterType = RenterType.valueOf(this.value)
 

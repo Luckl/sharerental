@@ -115,11 +115,11 @@
     <div class="w-full flex flex-col justify-center">
       <span class="text-3xl font-bold text-black text-center">Wat voor klant ben je?</span>
       <span class="text-gray-500 text-center">Je kunt dit later nog aanpassen</span>
-      <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="storeRenterType(RenterType.Private)">
+      <Button unstyled class="rounded-lg green-area w-full h-12 mt-4" @click="storeRenterType(RenterTypeEnum.Private)">
         Particulier (Incl. BTW)
       </Button>
       <Button unstyled class="rounded-lg border-4 border-green-800 text-green-800 font-bold w-full h-12 mt-4"
-              @click="storeRenterType(RenterType.Business)">Zakelijk (Excl. BTW)
+              @click="storeRenterType(RenterTypeEnum.Business)">Zakelijk (Excl. BTW)
       </Button>
     </div>
   </Dialog>
@@ -132,7 +132,7 @@ import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
 import type ContactFormClient from "~/services/api/ContactFormClient";
 import {useLessorStore} from "~/services/stores/lessorStore";
-import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 import {useDialog} from "primevue/usedialog";
 import {SrContactDialog} from "#components";
 
@@ -191,7 +191,7 @@ const contactForm = reactive({
   phone: ''
 });
 
-const storeRenterType = (renterType: RenterType) => {
+const storeRenterType = (renterType: RenterTypeEnum) => {
   renterTypeStore.setRenterType(renterType)
   showRenterTypeDialog.value = false
 }

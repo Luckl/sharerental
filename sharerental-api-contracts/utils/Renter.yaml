@@ -32,3 +32,11 @@ components:
           type: string
         country:
           type: string
+        renterType:
+          $ref: './RenterType.yaml#/components/schemas/RenterType'
+        companyName:
+          type: string
+        chamberOfCommerce:
+          type: string
+        vatNumber:
+          type: string

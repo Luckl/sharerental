@@ -8,9 +8,9 @@ import nl.sharerental.be.jooq.generated.tables.RentalItem.Companion.RENTAL_ITEM
 import nl.sharerental.be.jooq.generated.tables.records.RentalItemRecord
 import nl.sharerental.be.jooq.generated.tables.references.IMAGE
 import nl.sharerental.be.jooq.generated.tables.references.RENTAL_ITEM_IMAGE
-import nl.sharerental.be.user.RenterType
 import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.FilterOptionOptionsInner
+import nl.sharerental.contract.http.model.RenterType as HttpRenterType
 import nl.sharerental.contract.http.model.SearchRequest
 import nl.sharerental.contract.http.model.SearchResultItem
 import org.jooq.Condition
@@ -144,8 +144,8 @@ class FilterService(
 
         val renterTypeCondition = if (searchRequest?.renterType != null) {
             val renterType = when (searchRequest.renterType) {
-                SearchRequest.RenterTypeEnum.BUSINESS -> RenterTypeEnum.BUSINESS
-                SearchRequest.RenterTypeEnum.PRIVATE -> RenterTypeEnum.PRIVATE
+                HttpRenterType.BUSINESS -> RenterTypeEnum.BUSINESS
+                HttpRenterType.PRIVATE -> RenterTypeEnum.PRIVATE
             }
 
             RENTAL_ITEM.RENT_TO_RENTER_TYPE.eq(renterType).or(RENTAL_ITEM.RENT_TO_RENTER_TYPE.isNull)

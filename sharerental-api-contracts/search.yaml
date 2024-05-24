@@ -85,13 +85,7 @@ components:
         - filters
       properties:
         renterType:
-          type: string
-          format: enum
-          enum:
-              - 'business'
-              - 'private'
-          description: The type of renter
-          example: 'business'
+          $ref: './utils/RenterType.yaml#/components/schemas/RenterType'
         filters:
           type: array
           items:

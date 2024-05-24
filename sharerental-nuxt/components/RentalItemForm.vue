@@ -22,6 +22,11 @@
       <Textarea inputId="fShortDescription" class="mb-1" v-model="props.rentalItem.shortDescription"></Textarea>
     </div>
     <div class="flexbox-column">
+      <label for="fRentToRenterType" class="data-label mb-1">Verhuren aan</label>
+      <Dropdown inputId="fRentToRenterType" v-model="props.rentalItem.rentToRenterType"
+                :options="renterTypes" option-value="value" option-label="name" showClear placeholder="Alle type klanten" class="mb-1"></Dropdown>
+    </div>
+    <div class="flexbox-column">
       <label for="fLongDescription" class="data-label mb-1">Lange omschrijving</label>
       <Textarea inputId="fLongDescription" class="mb-1" v-model="props.rentalItem.longDescription"></Textarea>
     </div>
@@ -30,6 +35,7 @@
       <Checkbox inputId="fDeliveryPossible" :binary="true" class="mb-1"
                 v-model="props.rentalItem.deliveryPossible"></Checkbox>
     </div>
+
     <div class="flexbox-column" v-if="props.rentalItem.deliveryPossible">
       <label for="fDeliveryPrice" class="data-label mb-1">Prijs voor bezorgen</label>
       <InputNumber v-model="props.rentalItem.deliveryPrice" inputId="fDeliveryPrice" mode="currency"
@@ -167,6 +173,11 @@ interface Props {
 
 // Define props and emitters here if needed
 const props = defineProps<Props>()
+const renterTypes = ref([
+  { name: 'Bedrijven', value: 'BUSINESS' },
+  { name: 'Particulieren', value: 'PRIVATE' },
+  { name: 'Alle type klanten', value: null }
+]);
 
 const categories = ref([
   {name: 'Stijgers, trappen en hoogwerkers'},

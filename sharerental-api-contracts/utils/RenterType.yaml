@@ -1,0 +1,10 @@
+components:
+  schemas:
+    RenterType:
+      type: string
+      format: enum
+      enum:
+        - 'BUSINESS'
+        - 'PRIVATE'
+      description: The type of renter
+      example: 'BUSINESS'
