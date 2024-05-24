@@ -1,12 +1,14 @@
 package nl.sharerental.be.search
 
 import nl.sharerental.be.jooq.generated.enums.RentalItemDisplayStatus
+import nl.sharerental.be.jooq.generated.enums.RenterTypeEnum
 import nl.sharerental.be.jooq.generated.tables.Lessor.Companion.LESSOR
 import nl.sharerental.be.jooq.generated.tables.Location.Companion.LOCATION
 import nl.sharerental.be.jooq.generated.tables.RentalItem.Companion.RENTAL_ITEM
 import nl.sharerental.be.jooq.generated.tables.records.RentalItemRecord
 import nl.sharerental.be.jooq.generated.tables.references.IMAGE
 import nl.sharerental.be.jooq.generated.tables.references.RENTAL_ITEM_IMAGE
+import nl.sharerental.be.user.RenterType
 import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.FilterOptionOptionsInner
 import nl.sharerental.contract.http.model.SearchRequest
@@ -140,7 +142,16 @@ class FilterService(
 
     private fun searchRequestToCondition(searchRequest: SearchRequest?): Condition {
 
+        val renterTypeCondition = if (searchRequest?.renterType != null) {
+            val renterType = when (searchRequest.renterType) {
+                SearchRequest.RenterTypeEnum.BUSINESS -> RenterTypeEnum.BUSINESS
+                SearchRequest.RenterTypeEnum.PRIVATE -> RenterTypeEnum.PRIVATE
+            }
 
+            RENTAL_ITEM.RENT_TO_RENTER_TYPE.eq(renterType).or(RENTAL_ITEM.RENT_TO_RENTER_TYPE.isNull)
+        } else {
+            trueCondition()
+        }
 
         val map = searchRequest?.filters
             ?.map { filter ->
@@ -151,7 +162,8 @@ class FilterService(
                 field!!.`in`(values)
             }.orEmpty()
 
-        return if (map.isNotEmpty()) map.reduce { acc, condition -> acc.and(condition) } else trueCondition()
+        return if (map.isNotEmpty()) map.reduce { acc, condition -> acc.and(condition) }
+            .and(renterTypeCondition) else trueCondition().and(renterTypeCondition)
     }
 
     private fun baseFilterAndQuery(query: String?) = RENTAL_ITEM.DISPLAY_STATUS.eq(RentalItemDisplayStatus.ACTIVE)

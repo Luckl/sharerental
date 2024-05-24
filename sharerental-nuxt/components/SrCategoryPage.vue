@@ -11,7 +11,7 @@ import {
   SearchRequestRenterTypeEnum
 } from "~/schemas/openapi/search";
 import type SearchClient from "~/services/api/SearchClient";
-import {useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import {RenterType, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 interface Props {
   category?: string;
@@ -56,7 +56,7 @@ const fetchItems = () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
   $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
     filters: allFilters,
-    renterType: SearchRequestRenterTypeEnum.PRIVATE
+    renterType: renterType.value == RenterType.Private ? SearchRequestRenterTypeEnum.Private : SearchRequestRenterTypeEnum.Business
   }, props.query).then(
       success => {
         state.results = success.embedded

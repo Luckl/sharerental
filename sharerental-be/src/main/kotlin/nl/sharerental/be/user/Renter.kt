@@ -25,6 +25,11 @@ data class Renter(
     @OneToOne(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "entered_by_user", referencedColumnName = "id")
     val createdByUser: User? = null,
+    @Enumerated(EnumType.STRING)
+    val renterType: RenterType = RenterType.PRIVATE,
+    val companyName: String? = null,
+    val chamberOfCommerce: String? = null,
+    val vatNumber: String? = null,
 ) {
     fun toResponse(): HttpRenter {
         val renter = HttpRenter()
@@ -38,4 +43,10 @@ data class Renter(
 
         return renter
     }
+}
+
+//CREATE TYPE RENTER_TYPE_ENUM AS ENUM ('PRIVATE', 'BUSINESS');
+enum class RenterType {
+    PRIVATE,
+    BUSINESS
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import nl.sharerental.be.images.Image
 import nl.sharerental.contract.http.model.Image as HttpImage
 import nl.sharerental.be.lessor.Lessor
+import nl.sharerental.be.user.RenterType
 import java.math.BigDecimal
 import java.net.URI
 
@@ -73,7 +74,10 @@ data class RentalItem(
     var fuelType: FuelType?,
 
     @Enumerated(EnumType.STRING)
-    var displayStatus: DisplayStatus = DisplayStatus.INACTIVE
+    var displayStatus: DisplayStatus = DisplayStatus.INACTIVE,
+
+    @Enumerated(EnumType.STRING)
+    var rentToRenterType: RenterType? = null
 ) {
 
      fun toResponse(): nl.sharerental.contract.http.model.RentalItem {
