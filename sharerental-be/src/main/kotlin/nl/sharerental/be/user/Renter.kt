@@ -40,12 +40,15 @@ data class Renter(
         renter.id = id
         renter.email = email
         renter.location = location?.toResponse()
+        renter.renterType = nl.sharerental.contract.http.model.RenterType.valueOf(renterType.name)
+        renter.chamberOfCommerce = chamberOfCommerce
+        renter.companyName = companyName
+        renter.vatNumber = vatNumber
 
         return renter
     }
 }
 
-//CREATE TYPE RENTER_TYPE_ENUM AS ENUM ('PRIVATE', 'BUSINESS');
 enum class RenterType {
     PRIVATE,
     BUSINESS

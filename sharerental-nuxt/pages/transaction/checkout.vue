@@ -4,6 +4,7 @@ import type {Renter} from "~/schemas/openapi/renter";
 import {useCartStore} from "~/services/stores/cartStore";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 import type TransactionClient from "~/services/api/TransactionClient";
+import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 const srRenterInformationForm = ref<typeof SrRenterInformationForm | null>(null)
 const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
@@ -14,17 +15,30 @@ const {rentalItem, endDate, startDate, price, amount} = storeToRefs(cartStore)
 
 const renter = ref<Renter | undefined>()
 
-const imageUrl = ref<string>(
-    rentalItem.value?.images?.[0].url ?? '/SR_s_green_white.png'
-)
+
+function determineImageUrl() {
+  if (rentalItem.value?.images?.[0]?.url === undefined) {
+    return '/SR_s_green_white.png'
+  } else {
+    return rentalItem.value?.images?.[0]?.url
+  }
+}
 
 const formatter = new Intl.NumberFormat('nl-NL', {
   style: 'currency',
   currency: 'EUR',
 })
 
-function formatCurrency(value: number) {
-  return formatter.format(value)
+const { renterType } = storeToRefs(useRenterTypeStore())
+
+function formatCurrency(value: number | undefined) {
+  if (value !== undefined && value !== null) {
+    if (renterType.value === RenterTypeEnum.Business) {
+      return formatter.format(value)
+    } else {
+      return formatter.format(value * 1.21)
+    }
+  } else return "Niet bekend"
 }
 
 const startTransaction = () => {
@@ -60,6 +74,10 @@ const createRenterInputObject = () => {
       postalCode: renter.value?.location.postalCode,
       city: renter.value?.location.city,
       country: renter.value?.location.country,
+      renterType: renter.value?.renterType,
+      chamberOfCommerce: renter.value?.chamberOfCommerce,
+      vatNumber: renter.value?.vatNumber,
+      companyName: renter.value?.companyName
     }
   } else {
     return undefined
@@ -77,7 +95,7 @@ const createRenterInputObject = () => {
       <div class="flex flex-col">
         <div class="flex gap-2">
           <div class="w-2/5">
-            <NuxtImg class="rounded-lg" fit="contain" loading="lazy" :src="imageUrl"></NuxtImg>
+            <NuxtImg class="rounded-lg" fit="contain" loading="lazy" :src="determineImageUrl()"></NuxtImg>
           </div>
           <div class="w-3/5 px-8 flex flex-col justify-between my-2">
             <div class="flex flex-col">

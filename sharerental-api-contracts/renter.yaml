@@ -22,6 +22,7 @@ components:
       type: object
       required:
         - id
+        - RenterType
         - firstName
         - lastName
         - phoneNumber
@@ -31,6 +32,8 @@ components:
         id:
           type: integer
           format: int64
+        RenterType:
+          $ref: './utils/RenterType.yaml#/components/schemas/RenterType'
         firstName:
           type: string
         lastName:
@@ -41,3 +44,9 @@ components:
           type: string
         location:
           $ref: './utils/Location.yaml#/components/schemas/Location'
+        chamberOfCommerce:
+          type: string
+        vatNumber:
+          type: string
+        companyName:
+          type: string

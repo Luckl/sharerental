@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 
 export enum RenterTypeEnum {
     Private = "PRIVATE",
-    Business = "PRIVATE"
+    Business = "BUSINESS"
 }
 
 export type RenterTypeState = {

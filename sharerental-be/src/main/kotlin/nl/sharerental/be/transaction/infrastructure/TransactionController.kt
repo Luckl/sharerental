@@ -10,6 +10,7 @@ import nl.sharerental.be.transaction.TransactionStatusEnum
 import nl.sharerental.be.transaction.infrastructure.repository.TransactionRepository
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.be.user.Renter
+import nl.sharerental.be.user.RenterType
 import nl.sharerental.be.user.User
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
@@ -147,5 +148,9 @@ private fun RenterInput.toRenter(user: User?): Renter = Renter(
         addressLine3 = addressLine3,
         geoLocation = null
     ),
+    renterType = RenterType.valueOf(renterType.value),
+    chamberOfCommerce = chamberOfCommerce,
+    vatNumber = vatNumber,
+    companyName = companyName,
     createdByUser = user
 )
