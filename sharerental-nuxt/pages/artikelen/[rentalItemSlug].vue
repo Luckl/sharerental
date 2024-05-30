@@ -8,6 +8,7 @@ import {useToast} from "primevue/usetoast";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
 import {useCartStore} from "~/services/stores/cartStore";
+import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 const $searchClient: SearchClient = useNuxtApp().$searchClient;
 const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
@@ -27,6 +28,7 @@ const dates = ref([]);
 const images = ref<Image[]>([]);
 const showNotPossibleModal = ref(false);
 const cartStore = useCartStore();
+const { renterType } = storeToRefs(useRenterTypeStore())
 
 onMounted(() => {
   fetchItem()
@@ -113,6 +115,21 @@ async function fetchItem() {
     images.value = success.images
   }
 }
+
+const formatter = new Intl.NumberFormat('nl-NL', {
+  style: 'currency',
+  currency: 'EUR',
+})
+
+function formatCurrency(value: number | undefined) {
+  if (value !== undefined && value !== null) {
+    if (renterType.value === RenterTypeEnum.Business) {
+      return formatter.format(value)
+    } else {
+      return formatter.format(value * 1.21)
+    }
+  } else return "Niet bekend"
+}
 </script>
 <template>
   <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
@@ -132,11 +149,11 @@ async function fetchItem() {
         <div class="flex gap-16 align-middle">
           <div class="flex flex-col items-center">
             <span class="font-bold">Per dag</span>
-            <span class="font-extrabold text-3xl">€ {{ item.price24h }}</span>
+            <span class="font-extrabold text-3xl">{{ formatCurrency(item.price24h) }}</span>
           </div>
           <div class="flex flex-col items-center" v-if="item.price168h">
             <span class="font-bold">Per week</span>
-            <span class="font-extrabold text-3xl">€ {{ item.price168h }}</span>
+            <span class="font-extrabold text-3xl">{{ formatCurrency(item.price168h) }}</span>
           </div>
         </div>
         <divider></divider>
@@ -173,7 +190,7 @@ async function fetchItem() {
         <div class="flex gap-4 items-center">
           <div class="flex flex-col">
             <span class="font-bold text-green-900">Jouw prijs</span>
-            <span class="font-bold text-green-900 text-3xl">€ {{ price }}</span>
+            <span class="font-bold text-green-900 text-3xl">{{ formatCurrency(price) }}</span>
           </div>
           <div>
             <Button label="Direct reserveren" :disabled="amount < 1" @click="showRenterInfo()"></Button>

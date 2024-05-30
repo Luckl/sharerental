@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import type { SearchResultItem } from "~/schemas/openapi/search";
+import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
 definePageMeta({
   layout: 'new'
@@ -28,6 +29,8 @@ definePageMeta({
 interface Props {
   item: SearchResultItem;
 }
+
+const { renterType } = storeToRefs(useRenterTypeStore())
 
 const props = defineProps<Props>()
 const formatter = new Intl.NumberFormat('nl-NL', {
@@ -45,7 +48,11 @@ function determineImageUrl() {
 
 function formatCurrency(value: number) {
   if (value !== undefined && value !== null) {
-    return formatter.format(value)
+    if (renterType.value === RenterTypeEnum.Business) {
+      return formatter.format(value)
+    } else {
+      return formatter.format(value * 1.21)
+    }
   } else return "Niet bekend"
 }
 </script>
