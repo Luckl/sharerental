@@ -30,6 +30,13 @@
       <label for="fLongDescription" class="data-label mb-1">Lange omschrijving</label>
       <Textarea inputId="fLongDescription" class="mb-1" v-model="props.rentalItem.longDescription"></Textarea>
     </div>
+
+    <div class="flexbox-column">
+      <label for="fAutomaticallyAcceptTransaction" class="data-label mb-1">Transacties voor dit artikel automatisch accepteren</label>
+      <Checkbox inputId="fDeliveryPossible" binary class="mb-1"
+                v-model="props.rentalItem.automaticallyAcceptTransaction"></Checkbox>
+    </div>
+
     <div class="flexbox-column">
       <label for="fDeliveryPossible" class="data-label mb-1">Bezorgen mogelijk</label>
       <Checkbox inputId="fDeliveryPossible" :binary="true" class="mb-1"

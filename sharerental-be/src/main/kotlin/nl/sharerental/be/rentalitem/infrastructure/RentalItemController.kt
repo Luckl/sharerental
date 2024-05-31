@@ -60,6 +60,7 @@ class RentalItemController(
             price24h = rentalItemInput.price24h?.toBigDecimal()!!
             price48h = rentalItemInput.price48h?.toBigDecimal()
             price168h = rentalItemInput.price168h?.toBigDecimal()
+            automaticallyAcceptTransaction = rentalItemInput.automaticallyAcceptTransaction
             deliveryPossible = rentalItemInput.deliveryPossible
             deliveryPrice = rentalItemInput.deliveryPrice?.toBigDecimal()
             category = rentalItemInput.category
@@ -109,6 +110,7 @@ class RentalItemController(
             price24h = rentalItemInput.price24h?.toBigDecimal()!!,
             price48h = rentalItemInput.price48h?.toBigDecimal(),
             price168h = rentalItemInput.price168h?.toBigDecimal(),
+            automaticallyAcceptTransaction = rentalItemInput.automaticallyAcceptTransaction,
             deliveryPossible = rentalItemInput.deliveryPossible,
             deliveryPrice = rentalItemInput.deliveryPrice?.toBigDecimal(),
             category = rentalItemInput.category,

@@ -128,8 +128,19 @@ class TransactionService(
         }
 
         if (molliePaymentStatus == PaymentStatus.PAID) {
-            oneSignalEmailSender.sendItemRentedEmailToLessor(transaction)
-            oneSignalEmailSender.sendItemRentedEmailToRenter(transaction)
+            oneSignalEmailSender.sendTransactionSuccessfulEmailToRenter(transaction)
+
+            processTransactionForLessor(transaction)
+        }
+    }
+
+    fun processTransactionForLessor(transaction: Transaction) {
+        oneSignalEmailSender.sendItemRentedEmailToLessor(transaction)
+        if (transaction.rentalItem.automaticallyAcceptTransaction) {
+            transaction.currentStatus = TransactionStatus(
+                status = TransactionStatusEnum.ACCEPTED,
+                transaction = transaction
+            )
         }
     }
 

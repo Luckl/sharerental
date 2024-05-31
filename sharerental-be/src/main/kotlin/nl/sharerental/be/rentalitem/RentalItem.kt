@@ -44,6 +44,7 @@ data class RentalItem(
     @Column(name = "price_168h")
     var price168h: BigDecimal?,
 
+    var automaticallyAcceptTransaction: Boolean,
     var deliveryPossible: Boolean?,
     var deliveryPrice: BigDecimal?,
     var category: String?,
@@ -94,6 +95,7 @@ data class RentalItem(
                 price24h = item.price24h.toDouble()
                 price48h = item.price48h?.toDouble()
                 price168h = item.price168h?.toDouble()
+                automaticallyAcceptTransaction = item.automaticallyAcceptTransaction
                 deliveryPossible = item.deliveryPossible
                 deliveryPrice = item.deliveryPrice?.toDouble()
                 category = item.category

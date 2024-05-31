@@ -42,6 +42,8 @@ components:
         price_168h:
           type: number
           format: double
+        automaticallyAcceptTransaction:
+          type: boolean
         deliveryPossible:
           type: boolean
         deliveryPrice:
@@ -136,6 +138,8 @@ components:
         price_168h:
           type: number
           format: double
+        automaticallyAcceptTransaction:
+          type: boolean
         deliveryPossible:
           type: boolean
         deliveryPrice:

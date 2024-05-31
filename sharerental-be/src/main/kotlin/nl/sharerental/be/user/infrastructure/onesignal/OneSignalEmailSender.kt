@@ -61,7 +61,7 @@ class OneSignalEmailSender(
         sendEmail(body)
     }
 
-    fun sendItemRentedEmailToRenter(transaction: Transaction) {
+    fun sendTransactionSuccessfulEmailToRenter(transaction: Transaction) {
         logger.info("Sending item rented email to renter ${transaction.renter.id}")
         val userEmail = transaction.renter.email
 

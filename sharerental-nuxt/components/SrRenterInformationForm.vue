@@ -182,8 +182,10 @@ function getRenter() {
   $renterClient.getRenter().then(
       success => {
 
+        renterTypeStore.renterType.value = success.renterType === RenterType.Business ? RenterTypeEnum.Business : RenterTypeEnum.Private
+
         existingRenterId.value = success.id
-        renterType.value = success.renterType === RenterTypeEnum.Business ? RenterType.Business : RenterType.Private
+        renterType.value = success.renterType
         email.value = success.email
         firstName.value = success.firstName
         lastName.value = success.lastName
