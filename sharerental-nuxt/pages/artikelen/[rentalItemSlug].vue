@@ -38,6 +38,25 @@ onMounted(() => {
       })
 })
 
+const createOffersForProduct= () => {
+  let offers = [
+    { price: item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D" }
+  ];
+
+  if (item.value.price168h) {
+    offers.push({ price: item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D" })
+  }
+
+  return offers
+}
+
+defineProduct({
+  name: item.value.name,
+  offers: createOffersForProduct(),
+  image: images.value[0]?.url,
+  description: item.value.shortDescription,
+})
+
 watch(amount, () => {
   calculatePrice()
 })

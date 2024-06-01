@@ -140,12 +140,12 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
           </div>
           <div class="flex justify-center">
             <div v-if="categoriesCollapsed">
-              <Button unstyled @click="categoriesCollapsed = !categoriesCollapsed">
+              <Button unstyled aria-label="expand menu" @click="categoriesCollapsed = !categoriesCollapsed">
                 <i class="pi pi-chevron-down"></i>
               </Button>
             </div>
             <div v-else>
-              <Button unstyled @click="categoriesCollapsed = !categoriesCollapsed">
+              <Button unstyled aria-label="collapse menu" @click="categoriesCollapsed = !categoriesCollapsed">
                 <i class="pi pi-chevron-up"></i>
               </Button>
             </div>

@@ -51,7 +51,7 @@
             <i class="pi pi-user" style="font-size: 1.5rem">
             </i>
           </NuxtLink>
-          <Button unstyled @click="menuOpened = !menuOpened">
+          <Button unstyled name="menu" @click="menuOpened = !menuOpened">
             <i class="pi pi-bars" style="font-size: 2rem">
             </i>
           </Button>
