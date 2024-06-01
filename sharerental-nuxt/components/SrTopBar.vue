@@ -22,10 +22,8 @@
                     to="/#hoe_het_werkt">Hoe
             het werkt
           </NuxtLink>
-          <button>
-            <a v-if="loaded && availableLessors?.length < 1" class="text-center mr-4 font-semibold"
-               @click="showContactDialog()">Contact
-            </a>
+          <button v-if="loaded && availableLessors?.length < 1" @click="showContactDialog()">
+            <span class="text-center mr-4 font-semibold">Contact</span>
           </button>
           <NuxtLink v-if="user && loaded && availableLessors?.length > 0" class="text-center mr-4 font-semibold"
                     to="/lessor/items">Artikelen
