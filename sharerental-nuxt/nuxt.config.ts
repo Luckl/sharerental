@@ -7,7 +7,7 @@ export default defineNuxtConfig({
         inject: true
     },
     site: {
-        url: 'https://sharerental.nl',
+        url: 'https://www.sharerental.nl',
         name: 'ShareRental',
         description: 'Gereedschap huren en verhuren',
         defaultLocale: 'nl', // not needed if you have @nuxtjs/i18n installed
