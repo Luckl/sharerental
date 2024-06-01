@@ -30,7 +30,7 @@ onBeforeUnmount(() => {
 
 const categoryBackground = (image: string) => {
   return computed(() => {
-    const imgUrl = img(image)
+    const imgUrl = img(image, {width: 400, height: 400})
     return {backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(102, 102, 102, 1)), url('${imgUrl}')`}
   })
 }
@@ -60,7 +60,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <SrSearch></SrSearch>
           </div>
           <div class="w-1/2 hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
         </div>
       </div>
@@ -194,7 +194,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       <div class="md:max-w-[1240px] md:mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
           <div class="hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
           <div>
             <h3 class="font-bold">Registreer nu!</h3>

@@ -1,7 +1,7 @@
 <template>
   <div class="p-2 bg-white rounded-lg hover:bg-gray-300">
     <div class="flex align-center p-2 w-60 h-60">
-      <NuxtImg class="rounded-lg" fit="contain" loading="lazy" :src="determineImageUrl()"/>
+      <NuxtImg class="rounded-lg" fit="contain" loading="lazy" sizes="224px" :src="determineImageUrl()"/>
     </div>
     <div class="my-2">
       <span class="font-bold text-lg">{{ item.title }}</span>

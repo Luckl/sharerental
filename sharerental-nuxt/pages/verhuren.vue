@@ -41,7 +41,7 @@ definePageMeta({
             </NuxtLink>
           </div>
           <div class="w-1/2 hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" alt="rental"/>
+            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
         </div>
       </div>
@@ -57,11 +57,11 @@ definePageMeta({
             <span class="mt-2">Maak een account aan via de registratie pagina</span>
           </div>
           <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-            <NuxtImg src="1.png" height="200" alt="rental"/>
+            <NuxtImg src="1.png" sizes="200px" alt="rental"/>
           </div>
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <NuxtImg src="2.png" height="200" alt="rental"/>
+              <NuxtImg src="2.png" sizes="200px" alt="rental"/>
             </div>
           </div>
           <div>
@@ -79,7 +79,7 @@ definePageMeta({
 
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <NuxtImg src="3.png" height="200" alt="rental"/>
+              <NuxtImg src="3.png" sizes="200px" alt="rental"/>
             </div>
           </div>
         </div>
