@@ -47,6 +47,9 @@ export default defineNuxtConfig({
             proxy: { to: "http://localhost:8080/backend/**", },
         }
     },
+    sitemap: {
+        sources: ['/backend/rentalItemPages']
+    },
     css: [
         '~/assets/css/reset.css',
         '~/assets/css/main.css',
