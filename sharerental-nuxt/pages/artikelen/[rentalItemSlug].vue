@@ -3,9 +3,7 @@ import {useRoute} from "#app";
 import type {Image, RentalItem} from "~/schemas/openapi/rentalItem";
 import SearchClient from "~/services/api/SearchClient";
 import TransactionClient from "~/services/api/TransactionClient";
-import type {Renter} from "~/schemas/openapi/renter";
 import {useToast} from "primevue/usetoast";
-import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
 import {useCartStore} from "~/services/stores/cartStore";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
@@ -35,29 +33,30 @@ onMounted(() => {
       .then(() => {
         calculatePrice()
         getAvailableItemsAmount()
+        useSchemaOrg([
+          defineProduct({
+            name: item.value.name,
+            offers: createOffersForProduct(),
+            image: images.value[0]?.url,
+            description: item.value.shortDescription
+          })
+        ])
       })
 })
 
 const createOffersForProduct= () => {
   let offers = [
-    { price: item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D" }
+    { price: "" + item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D" }
   ];
 
   if (item.value.price168h) {
-    offers.push({ price: item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D" })
+    offers.push({ price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D" })
   }
 
   return offers
 }
 
-useSchemaOrg([
-  defineProduct({
-    name: item.value.name,
-    offers: createOffersForProduct(),
-    image: images.value[0]?.url,
-    description: item.value.shortDescription,
-  })
-])
+
 
 watch(amount, () => {
   calculatePrice()
