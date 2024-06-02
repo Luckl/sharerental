@@ -50,12 +50,14 @@ const createOffersForProduct= () => {
   return offers
 }
 
-defineProduct({
-  name: item.value.name,
-  offers: createOffersForProduct(),
-  image: images.value[0]?.url,
-  description: item.value.shortDescription,
-})
+useSchemaOrg([
+  defineProduct({
+    name: item.value.name,
+    offers: createOffersForProduct(),
+    image: images.value[0]?.url,
+    description: item.value.shortDescription,
+  })
+])
 
 watch(amount, () => {
   calculatePrice()
