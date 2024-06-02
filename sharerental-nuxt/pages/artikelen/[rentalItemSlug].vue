@@ -26,41 +26,37 @@ const dates = ref([]);
 const images = ref<Image[]>([]);
 const showNotPossibleModal = ref(false);
 const cartStore = useCartStore();
-const {renterType} = storeToRefs(useRenterTypeStore())
+const { renterType } = storeToRefs(useRenterTypeStore())
 
-await useAsyncData(slug, () => $searchClient.details(slug))
-    .then((response) => {
-      item.value = response.data.value!
-      if (item.value.images != undefined) {
-        images.value = item.value.images
-      } else {
-        images.value = [
-          {
-            id: 0,
-            url: '/SR_s_green_white.png'
-          }
-        ]
-      }
+onMounted(() => {
+  fetchItem()
+      .then(() => {
+        calculatePrice()
+        getAvailableItemsAmount()
+        useSchemaOrg([
+          defineProduct({
+            name: item.value.name,
+            offers: createOffersForProduct(),
+            image: images.value[0]?.url,
+            description: item.value.shortDescription
+          })
+        ])
+      })
+})
 
-      calculatePrice()
-      getAvailableItemsAmount()
+const createOffersForProduct= () => {
+  let offers = [
+    { price: "" + item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D" }
+  ];
 
-      let offers = [
-        {price: "" + item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D"}
-      ];
+  if (item.value.price168h) {
+    offers.push({ price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D" })
+  }
 
-      if (item.value.price168h) {
-        offers.push({price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D"})
-      }
-      useSchemaOrg([
-        defineProduct({
-          name: item.value.name,
-          offers: offers,
-          image: images.value[0]?.url,
-          description: item.value.shortDescription
-        })
-      ])
-    })
+  return offers
+}
+
+
 
 watch(amount, () => {
   calculatePrice()
@@ -130,6 +126,14 @@ function getAvailableItemsAmount() {
         showError(failure.message);
       }
   )
+}
+
+async function fetchItem() {
+  let success = await $searchClient.details(slug);
+  item.value = success
+  if (success.images != undefined) {
+    images.value = success.images
+  }
 }
 
 const formatter = new Intl.NumberFormat('nl-NL', {
