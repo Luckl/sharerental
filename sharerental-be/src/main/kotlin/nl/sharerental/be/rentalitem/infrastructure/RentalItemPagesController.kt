@@ -22,5 +22,4 @@ class RentalItemPagesController(
 
 data class RentalItemPage(
     val loc: String,
-    val __sitemap: String = "rental-items"
 )
