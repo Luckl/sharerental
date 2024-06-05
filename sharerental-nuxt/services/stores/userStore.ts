@@ -15,10 +15,12 @@ export const useUserStore = defineStore({
         async refreshUser(): Promise<void> {
             this.user = await getCurrentUser();
 
-            if (this.user?.uid) {
-                setUserId(getAnalytics(), this.user?.uid)
-            } else {
-                setUserId(getAnalytics(), null)
+            if (typeof window !== 'undefined') {
+                if (this.user?.uid) {
+                    setUserId(getAnalytics(), this.user?.uid)
+                } else {
+                    setUserId(getAnalytics(), null)
+                }
             }
         },
     },

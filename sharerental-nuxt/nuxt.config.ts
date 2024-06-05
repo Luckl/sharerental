@@ -48,7 +48,6 @@ export default defineNuxtConfig({
         }
     },
     // https://medium.com/@csipkay/how-to-generate-a-sitemap-with-dynamic-routes-in-nuxt-js-3-and-sanity-cms-7e4198a17562
-    // TODO: build a dynamic sitemap based on available products
     routeRules: {
         // Don't add any /lessor/** URLs to the sitemap.xml since you need to be logged in for those
         '/lessor/**': { robots: false },
