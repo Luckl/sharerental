@@ -8,6 +8,5 @@
 <script setup lang="ts">
 
 const route = useRoute()
-const router = useRouter()
 const transaction = ref(route.query.transaction ? route.query.transaction : '')
 </script>

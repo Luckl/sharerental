@@ -3,11 +3,10 @@
 import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterStore";
 import {reactive, ref} from "vue";
 import {
-  type FilterOption, RenterType,
+  type FilterOption, RenterType, SearchApi,
   type SearchRequestFiltersInner,
   type SearchResultItem
 } from "~/schemas/openapi/search";
-import type SearchClient from "~/services/api/SearchClient";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 interface Props {
   category?: string;
@@ -33,7 +32,7 @@ const categoryFilter = ref<SearchRequestFiltersInner[]>([
 
 const availableFilters = ref<FilterOption[]>([])
 
-const $searchClient: SearchClient = useNuxtApp().$searchClient;
+const $searchApi: SearchApi = useNuxtApp().$searchApi;
 
 const state = reactive({
   results: undefined as SearchResultItem[] | undefined,
@@ -50,10 +49,16 @@ onMounted(() => {
 
 const fetchItems = () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
-  $searchClient.search(state.pageable.page, state.pageable.pageSize, state.pageable.sort, {
-    filters: allFilters,
-    renterType: renterType.value == RenterTypeEnum.Private ? RenterType.Private : RenterType.Business,
-  }, props.query).then(
+  $searchApi.search({
+    query: props.query ?? "",
+    page: state.pageable.page,
+    size: state.pageable.pageSize,
+    sort: state.pageable.sort,
+    searchRequest: {
+      filters: allFilters,
+      renterType: renterType.value == RenterTypeEnum.Private ? RenterType.Private : RenterType.Business,
+    }
+  }).then(
       success => {
         state.results = success.embedded
         let allAvailableFilters = success.filterOptions || [];

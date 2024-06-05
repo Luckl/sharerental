@@ -125,16 +125,13 @@
 <script setup lang="ts">
 import {useUserStore} from "~/services/stores/userStore";
 import {reactive, ref} from "vue";
-import {useNuxtApp} from "#app";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useFirebaseAuth} from "vuefire";
-import type ContactFormClient from "~/services/api/ContactFormClient";
 import {useLessorStore} from "~/services/stores/lessorStore";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 import {useDialog} from "primevue/usedialog";
 import {SrContactDialog} from "#components";
 
-const router = useRouter();
 const userStore = useUserStore();
 const {user} = storeToRefs(userStore);
 const lessorStore = useLessorStore();

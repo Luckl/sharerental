@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia'
 import type {Lessor} from "~/schemas/openapi/lessor";
 import {useNuxtApp} from "#app";
-import type LessorClient from "~/services/api/LessorClient";
 
 export type LessorState = {
     activeLessor: Lessor | null;
@@ -22,9 +21,13 @@ export const useLessorStore = defineStore({
     },
     actions: {
         async loadLessors(): Promise<void> {
-            const $lessorClient = useNuxtApp().$lessorClient;
+            const $lessorApi = useNuxtApp().$lessorApi;
 
-            this.availableLessors = await $lessorClient.findAll(0, 20, [])
+            this.availableLessors = await $lessorApi.getLessor({
+                page: 0,
+                size: 20,
+                sort: [],
+            })
                 .then((result) => {
                     return result.embedded;
                 }, (error) => {

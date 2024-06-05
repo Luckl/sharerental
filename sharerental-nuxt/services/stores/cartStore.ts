@@ -18,8 +18,8 @@ export const useCartStore = defineStore('cartStore', {
         price: null
     }),
     actions: {
-        async setCart(rentalItem: RentalItem, amount: number, endDate: Date, startDate: Date, price: number ): Promise<void> {
-            this.rentalItem = rentalItem;
+        async setCart(rentalItem: RentalItem | null, amount: number, endDate: Date, startDate: Date, price: number ): Promise<void> {
+            this.rentalItem = rentalItem ?? null;
             this.amount = amount;
             this.endDate = endDate;
             this.startDate = startDate;

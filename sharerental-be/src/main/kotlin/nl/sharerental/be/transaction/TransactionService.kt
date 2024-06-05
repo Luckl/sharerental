@@ -9,6 +9,7 @@ import nl.sharerental.be.transaction.infrastructure.repository.TransactionReposi
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.be.user.Renter
+import nl.sharerental.be.user.RenterType
 import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
 import nl.sharerental.contract.http.model.TransactionCalculationInput
 import org.slf4j.Logger

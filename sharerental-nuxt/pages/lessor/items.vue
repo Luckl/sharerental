@@ -41,9 +41,8 @@
   </ClientOnly>
 </template>
 <script lang="ts" setup>
-import {DisplayStatus} from "~/schemas/openapi/rentalItem";
+import {DisplayStatus, RentalItemApi} from "~/schemas/openapi/rentalItem";
 import type {GetRentalItemsResult, RentalItem} from "~/schemas/openapi/rentalItem";
-import RentalItemClient from "~/services/api/RentalItemClient";
 
 const error = ref<String | undefined>(undefined)
 const router = useRouter()
@@ -53,7 +52,7 @@ const pageSize = ref(5)
 const totalElements = ref(0)
 const rentalItems = ref<RentalItem[]>([])
 const rentalItemResult = ref<GetRentalItemsResult>()
-const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
+const $rentalItemApi: RentalItemApi = useNuxtApp().$rentalItemApi;
 
 onMounted(() => {
   fetchRentalItems();
@@ -79,21 +78,35 @@ function goToAddImages(id: number) {
 }
 
 function toggleVisibility(data: RentalItem) {
-  console.log(data)
   if (data.displayStatus === "ACTIVE") {
     data.displayStatus = "INACTIVE"
   } else if (data.displayStatus === "INACTIVE") {
     data.displayStatus = "ACTIVE"
   }
 
-  $rentalItemClient.update(data, data.id)
+  $rentalItemApi.updateRentalItem({
+    id: data.id,
+    rentalItemInput: {
+      displayStatus: data.displayStatus,
+      ...data
+    }
+
+  })
       .then(success => {
+        fetchRentalItems()
+      }, failure => {
+        error.value = "Er is iets fout gegaan"
         fetchRentalItems()
       })
 }
 
 function fetchRentalItems() {
-  $rentalItemClient.findAll(page.value, pageSize.value, [], filter.value)
+  $rentalItemApi.getRentalItems({
+    page: page.value,
+    size: pageSize.value,
+    sort: [],
+    filter: filter.value
+  })
       .then(
           success => {
             rentalItemResult.value = success

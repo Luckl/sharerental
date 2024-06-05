@@ -4,18 +4,22 @@ import type {
     ResponseContext,
 } from '~~/schemas/openapi/transaction';
 import {getCurrentUser} from "vuefire";
+import {isClient} from "@vueuse/shared";
 
 export class ApiMiddleware implements Middleware {
     public async pre(context: ResponseContext): Promise<FetchParams | void> {
 
         const accessToken = await this.acquireToken();
-        let xsrfToken = useCookie("XSRF-TOKEN").value;
         let headers = new Headers({
             ...context.init.headers
         });
-        if (xsrfToken != null) {
-            headers.append("X-XSRF-TOKEN", xsrfToken);
+        if (isClient) {
+            let xsrfToken = useCookie("XSRF-TOKEN").value;
+            if (xsrfToken != null) {
+                headers.append("X-XSRF-TOKEN", xsrfToken);
+            }
         }
+
         if (accessToken != null) {
             headers.append("Authorization", "Bearer " + accessToken);
         }

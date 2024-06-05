@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import type ContactFormClient from "~/services/api/ContactFormClient";
-import {useUserStore} from "~/services/stores/userStore";
-import {reactive, ref} from "vue";
-import {useCategoryStore} from "~/services/stores/categoryStore";
-import {SrContactDialog} from "#components";
-import {useDialog} from "primevue/usedialog";
+import { ref} from "vue";
 
 definePageMeta({
   description: 'Gereedschap en machines huren en verhuren',

@@ -33,17 +33,20 @@
 
 <script setup lang="ts">
 import {useRoute, useRuntimeConfig} from "#app";
-import RentalItemClient from "~/services/api/RentalItemClient";
-import RentalItemImageClient from "~/services/api/RentalItemImageClient";
-import type {Image as HttpImage, RentalItem} from "~/schemas/openapi/rentalItem";
+import {
+  type Image as HttpImage,
+  type RentalItem,
+  RentalItemApi,
+  RentalItemImageApi
+} from "~/schemas/openapi/rentalItem";
 
 const route = useRoute();
 let itemIdString = Array.isArray(route.params.rentalItem) ? route.params.rentalItem[0] : route.params.rentalItem;
 
 const itemId = Number.parseInt(itemIdString);
 const error = ref<String | undefined>(undefined)
-const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
-const $rentalItemImageClient: RentalItemImageClient = useNuxtApp().$rentalItemImageClient;
+const $rentalItemApi: RentalItemApi = useNuxtApp().$rentalItemApi;
+const $rentalItemImageApi: RentalItemImageApi = useNuxtApp().$rentalItemImageApi;
 const rentalItem = ref<RentalItem>({
   id: 0,
   name: ""
@@ -65,7 +68,10 @@ const customUploader = async (event) => {
     blobs.push(blob)
   }
 
-  $rentalItemImageClient.upload(itemId, blobs)
+  $rentalItemImageApi.uploadRentalItemImage({
+    id: itemId,
+    files: blobs
+  })
       .then(success => {
             fetchImagesForItem()
           },
@@ -79,7 +85,10 @@ const customUploader = async (event) => {
 };
 
 function removeImage(id: number) {
-  $rentalItemImageClient.delete(itemId, id)
+  $rentalItemImageApi.deleteRentalItemImage({
+    imageId: id,
+    id: itemId
+  })
       .then(
           success => {
             fetchImagesForItem()
@@ -91,7 +100,9 @@ function removeImage(id: number) {
 }
 
 function fetchImagesForItem() {
-  $rentalItemImageClient.get(itemId)
+  $rentalItemImageApi.getRentalItemImages({
+    id: itemId
+  })
       .then(
           success => {
             if (success.embedded !== undefined) {
@@ -100,13 +111,14 @@ function fetchImagesForItem() {
           },
           failure => {
             error.value = "Afbeeldingen ophalen mislukt"
-            console.log(failure)
           }
       )
 }
 
 function fetchItemInformation() {
-  $rentalItemClient.get(itemId)
+  $rentalItemApi.getRentalItem({
+    id: itemId
+  })
       .then(
           success => {
             success.name
@@ -114,7 +126,6 @@ function fetchItemInformation() {
           },
           failure => {
             error.value = "Er is iets mis gegaan"
-            console.log(failure)
           }
       )
 }

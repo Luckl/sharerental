@@ -132,11 +132,11 @@
 </template>
 <script setup lang="ts">
 
-import LessorClient, {type Lessor} from "~/services/api/LessorClient";
 import {useUserStore} from "~/services/stores/userStore";
 import {signOut as signOutFirebase} from "@firebase/auth";
 import {useLessorStore} from "~/services/stores/lessorStore";
 import {storeToRefs} from "pinia";
+import {LessorApi} from "~/schemas/openapi/lessor";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
@@ -160,7 +160,7 @@ const formInput = reactive({
   phoneNumber: ""
 })
 
-const $lessorClient: LessorClient = useNuxtApp().$lessorClient;
+const $lessorApi: LessorApi = useNuxtApp().$lessorApi;
 
 async function signOut() {
   await signOutFirebase(auth)
@@ -178,13 +178,15 @@ onMounted(() => {
   lessorStore.loadLessors()
       .then(() => {
         loaded.value = true
-        console.log(availableLessors.value)
       })
 
 })
 
 function onSubmitNewLessor() {
-  $lessorClient.create(formInput)
+  $lessorApi.createLessor({
+    lessorInput: formInput
+  })
+
       .then(success => {
             message.value = "Succesvol aangemaakt"
             lessorStore.loadLessors()

@@ -3,11 +3,11 @@
 import type {Renter} from "~/schemas/openapi/renter";
 import {useCartStore} from "~/services/stores/cartStore";
 import SrRenterInformationForm from "~/components/SrRenterInformationForm.vue";
-import type TransactionClient from "~/services/api/TransactionClient";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import {TransactionApi} from "~/schemas/openapi/transaction";
 
 const srRenterInformationForm = ref<typeof SrRenterInformationForm | null>(null)
-const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
+const $transactionApi: TransactionApi = useNuxtApp().$transactionApi;
 
 const cartStore = useCartStore()
 
@@ -29,7 +29,7 @@ const formatter = new Intl.NumberFormat('nl-NL', {
   currency: 'EUR',
 })
 
-const { renterType } = storeToRefs(useRenterTypeStore())
+const {renterType} = storeToRefs(useRenterTypeStore())
 
 function formatCurrency(value: number | undefined) {
   if (value !== undefined && value !== null) {
@@ -44,12 +44,15 @@ function formatCurrency(value: number | undefined) {
 const startTransaction = () => {
   if (rentalItem.value?.id) {
     srRenterInformationForm.value?.createUserIfSelected()
-    $transactionClient.startTransaction(
-        rentalItem.value?.id ?? 0,
-        startDate.value as Date,
-        endDate.value as Date,
-        amount.value ?? 1,
-        createRenterInputObject()
+    $transactionApi.startTransaction({
+          createTransactionRequest: {
+            rentalItemId: rentalItem.value?.id ?? 0,
+            startDate: startDate.value as Date,
+            endDate: endDate.value as Date,
+            amount: amount.value ?? 1,
+            renter: createRenterInputObject()
+          }
+        }
     ).then(
         success => {
           navigateTo(success.redirectUrl, {external: true})
@@ -62,9 +65,24 @@ const startTransaction = () => {
 }
 
 const createRenterInputObject = () => {
-  console.log(renter.value?.id)
   if (renter.value?.id == 0) {
-    return {
+    if (renter.value?.renterType === RenterTypeEnum.Business) {
+      return {
+        firstName: renter.value?.firstName ?? "",
+        lastName: renter.value?.lastName ?? "",
+        email: renter.value?.email ?? "",
+        phoneNumber: renter.value?.phoneNumber ?? "",
+        street: renter.value?.location.street,
+        houseNumber: renter.value?.location.houseNumber,
+        postalCode: renter.value?.location.postalCode,
+        city: renter.value?.location.city,
+        country: renter.value?.location.country,
+        renterType: renter.value?.renterType,
+        chamberOfCommerce: renter.value?.chamberOfCommerce,
+        vatNumber: renter.value?.vatNumber,
+        companyName: renter.value?.companyName
+      };
+    } else return {
       firstName: renter.value?.firstName ?? "",
       lastName: renter.value?.lastName ?? "",
       email: renter.value?.email ?? "",
@@ -74,14 +92,9 @@ const createRenterInputObject = () => {
       postalCode: renter.value?.location.postalCode,
       city: renter.value?.location.city,
       country: renter.value?.location.country,
-      renterType: renter.value?.renterType,
-      chamberOfCommerce: renter.value?.chamberOfCommerce,
-      vatNumber: renter.value?.vatNumber,
-      companyName: renter.value?.companyName
-    }
-  } else {
-    return undefined
-  }
+      renterType: renter.value?.renterType
+    };
+  } else return undefined
 }
 </script>
 <template>

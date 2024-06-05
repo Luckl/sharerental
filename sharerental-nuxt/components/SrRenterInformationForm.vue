@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import RenterClient from "~/services/api/RenterClient";
-import {type Renter, RenterType} from "~/schemas/openapi/renter";
+import {type Renter, RenterApi, RenterType} from "~/schemas/openapi/renter";
 import * as yup from "yup";
 import {useForm} from "vee-validate";
 import {useUserStore} from "~/services/stores/userStore";
 import {useToast} from "primevue/usetoast";
 import {createUserWithEmailAndPassword} from "firebase/auth";
-import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
-import type ContactFormClient from "~/services/api/ContactFormClient";
+import {UserApi, UserUserTypeEnum, ZipcodeApi} from "~/schemas/openapi/contactForm";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
-const $renterClient: RenterClient = useNuxtApp().$renterClient;
-const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+const $renterApi: RenterApi = useNuxtApp().$renterApi;
+const userApi: UserApi = useNuxtApp().$userApi;
+const zipcodeApi: ZipcodeApi = useNuxtApp().$zipcodeApi;
 
 defineProps<{
   modelValue: Renter | undefined
@@ -62,19 +61,19 @@ const schema = yup.object({
           return renterType === RenterType.Business
               ? companyName.required().label("Bedrijfsnaam")
               : companyName
-    }),
+        }),
     chamberOfCommerce: yup.string()
         .when('renterType', ([renterType], chamberOfCommerce) => {
           return renterType === RenterType.Business
               ? chamberOfCommerce.required().label("KvK nummer")
               : chamberOfCommerce
-    }),
+        }),
     vatNumber: yup.string()
         .when('renterType', ([renterType], vatNumber) => {
           return renterType === RenterType.Business
               ? vatNumber.label("BTW nummer (optioneel)")
               : vatNumber
-    })
+        })
   }),
   createAccount: yup.boolean().label("Maak een account aan"),
   password: yup.string()
@@ -121,7 +120,7 @@ const {defineField, errors, values, validate} = useForm({
 });
 
 watch(values, (value) => {
-  const tmpRenter = { ...value.renter }
+  const tmpRenter = {...value.renter}
   tmpRenter.id = existingRenterId.value
   updateModelValue(tmpRenter)
 })
@@ -157,7 +156,11 @@ const createUserIfSelected = async () => {
             .then(() => {
                   userStore.refreshUser()
                       .then(() =>
-                          contactFormClient.registerUser(UserUserTypeEnum.Renter)
+                          userApi.registerUser({
+                            user: {
+                              userType: UserUserTypeEnum.Renter
+                            }
+                          })
                       )
                 },
                 (reason) => {
@@ -171,7 +174,11 @@ const createUserIfSelected = async () => {
 
 const fetchZipInfo = async () => {
   if (postalCode.value.length === 6 && houseNumber.value.length > 0) {
-    const response = await contactFormClient.zipcode(postalCode.value, houseNumber.value)
+    const response = await zipcodeApi.getAddressByZipcode({
+      zipcode: postalCode.value,
+      houseNumber: houseNumber.value
+    })
+
     street.value = response.street ?? ""
     city.value = response.city ?? ""
     country.value = response.country ?? ""
@@ -179,7 +186,7 @@ const fetchZipInfo = async () => {
 }
 
 function getRenter() {
-  $renterClient.getRenter().then(
+  $renterApi.getRenter().then(
       success => {
 
         renterTypeStore.renterType.value = success.renterType === RenterType.Business ? RenterTypeEnum.Business : RenterTypeEnum.Private
@@ -288,17 +295,20 @@ defineExpose({
       </div>
 
       <div v-if="renterType === RenterType.Business" class="flex gap-2">
-        <sr-text-field label="Bedrijfsnaam" v-model="companyName" :errors="errors['renter.companyName']"></sr-text-field>
+        <sr-text-field label="Bedrijfsnaam" v-model="companyName"
+                       :errors="errors['renter.companyName']"></sr-text-field>
       </div>
       <div v-if="renterType === RenterType.Business" class="flex gap-2">
-        <sr-text-field label="KvK nummer" v-model="chamberOfCommerce" :errors="errors['renter.chamberOfCommerce']"></sr-text-field>
+        <sr-text-field label="KvK nummer" v-model="chamberOfCommerce"
+                       :errors="errors['renter.chamberOfCommerce']"></sr-text-field>
       </div>
       <div v-if="renterType === RenterType.Business" class="flex gap-2">
         <sr-text-field label="BTW nummer" v-model="vatNumber" :errors="errors['renter.vatNumber']"></sr-text-field>
       </div>
 
       <div class="flex gap-2">
-        <sr-text-field label="Emailadres" :disabled="userStore.user" placeholder="Emailadres" type="email" v-model="email"
+        <sr-text-field label="Emailadres" :disabled="userStore.user" placeholder="Emailadres" type="email"
+                       v-model="email"
                        :errors="errors['renter.email']"></sr-text-field>
       </div>
       <div class="flex gap-2 my-1 items-center">
@@ -358,5 +368,5 @@ defineExpose({
     <Button type="button" label="Aanpassen" @click="editRenterInfo = true; existingRenterId = 0"></Button>
   </div>
 
-  <Button @click="console.log(renterType)" > test </Button>
+  <Button @click="console.log(renterType)"> test</Button>
 </template>

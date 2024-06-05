@@ -4,8 +4,7 @@ import {useFirebaseAuth} from 'vuefire'
 import {useUserStore} from "~/services/stores/userStore";
 import {useForm} from "vee-validate";
 import * as yup from 'yup';
-import type ContactFormClient from "~/services/api/ContactFormClient";
-import {UserUserTypeEnum} from "~/schemas/openapi/contactForm";
+import {UserApi, UserUserTypeEnum} from "~/schemas/openapi/contactForm";
 
 definePageMeta({
   linkTitle: 'Login'
@@ -13,12 +12,10 @@ definePageMeta({
 
 const auth = useFirebaseAuth()! // only exists on client side
 auth.languageCode = "nl"
-const provider = new GoogleAuthProvider()
 const userStore = useUserStore()
-const user = ref(userStore.user)
 const router = useRouter()
 const errorParser = new RegExp('.*\\((.*)\\).*')
-const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+const userApi: UserApi = useNuxtApp().$userApi;
 
 const schema = yup.object({
   email: yup.string().email().required().label("Emailadres"),
@@ -32,11 +29,6 @@ const {defineField, handleSubmit, errors} = useForm({
   validationSchema: schema,
 });
 
-const options = ['Huren', 'Verhuren'].map((o) => ({
-  name: o,
-  value: o.toLowerCase(),
-}));
-
 const [email] = defineField("email")
 const [password] = defineField("password")
 const [passwordConfirm] = defineField("passwordConfirm")
@@ -47,7 +39,11 @@ const onSubmit = handleSubmit(async () => {
       .then(() => {
         userStore.refreshUser()
             .then(() =>
-                contactFormClient.registerUser(type.value.toLowerCase() === 'huren' ? UserUserTypeEnum.Renter : UserUserTypeEnum.Lessor)
+                userApi.registerUser({
+                  user: {
+                    userType: type.value.toLowerCase() === 'huren' ? UserUserTypeEnum.Renter : UserUserTypeEnum.Lessor
+                  }
+                })
                     .then(() =>
                         router.push("/lessor/profile")))
       })
@@ -116,12 +112,12 @@ const sticky = ref(false)
           Wat kom je doen?
           <div class="flex flex-row gap-8">
             <div class=" h-8 align-middle">
-            <RadioButton v-model="type" inputId="Huren" name="fCountry" value="huren"/>
-            <label for="Huren" class="ml-2">Huren</label>
+              <RadioButton v-model="type" inputId="Huren" name="fCountry" value="huren"/>
+              <label for="Huren" class="ml-2">Huren</label>
             </div>
             <div>
-            <RadioButton v-model="type" inputId="Verhuren" name="fCountry" value="verhuren"/>
-            <label for="Verhuren" class="ml-2">Verhuren</label>
+              <RadioButton v-model="type" inputId="Verhuren" name="fCountry" value="verhuren"/>
+              <label for="Verhuren" class="ml-2">Verhuren</label>
             </div>
           </div>
           <Button type="submit" label="Registreren"></Button>

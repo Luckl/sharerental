@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import {useRoute} from "#app";
-import type {Image, RentalItem} from "~/schemas/openapi/rentalItem";
-import SearchClient from "~/services/api/SearchClient";
-import TransactionClient from "~/services/api/TransactionClient";
+import {useRoute, useRuntimeConfig} from "#app";
+import type {Image} from "~/schemas/openapi/rentalItem";
 import {useToast} from "primevue/usetoast";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
 import {useCartStore} from "~/services/stores/cartStore";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import {SearchApi} from "~/schemas/openapi/search";
+import {TransactionApi} from "~/schemas/openapi/transaction";
 
-const $searchClient: SearchClient = useNuxtApp().$searchClient;
-const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
+const $searchApi: SearchApi = useNuxtApp().$searchApi;
+const $transactionApi: TransactionApi = useNuxtApp().$transactionApi;
 
 const route = useRoute();
 const router = useRouter();
@@ -18,49 +18,48 @@ const amount = ref(0);
 const price = ref(0);
 const amountAvailable = ref(0);
 const slug = Array.isArray(route.params.rentalItemSlug) ? route.params.rentalItemSlug[0] : route.params.rentalItemSlug;
-const item = ref<RentalItem>({
-  name: "",
-  id: 0
-});
 const dates = ref([]);
 const images = ref<Image[]>([]);
 const showNotPossibleModal = ref(false);
 const cartStore = useCartStore();
 const {renterType} = storeToRefs(useRenterTypeStore())
 
-await useAsyncData(slug, () => $searchClient.details(slug))
-    .then((response) => {
-      item.value = response.data.value!
-      if (item.value.images != undefined) {
-        images.value = item.value.images
-      } else {
-        images.value = [
-          {
-            id: 0,
-            url: '/SR_s_green_white.png'
-          }
-        ]
-      }
+const {data: item, error} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
 
-      calculatePrice()
-      getAvailableItemsAmount()
+if (error) {
+  console.error(error);
+}
 
-      let offers = [
-        {price: "" + item.value.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D"}
-      ];
+if (item.value?.images != undefined) {
+  images.value = item.value?.images
+} else {
+  images.value = [
+    {
+      id: 0,
+      url: '/SR_s_green_white.png'
+    }
+  ]
+}
 
-      if (item.value.price168h) {
-        offers.push({price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D"})
-      }
-      useSchemaOrg([
-        defineProduct({
-          name: item.value.name,
-          offers: offers,
-          image: images.value[0]?.url,
-          description: item.value.shortDescription
-        })
-      ])
-    })
+calculatePrice()
+getAvailableItemsAmount()
+
+let offers = [
+  {price: "" + item.value?.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D"}
+];
+
+if (item.value?.price168h) {
+  offers.push({price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D"})
+}
+
+useSchemaOrg([
+  defineProduct({
+    name: item.value?.name,
+    offers: offers,
+    image: images.value[0]?.url,
+    description: item.value?.shortDescription
+  })
+])
 
 watch(amount, () => {
   calculatePrice()
@@ -68,7 +67,7 @@ watch(amount, () => {
 
 const startTransaction = () => {
   cartStore.setCart(
-      item.value,
+      item.value || null,
       amount.value,
       dates.value[1],
       dates.value[0],
@@ -88,13 +87,15 @@ const showError = (message: String) => {
 };
 
 function calculatePrice() {
-  if (dates.value[0] != null && dates.value[1] != null) {
-    $transactionClient.calculatePrice(
-        item.value.id,
-        dates.value[0],
-        dates.value[1],
-        amount.value
-    ).then(
+  if (dates.value[0] != null && dates.value[1] != null && item.value?.id) {
+    $transactionApi.calculatePrice({
+      transactionCalculationInput: {
+        rentalItemId: item.value?.id,
+        startDate: dates.value[0],
+        endDate: dates.value[1],
+        amount: amount.value
+      }
+    }).then(
         success => {
           price.value = success.price
         },
@@ -114,14 +115,16 @@ function showRenterInfo() {
 }
 
 function getAvailableItemsAmount() {
-  if (dates.value[0] == null || dates.value[1] == null) {
+  if (dates.value[0] == null || dates.value[1] == null || item.value == null) {
     return
   }
-  $transactionClient.getAvailableItems(
-      dates.value[0],
-      dates.value[1],
-      item.value.id
-  ).then(
+  $transactionApi.getAmountAvailableForDate({
+    getAmountAvailableRequest: {
+      startDate: dates.value[0],
+      endDate: dates.value[1],
+      rentalItemId: item.value?.id
+    }
+  }).then(
       success => {
         amountAvailable.value = success.amountAvailable
         amount.value = amountAvailable.value
@@ -138,7 +141,7 @@ const formatter = new Intl.NumberFormat('nl-NL', {
 })
 
 function formatCurrency(value: number | undefined) {
-  if (value !== undefined && value !== null) {
+  if (value !== undefined) {
     if (renterType.value === RenterTypeEnum.Business) {
       return formatter.format(value)
     } else {
@@ -151,7 +154,7 @@ function formatCurrency(value: number | undefined) {
   <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 place-items-center md:p-12">
       <div class="m-8">
-        <h1 class="font-bold text-4xl text-center">{{ item.name }}</h1>
+        <h1 class="font-bold text-4xl text-center">{{ item?.name }}</h1>
         <div class="flex align-middle">
           <Galleria :value="images" :numVisible="5"
                     :showThumbnails="false" :showIndicators="true">
@@ -165,11 +168,11 @@ function formatCurrency(value: number | undefined) {
         <div class="flex gap-16 align-middle">
           <div class="flex flex-col items-center">
             <span class="font-bold">Per dag</span>
-            <span class="font-extrabold text-3xl">{{ formatCurrency(item.price24h) }}</span>
+            <span class="font-extrabold text-3xl">{{ formatCurrency(item?.price24h) }}</span>
           </div>
-          <div class="flex flex-col items-center" v-if="item.price168h">
+          <div class="flex flex-col items-center" v-if="item?.price168h">
             <span class="font-bold">Per week</span>
-            <span class="font-extrabold text-3xl">{{ formatCurrency(item.price168h) }}</span>
+            <span class="font-extrabold text-3xl">{{ formatCurrency(item?.price168h) }}</span>
           </div>
         </div>
         <divider></divider>
@@ -220,24 +223,24 @@ function formatCurrency(value: number | undefined) {
         <div class="flex flex-col">
           <span class="font-bold text-xl">Specificaties</span>
           <divider></divider>
-          <SrRentalItemProperty :field="item.brand" label="Merk"/>
-          <SrRentalItemProperty :field="item.longDescription" label="Omschrijving"/>
-          <SrRentalItemProperty :field="item.reachMeters" label="Bereik" suffix="m"/>
-          <SrRentalItemProperty :field="item.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg"/>
-          <SrRentalItemProperty :field="item.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m"/>
-          <SrRentalItemProperty :field="item.intrinsicWeightKilograms" label="Gewicht" suffix="kg"/>
-          <SrRentalItemProperty :field="item.materialType" label="Type materiaal"/>
-          <SrRentalItemProperty :field="item.maximumPressureBars" label="Maximale drukvermogen" suffix="bar"/>
-          <SrRentalItemProperty :field="item.maximumHorsePower" label="Maximale vermogen" suffix="pk"/>
-          <SrRentalItemProperty :field="item.requiredPowerVoltageVolt" label="Benodigde stroomtoevoer" suffix="V"/>
-          <SrRentalItemProperty :field="item.workWidthMeters" label="Werkbreedte" suffix="m"/>
-          <SrRentalItemProperty :field="item.vacuumAttachmentPossible" label="Stofzuiger aansluiting"/>
-          <SrRentalItemProperty :field="item.capacityLiters" label="Bakinhoud" suffix="l"/>
-          <SrRentalItemProperty :field="item.itemHeight" label="Artikelhoogte" suffix="m"/>
-          <SrRentalItemProperty :field="item.itemWidth" label="Artikelbreedte" suffix="m"/>
-          <SrRentalItemProperty :field="item.itemLength" label="Artikellengte" suffix="m"/>
-          <SrRentalItemProperty :field="item.powerWatt" label="Vermogen" suffix="W"/>
-          <SrRentalItemProperty :field="item.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
+          <SrRentalItemProperty :field="item?.brand" label="Merk"/>
+          <SrRentalItemProperty :field="item?.longDescription" label="Omschrijving"/>
+          <SrRentalItemProperty :field="item?.reachMeters" label="Bereik" suffix="m"/>
+          <SrRentalItemProperty :field="item?.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg"/>
+          <SrRentalItemProperty :field="item?.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m"/>
+          <SrRentalItemProperty :field="item?.intrinsicWeightKilograms" label="Gewicht" suffix="kg"/>
+          <SrRentalItemProperty :field="item?.materialType" label="Type materiaal"/>
+          <SrRentalItemProperty :field="item?.maximumPressureBars" label="Maximale drukvermogen" suffix="bar"/>
+          <SrRentalItemProperty :field="item?.maximumHorsePower" label="Maximale vermogen" suffix="pk"/>
+          <SrRentalItemProperty :field="item?.requiredPowerVoltageVolt" label="Benodigde stroomtoevoer" suffix="V"/>
+          <SrRentalItemProperty :field="item?.workWidthMeters" label="Werkbreedte" suffix="m"/>
+          <SrRentalItemProperty :field="item?.vacuumAttachmentPossible" label="Stofzuiger aansluiting"/>
+          <SrRentalItemProperty :field="item?.capacityLiters" label="Bakinhoud" suffix="l"/>
+          <SrRentalItemProperty :field="item?.itemHeight" label="Artikelhoogte" suffix="m"/>
+          <SrRentalItemProperty :field="item?.itemWidth" label="Artikelbreedte" suffix="m"/>
+          <SrRentalItemProperty :field="item?.itemLength" label="Artikellengte" suffix="m"/>
+          <SrRentalItemProperty :field="item?.powerWatt" label="Vermogen" suffix="W"/>
+          <SrRentalItemProperty :field="item?.maximumSurfaceSquareMeters" label="Maximale oppervlakte" suffix="m2"/>
         </div>
       </div>
     </div>

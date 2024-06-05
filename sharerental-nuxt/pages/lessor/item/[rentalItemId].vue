@@ -15,12 +15,11 @@
 </template>
 <script setup lang="ts">
 import type {RentalItemInput} from "~/schemas/openapi/rentalItem";
-import RentalItemClient from "~/services/api/RentalItemClient";
 import {useRoute} from "#app";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
-const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
+const $rentalItemApi = useNuxtApp().$rentalItemApi;
 const route = useRoute();
 const itemId = Number.parseInt(Array.isArray(route.params.rentalItemId) ? route.params.rentalItemId[0] : route.params.rentalItemId);
 
@@ -33,7 +32,7 @@ onMounted(() => {
 })
 
 function fetchItem() {
-  $rentalItemClient.get(itemId)
+  $rentalItemApi.getRentalItem({id: itemId})
       .then(
           success => {
             Object.assign(formInput, success)
@@ -43,7 +42,10 @@ function fetchItem() {
 
 function onSubmitNewItem() {
 
-  $rentalItemClient.update(formInput, itemId)
+  $rentalItemApi.updateRentalItem({
+    id: itemId,
+    rentalItemInput: formInput
+  })
       .then(success => {
             router.push('/lessor/items')
           },

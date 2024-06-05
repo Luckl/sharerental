@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type ContactFormClient from "~/services/api/ContactFormClient";
 
 import { ref, reactive } from "vue";
 import {useUserStore} from "~/services/stores/userStore";
+import {ContactFormApi} from "~/schemas/openapi/contactForm";
 
-const contactFormClient: ContactFormClient = useNuxtApp().$contactFormClient;
+const contactFormApi: ContactFormApi = useNuxtApp().$contactFormApi;
 const userStore = useUserStore()
 const user = ref(userStore.user)
 
@@ -17,15 +17,16 @@ const contactForm = reactive({
 });
 
 const shareContactDetails = () => {
-  contactFormClient.sendContactForm({
-    name: contactForm.name,
-    email: contactForm.email,
-    phone: contactForm.phone,
-    analyticsToken: user.value?.uid ?? ''
+  contactFormApi.sendContactForm({
+    contactForm: {
+      name: contactForm.name,
+      email: contactForm.email,
+      phone: contactForm.phone,
+      analyticsToken: user.value?.uid ?? ''
+    }
   })
 
   dialogRef.value.close();
-
 }
 
 </script>

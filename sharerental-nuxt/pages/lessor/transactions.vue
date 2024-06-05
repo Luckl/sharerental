@@ -65,14 +65,14 @@
 </template>
 <script lang="ts" setup>
 import {
-   TransactionStatus
+  TransactionApi,
+  TransactionStatus
 } from "~/schemas/openapi/transaction";
 import type {
   DisplayStatus,
   GetTransactionsResult,
   Transaction
 } from "~/schemas/openapi/transaction";
-import TransactionClient from "~/services/api/TransactionClient";
 
 const error = ref<String | undefined>(undefined)
 const router = useRouter()
@@ -84,7 +84,7 @@ const pageSize = ref(20)
 const totalElements = ref(0)
 const transactions = ref<Transaction[]>([])
 const transactionsResult = ref<GetTransactionsResult>()
-const $transactionClient: TransactionClient = useNuxtApp().$transactionClient;
+const $transactionApi: TransactionApi = useNuxtApp().$transactionApi;
 
 const defaultStatuses = ref([
   TransactionStatus.Initialized,
@@ -109,7 +109,7 @@ function acceptTransaction(id: number) {
 }
 
 function fetchTransactions() {
-  $transactionClient.getTransactions(page.value, pageSize.value,["startDate;desc"], filter.value, defaultStatuses.value)
+  $transactionApi.getTransactions(page.value, pageSize.value,["startDate;desc"], filter.value, defaultStatuses.value)
       .then(
           success => {
             transactionsResult.value = success

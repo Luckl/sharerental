@@ -12,15 +12,13 @@
 </template>
 <script setup lang="ts">
 import type {RentalItemInput} from "~/schemas/openapi/rentalItem";
-import RentalItemClient from "~/services/api/RentalItemClient";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
-const $rentalItemClient: RentalItemClient = useNuxtApp().$rentalItemClient;
+const $rentalItemApi = useNuxtApp().$rentalItemApi;
 
 const formInput = reactive<RentalItemInput>({
   name: "",
-  number: undefined,
   category: undefined,
   shortDescription: undefined,
   longDescription: undefined,
@@ -50,12 +48,13 @@ const formInput = reactive<RentalItemInput>({
 
 function onSubmitNewItem() {
 
-  $rentalItemClient.create(formInput)
+  $rentalItemApi.createRentalItem({
+    rentalItemInput: formInput
+  })
       .then(success => {
             router.push('/lessor/items')
 
             formInput.name = "";
-            formInput.number = "";
             formInput.category = "";
             formInput.shortDescription = "";
             formInput.longDescription = "";
