@@ -27,7 +27,8 @@ const {renterType} = storeToRefs(useRenterTypeStore())
 const {data: item, error} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
 
 if (error) {
-  console.error(error)
+  console.error(error.value)
+  console.error(error.value?.cause)
 }
 
 if (item.value?.images != undefined) {
