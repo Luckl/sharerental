@@ -26,10 +26,6 @@ const {renterType} = storeToRefs(useRenterTypeStore())
 
 const {data: item, error} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
 
-if (error) {
-  console.error(error);
-}
-
 if (item.value?.images != undefined) {
   images.value = item.value?.images
 } else {
@@ -219,7 +215,7 @@ function formatCurrency(value: number | undefined) {
       <div>
         <h2></h2>
       </div>
-      <div>
+      <div class="w-full">
         <div class="flex flex-col">
           <span class="font-bold text-xl">Specificaties</span>
           <divider></divider>

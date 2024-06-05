@@ -22,10 +22,6 @@
 import type { SearchResultItem } from "~/schemas/openapi/search";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 
-definePageMeta({
-  layout: 'new'
-})
-
 interface Props {
   item: SearchResultItem;
 }

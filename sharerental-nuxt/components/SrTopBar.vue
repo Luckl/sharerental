@@ -167,16 +167,16 @@ const accountButtonLink = computed(() => {
   }
 })
 
-onMounted(() => {
-  userStore.refreshUser()
-  lessorStore.loadLessors()
-      .then(() => {
-        loaded.value = true
-      })
-  if (!renterTypeStore.renterType) {
+userStore.refreshUser()
+lessorStore.loadLessors()
+    .then(() => {
+      loaded.value = true
+    })
+if (!renterTypeStore.renterType) {
+  setTimeout(() => {
     showRenterTypeDialog.value = true
-  }
-})
+  }, 3000)
+}
 
 
 const showRenterTypeDialog = ref(false);
