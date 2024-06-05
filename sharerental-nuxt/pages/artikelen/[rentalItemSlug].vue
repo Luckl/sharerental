@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useRoute, useRuntimeConfig} from "#app";
+import {useRoute} from "#app";
 import type {Image} from "~/schemas/openapi/rentalItem";
 import {useToast} from "primevue/usetoast";
 import SrRentalItemProperty from "~/components/SrRentalItemProperty.vue";
@@ -25,6 +25,10 @@ const cartStore = useCartStore();
 const {renterType} = storeToRefs(useRenterTypeStore())
 
 const {data: item, error} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
+
+if (error) {
+  console.error(error)
+}
 
 if (item.value?.images != undefined) {
   images.value = item.value?.images
