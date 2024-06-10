@@ -57,7 +57,7 @@ export default defineNuxtConfig({
         }
     },
     sitemap: {
-        sources: ['/backend/rentalItemPages']
+        sources: [process.env.SR_BACKEND_URL + '/backend/rentalItemPages']
     },
     css: [
         '~/assets/css/reset.css',
