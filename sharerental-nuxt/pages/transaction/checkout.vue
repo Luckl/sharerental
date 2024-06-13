@@ -41,9 +41,12 @@ function formatCurrency(value: number | undefined) {
   } else return "Niet bekend"
 }
 
-const startTransaction = () => {
+const startTransaction = async () => {
   if (rentalItem.value?.id) {
-    srRenterInformationForm.value?.createUserIfSelected()
+    debugger;
+    const success = await srRenterInformationForm.value?.submitForm()
+    if (!success) return
+
     $transactionApi.startTransaction({
           createTransactionRequest: {
             rentalItemId: rentalItem.value?.id ?? 0,

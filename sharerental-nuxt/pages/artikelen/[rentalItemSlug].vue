@@ -24,12 +24,7 @@ const showNotPossibleModal = ref(false);
 const cartStore = useCartStore();
 const {renterType} = storeToRefs(useRenterTypeStore())
 
-const {data: item, error} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
-
-if (error) {
-  console.error(error.value)
-  console.error(error.value?.cause)
-}
+const {data: item} = await useAsyncData(slug, () => $searchApi.searchDetails({slug}))
 
 if (item.value?.images != undefined) {
   images.value = item.value?.images

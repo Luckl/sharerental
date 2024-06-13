@@ -146,30 +146,34 @@ const [subscribeToNewsletter] = defineField("subscribeToNewsletter")
 const existingRenterId = ref(0);
 const editRenterInfo = ref(false);
 
-const createUserIfSelected = async () => {
-  if (!createAccount.value) {
-    return
-  }
-  await validate()
-      .then(() => {
-        createUserWithEmailAndPassword(auth, email.value, password.value)
-            .then(() => {
-                  userStore.refreshUser()
-                      .then(() =>
-                          userApi.registerUser({
-                            user: {
-                              userType: UserUserTypeEnum.Renter
-                            }
-                          })
-                      )
-                },
-                (reason) => {
-                  toast.add({
-                    severity: 'error', summary: 'Er is iets fout gegaan', detail: reason,
-                    life: 5000
+const submitForm = async () => {
+  return await validate()
+      .then((result => {
+        if (!result.valid) {
+          return false
+        }
+
+        if (createAccount.value) {
+          createUserWithEmailAndPassword(auth, email.value, password.value)
+              .then(() => {
+                    userStore.refreshUser()
+                        .then(() =>
+                            userApi.registerUser({
+                              user: {
+                                userType: UserUserTypeEnum.Renter
+                              }
+                            })
+                        )
+                  },
+                  (reason) => {
+                    toast.add({
+                      severity: 'error', summary: 'Er is iets fout gegaan', detail: reason,
+                      life: 5000
+                    })
                   })
-                })
-      })
+        }
+        return true
+  }))
 }
 
 const fetchZipInfo = async () => {
@@ -214,8 +218,9 @@ function getRenter() {
   )
 }
 
+
 defineExpose({
-  createUserIfSelected
+  submitForm
 })
 </script>
 <template>
@@ -367,6 +372,4 @@ defineExpose({
   <div v-if="!editRenterInfo">
     <Button type="button" label="Aanpassen" @click="editRenterInfo = true; existingRenterId = 0"></Button>
   </div>
-
-  <Button @click="console.log(renterType)"> test</Button>
 </template>

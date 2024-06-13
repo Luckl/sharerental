@@ -12,8 +12,8 @@ import type {SrRenterInformationForm} from "#components";
 
 const renterInformationForm = ref<InstanceType<typeof SrRenterInformationForm> | null>(null)
 
-const createUserIfSelected = () => {
-  renterInformationForm.value?.createUserIfSelected()
+const submitForm = () => {
+  return renterInformationForm.value?.submitForm()
 }
 
 useSeoMeta({
