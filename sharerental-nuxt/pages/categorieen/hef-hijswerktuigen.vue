@@ -4,7 +4,7 @@ definePageMeta({
   layout: 'no-header'
 })
 
-const category = ref('Hef- en hijswerktuigen')
+const category = ref('Hef-hijswerktuigen')
 
 </script>
 <template>
