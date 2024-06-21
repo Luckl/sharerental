@@ -40,12 +40,33 @@ if (item.value?.images != undefined) {
 calculatePrice()
 getAvailableItemsAmount()
 
+let availableAtOrFrom = {
+  geo: {
+    latitude: 51.44270647881352,
+    longitude: 4.901124198191534
+  }
+}
+
 let offers = [
-  {price: "" + item.value?.price24h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P1D"}
+  {
+    price: "" + item.value?.price24h,
+    priceCurrency: "EUR",
+    availability: "InStock",
+    leaseLength: "P1D",
+    businessFunction: "Lease",
+    availableAtOrFrom: availableAtOrFrom
+  }
 ];
 
 if (item.value?.price168h) {
-  offers.push({price: "" + item.value.price168h, priceCurrency: "EUR", availability: "InStock", leaseLength: "P7D"})
+  offers.push({
+    price: "" + item.value.price168h,
+    priceCurrency: "EUR",
+    availability: "InStock",
+    leaseLength: "P7D",
+    businessFunction: "Lease",
+    availableAtOrFrom: availableAtOrFrom
+  })
 }
 
 useSchemaOrg([
