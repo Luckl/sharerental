@@ -146,7 +146,8 @@ private fun RenterInput.toRenter(user: User?): Renter = Renter(
         addressLine1 = addressLine1,
         addressLine2 = addressLine2,
         addressLine3 = addressLine3,
-        geoLocation = null
+        latitude = null,
+        longitude = null
     ),
     renterType = RenterType.valueOf(renterType.value),
     chamberOfCommerce = chamberOfCommerce,
