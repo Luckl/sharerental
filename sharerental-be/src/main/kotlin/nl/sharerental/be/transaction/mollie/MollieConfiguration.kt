@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration
         be.woutschoovaerts.mollie.data.payment.PaymentStatus::class,
     ]
 )
-class MollieConfiguration(@Value("\${mollie.apiKey}") private val mollieApiKey: String) {
+class MollieConfiguration(@Value("\${mollie.api-key}") private val mollieApiKey: String) {
 
     @Bean
     fun mollieClient(): Client = ClientBuilder().withApiKey(mollieApiKey).build()
