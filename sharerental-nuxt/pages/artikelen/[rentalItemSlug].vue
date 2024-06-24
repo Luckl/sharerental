@@ -40,12 +40,12 @@ if (item.value?.images != undefined) {
 calculatePrice()
 getAvailableItemsAmount()
 
-let availableAtOrFrom = {
+let availableAtOrFrom = definePlace({
   geo: {
     latitude: item.value?.latitude,
     longitude: item.value?.longitude
   }
-}
+})
 
 let offers = [
   {
