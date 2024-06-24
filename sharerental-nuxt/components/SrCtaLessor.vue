@@ -33,7 +33,7 @@ const showContactDialog = () => {
             <a href="mailto:support@sharerental.app">
               <span class="my-1 text-sm">Service</span>
             </a>
-            <span class="my-1 text-sm">Nieuwsbrief</span>
+            <NuxtLink to="/nieuwsbrief/waar-we-voor-staan"><span class="my-1 text-sm">Nieuwsbrief</span></NuxtLink>
             <span class="my-1 text-sm"></span>
             <span class="my-1 text-sm"><button @click="showContactDialog()">Contact</button></span>
           </div>
