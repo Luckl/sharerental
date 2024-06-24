@@ -48,25 +48,27 @@ let availableAtOrFrom = definePlace({
 })
 
 let offers = [
-  {
+  defineOffer({
     price: "" + item.value?.price24h,
     priceCurrency: "EUR",
     availability: "InStock",
     leaseLength: "P1D",
     businessFunction: "Lease",
     availableAtOrFrom: availableAtOrFrom
-  }
+  })
 ];
 
 if (item.value?.price168h) {
-  offers.push({
-    price: "" + item.value.price168h,
-    priceCurrency: "EUR",
-    availability: "InStock",
-    leaseLength: "P7D",
-    businessFunction: "Lease",
-    availableAtOrFrom: availableAtOrFrom
-  })
+  offers.push(
+      defineOffer({
+        price: "" + item.value.price168h,
+        priceCurrency: "EUR",
+        availability: "InStock",
+        leaseLength: "P7D",
+        businessFunction: "Lease",
+        availableAtOrFrom: availableAtOrFrom
+      })
+  )
 }
 
 useSchemaOrg([
