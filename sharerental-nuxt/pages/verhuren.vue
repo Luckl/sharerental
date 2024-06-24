@@ -32,7 +32,7 @@ definePageMeta({
         <div class="flex py-40 align-middle justify-center">
           <div class="flex flex-col w-full md:w-1/2 justify-center">
             <h1 class="my-10 font-extrabold text-4xl md:text-4xl">ShareRental</h1>
-            <span class="my-10 text-xl">Hét nieuwe online machineverhuurplatform. Registreer je nu en begin vandaag nog met verhuren.</span>
+            <span class="my-10 text-xl">Met ShareRental verdien je eenvoudig extra inkomsten door je onbenutte gereedschap te verhuren. Ons platform biedt gebruiksvriendelijke tools en een groeiende community van betrouwbare huurders. Samen zorgen we voor een efficiënter gebruik van middelen, terwijl jij geniet van extra financiële voordelen en een netwerk van gelijkgestemden. Doe mee en ontdek hoe eenvoudig en winstgevend het kan zijn!</span>
             <NuxtLink to="/register">
               <Button unstyled class="rounded-lg bg-white font-bold text-black w-36 h-12 mt-4">Gratis registreren</Button>
             </NuxtLink>

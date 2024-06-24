@@ -157,7 +157,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
           <div class="flex flex-col m-5 md:m-20 w-80">
             <span class="text-xl font-bold">Zoeken</span>
-            <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een paar uur of een paar weken nodig hebt.</span>
+            <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een dag of een paar weken nodig hebt.</span>
           </div>
           <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
             <span class="text-xl font-bold">Image</span>
@@ -178,8 +178,8 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80">
               <span class="text-xl font-bold">Huren & Retourneren</span>
-              <span class="mt-2">Na het boeken, regel het ophalen van je gehuurde item of laat het bezorgen op jouw locatie. Als je klaar bent, retourneer eenvoudig de apparatuur naar het verhuurbedrijf. Je wordt alleen in rekening gebracht voor de daadwerkelijke verhuurperiode, zonder verborgen kosten of verplichtingen.</span>
-              <button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button>
+              <span class="mt-2">Na het boeken, regel het ophalen van je gehuurde item of laat het bezorgen op jouw locatie. Als je klaar bent, retourneer eenvoudig de apparatuur naar het verhuurbedrijf. Zonder verborgen kosten of verplichtingen.</span>
+              <nuxtLink to="/"><button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button></nuxtLink>
             </div>
           </div>
         </div>
@@ -192,7 +192,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
           <div>
-            <h3 class="font-bold">Registreer nu!</h3>
+            <h3 class="font-bold">Ontdek hoe eenvoudig en voordelig het kan zijn om je volgende project te voltooien met ShareRental. Huur topkwaliteit gereedschap en machines zonder de hoge kosten van aanschaf en onderhoud. Of je nu een doe-het-zelf project hebt, je tuin wilt opknappen of een professionele klus moet klaren, wij hebben alles wat je nodig hebt.</h3>
             <h1 class="my-10 text-3xl">Huur vandaag nog alles voor je volgende project!</h1>
             <NuxtLink to="/register">
               <button unstyled class="rounded-lg black-area p-3 h-12 mr-8">Gratis registreren</button>

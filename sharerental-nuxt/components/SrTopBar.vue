@@ -5,7 +5,7 @@
         <span class="text-sm font-bold">Iemand spreken over verhuren? </span><span
           class="font-thin"><a href="mailto:info@sharerental.app">info@sharerental.app</a></span>
       </div>
-      <div class="hidden md:block"><span class="font-bold">Huren</span> |
+      <div class="hidden md:block"><NuxtLink to="/"><span class="font-bold">Huren</span></NuxtLink> |
         <NuxtLink to="/verhuren"><span class="font-thin">Verhuren</span></NuxtLink>
       </div>
     </div>
