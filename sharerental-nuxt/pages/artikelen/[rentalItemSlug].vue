@@ -42,8 +42,8 @@ getAvailableItemsAmount()
 
 let availableAtOrFrom = {
   geo: {
-    latitude: 51.44270647881352,
-    longitude: 4.901124198191534
+    latitude: item.value?.latitude,
+    longitude: item.value?.longitude
   }
 }
 

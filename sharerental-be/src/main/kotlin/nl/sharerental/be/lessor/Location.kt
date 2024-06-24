@@ -21,8 +21,8 @@ class Location(
     val postalCode: String?,
     val city: String?,
     val country: String?,
-    @Column(name = "geo_location")
-    val geoLocation: String?
+    val latitude: Double?,
+    val longitude: Double?,
 ) {
     fun toResponse(): HttpLocation {
         val httpLocation = HttpLocation()

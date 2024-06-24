@@ -118,8 +118,9 @@ data class RentalItem(
                 maximumSurfaceSquareMeters = item.maximumSurfaceSquareMeters
                 fuelType = item.fuelType?.toHttpEnum()
                 rentToRenterType = item.rentToRenterType?.toHttpEnum()
+                latitude = item.owner.primaryLocation.latitude
+                longitude = item.owner.primaryLocation.longitude
             }
-
     }
 }
 

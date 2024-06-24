@@ -32,7 +32,7 @@ gcp:
       name: sharerental-staging
 
 mollie:
-  apiKey: test_5nGU9dSj578p2RtgKSkrGPsDp2g9uV
+  api-key: test_5nGU9dSj578p2RtgKSkrGPsDp2g9uV
 
 one-signal:
   mock: true

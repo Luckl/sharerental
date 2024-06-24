@@ -1,6 +1,8 @@
 package nl.sharerental.be.lessor.infrastructure
 
 import jakarta.transaction.Transactional
+import nl.sharerental.be.contactform.PostalCodeId
+import nl.sharerental.be.contactform.infrastructure.repository.PostalCodeLocationRepository
 import nl.sharerental.be.lessor.Lessor
 import nl.sharerental.be.lessor.Location
 import nl.sharerental.be.lessor.UserLessor
@@ -22,9 +24,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LessorController(private val lessorRepository: LessorRepository,
-                       private val userLessorRepository: UserLessorRepository,
-                       private val currentUserService: CurrentUserService) : LessorApi {
+class LessorController(
+    private val lessorRepository: LessorRepository,
+    private val userLessorRepository: UserLessorRepository,
+    private val currentUserService: CurrentUserService,
+    private val postalCodeLocationRepository: PostalCodeLocationRepository
+) : LessorApi {
     private val logger = LoggerFactory.getLogger(LessorController::class.java)
 
     @Transactional
@@ -32,6 +37,10 @@ class LessorController(private val lessorRepository: LessorRepository,
 
         requireNotNull(lessorInput) { "LessorInputEmpty" }
         requireNotNull(lessorInput.name) { "LessorNameEmpty" }
+
+        val postalCodeLocation =
+            postalCodeLocationRepository.findById(PostalCodeId(lessorInput.postalCode, lessorInput.houseNumber))
+                .orElseThrow { IllegalArgumentException("PostalCodeLocationNotFound") }
 
         val primaryLocation = Location(
             addressLine1 = lessorInput.addressLine1,
@@ -42,7 +51,8 @@ class LessorController(private val lessorRepository: LessorRepository,
             houseNumber = lessorInput.houseNumber,
             postalCode = lessorInput.postalCode,
             street = lessorInput.street,
-            geoLocation = null
+            latitude = postalCodeLocation.latitude,
+            longitude = postalCodeLocation.longitude
         )
 
         val lessor = Lessor(
