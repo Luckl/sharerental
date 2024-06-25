@@ -32,7 +32,7 @@ data class RentalItem(
     var shortDescription: String?,
     var longDescription: String?,
 
-    var amount: Int = 1,
+    var amount: Int,
 
     @ManyToOne
     var owner: Lessor,
@@ -118,6 +118,7 @@ data class RentalItem(
                 maximumSurfaceSquareMeters = item.maximumSurfaceSquareMeters
                 fuelType = item.fuelType?.toHttpEnum()
                 rentToRenterType = item.rentToRenterType?.toHttpEnum()
+                amount = item.amount
                 latitude = item.owner.primaryLocation.latitude
                 longitude = item.owner.primaryLocation.longitude
             }

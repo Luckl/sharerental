@@ -64,6 +64,13 @@
       <label for="fPrice168h" class="data-label mb-1">Prijs per week</label>
       <InputNumber v-model="props.rentalItem.price168h" inputId="fPrice168h" mode="currency" currency="EUR"></InputNumber>
     </div>
+
+    <div class="flexbox-column">
+      <label for="fAmount" class="data-label mb-1">Aantal</label>
+      <InputNumber v-model="props.rentalItem.amount" inputId="fAmount"></InputNumber>
+    </div>
+
+
     <Divider align="left" type="solid" class="mb-1">
       <span>Aanvullende gegevens</span>
     </Divider>

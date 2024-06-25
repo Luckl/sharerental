@@ -60,6 +60,7 @@ class RentalItemController(
             price24h = rentalItemInput.price24h?.toBigDecimal()!!
             price48h = rentalItemInput.price48h?.toBigDecimal()
             price168h = rentalItemInput.price168h?.toBigDecimal()
+            amount = rentalItemInput.amount
             automaticallyAcceptTransaction = rentalItemInput.automaticallyAcceptTransaction
             deliveryPossible = rentalItemInput.deliveryPossible
             deliveryPrice = rentalItemInput.deliveryPrice?.toBigDecimal()
@@ -133,6 +134,7 @@ class RentalItemController(
             maximumSurfaceSquareMeters = rentalItemInput.maximumSurfaceSquareMeters,
             fuelType = rentalItemInput.fuelType?.toEntityEnum(),
             rentToRenterType = rentalItemInput.rentToRenterType?.toEntityEnum(),
+            amount = rentalItemInput.amount,
             owner = lessor
         )
 
