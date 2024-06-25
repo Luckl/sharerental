@@ -19,6 +19,6 @@ const router = useRouter();
 let searchText = ref("")
 
 function search() {
-  router.push("/search/" + searchText.value)
+  router.push("/zoeken?query=" + searchText.value)
 }
 </script>

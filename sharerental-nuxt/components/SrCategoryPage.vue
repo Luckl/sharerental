@@ -4,7 +4,7 @@ import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterS
 import {reactive, ref} from "vue";
 import {
   type FilterOption, RenterType, SearchApi,
-  type SearchRequestFiltersInner,
+  type SearchRequestFiltersInner, type SearchResult,
   type SearchResultItem
 } from "~/schemas/openapi/search";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
@@ -43,13 +43,9 @@ const state = reactive({
   },
 });
 
-onMounted(() => {
-  fetchItems()
-})
-
-const fetchItems = () => {
+const fetchItems = async () => {
   let allFilters = categoryFilter.value.concat(mapToFilter());
-  $searchApi.search({
+  return await $searchApi.search({
     query: props.query ?? "",
     page: state.pageable.page,
     size: state.pageable.pageSize,
@@ -60,20 +56,25 @@ const fetchItems = () => {
     }
   }).then(
       success => {
-        state.results = success.embedded
-        let allAvailableFilters = success.filterOptions || [];
-        availableFilters.value = allAvailableFilters
-            .filter(value => value.field !== 'category')
-
-        availableFilters.value
-            .filter(value => value.field !== 'category')
-            .filter(value => value.options?.length || 0 > 0)
-            .filter(filter => activatedFilters.value[filter.field || ""] === undefined)
-            .forEach(filter => {
-              activatedFilters.value[filter.field || ""] = []
-            })
+        processSuccess(success)
+        return success
       }
   )
+}
+
+const processSuccess = (success: SearchResult) => {
+  state.results = success.embedded
+  let allAvailableFilters = success.filterOptions || [];
+  availableFilters.value = allAvailableFilters
+      .filter(value => value.field !== 'category')
+
+  availableFilters.value
+      .filter(value => value.field !== 'category')
+      .filter(value => value.options?.length || 0 > 0)
+      .filter(filter => activatedFilters.value[filter.field || ""] === undefined)
+      .forEach(filter => {
+        activatedFilters.value[filter.field || ""] = []
+      })
 }
 
 const screenWidth = ref(process.client ? window.innerWidth : 0);
@@ -109,6 +110,12 @@ const formatCurrency = (value: number) => {
     currency: 'EUR'
   }).format(value)
 }
+
+const {data} = await useAsyncData(props.query + "-" + props.category, () => {
+  return fetchItems()
+})
+
+processSuccess(data.value!!)
 
 </script>
 <template>
