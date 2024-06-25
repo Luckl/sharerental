@@ -179,7 +179,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <div class="flex flex-col m-5 md:m-20 w-80">
               <span class="text-xl font-bold">Huren & Retourneren</span>
               <span class="mt-2">Na het boeken, regel het ophalen van je gehuurde item of laat het bezorgen op jouw locatie. Als je klaar bent, retourneer eenvoudig de apparatuur naar het verhuurbedrijf. Zonder verborgen kosten of verplichtingen.</span>
-              <nuxtLink to="/"><button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button></nuxtLink>
+              <nuxtLink to="/zoeken"><button unstyled class="rounded-lg black-area w-36 h-12 mt-4">Bekijk het aanbod</button></nuxtLink>
             </div>
           </div>
         </div>
