@@ -50,7 +50,9 @@ data class Transaction(
             amount: Int
         ): BigDecimal {
             return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate)))
-                .setScale(2, RoundingMode.HALF_UP).times(BigDecimal(amount))
+                .times(BigDecimal.valueOf(1.21))
+                .times(BigDecimal(amount))
+                .setScale(2, RoundingMode.HALF_UP)
         }
     }
 
