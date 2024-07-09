@@ -116,6 +116,14 @@ class FilterService(
             .on(LESSOR.PRIMARY_LOCATION.eq(LOCATION.ID))
 
             .where(baseFilterAndQuery(query))
+            .and(
+                if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                    // filter on distance
+                    // TODO fetch point based on user IP
+                    condition("(point(Location.longitude, Location.latitude) <@> point(4.948795, 51.844849)) < 250"),
+                    // else
+                    trueCondition())
+            )
             .and(additionalFilters)
             //TODO add proper sort
             .orderBy(RENTAL_ITEM.PRICE_24H.asc())
