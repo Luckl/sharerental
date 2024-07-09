@@ -24,7 +24,7 @@ class IpApiClient(
 
     fun getIp(ip: String): IpInfo? {
         val result = ipApi.get()
-            .uri(ip)
+            .uri("/$ip")
             .retrieve()
             .bodyToMono(IpInfo::class.java)
             .block()
@@ -37,17 +37,15 @@ class IpApiClient(
 }
 
 data class IpInfo(
-    val query: String,
-    val status: String,
-    val countryCode: String,
-    val country: String,
-    val region: String,
-    val regionName: String,
-    val city: String,
-    val zip: String,
-    val lat: Double,
-    val lon: Double,
-    val timezone: String,
-    val isp: String,
-    val org: String,
+    val query: String?,
+    val status: String?,
+    val countryCode: String?,
+    val country: String?,
+    val region: String?,
+    val regionName: String?,
+    val city: String?,
+    val zip: String?,
+    val proxy: Boolean?,
+    val lat: Double?,
+    val lon: Double?,
 )

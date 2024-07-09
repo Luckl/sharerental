@@ -1,5 +1,6 @@
 package nl.sharerental.be.search
 
+import nl.sharerental.be.infrastructure.ipapi.IpInfo
 import nl.sharerental.be.jooq.generated.enums.RentalItemDisplayStatus
 import nl.sharerental.be.jooq.generated.enums.RenterTypeEnum
 import nl.sharerental.be.jooq.generated.tables.Lessor.Companion.LESSOR
@@ -15,6 +16,7 @@ import nl.sharerental.contract.http.model.SearchRequest
 import nl.sharerental.contract.http.model.SearchResultItem
 import org.jooq.Condition
 import org.jooq.DSLContext
+import org.jooq.Field
 import org.jooq.TableField
 import org.jooq.impl.DSL.*
 import org.slf4j.LoggerFactory
@@ -28,7 +30,7 @@ class FilterService(
     private val create: DSLContext,
 ) {
 
-    fun getFilterOptions(query: String?, searchRequest: SearchRequest?): List<FilterOption> {
+    fun getFilterOptions(query: String?, searchRequest: SearchRequest?, ip: IpInfo?): List<FilterOption> {
         // time duration in milliseconds
         val start = Instant.now()
 
@@ -37,6 +39,7 @@ class FilterService(
                 query,
                 searchRequest,
                 tableField,
+                ip
             )
         }
             .filter { it.options.isNotEmpty() }
@@ -51,12 +54,13 @@ class FilterService(
     fun getCountsForDistinctFieldValuesWithFilter(
         query: String?,
         searchRequest: SearchRequest?,
-        tableField: TableField<RentalItemRecord, out Any>
+        tableField: TableField<RentalItemRecord, out Any>,
+        ip: IpInfo?
     ): FilterOption {
 
         val result = create.select(tableField, count())
             .from(RENTAL_ITEM)
-            .where(buildCompleteFilter(searchRequest, query))
+            .where(buildCompleteFilter(searchRequest, query, ip))
             .and(tableField.isNotNull)
             .groupBy(tableField)
             .fetch()
@@ -73,19 +77,19 @@ class FilterService(
             }
     }
 
-    fun count(query: String?, searchRequest: SearchRequest?): Int {
+    fun count(query: String?, searchRequest: SearchRequest?, ip: IpInfo?): Int {
         val start = Instant.now()
 
         val i = create.selectCount()
             .from(RENTAL_ITEM)
-            .where(buildCompleteFilter(searchRequest, query))
+            .where(buildCompleteFilter(searchRequest, query, ip))
             .fetchOne(0, Int::class.java) ?: 0
         val end = Instant.now()
         logger.debug("Time taken to count: {} ms", end.toEpochMilli() - start.toEpochMilli())
         return i
     }
 
-    fun search(query: String?, pageRequest: PageRequest, searchRequest: SearchRequest?): MutableList<SearchResultItem> {
+    fun search(query: String?, pageRequest: PageRequest, searchRequest: SearchRequest?, ip: IpInfo?): MutableList<SearchResultItem> {
         val start = Instant.now()
 
         val fetch = create.select(
@@ -110,7 +114,7 @@ class FilterService(
             .join(LOCATION)
             .on(LESSOR.PRIMARY_LOCATION.eq(LOCATION.ID))
 
-            .where(buildCompleteFilter(searchRequest, query))
+            .where(buildCompleteFilter(searchRequest, query, ip))
             //TODO add proper sort
             .orderBy(RENTAL_ITEM.PRICE_24H.asc())
 
@@ -135,16 +139,20 @@ class FilterService(
         return fetch
     }
 
-    private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?) = searchRequestToCondition(searchRequest)
+    private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?, ip: IpInfo?) = searchRequestToCondition(searchRequest)
         .and(baseFilterAndQuery(query))
-        .and(
-            if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                // filter on distance
-                // TODO fetch point based on user IP
-                condition("(point(Location.longitude, Location.latitude) <@> point(4.948795, 51.844849)) < 250"),
-                // else
-                trueCondition())
-        )
+        .and(queryLocationIfIpInfoAvailable(ip))
+
+    private fun queryLocationIfIpInfoAvailable(ip: IpInfo?): Condition {
+        return if (ip?.lat != null && ip.lon != null) {
+            condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                condition("(point(Location.longitude, Location.latitude) <@> point(${ip.lon}, ${ip.lat})) < 250"),
+                trueCondition()))
+
+        } else {
+            trueCondition()
+        }
+    }
 
     private fun searchRequestToCondition(searchRequest: SearchRequest?): Condition {
 

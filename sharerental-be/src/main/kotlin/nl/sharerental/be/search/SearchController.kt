@@ -1,6 +1,8 @@
 package nl.sharerental.be.search
 
+import jakarta.servlet.http.HttpServletRequest
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
+import nl.sharerental.be.infrastructure.ipapi.IpApiClient
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse
@@ -21,6 +23,8 @@ import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 class SearchController(
     private val rentalItemRepository: RentalItemRepository,
     private val filterService: FilterService,
+    private val request: HttpServletRequest,
+    private val ipApi: IpApiClient,
     ) : SearchApi {
 
 
@@ -33,14 +37,18 @@ class SearchController(
     ): ResponseEntity<SearchResult> {
         logger.debug("Search query registered - [$query]")
 
+        request.remoteAddr?.let { logger.debug("Request from IP: $it") }
+
+        val ip = ipApi.getIp(request.remoteAddr ?: "")
+
         val start = Instant.now()
         val pageRequest = pageRequest(page, size, sort)
 
-        val filterOptions = filterService.getFilterOptions(query, searchRequest)
+        val filterOptions = filterService.getFilterOptions(query, searchRequest, ip)
 
-        val search = filterService.search(query, pageRequest, searchRequest)
+        val search = filterService.search(query, pageRequest, searchRequest, ip)
 
-        val count = filterService.count(query, searchRequest)
+        val count = filterService.count(query, searchRequest, ip)
 
         val end = Instant.now()
         logger.debug("Total time taken to search: {} ms", end.toEpochMilli() - start.toEpochMilli())
