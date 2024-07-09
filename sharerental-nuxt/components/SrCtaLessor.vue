@@ -46,7 +46,7 @@ const showContactDialog = () => {
         <div class="flex flex-col mb-20 order-first md:order-last">
           <h1 class="text-xl md:text-4xl">Direct beginnen met verhuren?</h1>
           <span class="mt-1">Ben je op zoek naar een extra verkoopkanaal?</span>
-          <span>Ben je benieuwd naar alle opties een mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
+          <span>Ben je benieuwd naar alle opties en mogelijkheden voor samenwerking binnen het ShareRental platform?</span>
           <span>Neem dan direct gratis contact op!</span>
           <button unstyled class="rounded-lg bg-white text-black font-bold w-36 h-12 mt-4"
                   @click="showContactDialog()">Neem contact op
