@@ -10,8 +10,10 @@ definePageMeta({
   linkTitle: 'Login'
 })
 
-const auth = useFirebaseAuth()! // only exists on client side
-auth.languageCode = "nl"
+const auth = useFirebaseAuth() // only exists on client side
+if (auth) {
+  auth.languageCode = "nl"
+}
 const userStore = useUserStore()
 const router = useRouter()
 const errorParser = new RegExp('.*\\((.*)\\).*')
