@@ -43,7 +43,6 @@ function formatCurrency(value: number | undefined) {
 
 const startTransaction = async () => {
   if (rentalItem.value?.id) {
-    debugger;
     const success = await srRenterInformationForm.value?.submitForm()
     if (!success) return
 

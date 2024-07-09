@@ -1,7 +1,8 @@
 <template>
   <form-page>
     <template #content>
-      Succes! Je hebt zojuist succesvol een reservering geplaatst met ID <span class="font-bold">{{ transaction }}</span>
+      Succes! Je hebt zojuist succesvol een reservering geplaatst met referentie <span class="font-bold">{{ transaction }}</span>
+      <p>Check je email voor meer informatie</p>
     </template>
   </form-page>
 </template>
