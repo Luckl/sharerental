@@ -148,7 +148,6 @@ class FilterService(
             condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
                 condition("(point(Location.longitude, Location.latitude) <@> point(${ip.lon}, ${ip.lat})) < 250"),
                 trueCondition()))
-
         } else {
             trueCondition()
         }

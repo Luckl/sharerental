@@ -1,6 +1,6 @@
 package nl.sharerental.be
 
-import nl.sharerental.be.infrastructure.postcodeeu.ZipInfo
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.aot.hint.MemberCategory
 import org.springframework.aot.hint.RuntimeHints
 import org.springframework.aot.hint.RuntimeHintsRegistrar
@@ -17,5 +17,6 @@ class MyRuntimeHints : RuntimeHintsRegistrar {
         hints.reflection().registerType(LockInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(MonitorInfo::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
         hints.reflection().registerType(StackTraceElement::class.java, MemberCategory.INTROSPECT_PUBLIC_METHODS)
+        hints.proxies().registerJdkProxy(HttpServletRequest::class.java)
     }
 }
