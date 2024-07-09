@@ -1,6 +1,5 @@
 package nl.sharerental.be.search
 
-import jakarta.servlet.http.HttpServletRequest
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.infrastructure.ipapi.IpApiClient
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
@@ -12,6 +11,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -23,7 +24,6 @@ import nl.sharerental.contract.http.model.RentalItem as HttpRentalItem
 class SearchController(
     private val rentalItemRepository: RentalItemRepository,
     private val filterService: FilterService,
-//    private val request: HttpServletRequest,
     private val ipApi: IpApiClient,
     ) : SearchApi {
 
@@ -37,18 +37,20 @@ class SearchController(
     ): ResponseEntity<SearchResult> {
         logger.debug("Search query registered - [$query]")
 
-//        request.remoteAddr?.let { logger.debug("Request from IP: $it") }
+        val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?)?.request
 
-//        val ip = ipApi.getIp(request.remoteAddr ?: "")
+        request?.remoteAddr?.let { logger.debug("Request from IP: $it") }
+
+        val ip = ipApi.getIp(request?.remoteAddr ?: "")
 
         val start = Instant.now()
         val pageRequest = pageRequest(page, size, sort)
 
-        val filterOptions = filterService.getFilterOptions(query, searchRequest, null)
+        val filterOptions = filterService.getFilterOptions(query, searchRequest, ip)
 
-        val search = filterService.search(query, pageRequest, searchRequest, null)
+        val search = filterService.search(query, pageRequest, searchRequest, ip)
 
-        val count = filterService.count(query, searchRequest, null)
+        val count = filterService.count(query, searchRequest, ip)
 
         val end = Instant.now()
         logger.debug("Total time taken to search: {} ms", end.toEpochMilli() - start.toEpochMilli())
