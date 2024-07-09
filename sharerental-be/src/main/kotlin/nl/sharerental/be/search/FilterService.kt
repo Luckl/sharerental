@@ -56,8 +56,7 @@ class FilterService(
 
         val result = create.select(tableField, count())
             .from(RENTAL_ITEM)
-            .where(baseFilterAndQuery(query))
-            .and(searchRequestToCondition(searchRequest))
+            .where(buildCompleteFilter(searchRequest, query))
             .and(tableField.isNotNull)
             .groupBy(tableField)
             .fetch()
@@ -76,12 +75,10 @@ class FilterService(
 
     fun count(query: String?, searchRequest: SearchRequest?): Int {
         val start = Instant.now()
-        val additionalFilters = searchRequestToCondition(searchRequest)
 
         val i = create.selectCount()
             .from(RENTAL_ITEM)
-            .where(baseFilterAndQuery(query))
-            .and(additionalFilters)
+            .where(buildCompleteFilter(searchRequest, query))
             .fetchOne(0, Int::class.java) ?: 0
         val end = Instant.now()
         logger.debug("Time taken to count: {} ms", end.toEpochMilli() - start.toEpochMilli())
@@ -90,8 +87,6 @@ class FilterService(
 
     fun search(query: String?, pageRequest: PageRequest, searchRequest: SearchRequest?): MutableList<SearchResultItem> {
         val start = Instant.now()
-
-        val additionalFilters = searchRequestToCondition(searchRequest)
 
         val fetch = create.select(
             RENTAL_ITEM.ID,
@@ -115,16 +110,7 @@ class FilterService(
             .join(LOCATION)
             .on(LESSOR.PRIMARY_LOCATION.eq(LOCATION.ID))
 
-            .where(baseFilterAndQuery(query))
-            .and(
-                if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                    // filter on distance
-                    // TODO fetch point based on user IP
-                    condition("(point(Location.longitude, Location.latitude) <@> point(4.948795, 51.844849)) < 250"),
-                    // else
-                    trueCondition())
-            )
-            .and(additionalFilters)
+            .where(buildCompleteFilter(searchRequest, query))
             //TODO add proper sort
             .orderBy(RENTAL_ITEM.PRICE_24H.asc())
 
@@ -143,10 +129,22 @@ class FilterService(
                     this.imageUrl = it.value8()?.let { it1 -> URI(it1) }
                 }
             }
+
         val end = Instant.now()
         logger.debug("Time taken to search: {} ms", end.toEpochMilli() - start.toEpochMilli())
         return fetch
     }
+
+    private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?) = searchRequestToCondition(searchRequest)
+        .and(baseFilterAndQuery(query))
+        .and(
+            if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                // filter on distance
+                // TODO fetch point based on user IP
+                condition("(point(Location.longitude, Location.latitude) <@> point(4.948795, 51.844849)) < 250"),
+                // else
+                trueCondition())
+        )
 
     private fun searchRequestToCondition(searchRequest: SearchRequest?): Condition {
 

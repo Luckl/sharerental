@@ -15,13 +15,13 @@ class PostcodeEuClient(
     @Value("\${share-rental.postcode-eu.dutch-zip-lookup-url}") private val zipLookupUrl: String,
     ) {
 
-    val slackClient = WebClient.builder()
+    val postcodeEuClient = WebClient.builder()
         .baseUrl(zipLookupUrl)
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .build()
 
     fun getZipInfo(zip: String, houseNumber: String): ZipInfo {
-        return slackClient.get()
+        return postcodeEuClient.get()
             .uri("/$zip/$houseNumber")
             .headers {
                 it.setBasicAuth(key, secret)

@@ -54,6 +54,9 @@ share-rental:
     secret:
     dutch-zip-lookup-url: https://api.postcode.eu/nl/v1/addresses/postcode/
 
+  ip-api:
+    base-url: http://ip-api.com/json/
+
 ngrok:
   enabled: true
   auth-token: 2VtukgpNnE6MmsmLeAIyoSmX1iv_2dRWq8zfkE9YsVhzsTzqS
