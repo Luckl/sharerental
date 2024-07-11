@@ -60,6 +60,10 @@ class FilterService(
 
         val result = create.select(tableField, count())
             .from(RENTAL_ITEM)
+            .join(LESSOR)
+            .on(RENTAL_ITEM.OWNER_ID.eq(LESSOR.ID))
+            .join(LOCATION)
+            .on(LESSOR.PRIMARY_LOCATION.eq(LOCATION.ID))
             .where(buildCompleteFilter(searchRequest, query, ip))
             .and(tableField.isNotNull)
             .groupBy(tableField)
@@ -82,6 +86,10 @@ class FilterService(
 
         val i = create.selectCount()
             .from(RENTAL_ITEM)
+            .join(LESSOR)
+            .on(RENTAL_ITEM.OWNER_ID.eq(LESSOR.ID))
+            .join(LOCATION)
+            .on(LESSOR.PRIMARY_LOCATION.eq(LOCATION.ID))
             .where(buildCompleteFilter(searchRequest, query, ip))
             .fetchOne(0, Int::class.java) ?: 0
         val end = Instant.now()
@@ -146,7 +154,7 @@ class FilterService(
     private fun queryLocationIfIpInfoAvailable(ip: IpInfo?): Condition {
         return if (ip?.lat != null && ip.lon != null) {
             condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                condition("(point(Location.longitude, Location.latitude) <@> point(${ip.lon}, ${ip.lat})) < 250"),
+                condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),
                 trueCondition()))
         } else {
             trueCondition()
