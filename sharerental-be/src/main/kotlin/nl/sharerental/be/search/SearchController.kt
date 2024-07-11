@@ -39,9 +39,9 @@ class SearchController(
 
         val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?)?.request
 
-        request?.remoteAddr?.let { logger.debug("Request from IP: $it") }
+        request?.getHeader("X-Forwarded-For")?.let { logger.debug("Request from IP: $it") }
 
-        val ip = ipApi.getIp(request?.remoteAddr ?: "")
+        val ip = ipApi.getIp(request?.getHeader("X-Forwarded-For") ?: "")
 
         val start = Instant.now()
         val pageRequest = pageRequest(page, size, sort)
