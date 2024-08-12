@@ -1,8 +1,11 @@
 package nl.sharerental.be.search
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import nl.sharerental.be.infrastructure.PageableHelper.pageRequest
 import nl.sharerental.be.infrastructure.ipapi.IpApiClient
 import nl.sharerental.be.rentalitem.infrastructure.repository.RentalItemRepository
+import nl.sharerental.be.search.infrastructure.SearchRequestQueryRepository
+import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.contract.http.SearchApi
 import nl.sharerental.contract.http.model.PaginationResponse
 import nl.sharerental.contract.http.model.SearchRequest
@@ -25,6 +28,9 @@ class SearchController(
     private val rentalItemRepository: RentalItemRepository,
     private val filterService: FilterService,
     private val ipApi: IpApiClient,
+    private val searchRequestQueryRepository: SearchRequestQueryRepository,
+    private val objectMapper: ObjectMapper,
+    private val userService: CurrentUserService
     ) : SearchApi {
 
 
@@ -35,11 +41,18 @@ class SearchController(
         sort: MutableList<String>?,
         searchRequest: SearchRequest?
     ): ResponseEntity<SearchResult> {
-        logger.debug("Search query registered - [$query]")
 
         val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?)?.request
 
         request?.getHeader("X-Forwarded-For")?.let { logger.debug("Request from IP: $it") }
+
+        searchRequestQueryRepository.save(SearchRequestQuery(
+            ipAddress = request?.getHeader("X-Forwarded-For") ?: "",
+            userId = userService.getOptional()?.id,
+            query = query,
+            category = searchRequest?.filters?.findLast { it.field == "category" }?.values.toString(),
+            searchRequest = objectMapper.writeValueAsString(searchRequest)
+        ))
 
         val ip = ipApi.getIp(request?.getHeader("X-Forwarded-For") ?: "")
 
