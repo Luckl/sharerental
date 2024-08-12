@@ -42,7 +42,6 @@ class TransactionService(
     @Scheduled(cron = "0 * * * * *")
     @Transactional
     fun expireTransactions() {
-        logger.debug("Running expireTransactions cronjob")
         val transactions = transactionRepository.findAllByCurrentStatusAndOlderThan(
             TransactionStatusEnum.INITIALIZED,
             LocalDateTime.now().minusMinutes(30).toInstant(

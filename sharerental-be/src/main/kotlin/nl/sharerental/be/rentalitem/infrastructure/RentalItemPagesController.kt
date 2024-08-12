@@ -16,7 +16,6 @@ class RentalItemPagesController(
 
     @GetMapping("rentalItemPages")
     fun getRentalItemPages(): List<RentalItemPage> {
-        logger.info("Returning rental item pages")
         return rentalItemRepository
             .findAll()
             .filter { it.displayStatus == DisplayStatus.ACTIVE }
