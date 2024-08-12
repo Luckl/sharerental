@@ -4,6 +4,7 @@ import {useNuxtApp} from "#app";
 
 export type LessorState = {
     activeLessor: Lessor | null;
+    loaded: boolean;
     availableLessors: Lessor[];
 }
 
@@ -12,6 +13,7 @@ export const useLessorStore = defineStore({
     id: 'lessorStore',
     state: () => ({
         activeLessor: null,
+        loaded: false,
         availableLessors: [],
     } as LessorState),
     getters: {
@@ -21,6 +23,15 @@ export const useLessorStore = defineStore({
     },
     actions: {
         async loadLessors(): Promise<void> {
+
+            if (this.loaded) {
+                return;
+            } else {
+                await this.reloadLessors();
+            }
+
+        },
+        async reloadLessors(): Promise<void> {
             const $lessorApi = useNuxtApp().$lessorApi;
 
             this.availableLessors = await $lessorApi.getLessor({
@@ -29,8 +40,10 @@ export const useLessorStore = defineStore({
                 sort: [],
             })
                 .then((result) => {
+                    this.loaded = true;
                     return result.embedded;
                 }, (error) => {
+                    this.loaded = true;
                     return [];
                 });
 
@@ -39,6 +52,6 @@ export const useLessorStore = defineStore({
             } else {
                 this.activeLessor = null;
             }
-        },
+        }
     },
 })

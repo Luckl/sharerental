@@ -167,7 +167,7 @@ async function signOut() {
       .then(() => {
         userStore.refreshUser()
             .then(() => {
-              lessorStore.loadLessors()
+              lessorStore.reloadLessors()
             }).then(() => {
           router.push("/")
         })
@@ -175,7 +175,7 @@ async function signOut() {
 }
 
 onMounted(() => {
-  lessorStore.loadLessors()
+  lessorStore.reloadLessors()
       .then(() => {
         loaded.value = true
       })
@@ -189,7 +189,7 @@ function onSubmitNewLessor() {
 
       .then(success => {
             message.value = "Succesvol aangemaakt"
-            lessorStore.loadLessors()
+            lessorStore.reloadLessors()
             userStore.refreshUser()
           },
           failureReason => {

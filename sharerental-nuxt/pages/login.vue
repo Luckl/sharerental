@@ -30,7 +30,7 @@ function signInCredentials() {
       .then(() => {
         userStore.refreshUser()
             .then(() => {
-              lessorStore.loadLessors()
+              lessorStore.reloadLessors()
             }).then(() => {
           router.push("/")
         })
@@ -44,7 +44,7 @@ function signInGoogle() {
       .then(() => {
         userStore.refreshUser()
             .then(() => {
-              lessorStore.loadLessors()
+              lessorStore.reloadLessors()
             }).then(() => {
           router.push("/")
         })
