@@ -171,6 +171,13 @@ paths:
             example: "bouwdro"
           required: false
           description: Search query, applied to all text fields.
+        - in: query
+          name: lessorId
+          schema:
+              type: integer
+              format: int64
+              example: '1'
+          required: false
       responses:
         200:
           description: Successful result

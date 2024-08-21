@@ -43,6 +43,7 @@
 <script lang="ts" setup>
 import {DisplayStatus, RentalItemApi} from "~/schemas/openapi/rentalItem";
 import type {GetRentalItemsResult, RentalItem} from "~/schemas/openapi/rentalItem";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 const error = ref<String | undefined>(undefined)
 const router = useRouter()
@@ -51,6 +52,7 @@ const page = ref(0)
 const pageSize = ref(5)
 const totalElements = ref(0)
 const rentalItems = ref<RentalItem[]>([])
+const {activeLessor} = storeToRefs(useLessorStore())
 const rentalItemResult = ref<GetRentalItemsResult>()
 const $rentalItemApi: RentalItemApi = useNuxtApp().$rentalItemApi;
 
@@ -100,12 +102,17 @@ function toggleVisibility(data: RentalItem) {
       })
 }
 
+watch(activeLessor, () => {
+  fetchRentalItems()
+})
+
 function fetchRentalItems() {
   $rentalItemApi.getRentalItems({
     page: page.value,
     size: pageSize.value,
     sort: [],
-    filter: filter.value
+    filter: filter.value,
+    lessorId: activeLessor.value?.id
   })
       .then(
           success => {

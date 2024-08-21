@@ -19,59 +19,45 @@
         <span class="font-bold text-xl m-1">Registreren als verhuurder</span>
       </template>
       <template #content class="flexbox-column">
-        <form @submit.prevent>
-          <div class="flexbox-column">
-            <label for="fName" class="data-label mb-1">Weergavenaam</label>
-            <InputText inputId="fName" class="mb-1" v-model="formInput.name"></InputText>
+        <form @submit="onSubmit">
+          <span class="text-xl font-bold block mb-5">Vul je gegevens in.</span>
+          <div class="flex gap-2">
+            <sr-text-field label="Weergavenaam" v-model="name"
+                           :errors="errors['lessor.name']"></sr-text-field>
           </div>
-          <div class="flexbox-column">
-            <label for="fDescription" class="data-label mb-1">Omschrijving</label>
-            <InputText inputId="fDescription" class="mb-1" v-model="formInput.description"></InputText>
+          <div class="flex gap-2">
+            <sr-text-field label="Omschrijving" v-model="description"
+                           :errors="errors['lessor.description']"></sr-text-field>
           </div>
-          <Divider align="left" type="solid" class="mb-1">
-            <span>Locatiegegevens</span>
-          </Divider>
-          <div class="flexbox-row mb-1">
-            <div class="flex align-items-center ">
-              <RadioButton v-model="formInput.country" inputId="NL" name="fCountry" value="Nederland"/>
-              <label for="NL" class="ml-2">Nederland</label>
+          <div class="flex gap-2">
+            <sr-text-field label="Telefoonnummer" v-model="phoneNumber"
+                           :errors="errors['lessor.phoneNumber']"></sr-text-field>
+          </div>
+          <div class="flex gap-2">
+            <sr-text-field label="Postcode" v-model="postalCode" @change="fetchZipInfo()"
+                           :errors="errors['lessor.location.postalCode']"></sr-text-field>
+            <sr-text-field label="Huisnummer" v-model="houseNumber" @change="fetchZipInfo()"
+                           :errors="errors['lessor.location.houseNumber']"></sr-text-field>
+          </div>
+          <small id="help" class="p-error">{{ postalCodeLookupError }}</small>
+          <div class="flex gap-2">
+            <sr-text-field label="Straat" v-model="street" disabled
+                           :errors="errors['lessor.location.street']"></sr-text-field>
+            <sr-text-field label="Stad" v-model="city" disabled
+                           :errors="errors['lessor.location.city']"></sr-text-field>
+          </div>
+          <div class="flex gap-2">
+            <div class="h-8 align-middle">
+              <label for="Nederland" class="mr-2">Nederland</label>
+              <RadioButton v-model="country" value="Nederland" binary inputId="Nederland"></RadioButton>
             </div>
-            <div class="flex align-items-center">
-              <RadioButton v-model="formInput.country" inputId="BE" name="fCountry" value="België"/>
-              <label for="BE" class="ml-2">België</label>
+            <div>
+              <label for="België" class="mr-2">België</label>
+              <RadioButton v-model="country" value="België" binary inputId="België"></RadioButton>
             </div>
           </div>
-          <div class="flexbox-column">
-            <label for="fPostalCode" class="data-label mb-1">Postcode</label>
-            <InputText inputId="fPostalCode" class="mb-1" v-model="formInput.postalCode"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fHouseNumber" class="data-label mb-1">Huisnummer</label>
-            <InputText inputId="fHouseNumber" class="mb-1" v-model="formInput.houseNumber"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fHouseNumberAddition" class="data-label mb-1">Toevoeging</label>
-            <InputText inputId="fHouseNumberAddition" class="mb-1 fit"
-                       v-model="formInput.houseNumberAddition"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fStreet" class="data-label mb-1">Straat</label>
-            <InputText inputId="fStreet" class="mb-1 fit" v-model="formInput.street"></InputText>
-          </div>
-          <div class="flexbox-column">
-            <label for="fCity" class="data-label mb-1">Plaatsnaam</label>
-            <InputText inputId="fCity" class="mb-1 fit" v-model="formInput.city"></InputText>
-          </div>
-          <Divider align="left" type="solid" class="mb-1">
-            <span>Contactgegevens</span>
-          </Divider>
-          <div class="flexbox-column">
-            <label for="fCity" class="data-label mb-1">Telefoonnummer</label>
-            <InputText inputId="fCity" class="mb-1 fit" v-model="formInput.phoneNumber"></InputText>
-          </div>
-          <div>
-            <Button @Click="onSubmitNewLessor">Aanmaken</Button>
-          </div>
+
+          <Button type="submit" label="Verhuurder aanmaken"></Button>
         </form>
       </template>
     </form-page>
@@ -110,9 +96,7 @@
           <span class="data-label mb-1">Adres</span>
           <span>{{
               activeLessor?.primaryLocation?.street
-            }} {{ activeLessor?.primaryLocation?.houseNumber }}{{
-              activeLessor?.primaryLocation?.houseNumberAddition
-            }}</span>
+            }} {{ activeLessor?.primaryLocation?.houseNumber }}</span>
         </div>
         <div class="flexbox-column">
           <span class="data-label mb-1">Plaatsnaam</span>
@@ -137,10 +121,10 @@ import {signOut as signOutFirebase} from "@firebase/auth";
 import {useLessorStore} from "~/services/stores/lessorStore";
 import {storeToRefs} from "pinia";
 import {LessorApi} from "~/schemas/openapi/lessor";
+import {RenterType} from "~/schemas/openapi/renter";
 
 let user = useCurrentUser();
 const auth = useFirebaseAuth()!!
-const username = user.value?.displayName
 const userStore = useUserStore()
 const lessorStore = useLessorStore()
 const router = useRouter()
@@ -148,17 +132,72 @@ const {availableLessors, activeLessor} = storeToRefs(lessorStore)
 const loaded = ref(false)
 const message = ref<String | undefined>(undefined)
 const error = ref<String | undefined>(undefined)
-const formInput = reactive({
-  name: "",
-  description: "",
-  street: "",
-  postalCode: "",
-  houseNumber: "",
-  houseNumberAddition: "",
-  city: "",
-  country: "",
-  phoneNumber: ""
-})
+import * as yup from "yup";
+import {useForm} from "vee-validate";
+import SrTextField from "~/components/SrTextField.vue";
+import {ZipcodeApi} from "~/schemas/openapi/contactForm";
+
+const zipcodeApi: ZipcodeApi = useNuxtApp().$zipcodeApi;
+const postalCodeLookupError = ref<String | undefined>(undefined)
+
+const schema = yup.object({
+  lessor: yup.object({
+    name: yup.string().required().label("Weergavenaam"),
+    description: yup.string().required().label("Omschrijving"),
+    phoneNumber: yup.string().required().label("Telefoonnummer"),
+    location: yup.object({
+      street: yup.string().required().label("Straat"),
+      houseNumber: yup.string().required().label("Huisnummer"),
+      postalCode: yup.string().required().label("Postcode"),
+      city: yup.string().required().label("Stad"),
+      country: yup.mixed().oneOf(["Nederland", "België"]).required().label("Land"),
+    })
+  }),
+});
+
+const {defineField, errors, handleSubmit} = useForm({
+  validationSchema: schema,
+  initialValues: {
+    lessor: {
+      name: "",
+      description: "",
+      phoneNumber: "",
+      location: {
+        street: "",
+        houseNumber: "",
+        postalCode: "",
+        city: "",
+        country: "Nederland",
+      }
+    }
+  }
+});
+
+const [name] = defineField("lessor.name");
+const [description] = defineField("lessor.description");
+const [phoneNumber] = defineField("lessor.phoneNumber");
+const [street] = defineField("lessor.location.street");
+const [houseNumber] = defineField("lessor.location.houseNumber");
+const [postalCode] = defineField("lessor.location.postalCode");
+const [city] = defineField("lessor.location.city");
+const [country] = defineField("lessor.location.country");
+
+const fetchZipInfo = async () => {
+  if (postalCode.value.length === 6 && houseNumber.value.length > 0) {
+    await zipcodeApi.getAddressByZipcode({
+      zipcode: postalCode.value,
+      houseNumber: houseNumber.value
+    }).then((response) => {
+          street.value = response.street ?? ""
+          city.value = response.city ?? ""
+          country.value = response.country ?? ""
+        },
+
+        () => {
+          postalCodeLookupError.value = "Adres niet gevonden"
+        })
+  }
+}
 
 const $lessorApi: LessorApi = useNuxtApp().$lessorApi;
 
@@ -182,20 +221,31 @@ onMounted(() => {
 
 })
 
-function onSubmitNewLessor() {
-  $lessorApi.createLessor({
-    lessorInput: formInput
-  })
+const onSubmit = handleSubmit(values => {
+      $lessorApi.createLessor({
 
-      .then(success => {
-            message.value = "Succesvol aangemaakt"
-            lessorStore.reloadLessors()
-            userStore.refreshUser()
-          },
-          failureReason => {
-            error.value = "Er is iets fout gegaan"
-          })
-}
+        lessorInput: {
+          name: values.lessor.name,
+          description: values.lessor.description,
+          phoneNumber: values.lessor.phoneNumber,
+          street: values.lessor.location.street,
+          houseNumber: values.lessor.location.houseNumber,
+          postalCode: values.lessor.location.postalCode,
+          city: values.lessor.location.city,
+          country: values.lessor.location.country
+        }
+      })
+
+          .then(success => {
+                message.value = "Succesvol aangemaakt"
+                lessorStore.reloadLessors()
+                userStore.refreshUser()
+              },
+              failureReason => {
+                error.value = "Er is iets fout gegaan"
+              })
+    })
+;
 
 </script>
 <style>
@@ -203,12 +253,6 @@ function onSubmitNewLessor() {
 .flexbox-column {
   display: flex;
   flex-direction: column
-}
-
-.flexbox-row {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem
 }
 
 .mb-1 {

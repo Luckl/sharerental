@@ -152,11 +152,7 @@ components:
           example: "Machineverhuur voor iedereen!"
         phoneNumber:
           type: string
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        addressLine3:
+        email:
           type: string
         street:
           type: string

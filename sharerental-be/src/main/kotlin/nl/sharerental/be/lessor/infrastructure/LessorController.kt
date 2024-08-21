@@ -43,16 +43,16 @@ class LessorController(
                 .orElseThrow { IllegalArgumentException("PostalCodeLocationNotFound") }
 
         val primaryLocation = Location(
-            addressLine1 = lessorInput.addressLine1,
-            addressLine2 = lessorInput.addressLine2,
-            addressLine3 = lessorInput.addressLine3,
             city = lessorInput.city,
             country = lessorInput.country,
             houseNumber = lessorInput.houseNumber,
             postalCode = lessorInput.postalCode,
             street = lessorInput.street,
             latitude = postalCodeLocation.latitude,
-            longitude = postalCodeLocation.longitude
+            longitude = postalCodeLocation.longitude,
+            addressLine1 = "",
+            addressLine2 = "",
+            addressLine3 = ""
         )
 
         val lessor = Lessor(

@@ -144,23 +144,31 @@ class RentalItemController(
         return ResponseEntity.ok(HttpRentalItem(result.id, result.name))
     }
 
-
-
     override fun getRentalItems(
         page: Int?,
         size: Int?,
         sort: MutableList<String>?,
-        filter: String?
+        filter: String?,
+        lessorId: Long?
     ): ResponseEntity<GetRentalItemsResult> {
-        val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
-        if (lessors.size != 1) {
-            throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
+        val lessor = if (lessorId != null) {
+            lessorRepository.getIdsForUserId(currentUserService.get().id).filter { it == lessorId }.also {
+                if (it.isEmpty()) {
+                    throw RuntimeException("No lessors found for this ID.")
+                }
+            }.first()
+        } else {
+            lessorRepository.getIdsForUserId(currentUserService.get().id).also {
+                if (it.size != 1) {
+                    throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
+                }
+            }.first()
         }
 
         val actualSort = if (sort?.isEmpty() == true) mutableListOf("id;desc") else sort
 
-        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessors[0], filter, pageRequest(
+        val findAll = rentalItemRepository.findByLessorIdAndSearch(lessor, filter, pageRequest(
             page,
             size,
             actualSort))
