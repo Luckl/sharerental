@@ -41,6 +41,14 @@
                     :label="accountBtnText" text unstyled>
             </Button>
           </NuxtLink>
+          <dropdown v-if="availableLessors.length > 1" v-model="activeLessor" :options="availableLessors">
+            <template #value="slotProps">
+              <span>{{ slotProps.value.name }} ({{ slotProps.value.id}})</span>
+            </template>
+            <template #option="slotProps">
+              <span>{{ slotProps.option.name }} ({{ slotProps.option.id}})</span>
+            </template>
+          </dropdown>
         </div>
       </nav>
       <nav class="flex md:hidden w-full">
@@ -131,11 +139,12 @@ import {useLessorStore} from "~/services/stores/lessorStore";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
 import {useDialog} from "primevue/usedialog";
 import {SrContactDialog} from "#components";
+import type {Lessor} from "~/schemas/openapi/lessor";
 
 const userStore = useUserStore();
 const {user} = storeToRefs(userStore);
 const lessorStore = useLessorStore();
-const {availableLessors} = storeToRefs(lessorStore);
+const {availableLessors, activeLessor} = storeToRefs(lessorStore);
 const dialog = useDialog();
 
 const renterTypeStore = useRenterTypeStore();
