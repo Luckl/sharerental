@@ -26,12 +26,6 @@ components:
           type: integer
           format: int64
           example: 1
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        addressLine3:
-          type: string
         street:
           type: string
         houseNumber:
@@ -42,3 +36,9 @@ components:
           type: string
         country:
           type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

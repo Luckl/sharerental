@@ -42,8 +42,8 @@ getAvailableItemsAmount()
 
 let availableAtOrFrom = definePlace({
   geo: {
-    latitude: item.value?.latitude,
-    longitude: item.value?.longitude
+    latitude: item.value?.location?.latitude,
+    longitude: item.value?.location?.longitude
   }
 })
 
@@ -244,6 +244,8 @@ function formatCurrency(value: number | undefined) {
           <divider></divider>
           <SrRentalItemProperty :field="item?.brand" label="Merk"/>
           <SrRentalItemProperty :field="item?.longDescription" label="Omschrijving"/>
+          <SrRentalItemProperty :field="item?.location?.city" label="Locatie"/>
+          <SrRentalItemProperty :field="item?.location?.country" label="Land"/>
           <SrRentalItemProperty :field="item?.reachMeters" label="Bereik" suffix="m"/>
           <SrRentalItemProperty :field="item?.carryingWeightKilograms" label="Maximale draaggewicht" suffix="kg"/>
           <SrRentalItemProperty :field="item?.maximumWorkHeightMeters" label="Maximale werkhoogte" suffix="m"/>

@@ -119,8 +119,7 @@ data class RentalItem(
                 fuelType = item.fuelType?.toHttpEnum()
                 rentToRenterType = item.rentToRenterType?.toHttpEnum()
                 amount = item.amount
-                latitude = item.owner.primaryLocation.latitude
-                longitude = item.owner.primaryLocation.longitude
+                location = item.owner.primaryLocation.toResponse()
             }
     }
 }

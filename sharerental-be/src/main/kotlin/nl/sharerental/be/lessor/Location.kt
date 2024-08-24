@@ -27,9 +27,6 @@ class Location(
     fun toResponse(): HttpLocation {
         val httpLocation = HttpLocation()
 
-        httpLocation.addressLine1 = addressLine1
-        httpLocation.addressLine2 = addressLine2
-        httpLocation.addressLine3 = addressLine3
         httpLocation.street = street
         httpLocation.houseNumber = houseNumber
         httpLocation.postalCode = postalCode

@@ -199,12 +199,8 @@ components:
           $ref: '#/components/schemas/FuelType'
         rentToRenterType:
           $ref: './RenterType.yaml#/components/schemas/RenterType'
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
+        location:
+          $ref: './Location.yaml#/components/schemas/Location'
       required:
         - id
         - name
