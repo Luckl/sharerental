@@ -125,9 +125,21 @@ const createRenterInputObject = () => {
                 <span class="font-bold text-sm ">Prijs per dag </span>
                 <span class="font-bold text-sm ">{{ formatCurrency(rentalItem?.price24h) }}</span>
               </div>
+              <div class="flex justify-between" v-if="rentalItem?.price168h">
+                <span class="font-bold text-sm ">Prijs per week </span>
+                <span class="font-bold text-sm ">{{ formatCurrency(rentalItem?.price168h) }}</span>
+              </div>
+              <div class="flex justify-between" v-if="rentalItem?.deposit">
+                <span class="font-bold text-sm ">Borg </span>
+                <span class="font-bold text-sm ">{{ formatCurrency(rentalItem?.deposit, false) }}</span>
+              </div>
               <div class="flex justify-between">
                 <span class="font-bold text-sm">Aantal </span>
                 <span class="font-bold text-sm ">{{ amount }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="font-bold text-sm">BTW </span>
+                <span class="font-bold text-sm ">21%</span>
               </div>
               <div class="flex justify-between">
                 <span class="font-bold text-green-900 ">Totaal </span>
