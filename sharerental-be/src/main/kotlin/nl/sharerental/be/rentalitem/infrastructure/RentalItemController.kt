@@ -60,6 +60,7 @@ class RentalItemController(
             price24h = rentalItemInput.price24h?.toBigDecimal()!!
             price48h = rentalItemInput.price48h?.toBigDecimal()
             price168h = rentalItemInput.price168h?.toBigDecimal()
+            deposit = rentalItemInput.deposit?.toBigDecimal()!!
             amount = rentalItemInput.amount
             automaticallyAcceptTransaction = rentalItemInput.automaticallyAcceptTransaction
             deliveryPossible = rentalItemInput.deliveryPossible
