@@ -31,9 +31,9 @@ const formatter = new Intl.NumberFormat('nl-NL', {
 
 const {renterType} = storeToRefs(useRenterTypeStore())
 
-function formatCurrency(value: number | undefined) {
-  if (value !== undefined && value !== null) {
-    if (renterType.value === RenterTypeEnum.Business) {
+function formatCurrency(value: number | undefined, withVat: boolean = true) {
+  if (value !== undefined) {
+    if (renterType.value === RenterTypeEnum.Business || !withVat) {
       return formatter.format(value)
     } else {
       return formatter.format(value * 1.21)
@@ -131,7 +131,7 @@ const createRenterInputObject = () => {
               </div>
               <div class="flex justify-between">
                 <span class="font-bold text-green-900 ">Totaal </span>
-                <span class="font-bold text-green-900">{{ formatCurrency(price) }}</span>
+                <span class="font-bold text-green-900">{{ formatCurrency(price, false) }}</span>
               </div>
             </div>
 

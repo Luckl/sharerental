@@ -235,7 +235,7 @@ function formatCurrency(value: number | undefined, withVat: boolean = true) {
         <div class="flex gap-4 items-center">
           <div class="flex flex-col">
             <span class="font-bold text-green-900">Jouw prijs</span>
-            <span class="font-bold text-green-900 text-3xl">{{ formatCurrency(price, false) }}</span>
+            <span class="font-bold text-green-900 text-3xl">{{ formatCurrency(price - ((item?.deposit ?? 0) * amount), false) }}</span>
           </div>
           <div>
             <Button label="Direct reserveren" :disabled="amount < 1" @click="showRenterInfo()"></Button>
