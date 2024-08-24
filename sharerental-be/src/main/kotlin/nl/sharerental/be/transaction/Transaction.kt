@@ -9,6 +9,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlin.math.max
 
 @Entity
 @Table(name = "transaction")
@@ -47,12 +48,27 @@ data class Transaction(
             rentalItem: RentalItem,
             startDate: LocalDate,
             endDate: LocalDate,
-            amount: Int
+            amount: Int,
+            includeVat: Boolean
         ): BigDecimal {
-            return rentalItem.price24h.times(BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate)))
-                .times(BigDecimal.valueOf(1.21))
+            val daysBetween = ChronoUnit.DAYS.between(startDate, endDate)
+            val weekPrice = rentalItem.price168h ?: rentalItem.price24h.times(BigDecimal(7))
+            val days = max(daysBetween, 1)
+            val remainderDays = days % 7
+            val weeks = days / 7
+
+            val weekPriceTotal = weekPrice.times(BigDecimal.valueOf(weeks))
+            val dayPriceTotal = if (rentalItem.price24h.times(BigDecimal.valueOf(remainderDays)) > weekPrice)
+                weekPrice
+            else
+                rentalItem.price24h.times(BigDecimal.valueOf(remainderDays))
+
+            return dayPriceTotal.plus(weekPriceTotal)
+                .times(if (includeVat) BigDecimal(1.21) else BigDecimal(1))
+                .plus(rentalItem.deposit)
                 .times(BigDecimal(amount))
                 .setScale(2, RoundingMode.HALF_UP)
+
         }
     }
 

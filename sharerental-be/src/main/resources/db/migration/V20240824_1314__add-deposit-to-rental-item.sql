@@ -1,0 +1,1 @@
+alter table rental_item add column deposit numeric not null default 0;

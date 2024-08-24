@@ -112,7 +112,8 @@ function calculatePrice() {
         rentalItemId: item.value?.id,
         startDate: dates.value[0],
         endDate: dates.value[1],
-        amount: amount.value
+        amount: amount.value,
+        includeVat: renterType.value === RenterTypeEnum.Private
       }
     }).then(
         success => {
@@ -159,9 +160,9 @@ const formatter = new Intl.NumberFormat('nl-NL', {
   currency: 'EUR',
 })
 
-function formatCurrency(value: number | undefined) {
+function formatCurrency(value: number | undefined, withVat: boolean = true) {
   if (value !== undefined) {
-    if (renterType.value === RenterTypeEnum.Business) {
+    if (renterType.value === RenterTypeEnum.Business || !withVat) {
       return formatter.format(value)
     } else {
       return formatter.format(value * 1.21)
@@ -192,6 +193,12 @@ function formatCurrency(value: number | undefined) {
           <div class="flex flex-col items-center" v-if="item?.price168h">
             <span class="font-bold">Per week</span>
             <span class="font-extrabold text-3xl">{{ formatCurrency(item?.price168h) }}</span>
+          </div>
+        </div>
+        <div class="flex gap-16 align-middle" >
+          <div class="flex flex-col items-center">
+            <span class="font-bold">Borg</span>
+            <span class="font-extrabold text-3xl">{{ formatCurrency(item?.deposit, false) }}</span>
           </div>
         </div>
         <divider></divider>
@@ -228,7 +235,7 @@ function formatCurrency(value: number | undefined) {
         <div class="flex gap-4 items-center">
           <div class="flex flex-col">
             <span class="font-bold text-green-900">Jouw prijs</span>
-            <span class="font-bold text-green-900 text-3xl">{{ formatCurrency(price) }}</span>
+            <span class="font-bold text-green-900 text-3xl">{{ formatCurrency(price, false) }}</span>
           </div>
           <div>
             <Button label="Direct reserveren" :disabled="amount < 1" @click="showRenterInfo()"></Button>

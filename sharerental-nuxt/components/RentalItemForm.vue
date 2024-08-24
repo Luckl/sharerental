@@ -66,10 +66,14 @@
     </div>
 
     <div class="flexbox-column">
+      <label for="fDeposit" class="data-label mb-1">Borg</label>
+      <InputNumber v-model="props.rentalItem.deposit" inputId="fDeposit" mode="currency" currency="EUR"></InputNumber>
+    </div>
+
+    <div class="flexbox-column">
       <label for="fAmount" class="data-label mb-1">Aantal</label>
       <InputNumber v-model="props.rentalItem.amount" inputId="fAmount"></InputNumber>
     </div>
-
 
     <Divider align="left" type="solid" class="mb-1">
       <span>Aanvullende gegevens</span>

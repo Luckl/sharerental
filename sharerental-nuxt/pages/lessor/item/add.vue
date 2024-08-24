@@ -27,6 +27,7 @@ const formInput = reactive<RentalItemInput>({
   price24h: undefined,
   price48h: undefined,
   price168h: undefined,
+  deposit: 0,
   automaticallyAcceptTransaction: false,
   reachMeters: undefined,
   carryingWeightKilograms: undefined,
@@ -64,6 +65,7 @@ function onSubmitNewItem() {
             formInput.price24h = undefined;
             formInput.price48h = undefined;
             formInput.price168h = undefined;
+            formInput.deposit = 0;
             formInput.reachMeters = undefined;
             formInput.carryingWeightKilograms = undefined;
             formInput.maximumWorkHeightMeters = undefined;

@@ -9,7 +9,6 @@ import nl.sharerental.be.transaction.infrastructure.repository.TransactionReposi
 import nl.sharerental.be.transaction.mollie.TransactionProcessor
 import nl.sharerental.be.user.CurrentUserService
 import nl.sharerental.be.user.Renter
-import nl.sharerental.be.user.RenterType
 import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
 import nl.sharerental.contract.http.model.TransactionCalculationInput
 import org.slf4j.Logger
@@ -34,6 +33,8 @@ class TransactionService(
     private val rentalItemRepository: RentalItemRepository,
 ) {
 
+    private val NO_VAT = false
+    private val WITH_VAT = true
     private val logger: Logger = LoggerFactory.getLogger(TransactionService::class.java)
 
     /**
@@ -167,7 +168,8 @@ class TransactionService(
                 rentalItem,
                 startDate,
                 endDate,
-                amount
+                amount,
+                WITH_VAT
             )
 
         logger.debug(
@@ -193,7 +195,7 @@ class TransactionService(
             startDate = startDate,
             endDate = endDate,
             amount = amount,
-            price = price
+            price = price.times(BigDecimal(1.21))
         )
 
         //First save so TransactionStatus entity won't get a null value for transaction_id
@@ -226,7 +228,8 @@ class TransactionService(
                     it,
                     transactionCalculationInput.startDate,
                     transactionCalculationInput.endDate,
-                    transactionCalculationInput.amount
+                    transactionCalculationInput.amount,
+                    transactionCalculationInput.includeVat
                 )
             }
 
