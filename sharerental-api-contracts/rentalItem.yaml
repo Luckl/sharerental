@@ -192,6 +192,15 @@ paths:
         - rentalItem
       security:
         - BearerAuth: [ ]
+      parameters:
+        - in: query
+          name: lessorId
+          schema:
+            type: integer
+            format: int64
+            example: '1'
+          required: true
+          description: The id of the lessor
       requestBody:
         required: true
         content:

@@ -92,16 +92,13 @@ class RentalItemController(
     }
 
     @Transactional
-    override fun createRentalItem(rentalItemInput: RentalItemInput?): ResponseEntity<HttpRentalItem> {
+    override fun createRentalItem(
+        lessorId: Long?,
+        rentalItemInput: RentalItemInput?): ResponseEntity<HttpRentalItem> {
 
-        val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
+        val validatedLessorId = lessorRepository.getIdsForUserId(currentUserService.get().id).firstOrNull { it == lessorId } ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
 
-        if (lessors.size != 1) {
-            logger.warn("User {} has {} lessors, cannot create rentalItem since we don't know for which lessor", currentUserService.get().id, lessors.size)
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        }
-
-        val lessor = lessorRepository.findById(lessors[0]).orElseThrow()
+        val lessor = lessorRepository.findById(validatedLessorId).orElseThrow()
 
         val rentalItem = RentalItem(
             name = rentalItemInput!!.name,

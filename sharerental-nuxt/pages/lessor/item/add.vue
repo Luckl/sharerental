@@ -12,10 +12,12 @@
 </template>
 <script setup lang="ts">
 import type {RentalItemInput} from "~/schemas/openapi/rentalItem";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
 const $rentalItemApi = useNuxtApp().$rentalItemApi;
+const {activeLessor} = storeToRefs(useLessorStore())
 
 const formInput = reactive<RentalItemInput>({
   name: "",
@@ -51,7 +53,8 @@ const formInput = reactive<RentalItemInput>({
 function onSubmitNewItem() {
 
   $rentalItemApi.createRentalItem({
-    rentalItemInput: formInput
+    rentalItemInput: formInput,
+    lessorId: activeLessor?.value?.id !!
   })
       .then(success => {
             router.push('/lessor/items')
