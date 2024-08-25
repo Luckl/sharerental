@@ -43,6 +43,7 @@ data class Transaction(
         }
     }
 
+    //TODO: Return object that contains calculation subresults such as subtotal ex and incl vat, deposit, amount of days, etc. to prevent recalculation in the frontend.
     companion object {
         fun calculatePrice(
             rentalItem: RentalItem,
