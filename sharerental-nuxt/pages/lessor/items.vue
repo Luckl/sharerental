@@ -6,7 +6,7 @@
     <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
 
     <div class="form-container">
-      <DataTable :first="0" :rows="pageSize" :value="rentalItems" lazy paginator stateStorage="session"
+      <DataTable :first="0" :rows="pageSize" :value="rentalItems" lazy paginator stateStorage="session" stateKey="dt-rental-items"
                  :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem" ref="dt"
                  :totalRecords="totalElements" @page="onPage($event)"
                  paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
