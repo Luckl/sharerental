@@ -7,6 +7,7 @@ import {useToast} from "primevue/usetoast";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {UserApi, UserUserTypeEnum, ZipcodeApi} from "~/schemas/openapi/contactForm";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import SrTextField from "~/components/SrTextField.vue";
 
 const $renterApi: RenterApi = useNuxtApp().$renterApi;
 const userApi: UserApi = useNuxtApp().$userApi;

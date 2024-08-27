@@ -1,103 +1,51 @@
 <template>
   <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
+  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 md:p-12">
+      <div class="px-8">
+        <RentalItemForm v-model="rentalItem" ref="rentalItemForm"></RentalItemForm>
 
-  <FormPage>
-    <template #header>
-      <span class="font-bold text-xl m-1">Artikel toevoegen</span>
-    </template>
-    <template #content class="flexbox-column">
-      <RentalItemForm :rentalItem="formInput" :submit="onSubmitNewItem" submitButtonText="Aanmaken"></RentalItemForm>
-    </template>
-  </FormPage>
+        <div class="flex justify-end mt-8">
+          <Button label="Aanmaken" @click="onSubmitNewItem" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
-import type {RentalItemInput} from "~/schemas/openapi/rentalItem";
+import type {RentalItem} from "~/schemas/openapi/rentalItem";
 import {useLessorStore} from "~/services/stores/lessorStore";
+import type RentalItemForm from "~/components/RentalItemForm.vue";
+
+const rentalItemForm = ref<typeof RentalItemForm | null>(null)
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)
 const $rentalItemApi = useNuxtApp().$rentalItemApi;
 const {activeLessor} = storeToRefs(useLessorStore())
 
-const formInput = reactive<RentalItemInput>({
-  name: "",
-  category: undefined,
-  shortDescription: undefined,
-  longDescription: undefined,
-  deliveryPossible: false,
-  deliveryPrice: undefined,
-  price24h: undefined,
-  price48h: undefined,
-  price168h: undefined,
-  deposit: 0,
-  automaticallyAcceptTransaction: false,
-  reachMeters: undefined,
-  carryingWeightKilograms: undefined,
-  maximumWorkHeightMeters: undefined,
-  intrinsicWeightKilograms: undefined,
-  maximumPressureBars: undefined,
-  maximumHorsePower: undefined,
-  requiredPowerVoltageVolt: undefined,
-  workWidthMeters: undefined,
-  capacityLiters: undefined,
-  itemHeight: undefined,
-  itemWidth: undefined,
-  itemLength: undefined,
-  powerWatt: undefined,
-  maximumSurfaceSquareMeters: undefined,
-  materialType: undefined,
-  brand: undefined,
-  vacuumAttachmentPossible: false
-})
+const rentalItem = ref<RentalItem | undefined>()
 
-function onSubmitNewItem() {
+const onSubmitNewItem = async () => {
+  const success = await rentalItemForm.value?.submitRentalItemForm()
 
-  $rentalItemApi.createRentalItem({
-    rentalItemInput: formInput,
-    lessorId: activeLessor?.value?.id !!
-  })
-      .then(success => {
-            router.push('/lessor/items')
+  if (!success) return
 
-            formInput.name = "";
-            formInput.category = "";
-            formInput.shortDescription = "";
-            formInput.longDescription = "";
-            formInput.deliveryPossible = false;
-            formInput.deliveryPrice = undefined;
-            formInput.price24h = undefined;
-            formInput.price48h = undefined;
-            formInput.price168h = undefined;
-            formInput.deposit = 0;
-            formInput.reachMeters = undefined;
-            formInput.carryingWeightKilograms = undefined;
-            formInput.maximumWorkHeightMeters = undefined;
-            formInput.intrinsicWeightKilograms = undefined;
-            formInput.maximumPressureBars = undefined;
-            formInput.maximumHorsePower = undefined;
-            formInput.requiredPowerVoltageVolt = undefined;
-            formInput.workWidthMeters = undefined;
-            formInput.capacityLiters = undefined;
-            formInput.itemHeight = undefined;
-            formInput.itemWidth = undefined;
-            formInput.itemLength = undefined;
-            formInput.powerWatt = undefined;
-            formInput.maximumSurfaceSquareMeters = undefined;
-            formInput.materialType = undefined;
-            formInput.brand = undefined;
-            formInput.vacuumAttachmentPossible = false;
-          },
-          failureReason => {
-            error.value = "Er is iets fout gegaan"
-          })
+  if (rentalItem.value) {
+    $rentalItemApi.createRentalItem({
+      rentalItemInput: {
+        ...rentalItem.value,
+      },
+      lessorId: activeLessor.value?.id ?? 0
+    }).then(
+      success => {
+        router.push(`/lessor/items`)
+      },
+      failure => {
+        error.value = failure.message
+      }
+    )
+  }
 }
 
 </script>
-<style>
-
-.flexbox-column {
-  display: flex;
-  flex-direction: column
-}
-
-</style>

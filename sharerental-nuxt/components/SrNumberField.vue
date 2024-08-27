@@ -2,7 +2,7 @@
 
 defineProps<{
   label: string,
-  modelValue: string | null | undefined,
+  modelValue: number | null | undefined,
   errors:  string | undefined,
 }>()
 
@@ -16,13 +16,13 @@ const updateModelValue = (value: string | undefined) => {
 <template>
   <div class="w-full">
     <div class="my-2">
-      <label :for="$attrs.id" class="block text-sm font-medium text-gray-700">{{ label }}</label>
-      <InputText inputId="input"
+      <Label :for="$attrs.id" class="block text-sm font-medium text-gray-700">{{ label }}</Label>
+      <InputNumber inputId="input"
                  :pt="{ root: 'w-full' }"
                  :model-value="modelValue"
                  v-bind="$attrs"
                  aria-describedby="help"
-                 @update:model-value="(value: string | undefined) => updateModelValue(value?.trim())"
+                 @update:model-value="(value: number | undefined) => updateModelValue(value)"
                  :class="{ 'p-invalid': errors }"
       />
     </div>
