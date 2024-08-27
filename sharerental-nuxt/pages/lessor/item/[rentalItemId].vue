@@ -3,17 +3,14 @@
     <Title>Artikelen</Title>
   </Head>
   <Message severity="error" v-if="error" v-bind:sticky="false">{{ error }}</Message>
-  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 md:p-12">
-      <div class="px-8">
-        <RentalItemForm v-model="rentalItem" ref="rentalItemForm"></RentalItemForm>
 
-        <div class="flex justify-end mt-8">
-          <Button label="Opslaan" @click="onSubmitNewItem"/>
-        </div>
-      </div>
+  <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+    <div class="flex justify-end mt-8">
+      <Button label="Opslaan" @click="onSubmitNewItem"/>
     </div>
   </div>
+  <RentalItemForm v-model="rentalItem" ref="rentalItemForm"></RentalItemForm>
+
 </template>
 <script setup lang="ts">
 import type {RentalItem} from "~/schemas/openapi/rentalItem";

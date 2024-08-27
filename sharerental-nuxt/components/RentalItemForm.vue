@@ -313,228 +313,228 @@ defineExpose({
 </script>
 
 <template>
+
   <form novalidate>
+    <div class="md:max-w-[1240px] md:mx-auto px-4 md:px-0">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 md:p-12">
+        <div class="px-8">
+          <div class="flex gap-2">
+            <sr-text-field label="Weergavenaam" v-model="name"
+                           :errors="errors['rentalItem.name']"></sr-text-field>
+          </div>
+          <div class="flex gap-2">
+            <sr-text-field label="Eigen referentie" v-model="externalReference"
+                           :errors="errors['rentalItem.externalReference']"></sr-text-field>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
+                <Dropdown inputId="category" placeholder="Categorie" :pt="{ root: 'w-full' }"
+                          v-model="category" :options="categories" optionLabel="name"
+                          option-value="name" aria-describedby="categoryhelp">
+                </Dropdown>
+              </div>
+              <small id="categoryhelp" class="p-error">{{ errors['rentalItem.category'] }}</small>
+            </div>
+          </div>
 
-    <div class="flex gap-2">
-      <sr-text-field label="Weergavenaam" v-model="name"
-                     :errors="errors['rentalItem.name']"></sr-text-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-text-field label="Eigen referentie" v-model="externalReference"
-                     :errors="errors['rentalItem.externalReference']"></sr-text-field>
-    </div>
-    <div class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
-          <Dropdown inputId="category" placeholder="Categorie" :pt="{ root: 'w-full' }"
-                    v-model="category" :options="categories" optionLabel="name"
-                    option-value="name" aria-describedby="categoryhelp">
-          </Dropdown>
-        </div>
-        <small id="categoryhelp" class="p-error">{{ errors['rentalItem.category'] }}</small>
-      </div>
-    </div>
-
-    <Divider align="left" type="solid" class="mb-1">
-      <span>Omschrijving</span>
-    </Divider>
-    <div class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
           <Textarea inputId="shortDescription" placeholder="Korte omschrijving" :pt="{ root: 'w-full' }"
                     v-model="shortDescription" aria-describedby="shortDescriptionHelp"
                     :class="{ 'p-invalid': errors }">
           </Textarea>
-        </div>
-        <small id="shortDescriptionHelp" class="p-error">{{ errors['rentalItem.shortDescription'] }}</small>
-      </div>
-    </div>
-    <div class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
-          <Textarea inputId="longDescription" placeholder="Lange omschrijving" :pt="{ root: 'w-full h-40' }"
+              </div>
+              <small id="shortDescriptionHelp" class="p-error">{{ errors['rentalItem.shortDescription'] }}</small>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
+          <Textarea inputId="longDescription" placeholder="Lange omschrijving" :pt="{ root: 'w-full h-32' }"
                     v-model="longDescription" aria-describedby="longDescriptionhelp"
                     :class="{ 'p-invalid': errors }">
           </Textarea>
+              </div>
+              <small id="longDescriptionhelp" class="p-error">{{ errors['rentalItem.longDescription'] }}</small>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-full">
+              <label for="input" class="block text-sm font-medium text-gray-700">Verhuren aan</label>
+              <div class="my-2">
+                <Dropdown inputId="rentToRenterType" placeholder="Alle type klanten" :pt="{ root: 'w-full' }"
+                          v-model="rentToRenterType" :options="renterTypes" option-value="value"
+                          option-label="name" aria-describedby="rentToRenterTypehelp">
+                </Dropdown>
+              </div>
+              <small id="rentToRenterTypehelp" class="p-error">{{ errors['rentalItem.rentToRenterType'] }}</small>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
+                <Checkbox inputId="automaticallyAcceptTransaction" v-model="automaticallyAcceptTransaction" binary
+                          aria-describedby="automaticallyAcceptTransactionhelp" :class="{ 'p-invalid': errors }">
+                </Checkbox>
+                <label for="automaticallyAcceptTransaction" class="ml-2">Automatisch accepteren</label>
+              </div>
+              <small id="automaticallyAcceptTransactionhelp"
+                     class="p-error">{{ errors['rentalItem.automaticallyAcceptTransaction'] }}</small>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
+                <Checkbox inputId="deliveryPossible" v-model="deliveryPossible" binary
+                          aria-describedby="deliveryPossiblehelp" :class="{ 'p-invalid': errors }">
+                </Checkbox>
+                <label for="deliveryPossible" class="ml-2">Bezorgen mogelijk</label>
+              </div>
+              <small id="deliveryPossiblehelp" class="p-error">{{ errors['rentalItem.deliveryPossible'] }}</small>
+            </div>
+          </div>
+          <div v-if="deliveryPossible" class="flex gap-2">
+            <sr-number-field label="Prijs voor bezorgen" v-model="deliveryPrice"
+                             mode="currency" currency="EUR" locale="nl-NL"
+                             :errors="errors['rentalItem.deliveryPrice']"></sr-number-field>
+          </div>
+
         </div>
-        <small id="longDescriptionhelp" class="p-error">{{ errors['rentalItem.longDescription'] }}</small>
-      </div>
-    </div>
-    <div class="flex gap-2">
-      <div class="w-full">
-        <label for="input" class="block text-sm font-medium text-gray-700">Verhuren aan</label>
-        <div class="my-2">
-          <Dropdown inputId="rentToRenterType" placeholder="Alle type klanten" :pt="{ root: 'w-full' }"
-                    v-model="rentToRenterType" :options="renterTypes" option-value="value"
-                    option-label="name" aria-describedby="rentToRenterTypehelp" >
-          </Dropdown>
-        </div>
-        <small id="rentToRenterTypehelp" class="p-error">{{ errors['rentalItem.rentToRenterType'] }}</small>
-      </div>
-    </div>
+        <div class="px-8">
+          <div class="flex gap-2">
+            <sr-number-field label="Prijs per dag (ex. btw)" v-model="price24h"
+                             mode="currency" currency="EUR" locale="nl-NL"
+                             :errors="errors['rentalItem.price24h']"></sr-number-field>
+          </div>
+          <div class="flex gap-2">
+            <sr-number-field label="Prijs per week (ex. btw)" v-model="price168h"
+                             mode="currency" currency="EUR" locale="nl-NL"
+                             :errors="errors['rentalItem.price168h']"></sr-number-field>
+          </div>
 
-    <Divider align="left" type="solid" class="mb-1">
-      <span>Verhuur voorwaarden</span>
-    </Divider>
-    <div class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
-          <Checkbox inputId="automaticallyAcceptTransaction" v-model="automaticallyAcceptTransaction" binary
-                    aria-describedby="automaticallyAcceptTransactionhelp" :class="{ 'p-invalid': errors }">
-          </Checkbox>
-          <label for="automaticallyAcceptTransaction" class="ml-2">Automatisch accepteren</label>
-        </div>
-        <small id="automaticallyAcceptTransactionhelp" class="p-error">{{ errors['rentalItem.automaticallyAcceptTransaction'] }}</small>
-      </div>
-    </div>
+          <div class="flex gap-2">
+            <sr-number-field label="Borg" v-model="deposit"
+                             mode="currency" currency="EUR" locale="nl-NL"
+                             :errors="errors['rentalItem.deposit']"></sr-number-field>
+          </div>
+          <div class="flex gap-2">
+            <sr-number-field label="Aantal artikelen beschikbaar" v-model="amount"
+                             :errors="errors['rentalItem.amount']"></sr-number-field>
+          </div>
 
-    <div class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
-          <Checkbox inputId="deliveryPossible" v-model="deliveryPossible" binary
-                    aria-describedby="deliveryPossiblehelp" :class="{ 'p-invalid': errors }">
-          </Checkbox>
-          <label for="deliveryPossible" class="ml-2">Bezorgen mogelijk</label>
-        </div>
-        <small id="deliveryPossiblehelp" class="p-error">{{ errors['rentalItem.deliveryPossible'] }}</small>
-      </div>
-    </div>
-    <div v-if="deliveryPossible" class="flex gap-2">
-      <sr-number-field label="Prijs voor bezorgen" v-model="deliveryPrice"
-                       mode="currency" currency="EUR" locale="nl-NL"
-                       :errors="errors['rentalItem.deliveryPrice']"></sr-number-field>
-    </div>
-
-    <Divider align="left" type="solid" class="mb-1">
-      <span>Prijs en kosten</span>
-    </Divider>
-
-    <div class="flex gap-2">
-      <sr-number-field label="Prijs per dag (ex. btw)" v-model="price24h"
-                       mode="currency" currency="EUR" locale="nl-NL"
-                       :errors="errors['rentalItem.price24h']"></sr-number-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-number-field label="Prijs per week (ex. btw)" v-model="price168h"
-                       mode="currency" currency="EUR" locale="nl-NL"
-                       :errors="errors['rentalItem.price168h']"></sr-number-field>
-    </div>
-
-    <div class="flex gap-2">
-      <sr-number-field label="Borg" v-model="deposit"
-                       mode="currency" currency="EUR" locale="nl-NL"
-                       :errors="errors['rentalItem.deposit']"></sr-number-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-number-field label="Aantal artikelen beschikbaar" v-model="amount"
-                       :errors="errors['rentalItem.amount']"></sr-number-field>
-    </div>
-
-    <div class="flex gap-2">
-      <sr-text-field label="Merk" v-model="brand"
-                     :errors="errors['rentalItem.brand']"></sr-text-field>
-    </div>
-    <div class="flex gap-2">
-      <sr-number-field label="Gewicht (kg)" v-model="intrinsicWeightKilograms"
-                       :maxFractionDigits="5" suffix=" kg"
-                       :errors="errors['rentalItem.intrinsicWeightKilograms']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
-         class="flex gap-2">
-      <sr-number-field label="Bereik (m)" v-model="reachMeters"
-                       :maxFractionDigits="5" suffix=" m"
-                       :errors="errors['rentalItem.reachMeters']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
-         class="flex gap-2">
-      <sr-number-field label="Hefvermogen (kg)" v-model="carryingWeightKilograms"
-                       :maxFractionDigits="5" suffix=" kg"
-                       :errors="errors['rentalItem.carryingWeightKilograms']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
-         class="flex gap-2">
-      <sr-number-field label="Maximale werkhoogte
+          <div class="flex gap-2">
+            <sr-text-field label="Merk" v-model="brand"
+                           :errors="errors['rentalItem.brand']"></sr-text-field>
+          </div>
+          <div class="flex gap-2">
+            <sr-number-field label="Gewicht (kg)" v-model="intrinsicWeightKilograms"
+                             :maxFractionDigits="5" suffix=" kg"
+                             :errors="errors['rentalItem.intrinsicWeightKilograms']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+               class="flex gap-2">
+            <sr-number-field label="Bereik (m)" v-model="reachMeters"
+                             :maxFractionDigits="5" suffix=" m"
+                             :errors="errors['rentalItem.reachMeters']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+               class="flex gap-2">
+            <sr-number-field label="Hefvermogen (kg)" v-model="carryingWeightKilograms"
+                             :maxFractionDigits="5" suffix=" kg"
+                             :errors="errors['rentalItem.carryingWeightKilograms']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+               class="flex gap-2">
+            <sr-number-field label="Maximale werkhoogte
         (m)" v-model="maximumWorkHeightMeters"
-                       :maxFractionDigits="5" suffix=" m"
-                       :errors="errors['rentalItem.maximumWorkHeightMeters']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Luchtdrukgereedschap'"
-         class="flex gap-2">
-      <sr-number-field label="Maximale druk (bar)" v-model="maximumPressureBars"
-                       :maxFractionDigits="5" suffix=" bar"
-                       :errors="errors['rentalItem.maximumPressureBars']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Luchtdrukgereedschap'"
-         class="flex gap-2">
-      <sr-number-field label="Maximaal vermogen (pk)" v-model="maximumHorsePower"
-                       :maxFractionDigits="5" suffix=" pk"
-                       :errors="errors['rentalItem.maximumHorsePower']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Electrisch gereedschap'"
-         class="flex gap-2">
-      <sr-number-field label="Vereist voltage (V)" v-model="requiredPowerVoltageVolt"
-                       :maxFractionDigits="5" suffix=" V"
-                       :errors="errors['rentalItem.requiredPowerVoltageVolt']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Betonbewerking'"
-         class="flex gap-2">
-      <sr-number-field label="Werkbreedte (m)" v-model="workWidthMeters"
-                       :maxFractionDigits="5" suffix=" m"
-                       :errors="errors['rentalItem.workWidthMeters']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Betonbewerking'"
-         class="flex gap-2">
-      <div class="w-full">
-        <div class="my-2">
-          <Checkbox inputId="vacuumAttachmentPossible" v-model="vacuumAttachmentPossible"
-                    :maxFractionDigits="5" binary
-                    aria-describedby="vacuumAttachmentPossiblehelp" :class="{ 'p-invalid': errors }">
-          </Checkbox>
-          <label for="vacuumAttachmentPossible" class="ml-2">Vacuum mogelijk</label>
+                             :maxFractionDigits="5" suffix=" m"
+                             :errors="errors['rentalItem.maximumWorkHeightMeters']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Luchtdrukgereedschap'"
+               class="flex gap-2">
+            <sr-number-field label="Maximale druk (bar)" v-model="maximumPressureBars"
+                             :maxFractionDigits="5" suffix=" bar"
+                             :errors="errors['rentalItem.maximumPressureBars']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Luchtdrukgereedschap'"
+               class="flex gap-2">
+            <sr-number-field label="Maximaal vermogen (pk)" v-model="maximumHorsePower"
+                             :maxFractionDigits="5" suffix=" pk"
+                             :errors="errors['rentalItem.maximumHorsePower']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Electrisch gereedschap'"
+               class="flex gap-2">
+            <sr-number-field label="Vereist voltage (V)" v-model="requiredPowerVoltageVolt"
+                             :maxFractionDigits="5" suffix=" V"
+                             :errors="errors['rentalItem.requiredPowerVoltageVolt']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Betonbewerking'"
+               class="flex gap-2">
+            <sr-number-field label="Werkbreedte (m)" v-model="workWidthMeters"
+                             :maxFractionDigits="5" suffix=" m"
+                             :errors="errors['rentalItem.workWidthMeters']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Betonbewerking'"
+               class="flex gap-2">
+            <div class="w-full">
+              <div class="my-2">
+                <Checkbox inputId="vacuumAttachmentPossible" v-model="vacuumAttachmentPossible"
+                          :maxFractionDigits="5" binary
+                          aria-describedby="vacuumAttachmentPossiblehelp" :class="{ 'p-invalid': errors }">
+                </Checkbox>
+                <label for="vacuumAttachmentPossible" class="ml-2">Vacuum mogelijk</label>
+              </div>
+              <small id="vacuumAttachmentPossiblehelp" class="p-error">{{
+                  errors['rentalItem.vacuumAttachmentPossible']
+                }}</small>
+            </div>
+          </div>
+          <div v-if="category === 'Grondverzetters, bouwmachines en tuinmateriaal'"
+               class="flex gap-2">
+            <sr-number-field label="Capaciteit (l)" v-model="capacityLiters"
+                             :maxFractionDigits="5" suffix=" l"
+                             :errors="errors['rentalItem.capacityLiters']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Evenementen'"
+               class="flex gap-2">
+            <sr-number-field label="Hoogte (cm)" v-model="itemHeight"
+                             :maxFractionDigits="5" suffix=" cm"
+                             :errors="errors['rentalItem.itemHeight']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Evenementen'"
+               class="flex gap-2">
+            <sr-number-field label="Breedte (cm)" v-model="itemWidth"
+                             :maxFractionDigits="5" suffix=" cm"
+                             :errors="errors['rentalItem.itemWidth']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Evenementen'"
+               class="flex gap-2">
+            <sr-number-field label="Lengte (cm)" v-model="itemLength"
+                             :maxFractionDigits="5" suffix=" cm"
+                             :errors="errors['rentalItem.itemLength']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Verwarmen, drogen en reinigen'"
+               class="flex gap-2">
+            <sr-number-field label="Vermogen (W)" v-model="powerWatt"
+                             :maxFractionDigits="5" suffix=" W"
+                             :errors="errors['rentalItem.powerWatt']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Verwarmen, drogen en reinigen'"
+               class="flex gap-2">
+            <sr-number-field label="Maximale oppervlakte (m²)" v-model="maximumSurfaceSquareMeters"
+                             :maxFractionDigits="5" suffix=" m²"
+                             :errors="errors['rentalItem.maximumSurfaceSquareMeters']"></sr-number-field>
+          </div>
+          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+               class="flex gap-2">
+            <sr-text-field label="Materiaal type" v-model="materialType"
+                           :errors="errors['rentalItem.materialType']"></sr-text-field>
+          </div>
         </div>
-        <small id="vacuumAttachmentPossiblehelp" class="p-error">{{ errors['rentalItem.vacuumAttachmentPossible'] }}</small>
       </div>
-    </div>
-    <div v-if="category === 'Grondverzetters, bouwmachines en tuinmateriaal'"
-         class="flex gap-2">
-      <sr-number-field label="Capaciteit (l)" v-model="capacityLiters"
-                       :maxFractionDigits="5" suffix=" l"
-                       :errors="errors['rentalItem.capacityLiters']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Evenementen'"
-         class="flex gap-2">
-      <sr-number-field label="Hoogte (cm)" v-model="itemHeight"
-                       :maxFractionDigits="5" suffix=" cm"
-                       :errors="errors['rentalItem.itemHeight']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Evenementen'"
-         class="flex gap-2">
-      <sr-number-field label="Breedte (cm)" v-model="itemWidth"
-                       :maxFractionDigits="5" suffix=" cm"
-                       :errors="errors['rentalItem.itemWidth']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Evenementen'"
-         class="flex gap-2">
-      <sr-number-field label="Lengte (cm)" v-model="itemLength"
-                       :maxFractionDigits="5" suffix=" cm"
-                       :errors="errors['rentalItem.itemLength']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Verwarmen, drogen en reinigen'"
-         class="flex gap-2">
-      <sr-number-field label="Vermogen (W)" v-model="powerWatt"
-                       :maxFractionDigits="5" suffix=" W"
-                       :errors="errors['rentalItem.powerWatt']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Verwarmen, drogen en reinigen'"
-         class="flex gap-2">
-      <sr-number-field label="Maximale oppervlakte (m²)" v-model="maximumSurfaceSquareMeters"
-                       :maxFractionDigits="5" suffix=" m²"
-                       :errors="errors['rentalItem.maximumSurfaceSquareMeters']"></sr-number-field>
-    </div>
-    <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
-         class="flex gap-2">
-      <sr-text-field label="Materiaal type" v-model="materialType"
-                     :errors="errors['rentalItem.materialType']"></sr-text-field>
     </div>
   </form>
 </template>
