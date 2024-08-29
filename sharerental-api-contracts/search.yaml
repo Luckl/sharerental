@@ -96,6 +96,11 @@ components:
                 format: text
                 description: filter key
                 example: 'category'
+              filterType:
+                type: string
+                enum:
+                  - 'in'
+                  - 'withinRange'
               values:
                 type: array
                 items:

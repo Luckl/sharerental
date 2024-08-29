@@ -4,7 +4,7 @@ import {type Filter, FilterType, useFilterStore} from "~/services/stores/filterS
 import {reactive, ref} from "vue";
 import {
   type FilterOption, RenterType, SearchApi,
-  type SearchRequestFiltersInner, type SearchResult,
+  type SearchRequestFiltersInner, SearchRequestFiltersInnerFilterTypeEnum, type SearchResult,
   type SearchResultItem
 } from "~/schemas/openapi/search";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
@@ -64,16 +64,13 @@ const fetchItems = async () => {
 
 const processSuccess = (success: SearchResult) => {
   state.results = success.embedded
-  let allAvailableFilters = success.filterOptions || [];
-  availableFilters.value = allAvailableFilters
-      .filter(value => value.field !== 'category')
 
   availableFilters.value
       .filter(value => value.field !== 'category')
       .filter(value => value.options?.length || 0 > 0)
-      .filter(filter => activatedFilters.value[filter.field || ""] === undefined)
+      .filter(filter => activatedBooleanFilters.value[filter.field || ""] === undefined)
       .forEach(filter => {
-        activatedFilters.value[filter.field || ""] = []
+        activatedBooleanFilters.value[filter.field || ""] = []
       })
 }
 
@@ -92,13 +89,14 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 
-const activatedFilters = ref<any>({})
+const activatedBooleanFilters = ref<any>({})
 const mapToFilter = (): SearchRequestFiltersInner[] => {
-  return Object.entries(activatedFilters.value)
+  return Object.entries(activatedBooleanFilters.value)
       .filter(([key, value]) => Array.isArray(value) && value.length > 0)
       .map(([key, value]) => {
         return {
           field: key,
+          filterType: SearchRequestFiltersInnerFilterTypeEnum.In,
           values: Array.isArray(value) ? value as string[] : [value as string]
         }
       })
@@ -111,11 +109,18 @@ const formatCurrency = (value: number) => {
   }).format(value)
 }
 
+const updatePossibleFilters = (success: SearchResult) => {
+  let allAvailableFilters = success.filterOptions || [];
+  availableFilters.value = allAvailableFilters
+      .filter(value => value.field !== 'category')
+}
+
 const {data} = await useAsyncData(props.query + "-" + props.category, () => {
   return fetchItems()
 })
 
 processSuccess(data.value!!)
+updatePossibleFilters(data.value!!)
 
 </script>
 <template>
@@ -149,7 +154,7 @@ processSuccess(data.value!!)
           </template>
           <div class="m-1" v-if="getFilter(filter)?.type === FilterType.Choice">
             <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
+              <Checkbox @change="fetchItems()" v-model="activatedBooleanFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span>{{ getFilter(filter)?.prefix }}{{ value.value }}{{ getFilter(filter)?.suffix }}</span>
@@ -159,7 +164,7 @@ processSuccess(data.value!!)
           </div>
           <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Boolean">
             <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]" :value="value.value"/>
+              <Checkbox @change="fetchItems()" v-model="activatedBooleanFilters[filter.field]" :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span>{{ value.value == 'true' ? 'Ja' : 'Nee' }}</span>
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
@@ -168,7 +173,7 @@ processSuccess(data.value!!)
           </div>
           <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Currency">
             <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox @change="fetchItems()" v-model="activatedFilters[filter.field]"
+              <Checkbox @change="fetchItems()" v-model="activatedBooleanFilters[filter.field]"
                         :value="value.value"/>
               <label :for="value.value" class="ml-2 w-full flex flex-wrap">
                 <span>{{ getFilter(filter)?.prefix }}{{ formatCurrency(value.value) }}{{

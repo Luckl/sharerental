@@ -13,15 +13,18 @@ import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.FilterOptionOptionsInner
 import nl.sharerental.contract.http.model.RenterType as HttpRenterType
 import nl.sharerental.contract.http.model.SearchRequest
+import nl.sharerental.contract.http.model.SearchRequestFiltersInner
+import nl.sharerental.contract.http.model.SearchRequestFiltersInner.FilterTypeEnum
 import nl.sharerental.contract.http.model.SearchResultItem
-import org.jooq.Condition
-import org.jooq.DSLContext
-import org.jooq.Field
-import org.jooq.TableField
+import org.jooq.*
 import org.jooq.impl.DSL.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpStatusCodeException
+import org.springframework.web.server.ResponseStatusException
+import java.math.BigDecimal
 import java.net.URI
 import java.time.Instant
 
@@ -147,7 +150,8 @@ class FilterService(
         return fetch
     }
 
-    private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?, ip: IpInfo?) = searchRequestToCondition(searchRequest)
+    private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?, ip: IpInfo?) =
+        searchRequestToCondition(searchRequest)
         .and(baseFilterAndQuery(query))
         .and(queryLocationIfIpInfoAvailable(ip))
 
@@ -176,15 +180,34 @@ class FilterService(
 
         val map = searchRequest?.filters
             ?.map { filter ->
-                filterFields.firstOrNull { it.name == filter.field } to filter.values
+                filterFields.firstOrNull { it.name == filter.field } to filter
             }
-            ?.filter { (field, values) -> field != null && values.isNotEmpty() }
-            ?.map { (field, values) ->
-                field!!.`in`(values)
+            ?.filter { (field, filter) -> field != null && filter != null && filter.values.isNotEmpty() }
+            ?.map { (field, filter) ->
+                filterToCondition(field, filter)
             }.orEmpty()
 
         return if (map.isNotEmpty()) map.reduce { acc, condition -> acc.and(condition) }
             .and(renterTypeCondition) else trueCondition().and(renterTypeCondition)
+    }
+
+    private fun filterToCondition(
+        field: TableField<RentalItemRecord, out Any?>?,
+        filter: SearchRequestFiltersInner
+    ): Condition {
+        return if (filter.filterType.equals(FilterTypeEnum.IN)) {
+            return field!!.`in`(filter.values)
+        } else if (filter.filterType.equals(FilterTypeEnum.WITHINRANGE)) {
+            if (field!!.type == BigDecimal::class.java) {
+                val castFilter = field as TableField<RentalItemRecord, BigDecimal?>
+                return castFilter.between(filter.values[0].toBigDecimal(), filter.values[1].toBigDecimal())
+            } else {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST ,"Filter field ${field.name} is not of type BigDecimal, cannot apply filter type WITHINRANGE")
+            }
+        }
+        else {
+            trueCondition()
+        }
     }
 
     private fun baseFilterAndQuery(query: String?) = RENTAL_ITEM.DISPLAY_STATUS.eq(RentalItemDisplayStatus.ACTIVE)
