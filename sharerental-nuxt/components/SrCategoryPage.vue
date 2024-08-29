@@ -44,7 +44,7 @@ const state = reactive({
 });
 
 const fetchItems = async () => {
-  let allFilters = categoryFilter.value.concat(mapToFilter());
+  let allFilters = categoryFilter.value.concat(mapToFilter()).concat(mapToSliderFilter());
   return await $searchApi.search({
     query: props.query ?? "",
     page: state.pageable.page,
@@ -102,6 +102,20 @@ const mapToFilter = (): SearchRequestFiltersInner[] => {
       })
 }
 
+const activatedSliderFilters = ref<any>({})
+
+const mapToSliderFilter = (): SearchRequestFiltersInner[] => {
+  return Object.entries(activatedSliderFilters.value)
+      .filter(([key, value]) => value !== undefined)
+      .map(([key, value]) => {
+        return {
+          field: key,
+          filterType: SearchRequestFiltersInnerFilterTypeEnum.WithinRange,
+          values: [value[0], value[1]]
+        }
+      })
+}
+
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('nl-NL', {
     style: 'currency',
@@ -115,11 +129,22 @@ const updatePossibleFilters = (success: SearchResult) => {
       .filter(value => value.field !== 'category')
 }
 
+const setSliderValues = (success: SearchResult) => {
+  let allAvailableFilters = success.filterOptions || [];
+  allAvailableFilters
+      .filter(value => getFilter(value)?.type === FilterType.Currency)
+      .forEach(filter => {
+        activatedSliderFilters.value[filter.field || ""] = [filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.min(a, b)),
+          filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.max(a, b))]
+      })
+}
+
 const {data} = await useAsyncData(props.query + "-" + props.category, () => {
   return fetchItems()
 })
 
 processSuccess(data.value!!)
+setSliderValues(data.value!!)
 updatePossibleFilters(data.value!!)
 
 </script>
@@ -172,15 +197,10 @@ updatePossibleFilters(data.value!!)
             </div>
           </div>
           <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Currency">
-            <div class="flex w-full" v-for="value in filter.options">
-              <Checkbox @change="fetchItems()" v-model="activatedBooleanFilters[filter.field]"
-                        :value="value.value"/>
-              <label :for="value.value" class="ml-2 w-full flex flex-wrap">
-                <span>{{ getFilter(filter)?.prefix }}{{ formatCurrency(value.value) }}{{
-                    getFilter(filter)?.suffix
-                  }}</span>
-                <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
-              </label>
+            <div class="flex flex-col w-full">
+              <span class="p-4">{{ formatCurrency(activatedSliderFilters[filter.field][0]) }} tot {{ formatCurrency(activatedSliderFilters[filter.field][1]) }}</span>
+              <slider @slideend="fetchItems()" class="w-full" range v-model="activatedSliderFilters[filter.field]" :min="filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.min(a, b))"
+                      :max="filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.max(a, b))"/>
             </div>
           </div>
         </AccordionTab>
