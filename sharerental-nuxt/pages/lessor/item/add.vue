@@ -6,13 +6,14 @@
         <Button label="Aanmaken" @click="onSubmitNewItem" />
       </div>
   </div>
-  <RentalItemForm v-model="rentalItem" ref="rentalItemForm"></RentalItemForm>
+  <SrRentalItemForm v-model="rentalItem" ref="rentalItemForm"></SrRentalItemForm>
 
 </template>
 <script setup lang="ts">
 import type {RentalItem} from "~/schemas/openapi/rentalItem";
 import {useLessorStore} from "~/services/stores/lessorStore";
 import type RentalItemForm from "~/components/RentalItemForm.vue";
+import SrRentalItemForm from "~/components/SrRentalItemForm.vue";
 
 const rentalItemForm = ref<typeof RentalItemForm | null>(null)
 

@@ -8,10 +8,10 @@
 <script setup lang="ts">
 import {setLocale} from "yup";
 import {nl} from "yup-locales";
-import {RentalItemForm, type SrRenterInformationForm} from "#components";
+import {SrRentalItemForm, type SrRenterInformationForm} from "#components";
 
 const renterInformationForm = ref<InstanceType<typeof SrRenterInformationForm> | null>(null)
-const rentalItemForm = ref<InstanceType<typeof RentalItemForm> | null>(null)
+const rentalItemForm = ref<InstanceType<typeof SrRentalItemForm> | null>(null)
 
 const submitForm = () => {
   return renterInformationForm.value?.submitForm()

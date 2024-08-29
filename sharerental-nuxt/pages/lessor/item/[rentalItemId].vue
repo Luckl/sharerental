@@ -9,12 +9,13 @@
       <Button label="Opslaan" @click="onSubmitNewItem"/>
     </div>
   </div>
-  <RentalItemForm v-model="rentalItem" ref="rentalItemForm"></RentalItemForm>
+  <SrRentalItemForm v-model="rentalItem" ref="rentalItemForm"></SrRentalItemForm>
 
 </template>
 <script setup lang="ts">
 import type {RentalItem} from "~/schemas/openapi/rentalItem";
 import type RentalItemForm from "~/components/RentalItemForm.vue";
+import SrRentalItemForm from "~/components/SrRentalItemForm.vue";
 
 const router = useRouter()
 const error = ref<String | undefined>(undefined)

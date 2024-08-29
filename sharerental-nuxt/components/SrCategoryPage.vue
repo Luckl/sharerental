@@ -38,7 +38,7 @@ const state = reactive({
   results: undefined as SearchResultItem[] | undefined,
   pageable: {
     page: 0,
-    pageSize: 30,
+    pageSize: 100,
     sort: [],
   },
 });
@@ -177,9 +177,6 @@ processSuccess(data.value!!)
                 <span class="grow text-sm text-gray-600 text-right">({{ value.count }} beschikbaar)</span>
               </label>
             </div>
-          </div>
-          <div class="p-2 m-2" v-else>
-            <span v-for="value in filter.options">{{ value.value }} ({{ value.count }} beschikbaar)</span>
           </div>
         </AccordionTab>
       </Accordion>

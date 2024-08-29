@@ -42,7 +42,7 @@ const schema = yup.object({
     category: yup.string().required().label("Categorie"),
     shortDescription: yup.string().label("Korte omschrijving"),
     longDescription: yup.string().label("Lange omschrijving"),
-    rentToRenterType: yup.string().label("Verhuren aan"),
+    rentToRenterType: yup.string().nullable(true).label("Verhuren aan"),
     automaticallyAcceptTransaction: yup.boolean().label("Automatisch accepteren"),
     deliveryPossible: yup.boolean().label("Bezorgen mogelijk"),
     deliveryPrice: yup.number().when('deliveryPossible', ([deliveryPossible], deliveryPrice) => {
