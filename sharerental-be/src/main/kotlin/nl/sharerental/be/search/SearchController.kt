@@ -49,6 +49,10 @@ class SearchController(
         searchRequestQueryRepository.save(SearchRequestQuery(
             ipAddress = request?.getHeader("X-Forwarded-For") ?: "",
             userId = userService.getOptional()?.id,
+            latitude = searchRequest?.distance?.latitude?.toBigDecimal(),
+            longitude = searchRequest?.distance?.longitude?.toBigDecimal(),
+            zipCode = searchRequest?.distance?.zipCode,
+            country = searchRequest?.distance?.country,
             query = query,
             category = searchRequest?.filters?.findLast { it.field == "category" }?.values.toString(),
             searchRequest = objectMapper.writeValueAsString(searchRequest)

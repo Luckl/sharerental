@@ -24,6 +24,10 @@ A state diagram describing the status of a transaction.
 
 [Mollie documentation](https://docs.mollie.com/payments/accepting-payments)
 
+## Zip Code DB
+
+Retrieved from https://public.opendatasoft.com/explore/dataset/georef-netherlands-postcode-pc4/export/
+
 # Development
 
 ### Ngrok for webhook callbacks from mollie (localhost)

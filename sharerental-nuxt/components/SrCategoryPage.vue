@@ -8,6 +8,7 @@ import {
   type SearchResultItem
 } from "~/schemas/openapi/search";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
+import { useGeolocation } from '@vueuse/core'
 interface Props {
   category?: string;
   query?: string;
@@ -32,6 +33,9 @@ const categoryFilter = ref<SearchRequestFiltersInner[]>([
 
 const availableFilters = ref<FilterOption[]>([])
 
+const radiusKm = ref(25)
+const { coords } = useGeolocation()
+
 const $searchApi: SearchApi = useNuxtApp().$searchApi;
 
 const state = reactive({
@@ -43,6 +47,10 @@ const state = reactive({
   },
 });
 
+watch(coords, () => {
+  fetchItems()
+})
+
 const fetchItems = async () => {
   let allFilters = categoryFilter.value.concat(mapToFilter()).concat(mapToSliderFilter());
   return await $searchApi.search({
@@ -51,6 +59,11 @@ const fetchItems = async () => {
     size: state.pageable.pageSize,
     sort: state.pageable.sort,
     searchRequest: {
+      distance: {
+        latitude: coords.value?.latitude,
+        longitude: coords.value?.longitude,
+        radius: radiusKm.value
+      },
       filters: allFilters,
       renterType: renterType.value == RenterTypeEnum.Private ? RenterType.Private : RenterType.Business,
     }
@@ -173,6 +186,18 @@ updatePossibleFilters(data.value!!)
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
+        <AccordionTab v-if="coords.latitude != undefined && coords.longitude != undefined">
+          <template #header>
+            <span class="m-2 font-bold">Afstand</span>
+          </template>
+          <div class="m-1">
+            <div class="flex flex-col w-full">
+              <span class="p-4">Maximale afstand: {{ radiusKm >= 300 ? 'Onbeperkt' : radiusKm + " km" }}</span>
+              <slider @slideend="fetchItems()" class="w-full" v-model="radiusKm" :min="0"
+                      :max="300"/>
+            </div>
+          </div>
+        </AccordionTab>
         <AccordionTab v-for="filter in availableFilters">
           <template #header>
             <span class="m-2 font-bold">{{ getFilter(filter)?.name || '' }}</span>

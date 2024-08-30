@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
 import java.net.URI
@@ -153,10 +152,15 @@ class FilterService(
     private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?, ip: IpInfo?) =
         searchRequestToCondition(searchRequest)
         .and(baseFilterAndQuery(query))
-        .and(queryLocationIfIpInfoAvailable(ip))
+        .and(queryLocationBasedOnSearchOrIp(searchRequest, ip))
 
-    private fun queryLocationIfIpInfoAvailable(ip: IpInfo?): Condition {
-        return if (ip?.lat != null && ip.lon != null) {
+    private fun queryLocationBasedOnSearchOrIp(searchRequest: SearchRequest?, ip: IpInfo?): Condition {
+
+        return if (searchRequest?.distance?.latitude != null && searchRequest.distance.longitude != null && searchRequest.distance.radius != null) {
+            condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${searchRequest.distance.longitude}, ${searchRequest.distance.latitude})) < ${searchRequest.distance.radius}"),
+                trueCondition()))
+        } else if (ip?.lat != null && ip.lon != null) {
             condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
                 condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),
                 trueCondition()))
