@@ -73,6 +73,7 @@ import type {
   GetTransactionsResult,
   Transaction
 } from "~/schemas/openapi/transaction";
+import {useLessorStore} from "~/services/stores/lessorStore";
 
 const error = ref<String | undefined>(undefined)
 const router = useRouter()
@@ -85,6 +86,7 @@ const totalElements = ref(0)
 const transactions = ref<Transaction[]>([])
 const transactionsResult = ref<GetTransactionsResult>()
 const $transactionApi: TransactionApi = useNuxtApp().$transactionApi;
+const {activeLessor} = storeToRefs(useLessorStore())
 
 const defaultStatuses = ref([
   TransactionStatus.Initialized,
@@ -108,8 +110,19 @@ function acceptTransaction(id: number) {
   console.log("accepting transaction " + id)
 }
 
+watch([activeLessor], () => {
+  fetchTransactions()
+})
+
 function fetchTransactions() {
-  $transactionApi.getTransactions(page.value, pageSize.value,["startDate;desc"], filter.value, defaultStatuses.value)
+  $transactionApi.getTransactions( {
+    page: page.value,
+    size: pageSize.value,
+    sort: ["startDate;desc"],
+    filter: filter.value,
+    status: defaultStatuses.value,
+    lessorId: activeLessor.value?.id
+  })
       .then(
           success => {
             transactionsResult.value = success

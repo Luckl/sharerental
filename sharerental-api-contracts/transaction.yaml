@@ -77,6 +77,12 @@ paths:
               $ref: '#/components/schemas/TransactionStatus'
           required: false
           description: Status filter
+        - in: query
+          name: lessorId
+          schema:
+            type: integer
+            format: int64
+          required: false
       responses:
         200:
           description: Successful result

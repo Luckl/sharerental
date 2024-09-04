@@ -14,6 +14,7 @@ import nl.sharerental.be.user.RenterType
 import nl.sharerental.be.user.User
 import nl.sharerental.contract.http.TransactionApi
 import nl.sharerental.contract.http.model.*
+import nl.sharerental.contract.http.model.TransactionStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -62,13 +63,22 @@ class TransactionController(
         @RequestParam(
             required = false,
             value = "status"
-        ) status: MutableList<nl.sharerental.contract.http.model.TransactionStatus>?
+        ) status: MutableList<TransactionStatus>?,
+        lessorId: Long?
     ): ResponseEntity<GetTransactionsResult>? {
-        val lessors = lessorRepository.getIdsForUserId(currentUserService.get().id)
 
-        if (lessors.size != 1) {
-            logger.warn("User {} has {} lessors, cannot retrieve transactions because we dont know for which lessor", currentUserService.get().id, lessors.size)
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val lessor = if (lessorId != null) {
+            lessorRepository.getIdsForUserId(currentUserService.get().id).filter { it == lessorId }.also {
+                if (it.isEmpty()) {
+                    throw RuntimeException("No lessors found for this ID.")
+                }
+            }.first()
+        } else {
+            lessorRepository.getIdsForUserId(currentUserService.get().id).also {
+                if (it.size != 1) {
+                    throw RuntimeException("Multiple or no lessors for user, cannot find rental items.")
+                }
+            }.first()
         }
 
         val actualSort = if (sort?.isEmpty() == true) mutableListOf("startDate;desc") else sort
@@ -77,7 +87,7 @@ class TransactionController(
 
         // Should maybe be in service instead, but it'll just be a pass through to the repository.
         val findAll = transactionRepository.findByLessorIdAndSearch(
-            lessors[0],
+            lessor,
             filter,
             status?.map { it.toEntityEnum() }.orEmpty(),
             PageableHelper.pageRequest(page, size, actualSort)
