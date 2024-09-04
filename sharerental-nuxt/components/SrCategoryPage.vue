@@ -27,6 +27,7 @@ const getFilter = (filter: FilterOption): Filter | undefined => {
 const categoryFilter = ref<SearchRequestFiltersInner[]>([
   {
     field: 'category',
+    filterType: SearchRequestFiltersInnerFilterTypeEnum.In,
     values: props.category ? [props.category] : []
   }
 ])
