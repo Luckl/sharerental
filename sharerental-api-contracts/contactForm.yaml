@@ -118,3 +118,6 @@ components:
         analyticsToken:
           type: string
           example: "UA-123456789-1"
+        message:
+          type: string
+          example: "I would like to know more about your services"

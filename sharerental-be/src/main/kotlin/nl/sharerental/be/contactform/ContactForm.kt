@@ -14,4 +14,5 @@ class ContactForm (
     val email: String?,
     val phone: String?,
     val analyticsToken: String?,
+    val message: String?
     )

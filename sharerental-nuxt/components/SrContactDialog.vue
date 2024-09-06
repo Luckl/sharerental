@@ -13,7 +13,8 @@ const dialogRef = inject("dialogRef");
 const contactForm = reactive({
   name: '',
   email: '',
-  phone: ''
+  phone: '',
+  message: ''
 });
 
 const shareContactDetails = () => {
@@ -22,7 +23,8 @@ const shareContactDetails = () => {
       name: contactForm.name,
       email: contactForm.email,
       phone: contactForm.phone,
-      analyticsToken: user.value?.uid ?? ''
+      analyticsToken: user.value?.uid ?? '',
+      message: contactForm.message
     }
   })
 
@@ -41,6 +43,8 @@ const shareContactDetails = () => {
         <InputText id="email" v-model="contactForm.email" type="email" class="rounded-lg p-2"></InputText>
         <label for="phone">Telefoon</label>
         <InputText id="phone" v-model="contactForm.phone" class="rounded-lg p-2"></InputText>
+        <label for="message">Bericht</label>
+        <Textarea id="message" v-model="contactForm.message" class="rounded-lg p-2 h-32"></Textarea>
         <button unstyled type="submit" class="rounded-lg green-area font-bold w-36 h-12 mt-4" @click="shareContactDetails()">Versturen</button>
       </div>
     </form>

@@ -1,5 +1,6 @@
 package nl.sharerental.be.contactform.infrastructure
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import nl.sharerental.be.contactform.ContactForm
 import nl.sharerental.be.contactform.infrastructure.repository.ContactFormRepository
 import nl.sharerental.be.infrastructure.slack.SlackClient
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class ContactFormController(
     private val contactFormRepository: ContactFormRepository,
     private val slackClient: SlackClient,
+    private val objectMapper: ObjectMapper
 ) : ContactFormApi {
     private val logger = LoggerFactory.getLogger(ContactFormController::class.java)
 
@@ -22,13 +24,16 @@ class ContactFormController(
             name = contactForm?.name,
             email = contactForm?.email,
             phone = contactForm?.phone,
-            analyticsToken = contactForm?.analyticsToken
+            analyticsToken = contactForm?.analyticsToken,
+            message = contactForm?.message
         )
         contactFormRepository.save(
             entity
         )
 
-        slackClient.sendSlackMessage("Iemand heeft zijn gegevens achtergelaten: ${entity.toString()}")
+        logger.info("Received contact form: {}", objectMapper.writeValueAsString(entity))
+
+        slackClient.sendSlackMessage("${entity.name} heeft het volgende bericht achter gelaten: ${entity.message}. Email: ${entity.email} en telefoonnummer: ${entity.phone}")
 
         return ResponseEntity.ok().build()
     }
