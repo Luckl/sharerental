@@ -14,9 +14,9 @@ export const useCategoryStore = defineStore({
     state: () => ({
         categories: [
             {
-                name: 'Stijgers, trappen en hoogwerkers',
-                page: "stijgers-trappen-hoogwerkers",
-                image: 'categories/stijgers-trappen-hoogwerkers.jpg'
+                name: 'Steigers, trappen en hoogwerkers',
+                page: "steigers-trappen-hoogwerkers",
+                image: 'categories/steigers-trappen-hoogwerkers.jpg'
             },
             {
                 name: 'Luchtdrukgereedschap',

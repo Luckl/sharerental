@@ -18,7 +18,7 @@ const existingRentalItemDisplayStatus = ref(DisplayStatus.Inactive)
 const toast = useToast();
 
 const categories = ref([
-  {name: 'Stijgers, trappen en hoogwerkers'},
+  {name: 'Steigers, trappen en hoogwerkers'},
   {name: 'Luchtdrukgereedschap'},
   {name: 'Electrisch gereedschap'},
   {name: 'Betonbewerking'},
@@ -56,7 +56,7 @@ const schema = yup.object({
     intrinsicWeightKilograms: yup.number().label("Gewicht"),
     // Add conditional fields based on category
     materialType: yup.string().when('category', ([category], materialType) => {
-          if (category === 'Stijgers, trappen en hoogwerkers') {
+          if (category === 'Steigers, trappen en hoogwerkers') {
             return materialType;
           } else {
             return materialType;
@@ -64,7 +64,7 @@ const schema = yup.object({
         }
     ),
     reachMeters: yup.number().when('category', ([category], reachMeters) => {
-      if (category === 'Stijgers, trappen en hoogwerkers' || category === 'Hef-hijswerktuigen') {
+      if (category === 'Steigers, trappen en hoogwerkers' || category === 'Hef-hijswerktuigen') {
         return reachMeters;
       } else {
         return reachMeters;
@@ -72,7 +72,7 @@ const schema = yup.object({
     }),
     carryingWeightKilograms:
         yup.number().when('category', ([category], carryingWeightKilograms) => {
-          if (category === 'Stijgers, trappen en hoogwerkers' || category === 'Hef-hijswerktuigen') {
+          if (category === 'Steigers, trappen en hoogwerkers' || category === 'Hef-hijswerktuigen') {
             return carryingWeightKilograms;
           } else {
             return carryingWeightKilograms;
@@ -80,7 +80,7 @@ const schema = yup.object({
         }),
     maximumWorkHeightMeters:
         yup.number().when('category', ([category], maximumWorkHeightMeters) => {
-          if (category === 'Stijgers, trappen en hoogwerkers') {
+          if (category === 'Steigers, trappen en hoogwerkers') {
             return maximumWorkHeightMeters;
           } else {
             return maximumWorkHeightMeters;
@@ -434,19 +434,19 @@ defineExpose({
                              :maxFractionDigits="5" suffix=" kg"
                              :errors="errors['rentalItem.intrinsicWeightKilograms']"></sr-number-field>
           </div>
-          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+          <div v-if="category === 'Steigers, trappen en hoogwerkers'"
                class="flex gap-2">
             <sr-number-field label="Bereik (m)" v-model="reachMeters"
                              :maxFractionDigits="5" suffix=" m"
                              :errors="errors['rentalItem.reachMeters']"></sr-number-field>
           </div>
-          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+          <div v-if="category === 'Steigers, trappen en hoogwerkers'"
                class="flex gap-2">
             <sr-number-field label="Hefvermogen (kg)" v-model="carryingWeightKilograms"
                              :maxFractionDigits="5" suffix=" kg"
                              :errors="errors['rentalItem.carryingWeightKilograms']"></sr-number-field>
           </div>
-          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+          <div v-if="category === 'Steigers, trappen en hoogwerkers'"
                class="flex gap-2">
             <sr-number-field label="Maximale werkhoogte
         (m)" v-model="maximumWorkHeightMeters"
@@ -528,7 +528,7 @@ defineExpose({
                              :maxFractionDigits="5" suffix=" m²"
                              :errors="errors['rentalItem.maximumSurfaceSquareMeters']"></sr-number-field>
           </div>
-          <div v-if="category === 'Stijgers, trappen en hoogwerkers'"
+          <div v-if="category === 'Steigers, trappen en hoogwerkers'"
                class="flex gap-2">
             <sr-text-field label="Materiaal type" v-model="materialType"
                            :errors="errors['rentalItem.materialType']"></sr-text-field>

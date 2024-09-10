@@ -31,7 +31,7 @@ const categoryBackground = (image: string) => {
 }
 
 //TODO: Use category store and make dynamic
-const category1Background = categoryBackground('categories/stijgers-trappen-hoogwerkers.jpg')
+const category1Background = categoryBackground('categories/steigers-trappen-hoogwerkers.jpg')
 const category2Background = categoryBackground('categories/Betonbewerking.jpg')
 const category3Background = categoryBackground('categories/hef-en-hijswerktuigen.jpg')
 const category4Background = categoryBackground('categories/electrisch-gereedschap-3.jpg')
@@ -81,9 +81,9 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         <h1 class="text-4xl my-5">Categorieën</h1>
         <div class="flex justify-center">
           <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-4">
-            <nuxtLink to="/categorieen/stijgers-trappen-hoogwerkers" class="flex justify-center">
+            <nuxtLink to="/categorieen/steigers-trappen-hoogwerkers" class="flex justify-center">
               <div class="rounded-lg relative bg-cover bg-center h-48 w-full md:w-48" :style="category1Background">
-                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Stijgers, trappen en hoogwerkers</span>
+                <span class="absolute bottom-0 left-0 font-bold text-white m-2">Steigers, trappen en hoogwerkers</span>
               </div>
             </nuxtLink>
             <nuxtLink to="/categorieen/betonbewerking" class="flex justify-center">
