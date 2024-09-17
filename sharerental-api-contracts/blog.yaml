@@ -12,3 +12,101 @@ paths:
       responses:
         201:
           description: successful operation
+  /blog:
+    get:
+      summary: Retrieves an overview of most recent blog posts
+      operationId: getBlogPosts
+      tags:
+          - blog
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPosts'
+
+  /blog/{slug}:
+    get:
+      summary: Retrieves a blog post by its slug
+      operationId: getBlogPost
+      tags:
+          - blog
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "my-first-blog-post"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullBlogPost'
+components:
+    schemas:
+      BlogPosts:
+        type: array
+        items:
+          $ref: '#/components/schemas/BlogPost'
+      BlogPost:
+        type: object
+        properties:
+          id:
+            type: string
+          headline:
+            type: string
+          slug:
+            type: string
+      FullBlogPost:
+        type: object
+        properties:
+          id:
+            type: string
+          slug:
+            type: string
+          headline:
+            type: string
+          metaDescription:
+            type: string
+          metaKeywords:
+            type: string
+          html:
+            type: string
+          outline:
+            type: string
+          deleted:
+            type: boolean
+          published:
+            type: boolean
+          tags:
+            type: array
+            items:
+              $ref: '#/components/schemas/Tag'
+          category:
+            $ref: '#/components/schemas/Category'
+          readingTime:
+            type: integer
+          publishedAt:
+            type: string
+          relatedPosts:
+            type: array
+            items:
+              $ref: '#/components/schemas/BlogPost'
+      Tag:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+      Category:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string

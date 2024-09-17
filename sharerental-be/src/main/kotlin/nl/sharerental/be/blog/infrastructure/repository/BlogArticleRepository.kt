@@ -4,5 +4,6 @@ import nl.sharerental.be.blog.BlogArticle
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface BlogArticleRepository: JpaRepository<BlogArticle, String> {
-
+    fun findAllByDeletedIsFalseOrderByPublishedDesc(): List<BlogArticle>
+    fun findBySlugAndDeletedIsFalse(slug: String): BlogArticle?
 }

@@ -84,6 +84,7 @@ data class Article(
     val publishedAt: String,
     val relatedPosts: List<RelatedPost>
 )
+
 data class FullArticle(
     val id: String,
     val slug: String,
