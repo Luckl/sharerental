@@ -47,6 +47,9 @@ share-rental:
   callback-url: http://localhost:3000/transaction/completed
   webhook-url: https://81b5-185-132-108-115.ngrok-free.app/backend/transactions/mollie-callback
 
+  seo-bot:
+    api-host: https://app.seobotai.com/api
+    api-key:
   slack:
     platform-events-url:
   postcode-eu:
