@@ -7,32 +7,43 @@ import reactor.core.publisher.Mono
 
 @Service
 class SeoBotClient(
-    private val webClient: WebClient,
     @Value("\${share-rental.seo-bot.api-host}") private val apiHost: String,
     @Value("\${share-rental.seo-bot.api-key}") private val apiKey: String
     ) {
 
-    // Fetch articles based on query parameters
-    fun getArticles(categoryId: String, tagId: String): Mono<ArticleResponse> {
-        val uri = "$apiHost/articles"
+    private val webClient = WebClient
+        .builder()
+        .baseUrl(apiHost)
+        .build()
 
+    // Fetch articles based on query parameters
+    fun getArticles(categoryId: String? = null, tagId: String? = null): ArticleResponse? {
         return webClient.get()
             .uri { uriBuilder ->
                 uriBuilder
                     .path("/articles")
                     .queryParam("key", apiKey)
-                    .queryParam("categoryId", categoryId)
-                    .queryParam("tagId", tagId)
                     .queryParam("page", 0)
                     .queryParam("limit", 2)
+                    .also {
+                        if (categoryId != null) {
+                            it.queryParam("categoryId", categoryId)
+                        }
+                    }
+                    .also {
+                        if (tagId != null) {
+                            it.queryParam("tagId", tagId)
+                        }
+                    }
                     .build()
             }
             .retrieve()
             .bodyToMono(ArticleResponse::class.java)
+            .block()
     }
 
     // Fetch a single article by articleId
-    fun getArticleById(articleId: String): Mono<SingleArticleResponse> {
+    fun getArticleById(articleId: String): SingleArticleResponse? {
         val uri = "$apiHost/article"
 
         return webClient.get()
@@ -45,6 +56,7 @@ class SeoBotClient(
             }
             .retrieve()
             .bodyToMono(SingleArticleResponse::class.java)
+            .block()
     }
 }
 
@@ -66,6 +78,22 @@ data class Article(
     val slug: String,
     val headline: String,
     val metaDescription: String,
+    val tags: List<Tag>,
+    val category: Category,
+    val readingTime: Int,
+    val publishedAt: String,
+    val relatedPosts: List<RelatedPost>
+)
+data class FullArticle(
+    val id: String,
+    val slug: String,
+    val headline: String,
+    val metaDescription: String,
+    val metaKeywords: String,
+    val html: String,
+    val outline: String,
+    val deleted: Boolean,
+    val published: Boolean,
     val tags: List<Tag>,
     val category: Category,
     val readingTime: Int,
@@ -98,5 +126,5 @@ data class SingleArticleResponse(
 
 data class SingleArticleData(
     val success: Boolean,
-    val article: Article
+    val article: FullArticle
 )

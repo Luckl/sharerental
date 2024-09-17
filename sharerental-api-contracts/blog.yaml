@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: ShareRental - OpenAPI 3.0
+  version: 0.0.1
+paths:
+  /blog/fetch:
+    post:
+      summary: Fetches all blogs from seobot
+      operationId: fetchBlogPosts
+      tags:
+        - blog
+      responses:
+        201:
+          description: successful operation

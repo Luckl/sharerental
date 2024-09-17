@@ -27,6 +27,7 @@ class WebSecurityConfiguration {
                     "/transactions/calculate-price",
                     "/transactions",
                     "/search",
+                    "/blog/fetch",
                     "/rentalItemPages")
                 it.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             }
