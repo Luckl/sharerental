@@ -34,6 +34,7 @@ class BlogClient(
     }
 
     override fun getBlogPosts(): ResponseEntity<MutableList<BlogPost>> {
+        fetchBlogPosts()
         val posts = blogArticleRepository.findAllByDeletedIsFalseOrderByPublishedDesc().map { BlogArticle.toBlogPost(it) }.take(5)
         return ResponseEntity.ok(posts.toMutableList())
     }

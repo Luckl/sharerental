@@ -24,7 +24,7 @@ class SeoBotClient(
                     .path("/articles")
                     .queryParam("key", apiKey)
                     .queryParam("page", 0)
-                    .queryParam("limit", 2)
+                    .queryParam("limit", 100)
                     .also {
                         if (categoryId != null) {
                             it.queryParam("categoryId", categoryId)
