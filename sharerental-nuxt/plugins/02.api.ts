@@ -5,6 +5,7 @@ import {Configuration as SearchConfiguration,SearchApi} from "~/schemas/openapi/
 import {Configuration as TransactionConfiguration,TransactionApi} from "~/schemas/openapi/transaction";
 import {Configuration as RenterConfiguration,RenterApi} from "~/schemas/openapi/renter";
 import {Configuration as RentalItemConfiguration,RentalItemApi, RentalItemImageApi} from "~/schemas/openapi/rentalItem";
+import {Configuration as BlogConfiguration,BlogApi} from "~/schemas/openapi/blog";
 import {
     Configuration as ContactFormConfiguration,
     ContactFormApi,
@@ -28,6 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const contactFormApi = new ContactFormApi(new ContactFormConfiguration(configuration));
     const userApi = new UserApi(new ContactFormConfiguration(configuration));
     const zipcodeApi = new ZipcodeApi(new ContactFormConfiguration(configuration));
+    const blogApi = new BlogApi(new BlogConfiguration(configuration));
 
     console.log("API Clients initialized")
 
@@ -41,7 +43,8 @@ export default defineNuxtPlugin((nuxtApp) => {
             renterApi: renterApi,
             contactFormApi: contactFormApi,
             userApi: userApi,
-            zipcodeApi: zipcodeApi
+            zipcodeApi: zipcodeApi,
+            blogApi: blogApi
         }
     }
 })

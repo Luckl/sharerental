@@ -1,9 +1,14 @@
 <script lang="ts" setup>
 import { ref} from "vue";
+import {BlogApi} from "~/schemas/openapi/blog";
 
 definePageMeta({
   description: 'Gereedschap en machines huren en verhuren',
 })
+
+const $blogApi: BlogApi = useNuxtApp().$blogApi;
+
+const {data: blogPosts} = await useAsyncData("blogPosts", () => $blogApi.getBlogPosts())
 
 const img = useImage()
 const categoriesCollapsed = ref(true)
@@ -148,7 +153,17 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
         </div>
       </div>
     </section>
-    <section class="green-area px-4 mt-5">
+    <section class="bg-gray-200">
+      <div class="md:max-w-[1240px] md:mx-auto py-10">
+        <h1 class="my-10 text-4xl"><a id="nieuwsbrief">Nieuwsbrief</a></h1>
+        <div v-for="blogPost in blogPosts">
+          <NuxtLink :to="'/nieuwsbrief/' + blogPost.slug">
+            <i class="pi pi-angle-right"></i><span class="m-3">{{ blogPost.headline }}</span>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+    <section class="green-area px-4">
       <div class="md:max-w-[1240px] md:mx-auto">
 
         <div class="w-full flex justify-center">
@@ -192,7 +207,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
           <div>
-            <h3 class="font-bold">Ontdek hoe eenvoudig en voordelig het kan zijn om je volgende project te voltooien met ShareRental. Huur topkwaliteit gereedschap en machines zonder de hoge kosten van aanschaf en onderhoud. Of je nu een doe-het-zelf project hebt, je tuin wilt opknappen of een professionele klus moet klaren, wij hebben alles wat je nodig hebt.</h3>
+            <span class="font-bold">Ontdek hoe eenvoudig en voordelig het kan zijn om je volgende project te voltooien met ShareRental. Huur topkwaliteit gereedschap en machines zonder de hoge kosten van aanschaf en onderhoud. Of je nu een doe-het-zelf project hebt, je tuin wilt opknappen of een professionele klus moet klaren, wij hebben alles wat je nodig hebt.</span>
             <h1 class="my-10 text-3xl">Huur vandaag nog alles voor je volgende project!</h1>
             <NuxtLink to="/register">
               <button unstyled class="rounded-lg black-area p-3 h-12 mr-8">Gratis registreren</button>
