@@ -18,6 +18,8 @@ class ContactFormController(
     private val objectMapper: ObjectMapper
 ) : ContactFormApi {
 
+    private val logger = LoggerFactory.getLogger(ContactFormController::class.java)
+
     override fun sendContactForm(contactForm: HttpContactForm?): ResponseEntity<Void> {
         val entity = ContactForm(
             name = contactForm?.name,
