@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import nl.sharerental.be.infrastructure.ipapi.IpInfo
 import nl.sharerental.be.infrastructure.postcodeeu.ZipInfo
+import nl.sharerental.be.infrastructure.seobotai.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
@@ -22,6 +23,15 @@ import org.springframework.web.reactive.function.client.WebClient
         ItemRentedLessorEmailCustomData::class,
         ZipInfo::class,
         IpInfo::class,
+        ArticleData::class,
+        ArticleResponse::class,
+        SingleArticleResponse::class,
+        FullArticle::class,
+        Article::class,
+        Tag::class,
+        Category::class,
+        RelatedPost::class,
+        SingleArticleData::class,
     ]
 )
 class OneSignalConfiguration(

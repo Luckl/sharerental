@@ -17,7 +17,6 @@ class ContactFormController(
     private val slackClient: SlackClient,
     private val objectMapper: ObjectMapper
 ) : ContactFormApi {
-    private val logger = LoggerFactory.getLogger(ContactFormController::class.java)
 
     override fun sendContactForm(contactForm: HttpContactForm?): ResponseEntity<Void> {
         val entity = ContactForm(
@@ -27,9 +26,7 @@ class ContactFormController(
             analyticsToken = contactForm?.analyticsToken,
             message = contactForm?.message
         )
-        contactFormRepository.save(
-            entity
-        )
+        contactFormRepository.save(entity)
 
         logger.info("Received contact form: {}", objectMapper.writeValueAsString(entity))
 
