@@ -163,43 +163,66 @@ class FilterService(
 
     private fun queryLocationBasedOnSearchOrIp(searchRequest: SearchRequest?, ip: IpInfo?): Condition {
 
-        return if (searchRequest?.distance?.latitude != null && searchRequest.distance.longitude != null && searchRequest.distance.radius != null) {
-            condition(
-                if_(
-                    condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                    condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${searchRequest.distance.longitude}, ${searchRequest.distance.latitude})) < ${searchRequest.distance.radius}"),
-                    trueCondition()
-                )
-            )
-        } else if (searchRequest?.distance?.zipCode != null) {
-            val locationByPostalCode = locationService.getLocationByPostalCode(
-                searchRequest.distance.zipCode
-            )
+        filterByZipCodeIfPresent(searchRequest)?.let {
+            logger.debug("Filtering by zip code: {}", searchRequest?.distance?.zipCode ?: "")
+            return it }
+        filterByLatLongIfPresent(searchRequest)?.let {
+            logger.debug("Filtering by lat long: {}, {}", searchRequest?.distance?.latitude ?: "", searchRequest?.distance?.longitude ?: "")
+            return it }
+        filterByIpIfPresent(ip)?.let {
+            logger.debug("Filtering by ip: {}", ip ?: "")
+            return it }
+        return trueCondition()
+    }
 
-            if (locationByPostalCode != null) {
-                condition(
-                    if_(
-                        condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                        condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${locationByPostalCode.longitude}, ${locationByPostalCode.latitude})) < ${searchRequest.distance.radius}"),
-                        trueCondition()
-                    )
-                )
-            } else {
-                trueCondition()
-            }
-
-            trueCondition()
-        } else if (ip?.lat != null && ip.lon != null) {
-            condition(
+    fun filterByIpIfPresent(ip: IpInfo?): Condition? {
+        if (ip?.lat != null && ip.lon != null) {
+            return condition(
                 if_(
                     condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
                     condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),
                     trueCondition()
                 )
             )
-        } else {
-            trueCondition()
         }
+
+        return null
+    }
+
+    fun filterByLatLongIfPresent(searchRequest: SearchRequest?): Condition? {
+        if (searchRequest?.distance?.latitude != null && searchRequest.distance.longitude != null && searchRequest.distance.radius != null) {
+            return condition(
+                if_(
+                    condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                    condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${searchRequest.distance.longitude}, ${searchRequest.distance.latitude})) < ${searchRequest.distance.radius}"),
+                    trueCondition()
+                )
+            )
+        }
+
+        return null
+    }
+
+    fun filterByZipCodeIfPresent(searchRequest: SearchRequest?): Condition? {
+        if (searchRequest?.distance?.zipCode != null && searchRequest.distance.zipCode.isNotEmpty() && searchRequest.distance.radius != null) {
+
+            val locationByPostalCode = locationService.getLocationByPostalCode(
+                searchRequest.distance.zipCode
+            )
+
+            logger.debug("Location by postal code {}: {}", searchRequest.distance.zipCode, locationByPostalCode)
+
+            if (locationByPostalCode != null) {
+                return condition(
+                    if_(
+                        condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                        condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${locationByPostalCode.longitude}, ${locationByPostalCode.latitude})) < ${searchRequest.distance.radius}"),
+                        trueCondition()
+                    )
+                )
+            }
+        }
+        return null
     }
 
     private fun searchRequestToCondition(searchRequest: SearchRequest?): Condition {

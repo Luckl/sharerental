@@ -8,7 +8,8 @@ import {
   type SearchResultItem
 } from "~/schemas/openapi/search";
 import {RenterTypeEnum, useRenterTypeStore} from "~/services/stores/renterTypeStore";
-import { useGeolocation } from '@vueuse/core'
+import {useGeolocation} from '@vueuse/core'
+
 interface Props {
   category?: string;
   query?: string;
@@ -18,7 +19,8 @@ interface Props {
 const props = defineProps<Props>()
 const showFilters = ref(false)
 const {filters} = useFilterStore();
-const { renterType } = storeToRefs(useRenterTypeStore())
+const {renterType} = storeToRefs(useRenterTypeStore())
+const postalCode = ref<string | undefined>(undefined)
 
 const getFilter = (filter: FilterOption): Filter | undefined => {
   return filters.find(f => f.key === filter.field)
@@ -35,7 +37,7 @@ const categoryFilter = ref<SearchRequestFiltersInner[]>([
 const availableFilters = ref<FilterOption[]>([])
 
 const radiusKm = ref(25)
-const { coords } = useGeolocation()
+const {coords} = useGeolocation()
 
 const $searchApi: SearchApi = useNuxtApp().$searchApi;
 
@@ -63,7 +65,8 @@ const fetchItems = async () => {
       distance: {
         latitude: coords.value?.latitude,
         longitude: coords.value?.longitude,
-        radius: radiusKm.value
+        radius: radiusKm.value,
+        zipCode: postalCode.value
       },
       filters: allFilters,
       renterType: renterType.value == RenterTypeEnum.Private ? RenterType.Private : RenterType.Business,
@@ -148,8 +151,8 @@ const setSliderValues = (success: SearchResult) => {
   allAvailableFilters
       .filter(value => getFilter(value)?.type === FilterType.Currency)
       .forEach(filter => {
-        activatedSliderFilters.value[filter.field || ""] = [filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.min(a, b)),
-          filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.max(a, b))]
+        activatedSliderFilters.value[filter.field || ""] = [filter.options?.map(option => parseFloat(option.value!)).reduce((a, b) => Math.min(a, b)),
+          filter.options?.map(option => parseFloat(option.value!)).reduce((a, b) => Math.max(a, b))]
       })
 }
 
@@ -178,7 +181,9 @@ updatePossibleFilters(data.value!!)
         </div>
       </Button>
       <div class="w-full text-end">
-        <span class="text-gray-600">{{ state.results ? state.results.length : 0 }} {{ state.results?.length === 1 ? "resultaat" : "resultaten" }}</span>
+        <span class="text-gray-600">{{
+            state.results ? state.results.length : 0
+          }} {{ state.results?.length === 1 ? "resultaat" : "resultaten" }}</span>
       </div>
     </div>
   </div>
@@ -187,12 +192,15 @@ updatePossibleFilters(data.value!!)
       <div class="w-full text-xl font-bold">Filteren</div>
       <Divider></Divider>
       <Accordion unstyled :multiple="true" active-index="0,1,2,3,4,5,6,7,8">
-        <AccordionTab v-if="coords.latitude != undefined && coords.longitude != undefined">
+        <AccordionTab>
           <template #header>
             <span class="m-2 font-bold">Afstand</span>
           </template>
           <div class="m-1">
             <div class="flex flex-col w-full">
+              <InputText v-model="postalCode" @blur="fetchItems()" placeholder="Postcode" class="w-full"/>
+            </div>
+            <div class="flex flex-col w-full" v-if="(coords.latitude != undefined && coords.longitude != undefined) || postalCode != undefined ">
               <span class="p-4">Maximale afstand: {{ radiusKm >= 300 ? 'Onbeperkt' : radiusKm + " km" }}</span>
               <slider @slideend="fetchItems()" class="w-full" v-model="radiusKm" :min="0"
                       :max="300"/>
@@ -224,8 +232,11 @@ updatePossibleFilters(data.value!!)
           </div>
           <div class="m-1" v-else-if="getFilter(filter)?.type === FilterType.Currency">
             <div class="flex flex-col w-full">
-              <span class="p-4">{{ formatCurrency(activatedSliderFilters[filter.field][0]) }} tot {{ formatCurrency(activatedSliderFilters[filter.field][1]) }}</span>
-              <slider @slideend="fetchItems()" class="w-full" range v-model="activatedSliderFilters[filter.field]" :min="filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.min(a, b))"
+              <span class="p-4">{{
+                  formatCurrency(activatedSliderFilters[filter.field][0])
+                }} tot {{ formatCurrency(activatedSliderFilters[filter.field][1]) }}</span>
+              <slider @slideend="fetchItems()" class="w-full" range v-model="activatedSliderFilters[filter.field]"
+                      :min="filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.min(a, b))"
                       :max="filter.options?.map(option => parseFloat(option.value!) ).reduce((a, b) => Math.max(a, b))"/>
             </div>
           </div>
