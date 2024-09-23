@@ -9,6 +9,7 @@ import nl.sharerental.be.jooq.generated.tables.RentalItem.Companion.RENTAL_ITEM
 import nl.sharerental.be.jooq.generated.tables.records.RentalItemRecord
 import nl.sharerental.be.jooq.generated.tables.references.IMAGE
 import nl.sharerental.be.jooq.generated.tables.references.RENTAL_ITEM_IMAGE
+import nl.sharerental.be.location.LocationService
 import nl.sharerental.contract.http.model.FilterOption
 import nl.sharerental.contract.http.model.FilterOptionOptionsInner
 import nl.sharerental.contract.http.model.RenterType as HttpRenterType
@@ -30,6 +31,7 @@ import java.time.Instant
 @Service
 class FilterService(
     private val create: DSLContext,
+    private val locationService: LocationService
 ) {
 
     fun getFilterOptions(query: String?, searchRequest: SearchRequest?, ip: IpInfo?): List<FilterOption> {
@@ -99,7 +101,12 @@ class FilterService(
         return i
     }
 
-    fun search(query: String?, pageRequest: PageRequest, searchRequest: SearchRequest?, ip: IpInfo?): MutableList<SearchResultItem> {
+    fun search(
+        query: String?,
+        pageRequest: PageRequest,
+        searchRequest: SearchRequest?,
+        ip: IpInfo?
+    ): MutableList<SearchResultItem> {
         val start = Instant.now()
 
         val fetch = create.select(
@@ -151,8 +158,8 @@ class FilterService(
 
     private fun buildCompleteFilter(searchRequest: SearchRequest?, query: String?, ip: IpInfo?) =
         searchRequestToCondition(searchRequest)
-        .and(baseFilterAndQuery(query))
-        .and(queryLocationBasedOnSearchOrIp(searchRequest, ip))
+            .and(baseFilterAndQuery(query))
+            .and(queryLocationBasedOnSearchOrIp(searchRequest, ip))
 
     private fun queryLocationBasedOnSearchOrIp(searchRequest: SearchRequest?, ip: IpInfo?): Condition {
 
@@ -164,15 +171,32 @@ class FilterService(
                     trueCondition()
                 )
             )
-        }
-        else if (searchRequest?.distance?.zipCode != null && searchRequest.distance.radius != null) {
-            //todo: implement
+        } else if (searchRequest?.distance?.zipCode != null) {
+            val locationByPostalCode = locationService.getLocationByPostalCode(
+                searchRequest.distance.zipCode
+            )
+
+            if (locationByPostalCode != null) {
+                condition(
+                    if_(
+                        condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                        condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${locationByPostalCode.longitude}, ${locationByPostalCode.latitude})) < ${searchRequest.distance.radius}"),
+                        trueCondition()
+                    )
+                )
+            } else {
+                trueCondition()
+            }
 
             trueCondition()
         } else if (ip?.lat != null && ip.lon != null) {
-            condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),
-                trueCondition()))
+            condition(
+                if_(
+                    condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                    condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),
+                    trueCondition()
+                )
+            )
         } else {
             trueCondition()
         }
@@ -215,10 +239,12 @@ class FilterService(
                 val castFilter = field as TableField<RentalItemRecord, BigDecimal?>
                 return castFilter.between(filter.values[0].toBigDecimal(), filter.values[1].toBigDecimal())
             } else {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST ,"Filter field ${field.name} is not of type BigDecimal, cannot apply filter type WITHINRANGE")
+                throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Filter field ${field.name} is not of type BigDecimal, cannot apply filter type WITHINRANGE"
+                )
             }
-        }
-        else {
+        } else {
             trueCondition()
         }
     }

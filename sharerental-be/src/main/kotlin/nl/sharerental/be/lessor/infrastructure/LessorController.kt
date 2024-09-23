@@ -1,8 +1,8 @@
 package nl.sharerental.be.lessor.infrastructure
 
 import jakarta.transaction.Transactional
-import nl.sharerental.be.contactform.PostalCodeId
-import nl.sharerental.be.contactform.infrastructure.repository.PostalCodeLocationRepository
+import nl.sharerental.be.location.PostalCodeId
+import nl.sharerental.be.location.infrastructure.repository.PostalCodeLocationRepository
 import nl.sharerental.be.lessor.Lessor
 import nl.sharerental.be.lessor.Location
 import nl.sharerental.be.lessor.UserLessor

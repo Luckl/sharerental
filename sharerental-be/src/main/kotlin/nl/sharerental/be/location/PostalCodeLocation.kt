@@ -1,4 +1,4 @@
-package nl.sharerental.be.contactform
+package nl.sharerental.be.location
 
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EmbeddedId

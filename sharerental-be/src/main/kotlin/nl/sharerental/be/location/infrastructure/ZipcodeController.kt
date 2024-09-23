@@ -1,6 +1,6 @@
-package nl.sharerental.be.contactform.infrastructure
+package nl.sharerental.be.location.infrastructure
 
-import nl.sharerental.be.contactform.LocationService
+import nl.sharerental.be.location.LocationService
 import nl.sharerental.contract.http.ZipcodeApi
 import nl.sharerental.contract.http.model.GetAddressByZipcode200Response
 import org.springframework.http.ResponseEntity
