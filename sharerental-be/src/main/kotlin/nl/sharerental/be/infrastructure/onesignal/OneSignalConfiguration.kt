@@ -1,4 +1,4 @@
-package nl.sharerental.be.user.infrastructure.onesignal
+package nl.sharerental.be.infrastructure.onesignal
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

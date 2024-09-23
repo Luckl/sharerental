@@ -1,4 +1,4 @@
-package nl.sharerental.be.user.infrastructure.onesignal
+package nl.sharerental.be.infrastructure.onesignal
 
 import nl.sharerental.be.user.User
 import org.slf4j.Logger

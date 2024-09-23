@@ -1,4 +1,4 @@
-package nl.sharerental.be.user.infrastructure.onesignal
+package nl.sharerental.be.infrastructure.onesignal
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper

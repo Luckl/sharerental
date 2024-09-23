@@ -3,7 +3,6 @@ package nl.sharerental.be.infrastructure.seobotai
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 
 @Service
 class SeoBotClient(
@@ -44,7 +43,6 @@ class SeoBotClient(
 
     // Fetch a single article by articleId
     fun getArticleById(articleId: String): SingleArticleResponse? {
-        val uri = "$apiHost/article"
 
         return webClient.get()
             .uri { uriBuilder ->

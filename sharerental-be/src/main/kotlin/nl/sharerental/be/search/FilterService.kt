@@ -157,9 +157,18 @@ class FilterService(
     private fun queryLocationBasedOnSearchOrIp(searchRequest: SearchRequest?, ip: IpInfo?): Condition {
 
         return if (searchRequest?.distance?.latitude != null && searchRequest.distance.longitude != null && searchRequest.distance.radius != null) {
-            condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
-                condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${searchRequest.distance.longitude}, ${searchRequest.distance.latitude})) < ${searchRequest.distance.radius}"),
-                trueCondition()))
+            condition(
+                if_(
+                    condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
+                    condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${searchRequest.distance.longitude}, ${searchRequest.distance.latitude})) < ${searchRequest.distance.radius}"),
+                    trueCondition()
+                )
+            )
+        }
+        else if (searchRequest?.distance?.zipCode != null && searchRequest.distance.radius != null) {
+            //todo: implement
+
+            trueCondition()
         } else if (ip?.lat != null && ip.lon != null) {
             condition(if_(condition(LOCATION.LONGITUDE.isNotNull).and(LOCATION.LATITUDE.isNotNull),
                 condition("(point(${LOCATION.LONGITUDE.qualifiedName}, ${LOCATION.LATITUDE.qualifiedName}) <@> point(${ip.lon}, ${ip.lat})) < 250"),

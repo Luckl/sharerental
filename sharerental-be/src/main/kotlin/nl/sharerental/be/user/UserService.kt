@@ -1,7 +1,7 @@
 package nl.sharerental.be.user
 
-import nl.sharerental.be.user.infrastructure.onesignal.OneSignalEmailSender
-import nl.sharerental.be.user.infrastructure.onesignal.OneSignalUserCreation
+import nl.sharerental.be.infrastructure.onesignal.OneSignalEmailSender
+import nl.sharerental.be.infrastructure.onesignal.OneSignalUserCreation
 import nl.sharerental.be.user.infrastructure.repository.UserRepository
 import org.springframework.stereotype.Service
 
