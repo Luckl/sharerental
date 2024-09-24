@@ -20,22 +20,21 @@ const showContactDialog = () => {
     <div class="md:max-w-[1240px] md:mx-auto  px-4 md:px-0">
       <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
         <div>
-          <div class="grid grid-cols-2 ">
+          <div class="grid grid-cols-1 ">
             <span class="font-bold">Over ShareRental</span>
-            <span class="font-bold">Verhuren</span>
             <NuxtLink to="/#hoe_het_werkt">
               <span class="my-1 text-sm">Hoe het werkt</span>
             </NuxtLink>
             <NuxtLink to="/verhuren/#hoe_het_werkt">
-              <span class="my-1 text-sm">Zo werkt het</span>
+              <span class="my-1 text-sm">Verhuren: Zo werkt het</span>
             </NuxtLink>
-            <span class="my-1 text-sm">Over ons</span>
+            <NuxtLink to="/nieuwsbrief/nieuwe-categorie-transport"><span class="my-1 text-sm">Nieuwsbrief</span></NuxtLink>
             <a href="mailto:support@sharerental.app">
               <span class="my-1 text-sm">Service</span>
             </a>
-            <NuxtLink to="/nieuwsbrief/nieuwe-categorie-transport"><span class="my-1 text-sm">Nieuwsbrief</span></NuxtLink>
-            <span class="my-1 text-sm"></span>
+            <NuxtLink to="/algemene-voorwaarden"><span class="my-1 text-sm">Algemene voorwaarden</span></NuxtLink>
             <span class="my-1 text-sm"><button @click="showContactDialog()">Contact</button></span>
+            <span class="my-1 text-sm"></span>
           </div>
           <div class="mt-10 flex gap-5 mb-5">
             <i class="pi pi-facebook" style="font-size: 2rem"></i>

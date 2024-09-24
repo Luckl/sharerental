@@ -175,13 +175,12 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een dag of een paar weken nodig hebt.</span>
           </div>
           <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-            <span class="text-xl font-bold">Image</span>
-            <span class="mt-2"></span>
+            <NuxtImg src="search.png" sizes="620px" alt="search"/>
           </div>
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <span class="text-xl font-bold">Image</span>
-              <span class="mt-2"></span>
+              <NuxtImg src="compare.png" sizes="620px" alt="rental"/>
+
             </div>
           </div>
           <div>
