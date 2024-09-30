@@ -43,7 +43,6 @@ class BlogClient(
         val post = blogArticleRepository.findBySlugAndDeletedIsFalse(slug!!)
         return if (post != null) {
             logger.info("Found post with slug: $slug")
-            logger.debug("Found post: $post")
             ResponseEntity.ok(BlogArticle.toFullBlogPost(post))
         } else {
             ResponseEntity.notFound().build()
