@@ -30,7 +30,7 @@ onBeforeUnmount(() => {
 
 const categoryBackground = (image: string) => {
   return computed(() => {
-    const imgUrl = img(image, {width: 400, height: 400})
+    const imgUrl = img(image, {width: 400, height: 400, loading:"lazy"})
     return {backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(102, 102, 102, 1)), url('${imgUrl}')`}
   })
 }
@@ -60,7 +60,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <SrSearch></SrSearch>
           </div>
           <div class="w-1/2 hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
+            <NuxtImg src="forklift-transparent-background.png" loading="lazy" sizes="620px" alt="rental"/>
           </div>
         </div>
       </div>
@@ -175,11 +175,11 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
             <span class="mt-2">Bekijk ons uitgebreide assortiment gereedschap en apparatuur van vertrouwde verhuurbedrijven bij jou in de buurt. Gebruik onze zoekfilters om het perfecte item voor jouw project te vinden, of je het nu voor een dag of een paar weken nodig hebt.</span>
           </div>
           <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-            <NuxtImg src="search.png" sizes="620px" alt="search"/>
+            <NuxtImg src="search.png" sizes="620px" loading="lazy" alt="search"/>
           </div>
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <NuxtImg src="compare.png" sizes="620px" alt="rental"/>
+              <NuxtImg src="compare.png" loading="lazy" sizes="620px" alt="rental"/>
 
             </div>
           </div>
@@ -203,7 +203,7 @@ const category8Background = categoryBackground('categories/verwarmen-drogen-rein
       <div class="md:max-w-[1240px] md:mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5">
           <div class="hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
+            <NuxtImg  loading="lazy" src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
           <div>
             <span class="font-bold">Ontdek hoe eenvoudig en voordelig het kan zijn om je volgende project te voltooien met ShareRental. Huur topkwaliteit gereedschap en machines zonder de hoge kosten van aanschaf en onderhoud. Of je nu een doe-het-zelf project hebt, je tuin wilt opknappen of een professionele klus moet klaren, wij hebben alles wat je nodig hebt.</span>

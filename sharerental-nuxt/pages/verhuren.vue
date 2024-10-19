@@ -51,7 +51,7 @@ const showContactDialog = () => {
             </NuxtLink>
           </div>
           <div class="w-1/2 hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
+            <NuxtImg loading="lazy" src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
         </div>
       </div>
@@ -67,11 +67,11 @@ const showContactDialog = () => {
             <span class="mt-2">Registreer je eenvoudig op ons platform en voeg je gereedschap toe. Upload foto's, stel je huurprijs in, en maak je producten direct beschikbaar voor potentiële huurders.</span>
           </div>
           <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-            <NuxtImg src="1.png" sizes="200px" alt="rental"/>
+            <NuxtImg loading="lazy" src="1.png" sizes="200px" alt="rental"/>
           </div>
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <NuxtImg src="2.png" sizes="200px" alt="rental"/>
+              <NuxtImg loading="lazy" src="2.png" sizes="200px" alt="rental"/>
             </div>
           </div>
           <div>
@@ -88,7 +88,7 @@ const showContactDialog = () => {
           </div>
           <div>
             <div class="flex flex-col m-5 md:m-20 w-80 hidden md:block">
-              <NuxtImg src="3.png" sizes="200px" alt="rental"/>
+              <NuxtImg loading="lazy" src="3.png" sizes="200px" alt="rental"/>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ const showContactDialog = () => {
       <div class="md:max-w-[1240px] md:mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-10 pt-10">
           <div class="hidden md:block">
-            <NuxtImg src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
+            <NuxtImg loading="lazy" src="forklift-transparent-background.png" sizes="620px" alt="rental"/>
           </div>
           <div>
             <h1 class="my-10 text-3xl">Klaar om te verdienen met je gereedschap?</h1>
