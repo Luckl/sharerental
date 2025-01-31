@@ -32,6 +32,8 @@ class Location(
         httpLocation.postalCode = postalCode
         httpLocation.city = city
         httpLocation.country = country
+        httpLocation.latitude = latitude
+        httpLocation.longitude = longitude
 
         return httpLocation
     }

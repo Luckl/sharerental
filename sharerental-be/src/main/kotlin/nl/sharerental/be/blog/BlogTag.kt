@@ -10,13 +10,4 @@ data class BlogTag(
     var id: String,
     var title: String,
     var slug: String
-) {
-    companion object {
-        fun fromSeoBotTag(it: Tag): BlogTag = BlogTag (
-            id = it.id,
-            title = it.title,
-            slug = it.slug
-        )
-    }
-
-}
+)

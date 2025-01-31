@@ -11,13 +11,4 @@ data class BlogCategory(
     var title: String,
     var slug: String
 
-) {
-    companion object {
-        fun fromSeoBotCategory(category: Category): BlogCategory =
-            BlogCategory(
-                id = category.id,
-                title = category.title,
-                slug = category.slug
-            )
-    }
-}
+)

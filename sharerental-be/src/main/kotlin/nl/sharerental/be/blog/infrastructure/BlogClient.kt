@@ -1,6 +1,7 @@
 package nl.sharerental.be.blog.infrastructure
 
 import nl.sharerental.be.blog.BlogArticle
+import nl.sharerental.be.blog.BlogEntityFactory
 import nl.sharerental.be.blog.infrastructure.repository.BlogArticleRepository
 import nl.sharerental.be.infrastructure.seobotai.SeoBotClient
 import nl.sharerental.contract.http.BlogApi
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class BlogClient(
     private val seoBotClient: SeoBotClient,
-    private val blogArticleRepository: BlogArticleRepository
-): BlogApi {
+    private val blogArticleRepository: BlogArticleRepository,
+    private val blogEntityFactory: BlogEntityFactory
+) : BlogApi {
     private val logger = LoggerFactory.getLogger(BlogClient::class.java)
 
 
@@ -25,9 +27,18 @@ class BlogClient(
 
         logger.debug("Received articles: ${articles?.data}")
 
-        articles?.data?.articles?.forEach {
-            val articleById = seoBotClient.getArticleById(it.id)
-            blogArticleRepository.save(BlogArticle.fromSeoBotArticle(articleById!!))
+        val map = articles?.data?.articles?.map {
+            seoBotClient.getArticleById(it.id)
+        }
+
+        val entities = map?.map {
+            blogEntityFactory.createOrUpdateArticleFromResponseWithoutRelatedArticle(it!!)
+        }
+
+        blogArticleRepository.saveAll(entities!!)
+
+        map.forEach {
+            blogArticleRepository.save(blogEntityFactory.updateArticleWithRelatedPosts(it!!))
         }
 
         return ResponseEntity.ok().build()
@@ -35,7 +46,9 @@ class BlogClient(
 
     override fun getBlogPosts(): ResponseEntity<MutableList<BlogPost>> {
         fetchBlogPosts()
-        val posts = blogArticleRepository.findAllByDeletedIsFalseOrderByPublishedDesc().map { BlogArticle.toBlogPost(it) }.take(5)
+        val posts =
+            blogArticleRepository.findAllByDeletedIsFalseOrderByPublishedDesc().map { BlogArticle.toBlogPost(it) }
+                .take(5)
         return ResponseEntity.ok(posts.toMutableList())
     }
 
